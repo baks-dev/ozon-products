@@ -1,6 +1,6 @@
 {
   "name": "baks-dev/ozon-products",
-  "description": "Модуль Avito",
+  "description": "Модуль Ozon Products",
   "homepage": "https://github.com/baks-dev/ozon-products",
   "keywords": [
     "symfony",
@@ -29,7 +29,7 @@
   },
   "autoload": {
     "psr-4": {
-      "BaksDev\\Avito\\": ""
+      "BaksDev\\Ozon\\Products\\": ""
     }
   },
   "config": {
