@@ -21,18 +21,15 @@
  *  THE SOFTWARE.
  */
 
-declare(strict_types=1);
+namespace BaksDev\Ozon\Products\Repository\Settings\AllProductsSettings;
 
-namespace BaksDev\Ozon\Products;
+use BaksDev\Core\Form\Search\SearchDTO;
+use BaksDev\Core\Services\Paginator\PaginatorInterface;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
-
-class BaksDevOzonProductsBundle extends AbstractBundle
+interface AllProductsSettingsInterface
 {
-    public const NAMESPACE = __NAMESPACE__.'\\';
+    public function search(SearchDTO $search): self;
 
-    public const PATH = __DIR__.DIRECTORY_SEPARATOR;
-
+    /** Метод возвращает пагинатор WbProductsSettings */
+    public function fetchAllProductsSettingsAssociative(): PaginatorInterface;
 }

@@ -23,16 +23,47 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\Products;
+namespace BaksDev\Ozon\Products\Mapper\Attribute;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-class BaksDevOzonProductsBundle extends AbstractBundle
+final readonly class OzonProductsAttributeCollection
 {
-    public const NAMESPACE = __NAMESPACE__.'\\';
+    public function __construct(
+        #[AutowireIterator('baks.ozon.product.attribute', defaultPriorityMethod: 'priority')]
+        private iterable $property,
+    ) {
+    }
 
-    public const PATH = __DIR__.DIRECTORY_SEPARATOR;
+    public function cases(): array
+    {
+        $case = null;
 
+        foreach($this->property as $key => $property)
+        {
+            $case[$key] = new $property();
+        }
+
+        return $case;
+    }
+
+    public function casesSettings(int $category): array
+    {
+        $case = null;
+
+        /** @var OzonProductsAttributeInterface $instance */
+
+        foreach($this->property as $key => $property)
+        {
+            $instance = new $property();
+
+            if($instance->equalsCategory($category) && $instance->isSetting())
+            {
+                $case[$key] = $instance;
+            }
+        }
+
+        return $case;
+    }
 }
+

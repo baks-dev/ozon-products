@@ -1,0 +1,69 @@
+{% trans_default_domain 'ozon-products.admin.settings' %}
+
+<div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">
+    {{ form_start(form, { attr: { id: 'preform_form' } }) }}
+    <div class="modal-content p-3 border-bottom border-5 border-primary">
+        <div class="modal-header">
+
+            <h5 class="modal-title">
+                {# Заголовок модального окна #}
+                {{ 'breadcrumb.new'|trans }}
+            </h5>
+
+
+            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <span class="svg-icon svg-icon-2x"></span>
+            </div>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="pb-3">
+                <h5 class="pb-3">Системный раздел</h5>
+
+                {{ form_row(form.category, {
+                    label: 'Категория продукции',
+                    placeholder: 'Выберите категорию продукции ...',
+                    attr: { 'data-select' : 'select2' }
+                }) }}
+            </div>
+
+            <div>
+                <h5 class="pb-3">Ozon</h5>
+
+                {{ form_row(form.ozon, {
+                    label: 'Раздел',
+                    placeholder: 'Выберите раздел Ozon ...',
+                    attr: { 'data-select' : 'select2'} }) }}
+
+                {{ form_row(form.type, {
+                    label: 'Тип товара',
+                    placeholder: 'Выберите тип товара ...',
+                    attr: {'data-select' : 'select2'} }) }}
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <div class="flex-grow-1">
+                &nbsp;
+            </div>
+
+            <div class="d-flex gap-3">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    {{ 'btn.cancel'|trans({}, 'core.btn') }}
+                </button>
+
+
+                {{ form_widget(form.ozon_preform, { label: '
+                    <span>'~ 'btn.continue'|trans({}, 'core.btn') ~'</span>
+                    <span class="spinner-border spinner-border-sm vertical-middle d-none"></span>
+                '}) }}
+            </div>
+
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+

@@ -1,0 +1,31 @@
+page:
+  index: 'Ozon product cards'
+  new: 'Add card'
+  edit: 'Edit card'
+  update: 'Update Ozon card'
+  delete: 'Delete card'
+  get: 'Get new Ozon cards'
+
+breadcrumb:
+  index: 'Ozon product cards'
+  new: 'Add a Ozon product card'
+  edit: 'Edit Ozon product card'
+  update: 'Update Ozon product card'
+  delete: 'Delete Ozon product card'
+  restore: 'Restore Ozon product card'
+
+success:
+  new: 'Ozon product card has been successfully added'
+  edit: 'Ozon product card has been successfully updated'
+  update: 'The Ozon product card has been successfully added to the queue for updating'
+  delete: 'Ozon product card was successfully deleted'
+  restore: 'Ozon product card has been restored'
+  get: 'Ozon squat update added to queue'
+
+danger:
+  new: '%s: Error adding a Ozon product card'
+  edit: '%s: Error updating the Ozon product card'
+  update: '%s: Error updating the Ozon product card'
+  delete: '%s: Error when deleting Ozon product card'
+  restore: '%s: Error while restoring the Ozon product card'
+  get: "There's already been an update! Please try again in 5 minutes!"
