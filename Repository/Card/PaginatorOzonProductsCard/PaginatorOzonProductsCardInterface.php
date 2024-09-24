@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2023.  Baks.dev <admin@baks.dev>
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,17 @@
  *  THE SOFTWARE.
  */
 
-declare(strict_types=1);
+namespace BaksDev\Ozon\Products\Repository\Card\PaginatorOzonProductsCard;
 
-namespace BaksDev\Ozon\Products;
+use BaksDev\Core\Form\Search\SearchDTO;
+use BaksDev\Core\Services\Paginator\PaginatorInterface;
+use BaksDev\Products\Product\Forms\ProductFilter\Admin\ProductFilterDTO;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
-
-class BaksDevOzonProductsBundle extends AbstractBundle
+interface PaginatorOzonProductsCardInterface
 {
-    public const NAMESPACE = __NAMESPACE__.'\\';
+    public function search(SearchDTO $search): self;
 
-    public const PATH = __DIR__.DIRECTORY_SEPARATOR;
+    public function filter(ProductFilterDTO $filter): self;
 
+    public function findAll(): PaginatorInterface;
 }

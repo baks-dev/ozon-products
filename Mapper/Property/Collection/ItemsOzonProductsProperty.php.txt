@@ -1,0 +1,134 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
+
+use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeCollection;
+use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
+use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Ozon\Products\Repository\Card\CurrentOzonProductsCard\CurrentOzonProductsCard;
+use BaksDev\Type\Card\Id\OzonProductsCardUid;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+final class ItemsOzonProductsProperty implements OzonProductsPropertyInterface
+{
+    /**
+     * Основной класс данных
+     *
+     * Array
+     * example: "items" => [
+     *     'attributes' => [],
+     *     "barcode" => "112772873170",
+     *      "description_category_id" => 17028922,
+     *      "new_description_category_id" => 0,
+     *      "color_image" => "",
+     *      "complex_attributes" => [ ],
+     *      "currency_code" => "RUB",
+     *      "depth" => 10,
+     *      "dimension_unit" => "mm",
+     *      "height" => 250,
+     *      "images" => [ ],
+     *      "images360" => [ ],
+     *      "name" => "Комплект защитных плёнок для X3 NFC. Темный хлопок",
+     *      "offer_id" => "143210608",
+     *      "old_price" => "1100",
+     *      "pdf_list" => [ ],
+     *      "price" => "1000",
+     *      "primary_image" => "",
+     *      "vat" => "0.1",
+     *      "weight" => 100,
+     *      "weight_unit" => "g",
+     *      "width" => 150
+     *   ]
+     *
+     */
+
+    public const PARAM = 'items';
+
+    public function __construct(
+        private readonly ?CurrentOzonProductsCard $ozonProductsCard = null,
+        private readonly ?OzonProductsAttributeCollection $attributeCollection = null,
+        private readonly ?TranslatorInterface $translator = null,
+    ) {
+    }
+
+    public function getValue(): string
+    {
+        return self::PARAM;
+    }
+
+    /**
+     * Возвращает состояние
+     */
+    public function getData(OzonProductsCardUid|array $card): mixed
+    {
+        if($this->ozonProductsCard)
+        {
+            $data = $card instanceof OzonProductsCardUid ? $this->ozonProductsCard->findByCard($card) : $card;
+
+            if(!isset($data['market_category']))
+            {
+                return null;
+            }
+
+            $cases = $this->attributeCollection->cases($data['market_category']);
+
+            /** @var OzonProductsAttributeInterface $param */
+            foreach($cases as $param)
+            {
+                $parameter = $param->getData($data, $this->translator);
+
+                if(
+                    is_array($parameter) &&
+                    !empty($parameter['parameterId']) &&
+                    !empty($parameter['value'])
+                ) {
+                    $params[] = $parameter;
+                }
+            }
+        }
+
+        return $params ?? null;
+    }
+
+    /**
+     * Возвращает значение по умолчанию
+     */
+    public function default(): string|bool
+    {
+        return false;
+    }
+
+    /**
+     * Метод указывает, нужно ли добавить свойство для заполнения в форму
+     */
+    public function isSetting(): bool
+    {
+        return false;
+    }
+
+
+    public function required(): bool
+    {
+        return false;
+    }
+
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    /**
+     * Проверяет, относится ли значение к данному объекту
+     */
+    public static function equals(string $param): bool
+    {
+        return self::PARAM === $param;
+    }
+
+    public function choices(): bool
+    {
+        return false;
+    }
+}

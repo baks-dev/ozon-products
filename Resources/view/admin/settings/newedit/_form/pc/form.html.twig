@@ -1,0 +1,150 @@
+{% trans_default_domain 'ozon-products.admin.settings' %}
+
+
+<ul class="nav nav-pills gap-3 mb-3" id="nav-market">
+
+    <li class="nav-item" role="presentation">
+        <button class="btn fw-bolder nav-link active"
+                data-bs-toggle="tab"
+                type="button"
+                role="tab"
+                aria-selected="true"
+
+                id="tab_parameter-tab"
+                data-bs-target="#tab_parameter"
+                aria-controls="nav-market"
+        >
+            <small class="text-uppercase px-3">
+                {# Основные настройки #}
+                Основные настройки
+            </small>
+        </button>
+    </li>
+
+
+    <li class="nav-item">
+        <button class="btn fw-bolder nav-link"
+                data-bs-toggle="tab"
+                type="button"
+                role="tab"
+                aria-selected="true"
+
+                id="tab_property-tab"
+                data-bs-target="#tab_property"
+                aria-controls="nav-market"
+        >
+            <small class="text-uppercase px-3">
+                {# Пользовательские поля #}
+                Свойства товара
+            </small>
+        </button>
+    </li>
+
+
+</ul>
+
+<div class="tab-content">
+
+    {# ОСНОВНЫЕ НАСТРОЙКИ #}
+    <div class="tab-pane fade show active" id="tab_parameter" role="tabpanel">
+        {% for property in form.properties %}
+
+            <div class="d-flex p-3 mb-1 gap-2 align-items-end rounded-3 border"
+                    {#style='background-color: {{ property.vars.data.required ? '#fff2f2' : property.vars.data.field is null ? '#fffaef' : '#f8f8f8' }}'#}
+            >
+                <div class="w-50">
+                   {{ form_label(property.field) }}
+                    {{ form_help(property.field) }}
+                </div>
+
+
+                <div class="w-50 d-flex mb-1 gap-2 align-items-end rounded-3">
+                    {{ form_widget(property.field, {
+                        placeholder: 'Выберите поле из списка...',
+                        attr: { 'data-select' : 'select2', class:  'mb-0'  }
+                    }) }}
+
+                    {% if property.def is defined %}
+                        {{ form_widget(property.def, {
+                            placeholder: 'Выберите поле из списка...',
+                            attr: { 'placeholder' : 'по умолчанию' }
+                        }) }}
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+    </div>
+
+    <div class="tab-pane fade" id="tab_property" role="tabpanel">
+        {% for attribute in form.attributes %}
+
+            <div class="d-flex gap-2">
+
+                <div class=" w-100 d-flex p-3 mb-1 gap-2 align-items-end rounded-3 border" >
+
+                    <div class="w-50">
+                        {{ form_label(attribute.field) }}
+                        {{ form_help(attribute.field) }}
+
+{#                        {% if attribute.vars.data.help %}#}
+
+
+{#                            {% set rand = random() %}#}
+
+{#                            <div>#}
+{#                                <a tabindex="0"#}
+{#                                   id="{{ rand }}"#}
+{#                                   class="small text-decoration-none"#}
+{#                                   role="button"#}
+{#                                   data-bs-container="body"#}
+{#                                   data-bs-toggle="popover"#}
+{#                                   data-bs-trigger="click"#}
+{#                                   data-bs-placement="bottom"#}
+{#                                >#}
+{#                                    Список ркеомендуемых значений#}
+{#                                </a>#}
+
+{#                                <div id="{{ rand }}-content" class="d-none mt-5">#}
+{#                                    <div class="d-flex gap-3 align-items-center mb-1">#}
+{#                                <span>#}
+{#                                    {% for help in attribute.vars.data.help %}#}
+{#                                        {{ help }}<br>#}
+{#                                    {% endfor %}#}
+{#                                </span>#}
+{#                                    </div>#}
+{#                                </div>#}
+
+{#                            </div>#}
+{#                        {% endif %}#}
+
+                    </div>
+
+                    <div class="w-50 d-flex mb-1 gap-2 align-items-end rounded-3">
+                        {{ form_widget(attribute.field, {
+                            placeholder: 'Выберите поле из списка...',
+                            attr: { 'data-select' : 'select2', class:  'mb-0'  }
+                        }) }}
+                    </div>
+
+                </div>
+
+
+                {% if attribute.default is defined %}
+                <div class="w-50 p-3 mb-1 rounded-3 border" >
+                {{ form_widget(attribute.default, {
+                    placeholder: 'Рекомендуемые значения',
+                    attr: { 'placeholder' : 'по умолчанию' }
+                }) }}
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+

@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2023.  Baks.dev <admin@baks.dev>
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,30 @@
  *  THE SOFTWARE.
  */
 
-declare(strict_types=1);
+namespace BaksDev\Ozon\Products\Repository\Card\ProductOzonCard;
 
-namespace BaksDev\Ozon\Products;
+use BaksDev\Orders\Order\Entity\Order;
+use BaksDev\Orders\Order\Type\Id\OrderUid;
+use BaksDev\Products\Product\Entity\Product;
+use BaksDev\Products\Product\Type\Id\ProductUid;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
-
-class BaksDevOzonProductsBundle extends AbstractBundle
+interface ProductsOzonCardInterface
 {
-    public const NAMESPACE = __NAMESPACE__.'\\';
 
-    public const PATH = __DIR__.DIRECTORY_SEPARATOR;
+    public function forProduct(Product|ProductUid|string $product): self;
 
+    public function forOfferConst(ProductOfferConst|string $offerConst): self;
+
+    public function forVariationConst(ProductVariationConst|string $variationConst): self;
+
+    public function forModificationConst(ProductModificationConst|string $modificationConst): self;
+
+    /**
+     * Метод получает все карточки товара
+     */
+    public function find(): array|false;
 }

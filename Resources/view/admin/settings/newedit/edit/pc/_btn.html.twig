@@ -1,0 +1,26 @@
+{# Блок кнопок #}
+<div class="position-sticky d-flex flex-column w-100 bg-body mt-4" style="bottom: 0;">
+	<hr>
+	
+	<div class="d-flex pb-5">
+
+		<div class="flex-grow-1">
+			&nbsp;
+		</div>
+
+		<div class="d-flex gap-3">
+			
+			<a href="{{ app.request.headers.get('referer') is null or app.request.uri == app.request.headers.get('referer') ?
+			path('payment:admin.index') : app.request.headers.get('referer') }}"
+					class="btn btn-light">
+				{{ 'btn.cancel'|trans({}, 'core.btn') }}
+			</a>
+			
+			{{ form_widget(form.product_settings, { label: '
+				<span>'~ 'btn.update'|trans({}, 'core.btn') ~'</span>
+				<span class="spinner-border spinner-border-sm vertical-middle d-none"></span>
+			'}) }}
+		
+		</div>
+	</div>
+</div>

@@ -23,16 +23,46 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\Products;
+namespace BaksDev\Ozon\Products\Mapper\Property;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-class BaksDevOzonProductsBundle extends AbstractBundle
+final readonly class OzonProductPropertyCollection
 {
-    public const NAMESPACE = __NAMESPACE__.'\\';
+    public function __construct(
+        #[AutowireIterator('baks.ozon.product.property', defaultPriorityMethod: 'priority')]
+        private iterable $property,
+    ) {
+    }
 
-    public const PATH = __DIR__.DIRECTORY_SEPARATOR;
+    public function cases(): array
+    {
+        $case = null;
 
+        foreach($this->property as $key => $property)
+        {
+            $case[$key] = new $property();
+        }
+
+        return $case;
+    }
+
+    public function casesSettings(): array
+    {
+        $case = null;
+
+        /** @var OzonProductsPropertyInterface $instance */
+
+        foreach($this->property as $key => $property)
+        {
+            $instance = new $property();
+
+            if($instance->isSetting())
+            {
+                $case[$key] = $instance;
+            }
+        }
+
+        return $case;
+    }
 }

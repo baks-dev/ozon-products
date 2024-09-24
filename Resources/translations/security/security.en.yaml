@@ -1,0 +1,55 @@
+# Роль
+
+ROLE_OZON_PRODUCTS:
+  header: 'Ozon'
+  name: 'Соотношения свойств Ozon'
+  desc: 'Настройки соотношений данных Ozon'
+
+# Правила
+
+ROLE_OZON_PRODUCTS_INDEX:
+  name: 'Просмотр'
+  desc: ''
+
+ROLE_OZON_PRODUCTS_NEW:
+  name: 'Добавить'
+  desc: ''
+
+ROLE_OZON_PRODUCTS_EDIT:
+  name: 'Редактировать'
+  desc: ''
+
+ROLE_OZON_PRODUCTS_DELETE:
+  name: 'Удалить'
+  desc: ''
+
+
+ROLE_OZON_PRODUCTS_CARD:
+  header: 'Ozon'
+  name: 'Карточки товаров'
+  desc: 'Карточки товаров Ozon'
+
+ROLE_OZON_PRODUCTS_CARD_INDEX:
+  name: 'Просмотр'
+  desc: ''
+
+ROLE_OZON_PRODUCTS_CARD_NEW:
+  name: 'Добавить'
+  desc: ''
+
+ROLE_OZON_PRODUCTS_CARD_EDIT:
+  name: 'Редактировать'
+  desc: ''
+
+ROLE_OZON_PRODUCTS_CARD_DELETE:
+  name: 'Удалить'
+  desc: ''
+
+
+ROLE_OZON_PRODUCTS_CARD_GET:
+  name: 'Получить новые'
+  desc: 'Получить новые карточки с Ozon'
+
+ROLE_OZON_PRODUCTS_CARD_POST:
+  name: 'Обновить новые'
+  desc: 'Обновить новые карточки на Ozon'

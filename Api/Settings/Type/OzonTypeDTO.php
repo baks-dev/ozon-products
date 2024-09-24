@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2023.  Baks.dev <admin@baks.dev>
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,32 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\Products;
+namespace BaksDev\Ozon\Products\Api\Settings\Type;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
-
-class BaksDevOzonProductsBundle extends AbstractBundle
+final readonly class OzonTypeDTO
 {
-    public const NAMESPACE = __NAMESPACE__.'\\';
+    public function __construct(
+        /** ID категории */
+        private int $id,
 
-    public const PATH = __DIR__.DIRECTORY_SEPARATOR;
+        /** Наименование категорий */
+        private ?string $name = null
+    ) {
 
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }

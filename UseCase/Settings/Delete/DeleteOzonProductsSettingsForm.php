@@ -23,16 +23,30 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\Products;
+namespace BaksDev\Ozon\Products\UseCase\Settings\Delete;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BaksDevOzonProductsBundle extends AbstractBundle
+final class DeleteOzonProductsSettingsForm extends AbstractType
 {
-    public const NAMESPACE = __NAMESPACE__.'\\';
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder->add(
+            'delete_ozon_products_settings',
+            SubmitType::class,
+            ['label' => 'Delete', 'label_html' => true, 'attr' => ['class' => 'btn-danger']]
+        );
+    }
 
-    public const PATH = __DIR__.DIRECTORY_SEPARATOR;
-
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => DeleteOzonProductsSettingsDTO::class,
+            'method' => 'POST',
+            'attr' => ['class' => 'w-100'],
+        ]);
+    }
 }
