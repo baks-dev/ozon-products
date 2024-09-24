@@ -35,7 +35,7 @@ final class VoterDelete implements VoterInterface
     /**
      * Удалить
      */
-    public const VOTER = 'DELETE';
+    public const string VOTER = 'DELETE';
 
     public static function getVoter(): string
     {

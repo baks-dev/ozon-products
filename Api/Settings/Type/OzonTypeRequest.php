@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Api\Settings\Type;
 
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Ozon\Api\Ozon;
+use DateInterval;
 use DomainException;
 use Generator;
 use Psr\Cache\InvalidArgumentException;
@@ -37,10 +38,7 @@ final class OzonTypeRequest extends Ozon
 {
     private Locale|false $local = false;
 
-    private const int EXPIRES_CACHE_AFTER = 3600;
-
     private array $types = [];
-
 
     public function local(Locale|string $locale): self
     {
@@ -56,6 +54,9 @@ final class OzonTypeRequest extends Ozon
 
 
     /**
+     * Возвращает категории и типы для товаров в виде дерева.
+     * @see https://docs.ozon.ru/api/seller/#tag/CategoryAPI
+     *
      * @throws InvalidArgumentException
      */
     public function findAll(int $categoryId): Generator
@@ -64,12 +65,8 @@ final class OzonTypeRequest extends Ozon
 
         $response = $cache->get('ozon-products-type', function (ItemInterface $item): ResponseInterface {
 
-            $item->expiresAfter(self::EXPIRES_CACHE_AFTER);
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-            /**
-             *  Возвращает категории и типы для товаров в виде дерева.
-             * https://docs.ozon.ru/api/seller/#tag/CategoryAPI
-             */
             return $this->TokenHttpClient()
                 ->request(
                     'POST',
@@ -114,7 +111,7 @@ final class OzonTypeRequest extends Ozon
     /** Обход дерева категорий, получение типов товаров*/
     public function getTypes(int $categoryId, array $category): void
     {
-        foreach ($category as $item)
+        foreach($category as $item)
         {
             if(!empty($item['children']))
             {

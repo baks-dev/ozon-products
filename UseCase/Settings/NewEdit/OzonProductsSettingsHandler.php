@@ -36,22 +36,8 @@ final class OzonProductsSettingsHandler extends AbstractHandler
     /** @see ProductsSettings */
     public function handle(OzonProductsSettingsDTO $command): string|OzonProductsSettings
     {
-
-        /** Валидация DTO  */
-        $this->validatorCollection->add($command);
-
-        $this->main = new OzonProductsSettings();
-        $this->event = new OzonProductsSettingsEvent();
-
-        try
-        {
-            $command->getEvent() ? $this->preUpdate($command, true) : $this->prePersist($command);
-
-        }
-        catch(DomainException $errorUniqid)
-        {
-            return $errorUniqid->getMessage();
-        }
+        $this->setCommand($command);
+        $this->preEventPersistOrUpdate(OzonProductsSettings::class, OzonProductsSettingsEvent::class);
 
         /** Валидация всех объектов */
         if($this->validatorCollection->isInvalid())
@@ -67,8 +53,6 @@ final class OzonProductsSettingsHandler extends AbstractHandler
             transport: 'ozon-products'
         );
 
-
         return $this->main;
-
     }
 }

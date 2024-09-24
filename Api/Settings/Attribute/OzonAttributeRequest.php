@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Api\Settings\Attribute;
 
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Ozon\Api\Ozon;
+use DateInterval;
 use DomainException;
 use Generator;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -35,8 +36,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class OzonAttributeRequest extends Ozon
 {
     private Locale|false $local = false;
-
-    private const int EXPIRES_CACHE_AFTER = 3600;
 
     public function local(Locale|string $locale): self
     {
@@ -50,7 +49,10 @@ final class OzonAttributeRequest extends Ozon
         return $this;
     }
 
-
+    /**
+     * Получение характеристик для указанных категории и типа товара.
+     * @see https://docs.ozon.ru/api/seller/#operation/DescriptionCategoryAPI_GetAttributes
+     */
     public function findAll(int $categoryId, int $typeId): Generator
     {
         $cache = $this->getCacheInit('ozon-products');
@@ -59,27 +61,22 @@ final class OzonAttributeRequest extends Ozon
             sprintf('%s-%s', 'ozon-products-attribute', $typeId),
             function (ItemInterface $item) use ($categoryId, $typeId): ResponseInterface {
 
-                $item->expiresAfter(self::EXPIRES_CACHE_AFTER);
+                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-                /**
-                 * Получение характеристик для указанных категории и типа товара.
-                 * https://docs.ozon.ru/api/seller/#operation/DescriptionCategoryAPI_GetAttributes
-                 */
                 return $this->TokenHttpClient()
                     ->request(
                         'POST',
                         '/v1/description-category/attribute',
                         [
                             "json" => [
-                                'description_category_id'       => $categoryId,
-                                "language"                      => $this->local ?: 'DEFAULT',
-                                "type_id"                       => $typeId
+                                'description_category_id' => $categoryId,
+                                "language" => $this->local ?: 'DEFAULT',
+                                "type_id" => $typeId
                             ]
                         ]
                     );
             }
         );
-
 
         $content = $response->toArray(false);
 
@@ -93,7 +90,7 @@ final class OzonAttributeRequest extends Ozon
             );
         }
 
-        foreach ($content['result'] as $attributes)
+        foreach($content['result'] as $attributes)
         {
             yield new OzonAttributeDTO($attributes);
         }

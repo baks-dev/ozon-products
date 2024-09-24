@@ -35,7 +35,7 @@ final class VoterEdit implements VoterInterface
     /**
      * Редактировать
      */
-    public const VOTER = 'EDIT';
+    public const string VOTER = 'EDIT';
 
     public static function getVoter(): string
     {

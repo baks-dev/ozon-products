@@ -37,7 +37,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 final class Role implements RoleInterface, MenuAdminInterface
 {
 
-    public const ROLE = 'ROLE_OZON_PRODUCTS';
+    public const string ROLE = 'ROLE_OZON_PRODUCTS';
 
     public function getRole(): string
     {
@@ -59,7 +59,6 @@ final class Role implements RoleInterface, MenuAdminInterface
      */
     public function getGroupMenu(): MenuAdminSectionGroupCollectionInterface|bool
     {
-        // return new MenuGroupMarketplace();
         return new MenuGroupSettings();
     }
 

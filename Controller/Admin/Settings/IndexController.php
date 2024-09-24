@@ -46,6 +46,7 @@ final class IndexController extends AbstractController
         AllProductsSettingsInterface $allProductsSettings,
         int $page = 0,
     ): Response {
+
         /* Поиск */
         $search = new SearchDTO();
         $searchForm = $this->createForm(
@@ -57,11 +58,13 @@ final class IndexController extends AbstractController
         $searchForm->handleRequest($request);
 
         /* Получаем список */
-        $query = $allProductsSettings->fetchAllProductsSettingsAssociative($search);
+        $query = $allProductsSettings
+            ->search($search)
+            ->findPaginator();
 
         return $this->render(
             [
-                'query'  => $query,
+                'query' => $query,
                 'search' => $searchForm->createView(),
             ],
         );

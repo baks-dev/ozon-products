@@ -30,10 +30,8 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 final readonly class OzonProductsTypeCollection
 {
     public function __construct(
-        #[AutowireIterator('baks.ozon.product.type', defaultPriorityMethod: 'priority')]
-        private iterable $property,
-    ) {
-    }
+        #[AutowireIterator('baks.ozon.product.type', defaultPriorityMethod: 'priority')] private iterable $property,
+    ) {}
 
     public function cases(): array
     {

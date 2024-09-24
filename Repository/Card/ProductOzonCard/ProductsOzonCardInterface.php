@@ -37,11 +37,11 @@ interface ProductsOzonCardInterface
 
     public function forProduct(Product|ProductUid|string $product): self;
 
-    public function forOfferConst(ProductOfferConst|string $offerConst): self;
+    public function forOfferConst(ProductOfferConst|string|null|false $offerConst): self;
 
-    public function forVariationConst(ProductVariationConst|string $variationConst): self;
+    public function forVariationConst(ProductVariationConst|string|null|false $variationConst): self;
 
-    public function forModificationConst(ProductModificationConst|string $modificationConst): self;
+    public function forModificationConst(ProductModificationConst|string|null|false $modificationConst): self;
 
     /**
      * Метод получает все карточки товара

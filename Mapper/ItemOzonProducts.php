@@ -42,8 +42,7 @@ final readonly class ItemOzonProducts
 
     public function __construct(
         #[AutowireIterator('baks.ozon.product.property', defaultPriorityMethod: 'priority')] private iterable $property
-    ) {
-    }
+    ) {}
 
 
     /**

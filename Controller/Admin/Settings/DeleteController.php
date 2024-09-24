@@ -46,11 +46,15 @@ final class DeleteController extends AbstractController
         DeleteOzonProductsSettingsHandler $ProductSettingsHandler,
         #[MapEntity] OzonProductsSettingsEvent $Event,
     ): Response {
+
         $DeleteOzonProductSettingsDTO = new DeleteOzonProductsSettingsDTO();
         $Event->getDto($DeleteOzonProductSettingsDTO);
 
         $form = $this->createForm(DeleteOzonProductsSettingsForm::class, $DeleteOzonProductSettingsDTO, [
-            'action' => $this->generateUrl('ozon-products:admin.settings.delete', ['id' => $DeleteOzonProductSettingsDTO->getEvent()]),
+            'action' => $this->generateUrl(
+                'ozon-products:admin.settings.delete',
+                ['id' => $DeleteOzonProductSettingsDTO->getEvent()]
+            ),
         ]);
 
         $form->handleRequest($request);

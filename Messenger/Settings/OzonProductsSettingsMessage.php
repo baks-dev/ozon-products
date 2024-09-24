@@ -4,34 +4,16 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Messenger\Settings;
 
-
 use BaksDev\Ozon\Products\Type\Settings\Event\OzonProductsSettingsEventUid;
 use BaksDev\Products\Category\Type\Id\CategoryProductUid;
 
 final class OzonProductsSettingsMessage
 {
-    /**
-     * Идентификатор
-     */
-    private CategoryProductUid $id;
-
-    /**
-     * Идентификатор события
-     */
-    private OzonProductsSettingsEventUid $event;
-
-    /**
-     * Идентификатор предыдущего события
-     */
-    private ?OzonProductsSettingsEventUid $last;
-
-
-    public function __construct(CategoryProductUid $id, OzonProductsSettingsEventUid $event, ?OzonProductsSettingsEventUid $last = null)
-    {
-        $this->id = $id;
-        $this->event = $event;
-        $this->last = $last;
-    }
+    public function __construct(
+        private readonly CategoryProductUid $id,
+        private readonly OzonProductsSettingsEventUid $event,
+        private ?OzonProductsSettingsEventUid $last = null
+    ) {}
 
 
     /**

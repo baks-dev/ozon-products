@@ -37,21 +37,9 @@ final class DeleteOzonProductsSettingsHandler extends AbstractHandler
         DeleteOzonProductsSettingsDTO $command,
     ): string|OzonProductsSettings {
 
+        $this->setCommand($command);
 
-        /** Валидация DTO  */
-        $this->validatorCollection->add($command);
-
-        $this->main = new OzonProductsSettings();
-        $this->event = new OzonProductsSettingsEvent();
-
-        try
-        {
-            $this->preRemove($command);
-        }
-        catch(DomainException $errorUniqid)
-        {
-            return $errorUniqid->getMessage();
-        }
+        $this->preEventRemove(OzonProductsSettings::class, OzonProductsSettingsEvent::class);
 
         /** Валидация всех объектов */
         if($this->validatorCollection->isInvalid())

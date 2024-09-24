@@ -48,6 +48,7 @@ final class NewController extends AbstractController
         int $ozon,
         int $type,
     ): Response {
+
         $SettingsDTO = new OzonProductsSettingsDTO();
         $SettingsDTO->setSettings($category->getId());
         $SettingsDTO->setOzon($ozon);

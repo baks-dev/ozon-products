@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace BaksDev\Ozon\Products\Listeners\Entity;
 
 use BaksDev\Core\Type\Ip\IpAddress;
@@ -19,8 +20,7 @@ final class OzonProductsSettingsModifyListener
     public function __construct(
         private readonly RequestStack $request,
         private readonly TokenStorageInterface $token,
-    ) {
-    }
+    ) {}
 
     public function prePersist(OzonProductsSettingsModify $data, LifecycleEventArgs $event): void
     {

@@ -31,6 +31,10 @@ use DomainException;
 
 final class OzonCardUpdateRequest extends Ozon
 {
+    /**
+     * Создать или обновить товар
+     * @see https://docs.ozon.ru/api/seller/#operation/DescriptionCategoryAPI_SearchAttributeValues
+     */
     public function update(array $card): bool
     {
         if(Kernel::isTestEnvironment())
@@ -38,10 +42,6 @@ final class OzonCardUpdateRequest extends Ozon
             return true;
         }
 
-        /**
-         * Создать или обновить товар
-         * https://docs.ozon.ru/api/seller/#operation/DescriptionCategoryAPI_SearchAttributeValues
-         */
         $response = $this->TokenHttpClient()
             ->request(
                 'POST',
@@ -55,9 +55,7 @@ final class OzonCardUpdateRequest extends Ozon
 
         if($response->getStatusCode() !== 200)
         {
-
             $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
-
 
             throw new DomainException(
                 message: 'Ошибка '.self::class,

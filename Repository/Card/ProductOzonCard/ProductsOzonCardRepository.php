@@ -61,6 +61,7 @@ use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use BaksDev\Reference\Money\Type\Money;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use InvalidArgumentException;
 
 final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 {
@@ -73,14 +74,11 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
     private ProductModificationConst|false $modificationConst = false;
 
 
-    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder)
-    {
-    }
+    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
 
 
     public function forProduct(Product|ProductUid|string $product): self
     {
-
         if(is_string($product))
         {
             $product = new ProductUid($product);
@@ -100,6 +98,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
     {
         if(is_null($offerConst) || $offerConst === false)
         {
+            $this->offerConst = false;
             return $this;
         }
 
@@ -117,6 +116,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
     {
         if(is_null($variationConst) || $variationConst === false)
         {
+            $this->variationConst = false;
             return $this;
         }
 
@@ -134,6 +134,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
     {
         if(is_null($modificationConst) || $modificationConst === false)
         {
+            $this->modificationConst = false;
             return $this;
         }
 
@@ -154,7 +155,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
     {
         if($this->product === false)
         {
-            throw new \InvalidArgumentException('Invalid Argument product');
+            throw new InvalidArgumentException('Invalid Argument product');
         }
 
         $dbal = $this
@@ -252,23 +253,23 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                      * Modification
                      */
                     /* Массив с селектом стоимости продукта */
-                    $selectPrice[]      = 'NULLIF(product_modification_price.price, 0)';
+                    $selectPrice[] = 'NULLIF(product_modification_price.price, 0)';
 
                     /* Массив с селектом со старой стоимости продукта */
-                    $selectOldPrice[]   = 'NULLIF(product_modification_price.old, 0)';
+                    $selectOldPrice[] = 'NULLIF(product_modification_price.old, 0)';
 
                     /* Массив с селектом валюты продукта */
-                    $selectCurrency[]   = 'CASE WHEN product_modification_price.price IS NOT NULL AND product_modification_price.price > 0 THEN product_modification_price.currency END';
+                    $selectCurrency[] = 'CASE WHEN product_modification_price.price IS NOT NULL AND product_modification_price.price > 0 THEN product_modification_price.currency END';
 
                     /* Массив с селектома артикула товара */
-                    $selectArticle[]    = 'WHEN product_modification.article IS NOT NULL THEN product_modification.article';
+                    $selectArticle[] = 'WHEN product_modification.article IS NOT NULL THEN product_modification.article';
 
                     /* Массив с селектом наличия продукта */
-                    $selectQuantity[]   = 'WHEN product_modification_quantity.quantity > 0 AND product_modification_quantity.quantity > product_modification_quantity.reserve 
+                    $selectQuantity[] = 'WHEN product_modification_quantity.quantity > 0 AND product_modification_quantity.quantity > product_modification_quantity.reserve 
                                            THEN product_modification_quantity.quantity - ABS(product_modification_quantity.reserve)';
 
                     /* Массив с селектом фото товара */
-                    $selectPhoto[]      = "
+                    $selectPhoto[] = "
                         WHEN product_modification_image.ext IS NOT NULL
                         THEN JSONB_BUILD_OBJECT
                             (
@@ -283,23 +284,23 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                  * Variation
                  */
                 /* Массив с селектом стоимости продукта */
-                $selectPrice[]      = 'NULLIF(product_variation_price.price, 0)';
+                $selectPrice[] = 'NULLIF(product_variation_price.price, 0)';
 
                 /* Массив с селектом со старой стоимости продукта */
-                $selectOldPrice[]   = 'NULLIF(product_variation_price.old, 0)';
+                $selectOldPrice[] = 'NULLIF(product_variation_price.old, 0)';
 
                 /* Массив с селектом валюты продукта */
-                $selectCurrency[]   = 'CASE WHEN product_variation_price.price IS NOT NULL AND product_variation_price.price > 0 THEN product_variation_price.currency END';
+                $selectCurrency[] = 'CASE WHEN product_variation_price.price IS NOT NULL AND product_variation_price.price > 0 THEN product_variation_price.currency END';
 
                 /* Массив с селектома артикула товара */
-                $selectArticle[]    = 'WHEN product_variation.article IS NOT NULL THEN product_variation.article';
+                $selectArticle[] = 'WHEN product_variation.article IS NOT NULL THEN product_variation.article';
 
                 /* Массив с селектом наличия продукта */
-                $selectQuantity[]   = 'WHEN product_variation_quantity.quantity > 0 AND product_variation_quantity.quantity > product_variation_quantity.reserve 
+                $selectQuantity[] = 'WHEN product_variation_quantity.quantity > 0 AND product_variation_quantity.quantity > product_variation_quantity.reserve 
                                        THEN product_variation_quantity.quantity - ABS(product_variation_quantity.reserve)';
 
                 /* Массив с селектом фото товара */
-                $selectPhoto[]      = "
+                $selectPhoto[] = "
                     WHEN product_variation_image.ext IS NOT NULL
                     THEN JSONB_BUILD_OBJECT
                         (
@@ -314,23 +315,23 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
              * Product Offer
              */
             /* Массив с селектом стоимости продукта */
-            $selectPrice[]      = 'NULLIF(product_offer_price.price, 0)';
+            $selectPrice[] = 'NULLIF(product_offer_price.price, 0)';
 
             /* Массив с селектом со старой стоимости продукта */
-            $selectOldPrice[]   = 'NULLIF(product_offer_price.old, 0)';
+            $selectOldPrice[] = 'NULLIF(product_offer_price.old, 0)';
 
             /* Массив с селектом валюты продукта */
-            $selectCurrency[]   = 'CASE WHEN product_offer_price.price IS NOT NULL AND product_offer_price.price > 0 THEN product_offer_price.currency END';
+            $selectCurrency[] = 'CASE WHEN product_offer_price.price IS NOT NULL AND product_offer_price.price > 0 THEN product_offer_price.currency END';
 
             /* Массив с селектома артикула товара */
-            $selectArticle[]    = 'WHEN product_offer.article IS NOT NULL THEN product_offer.article';
+            $selectArticle[] = 'WHEN product_offer.article IS NOT NULL THEN product_offer.article';
 
             /* Массив с селектом наличия продукта */
-            $selectQuantity[]   = 'WHEN product_offer_quantity.quantity > 0 AND product_offer_quantity.quantity > product_offer_quantity.reserve 
+            $selectQuantity[] = 'WHEN product_offer_quantity.quantity > 0 AND product_offer_quantity.quantity > product_offer_quantity.reserve 
                                    THEN product_offer_quantity.quantity - ABS(product_offer_quantity.reserve)';
 
             /* Массив с селектом фото товара */
-            $selectPhoto[]      = "
+            $selectPhoto[] = "
                 WHEN product_offer_image.ext IS NOT NULL
                 THEN JSONB_BUILD_OBJECT
                     (
@@ -345,23 +346,23 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
          * Default
          */
         /* Массив с селектом стоимости продукта */
-        $selectPrice[]      = 'NULLIF(product_price.price, 0)';
+        $selectPrice[] = 'NULLIF(product_price.price, 0)';
 
         /* Старая стоимость продукта */
-        $selectOldPrice[]   = 'NULLIF(product_price.old, 0)';
+        $selectOldPrice[] = 'NULLIF(product_price.old, 0)';
 
         /* Массив с селектом валюты продукта */
-        $selectCurrency[]   = 'CASE WHEN product_price.price IS NOT NULL AND product_price.price > 0 THEN product_price.currency END';
+        $selectCurrency[] = 'CASE WHEN product_price.price IS NOT NULL AND product_price.price > 0 THEN product_price.currency END';
 
         /* Массив с селектома артикула товара */
-        $selectArticle[]    = 'WHEN product_info.article IS NOT NULL THEN product_info.article';
+        $selectArticle[] = 'WHEN product_info.article IS NOT NULL THEN product_info.article';
 
         /* Массив с селектом наличия продукта */
-        $selectQuantity[]   = 'WHEN product_price.quantity > 0 AND product_price.quantity > product_price.reserve 
+        $selectQuantity[] = 'WHEN product_price.quantity > 0 AND product_price.quantity > product_price.reserve 
                                THEN product_price.quantity - ABS(product_price.reserve)';
 
         /* Массив с селектом фото товара */
-        $selectPhoto[]      = "
+        $selectPhoto[] = "
             WHEN product_photo.ext IS NOT NULL
                 THEN JSONB_BUILD_OBJECT
                     (
@@ -416,8 +417,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 product_modification.value AS product_modification_value
             '
         );
-
-
 
 
         /** Характеристики упаковки товара  */

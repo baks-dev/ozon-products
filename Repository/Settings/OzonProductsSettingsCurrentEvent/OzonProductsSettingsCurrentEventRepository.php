@@ -9,12 +9,9 @@ use BaksDev\Ozon\Products\Entity\Settings\Event\OzonProductsSettingsEvent;
 use BaksDev\Ozon\Products\Entity\Settings\OzonProductsSettings;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 
-final class OzonProductsSettingsCurrentEventRepository implements OzonProductsSettingsCurrentEventInterface
+final readonly class OzonProductsSettingsCurrentEventRepository implements OzonProductsSettingsCurrentEventInterface
 {
-    public function __construct(
-        private readonly ORMQueryBuilder $ORMQueryBuilder
-    ) {
-    }
+    public function __construct(private ORMQueryBuilder $ORMQueryBuilder) {}
 
     /** Метод возвращает активное событие настройки профиля */
     public function findByProfile(UserProfileUid|string $profile): OzonProductsSettingsEvent|false
@@ -25,7 +22,6 @@ final class OzonProductsSettingsCurrentEventRepository implements OzonProductsSe
         }
 
         $orm = $this->ORMQueryBuilder->createQueryBuilder(self::class);
-
 
         $orm
             ->from(OzonProductsSettings::class, 'main')

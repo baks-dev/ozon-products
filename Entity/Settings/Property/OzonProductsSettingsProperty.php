@@ -92,7 +92,7 @@ class OzonProductsSettingsProperty extends EntityEvent
     {
         if($dto instanceof OzonProductsSettingsPropertyInterface || $dto instanceof self)
         {
-            if(empty($dto->getField()) && empty($dto->getDef()))
+            if($dto->getField() === null && empty($dto->getDef()))
             {
                 return false;
             }

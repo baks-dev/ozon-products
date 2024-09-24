@@ -46,9 +46,6 @@ final class PreformForm extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var PreformDTO  $data */
-        $data = $options['data'];
-
         /** Список локальных категорий */
 
         $builder

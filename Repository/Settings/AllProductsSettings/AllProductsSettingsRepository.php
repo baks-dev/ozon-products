@@ -63,13 +63,12 @@ final class AllProductsSettingsRepository implements AllProductsSettingsInterfac
 
 
     /** Метод возвращает пагинатор WbProductsSettings */
-    public function fetchAllProductsSettingsAssociative(): PaginatorInterface
+    public function findPaginator(): PaginatorInterface
     {
 
         $dbal = $this->DBALQueryBuilder
             ->createQueryBuilder(self::class)
-            ->bindLocal()
-        ;
+            ->bindLocal();
 
         $dbal->select('settings.id');
         $dbal->addSelect('settings.event');

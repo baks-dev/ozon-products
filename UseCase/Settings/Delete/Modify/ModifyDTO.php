@@ -18,13 +18,9 @@
 
 namespace BaksDev\Ozon\Products\UseCase\Settings\Delete\Modify;
 
-
 use BaksDev\Core\Type\Modify\Modify\ModifyActionDelete;
 use BaksDev\Core\Type\Modify\ModifyAction;
-use BaksDev\Core\Type\Modify\Modify\ModifyActionNew;
-use BaksDev\Core\Type\Modify\Modify\ModifyActionUpdate;
 use BaksDev\Ozon\Products\Entity\Settings\Modify\OzonProductsSettingsModifyInterface;
-use BaksDev\Yandex\Market\Products\Entity\Settings\Modify\YaMarketProductsSettingsModifyInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class ModifyDTO implements OzonProductsSettingsModifyInterface
@@ -45,4 +41,3 @@ final class ModifyDTO implements OzonProductsSettingsModifyInterface
         return $this->action;
     }
 }
-

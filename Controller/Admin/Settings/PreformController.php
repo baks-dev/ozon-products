@@ -51,7 +51,6 @@ final class PreformController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid() && $form->has('ozon_preform'))
         {
-
             $this->refreshTokenForm($form);
             return $this->redirectToRoute(
                 'ozon-products:admin.settings.newedit.new',

@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Api\Settings\Category;
 
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Ozon\Api\Ozon;
+use DateInterval;
 use DomainException;
 use Generator;
 use Psr\Cache\InvalidArgumentException;
@@ -36,8 +37,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class OzonCategoryRequest extends Ozon
 {
     private Locale|false $local = false;
-
-    private const int EXPIRES_CACHE_AFTER = 3600;
 
     public function local(Locale|string $locale): self
     {
@@ -52,6 +51,9 @@ final class OzonCategoryRequest extends Ozon
     }
 
     /**
+     * Возвращает категории и типы для товаров в виде дерева.
+     * @see https://docs.ozon.ru/api/seller/#tag/CategoryAPI
+     *
      * @throws InvalidArgumentException
      */
     public function findAll(?int $categoryId = null): Generator
@@ -60,12 +62,8 @@ final class OzonCategoryRequest extends Ozon
 
         $response = $cache->get('ozon-products-category', function (ItemInterface $item): ResponseInterface {
 
-            $item->expiresAfter(self::EXPIRES_CACHE_AFTER);
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-            /**
-             * Возвращает категории и типы для товаров в виде дерева.
-             * https://docs.ozon.ru/api/seller/#tag/CategoryAPI
-             */
             return $this->TokenHttpClient()
                 ->request(
                     'POST',
@@ -78,8 +76,8 @@ final class OzonCategoryRequest extends Ozon
                 );
         });
 
-
         $content = $response->toArray(false);
+
 
         if($response->getStatusCode() !== 200)
         {

@@ -35,6 +35,7 @@ use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
 
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
+use DateInterval;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -59,7 +60,6 @@ final class OzonProductsCardUpdate
 
     public function __invoke(OzonProductsCardMessage $message): void
     {
-
         $product = $this->ozonProductsCard
             ->forProduct($message->getProduct())
             ->forOfferConst($message->getOfferConst())
@@ -94,7 +94,7 @@ final class OzonProductsCardUpdate
                 md5(self::class)
             ]);
 
-        $this->deduplicator->expiresAfter(\DateInterval::createFromDateString('2 minutes'));
+        $this->deduplicator->expiresAfter(DateInterval::createFromDateString('2 minutes'));
 
         if($Deduplicator->isExecuted())
         {

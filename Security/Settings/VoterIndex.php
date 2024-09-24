@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 final class VoterIndex implements VoterInterface
 {
 
-    public const VOTER = 'INDEX';
+    public const string VOTER = 'INDEX';
 
     public static function getVoter(): string
     {

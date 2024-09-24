@@ -31,5 +31,5 @@ interface AllProductsSettingsInterface
     public function search(SearchDTO $search): self;
 
     /** Метод возвращает пагинатор WbProductsSettings */
-    public function fetchAllProductsSettingsAssociative(): PaginatorInterface;
+    public function findPaginator(): PaginatorInterface;
 }

@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Api\Settings\AttributeValues;
 
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Ozon\Api\Ozon;
+use DateInterval;
 use DomainException;
 use Generator;
 use Psr\Cache\InvalidArgumentException;
@@ -38,9 +39,8 @@ final class OzonAttributeValueRequest extends Ozon
     private Locale|false $local = false;
 
     private int $limit = 58732849;
-    private int $lastValueId = 0;
 
-    private const int EXPIRES_CACHE_AFTER = 3600;
+    private int $lastValueId = 0;
 
     public function local(Locale|string $locale): self
     {
@@ -55,6 +55,9 @@ final class OzonAttributeValueRequest extends Ozon
     }
 
     /**
+     * Возвращает справочник значений характеристики.
+     * @see https://docs.ozon.ru/api/seller/#operation/DescriptionCategoryAPI_GetAttributes
+     *
      * @throws InvalidArgumentException
      */
     public function findAll(int $categoryId, int $typeId, int $attributeId): Generator
@@ -65,30 +68,25 @@ final class OzonAttributeValueRequest extends Ozon
             sprintf('%s-%s-%s', 'ozon-products-attribute-value', $typeId, $attributeId),
             function (ItemInterface $item) use ($categoryId, $typeId, $attributeId): ResponseInterface {
 
-                $item->expiresAfter(self::EXPIRES_CACHE_AFTER);
+                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-                /**
-                 * Возвращает справочник значений характеристики.
-                 * https://docs.ozon.ru/api/seller/#operation/DescriptionCategoryAPI_GetAttributes
-                 */
                 return $this->TokenHttpClient()
                     ->request(
                         'POST',
                         '/v1/description-category/attribute/values',
                         [
                             "json" => [
-                                "attribute_id"                  => $attributeId,
-                                'description_category_id'       => $categoryId,
-                                "language"                      => $this->local ?: 'DEFAULT',
-                                "last_value_id"                 => $this->lastValueId,
-                                "limit"                         => $this->limit,
-                                "type_id"                       => $typeId
+                                "attribute_id" => $attributeId,
+                                'description_category_id' => $categoryId,
+                                "language" => $this->local ?: 'DEFAULT',
+                                "last_value_id" => $this->lastValueId,
+                                "type_id" => $typeId,
+                                "limit" => $this->limit,
                             ]
                         ]
                     );
             }
         );
-
 
         $content = $response->toArray(false);
 
@@ -102,10 +100,15 @@ final class OzonAttributeValueRequest extends Ozon
             );
         }
 
-        foreach ($content['result'] as $attributeValues)
+        foreach($content['result'] as $attributeValues)
         {
             yield new OzonAttributeValueDTO($attributeValues, $content['has_next']);
         }
     }
 
+    public function setLimit(int $limit): self
+    {
+        $this->limit = $limit;
+        return $this;
+    }
 }

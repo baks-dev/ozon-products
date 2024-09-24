@@ -35,7 +35,7 @@ final class VoterNew implements VoterInterface
     /**
      * Добавить
      */
-    public const VOTER = 'NEW';
+    public const string VOTER = 'NEW';
 
     public static function getVoter(): string
     {
