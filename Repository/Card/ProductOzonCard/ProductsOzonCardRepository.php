@@ -240,6 +240,30 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
         );
 
 
+        /* Offer Value, Postfix */
+        $dbal->addSelect(
+            '
+                NULL AS product_offer_postfix,
+                NULL AS product_offer_value
+            '
+        );
+
+        /* Variation Value, Postfix */
+        $dbal->addSelect(
+            '
+                NULL AS product_variation_postfix,
+                NULL AS product_variation_value
+            '
+        );
+
+        /* Variation Value, Postfix */
+        $dbal->addSelect(
+            '
+                NULL AS product_modification_postfix,
+                NULL AS product_modification_value
+            '
+        );
+
         if($this->offerConst)
         {
             $this->dbalOffer($dbal);
@@ -248,7 +272,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             {
                 if($this->modificationConst)
                 {
-
                     /**
                      * Modification
                      */
@@ -278,6 +301,19 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                                 'product_photo_ext', product_modification_image.ext,
                                 'product_photo_cdn', product_modification_image.cdn
                             )";
+
+
+                    /* Массив с селектома атриббутов */
+                    $selectAttribute[] = 'WHEN product_modification_params.value IS NOT NULL THEN product_modification_params.value';
+
+
+                    /** Характеристики упаковки товара  */
+                    $dbal
+                        ->addSelect('product_package.length') // Длина упаковки в см.
+                        ->addSelect('product_package.width')  // Ширина упаковки в см.
+                        ->addSelect('product_package.height') // Высота упаковки в см.
+                        ->addSelect('product_package.weight') // Вес товара в кг с учетом упаковки (брутто).
+                    ;
                 }
 
                 /**
@@ -309,6 +345,9 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                             'product_photo_ext', product_variation_image.ext,
                             'product_photo_cdn', product_variation_image.cdn
                         )";
+
+                /* Массив с селектома атриббутов */
+                $selectAttribute[] = 'WHEN product_variation_params.value IS NOT NULL THEN product_variation_params.value';
             }
 
             /**
@@ -340,6 +379,9 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                         'product_photo_ext', product_offer_image.ext,
                         'product_photo_cdn', product_offer_image.cdn
                     )";
+
+            /* Массив с селектома атриббутов */
+            $selectAttribute[] = 'WHEN product_offer_params.value IS NOT NULL THEN product_offer_params.value';
         }
 
         /**
@@ -372,6 +414,9 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                         'product_photo_cdn', product_photo.cdn
                     )";
 
+        /* Массив с селектома атриббутов */
+        $selectAttribute[] = 'WHEN product_property_params.value IS NOT NULL THEN product_property_params.value';
+
 
         /* Стоимость продукта */
         $dbal->addSelect('COALESCE('.implode(',', $selectPrice).', 0) AS product_price');
@@ -393,49 +438,54 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
         /* Наличие продукта */
         $dbal->addSelect('CASE '.implode(' ', $selectQuantity).' END AS product_quantity');
 
-
-        /* Offer Value, Postfix */
+        /* Фото товара */
         $dbal->addSelect(
-            '
-                product_offer.postfix AS product_offer_postfix,
-                product_offer.value AS product_offer_value
-            '
+            'JSON_AGG ( DISTINCT CASE '.implode(' ', $selectPhoto).' END ) AS product_images'
         );
 
-        /* Variation Value, Postfix */
+        /* Получение аттрибутов */
         $dbal->addSelect(
-            '
-                product_variation.postfix AS product_variation_postfix,
-                product_variation.value AS product_variation_value
-            '
-        );
-
-        /* Modification Value, Postfix */
-        $dbal->addSelect(
-            '
-                product_modification.postfix AS product_modification_postfix,
-                product_modification.value AS product_modification_value
-            '
+            "JSON_AGG ( 
+                DISTINCT JSONB_BUILD_OBJECT (
+                    'id', settings_params.type, 
+                    'value', CASE ".implode(' ', $selectAttribute)." ELSE NULL END
+                )
+            ) 
+            AS product_attributes"
         );
 
 
-        /** Характеристики упаковки товара  */
-        $dbal
-            ->addSelect('product_package.length') // Длина упаковки в см.
-            ->addSelect('product_package.width')  // Ширина упаковки в см.
-            ->addSelect('product_package.height') // Высота упаковки в см.
-            ->addSelect('product_package.weight') // Вес товара в кг с учетом упаковки (брутто).
-            ->leftJoin(
-                'product_variation',
-                DeliveryPackageProductParameter::class,
-                'product_package',
-                '
-                    product_package.product = product.id AND
-                    product_package.offer = product_offer.const AND
-                    product_package.variation = product_variation.const AND
-                    product_package.modification = product_modification.const
-                '
-            );
+        //        /* Modification Value, Postfix */
+        //        $dbal
+        //            ->addSelect('product_modification.postfix AS product_modification_postfix,
+        //                                   product_modification.value AS product_modification_value')
+        //            ->leftJoin(
+        //                'product',
+        //                ProductModification::class,
+        //                'product_modification',
+        //                'product_offer_price.offer = product_offer.id'
+        //            );
+        //
+        //
+
+
+        //        /** Характеристики упаковки товара  */
+        //        $dbal
+        //            ->addSelect('product_package.length') // Длина упаковки в см.
+        //            ->addSelect('product_package.width')  // Ширина упаковки в см.
+        //            ->addSelect('product_package.height') // Высота упаковки в см.
+        //            ->addSelect('product_package.weight') // Вес товара в кг с учетом упаковки (брутто).
+        //            ->leftJoin(
+        //                'product_variation',
+        //                DeliveryPackageProductParameter::class,
+        //                'product_package',
+        //                '
+        //                    product_package.product = product.id AND
+        //                    product_package.offer = product_offer.const AND
+        //                    product_package.variation = product_variation.const AND
+        //                    product_package.modification = product_modification.const
+        //                '
+        //            );
 
 
         /** Категория, согласно настройкам соотношений */
@@ -518,68 +568,11 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 '
             );
 
-        // Получаем значение из модификации множественного варианта
-        $dbal
-            ->leftJoin(
-                'settings_params',
-                ProductOffer::class,
-                'product_offer_params',
-                '
-                    product_offer_params.id = product_offer.id AND  
-                    product_offer_params.category_offer = settings_params.field
-                '
-            );
-
-
-        $dbal
-            ->leftJoin(
-                'product_variation',
-                ProductVariation::class,
-                'product_variation_params',
-                '
-                    product_variation_params.id = product_variation.id AND
-                    product_variation_params.category_variation = settings_params.field
-               '
-            );
-
-
-        $dbal
-            ->leftJoin(
-                'product_modification',
-                ProductModification::class,
-                'product_modification_params',
-                '
-                    product_modification_params.id = product_modification.id AND
-                    product_modification_params.category_modification = settings_params.field
-                '
-            );
-
-
-        $dbal->addSelect(
-            "JSON_AGG
-			( DISTINCT
-
-					JSONB_BUILD_OBJECT
-					(
-						'id', settings_params.type,
-						
-						'value', CASE
-						   WHEN product_property_params.value IS NOT NULL THEN product_property_params.value
-						   WHEN product_modification_params.value IS NOT NULL THEN product_modification_params.value
-						   WHEN product_variation_params.value IS NOT NULL THEN product_variation_params.value
-						   WHEN product_offer_params.value IS NOT NULL THEN product_offer_params.value
-						   ELSE NULL
-						END 
-					)
-
-			)
-			AS product_attributes"
-        );
 
         $dbal->allGroupByExclude();
 
         return $dbal
-            //->enableCache('ozon-products', 86400)
+            //->enableCache('ozon-products', 5)
             ->fetchAssociative();
     }
 
@@ -589,9 +582,12 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 
         if($this->offerConst)
         {
-
             /** Торговое предложение */
             $dbal
+                ->addSelect('
+                product_offer.postfix AS product_offer_postfix,
+                product_offer.value AS product_offer_value
+            ')
                 ->join(
                     'product',
                     ProductOffer::class,
@@ -603,7 +599,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                     $this->offerConst,
                     ProductOfferConst::TYPE
                 );
-
 
             /* Цена торгового предложения */
             $dbal->leftJoin(
@@ -632,6 +627,19 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 'product_offer_quantity.offer = product_offer.id'
             );
 
+            // Получаем значение из модификации множественного варианта
+            $dbal
+                ->leftJoin(
+                    'settings_params',
+                    ProductOffer::class,
+                    'product_offer_params',
+                    '
+                    product_offer_params.id = product_offer.id AND  
+                    product_offer_params.category_offer = settings_params.field
+                '
+                );
+
+
             if($this->variationConst)
             {
 
@@ -646,6 +654,11 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
     {
         /** Множественный вариант торгового предложения */
         $dbal
+            ->addSelect(
+                '
+                product_variation.postfix AS product_variation_postfix,
+                product_variation.value AS product_variation_value
+            ')
             ->join(
                 'product_offer',
                 ProductVariation::class,
@@ -685,6 +698,18 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             'product_variation_quantity.variation = product_variation.id'
         );
 
+        $dbal
+            ->leftJoin(
+                'product_variation',
+                ProductVariation::class,
+                'product_variation_params',
+                '
+                    product_variation_params.id = product_variation.id AND
+                    product_variation_params.category_variation = settings_params.field
+               '
+            );
+
+
         if($this->modificationConst)
         {
             $this->dbalModification($dbal);
@@ -696,6 +721,11 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
     {
         /** Модификатор множественного варианта торгового предложения  */
         $dbal
+            ->addSelect(
+                '
+                product_modification.postfix AS product_modification_postfix,
+                product_modification.value AS product_modification_value
+            ')
             ->join(
                 'product_variation',
                 ProductModification::class,
@@ -731,6 +761,28 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             ProductModificationQuantity::class,
             'product_modification_quantity',
             'product_modification_quantity.modification = product_modification.id'
+        );
+
+        $dbal->leftJoin(
+            'product_modification',
+            ProductModification::class,
+            'product_modification_params',
+            '
+                    product_modification_params.id = product_modification.id AND
+                    product_modification_params.category_modification = settings_params.field
+                '
+        );
+
+        $dbal->leftJoin(
+            'product_variation',
+            DeliveryPackageProductParameter::class,
+            'product_package',
+            '
+                    product_package.product = product.id AND
+                    product_package.offer = product_offer.const AND
+                    product_package.variation = product_variation.const AND
+                    product_package.modification = product_modification.const
+                '
         );
     }
 }

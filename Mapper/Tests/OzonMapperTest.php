@@ -61,17 +61,23 @@ class OzonMapperTest extends KernelTestCase
 
         foreach($AllProductsIdentifier->findAll() as $item)
         {
+            dump($item);
+
             $OzonCard = $ProductsOzonCard
                 ->forProduct($item['product_id'])
                 ->forOfferConst($item['offer_const'])
                 ->forVariationConst($item['variation_const'])
-                ->forModificationConst($item['modification_const'])
+                //->forModificationConst($item['modification_const'])
                 ->find();
+
+            dd($OzonCard);
 
             if($OzonCard === false)
             {
                 continue;
             }
+
+
 
 
             $request = $itemOzonProducts->getData($OzonCard);

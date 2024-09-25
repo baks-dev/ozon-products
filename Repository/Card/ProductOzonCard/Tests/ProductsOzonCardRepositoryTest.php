@@ -24,7 +24,6 @@ class ProductsOzonCardRepositoryTest extends KernelTestCase
         /** @var ProductsOzonCardInterface $ProductsOzonCard */
         $ProductsOzonCard = self::getContainer()->get(ProductsOzonCardInterface::class);
 
-
         foreach($AllProductsConstIdentifier->findAll() as $product)
         {
             $new = $ProductsOzonCard
