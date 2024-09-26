@@ -66,4 +66,3 @@ final readonly class OzonProductsAttributeCollection
         return $case;
     }
 }
-

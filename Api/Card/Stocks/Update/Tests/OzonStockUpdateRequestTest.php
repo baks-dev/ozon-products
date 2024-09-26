@@ -25,11 +25,9 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Stocks\Update\Tests;
 
-use BaksDev\Ozon\Products\Mapper\ItemOzonProducts;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
 use Iterator;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -40,9 +38,6 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 class OzonStockUpdateRequestTest extends KernelTestCase
 {
-    /**
-     * @throws InvalidArgumentException
-     */
     public function testComplete(): void
     {
 

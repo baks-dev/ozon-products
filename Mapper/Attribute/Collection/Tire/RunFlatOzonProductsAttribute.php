@@ -7,7 +7,6 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
-
 final class RunFlatOzonProductsAttribute implements OzonProductsAttributeInterface
 {
     //-id: 10123

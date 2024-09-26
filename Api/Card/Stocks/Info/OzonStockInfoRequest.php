@@ -69,7 +69,9 @@ final class OzonStockInfoRequest extends Ozon
 
 
         $filter["offer_id"] = $this->article;
+
         $filter["visibility"] = "ALL";
+
         if ($this->product)
         {
             $filter["product_id"] = $this->product;

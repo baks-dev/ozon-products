@@ -25,8 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Listeners\Event;
 
-
-
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeCollection;
 use BaksDev\Ozon\Products\Type\Settings\Attribute\OzonProductAttributeType;
 use Symfony\Component\Console\ConsoleEvents;
@@ -41,7 +39,6 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 #[AsEventListener(event: ConsoleEvents::COMMAND)]
 final class OzonProductAttributeListeners
 {
-
     private OzonProductsAttributeCollection $collection;
 
 

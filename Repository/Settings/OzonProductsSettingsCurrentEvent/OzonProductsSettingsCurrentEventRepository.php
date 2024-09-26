@@ -11,7 +11,9 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 
 final readonly class OzonProductsSettingsCurrentEventRepository implements OzonProductsSettingsCurrentEventInterface
 {
-    public function __construct(private ORMQueryBuilder $ORMQueryBuilder) {}
+    public function __construct(private ORMQueryBuilder $ORMQueryBuilder)
+    {
+    }
 
     /** Метод возвращает активное событие настройки профиля */
     public function findByProfile(UserProfileUid|string $profile): OzonProductsSettingsEvent|false

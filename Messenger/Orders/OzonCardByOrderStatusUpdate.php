@@ -47,7 +47,8 @@ final class OzonCardByOrderStatusUpdate
         private readonly CurrentProductIdentifierInterface $currentProductIdentifier,
         private readonly AllProfileYaMarketTokenInterface $allProfileYaMarketToken,
         private readonly MessageDispatchInterface $messageDispatch,
-    ) {}
+    ) {
+    }
 
     /**
      * Обновляем остатки Ozon при изменении статусов заказов
