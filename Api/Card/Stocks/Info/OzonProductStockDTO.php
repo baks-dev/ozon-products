@@ -5,6 +5,7 @@ namespace BaksDev\Ozon\Products\Api\Card\Stocks\Info;
 class OzonProductStockDTO
 {
     public function __construct(
+
         /** Тип склада. */
         private string $type,
 

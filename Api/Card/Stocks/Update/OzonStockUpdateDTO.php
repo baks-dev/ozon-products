@@ -67,5 +67,4 @@ final readonly class OzonStockUpdateDTO
         return $this->errors;
     }
 
-
 }

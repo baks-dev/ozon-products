@@ -18,13 +18,11 @@
 
 namespace BaksDev\Ozon\Products\Controller\Admin\Settings\Tests;
 
-
 use BaksDev\Ozon\Products\Repository\Settings\OzonProductsSettingsCurrentEvent\OzonProductsSettingsCurrentEventInterface;
 use BaksDev\Products\Category\Type\Id\CategoryProductUid;
 use BaksDev\Users\User\Tests\TestUserAccount;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
-
 
 /**
  * @group ozon-products

@@ -67,11 +67,11 @@ final class OzonStockUpdateRequest extends Ozon
     {
         if (null === $product)
         {
-            $this->profile = false;
+            $this->product = false;
         }
         else
         {
-            $this->total = $product;
+            $this->product = $product;
         }
 
         return $this;

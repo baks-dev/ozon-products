@@ -35,6 +35,7 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
+
 use function PHPUnit\Framework\assertNotEmpty;
 
 /**

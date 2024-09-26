@@ -74,7 +74,9 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
     private ProductModificationConst|false $modificationConst = false;
 
 
-    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
+    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder)
+    {
+    }
 
 
     public function forProduct(Product|ProductUid|string $product): self
@@ -658,7 +660,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 '
                 product_variation.postfix AS product_variation_postfix,
                 product_variation.value AS product_variation_value
-            ')
+            '
+            )
             ->join(
                 'product_offer',
                 ProductVariation::class,
@@ -725,7 +728,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 '
                 product_modification.postfix AS product_modification_postfix,
                 product_modification.value AS product_modification_value
-            ')
+            '
+            )
             ->join(
                 'product_variation',
                 ProductModification::class,

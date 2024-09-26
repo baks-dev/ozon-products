@@ -34,7 +34,6 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 
 interface ProductsOzonCardInterface
 {
-
     public function forProduct(Product|ProductUid|string $product): self;
 
     public function forOfferConst(ProductOfferConst|string|null|false $offerConst): self;

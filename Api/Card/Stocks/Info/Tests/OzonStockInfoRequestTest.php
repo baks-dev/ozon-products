@@ -28,13 +28,11 @@ namespace BaksDev\Ozon\Products\Api\Card\Stocks\Info\Tests;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonProductStockDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoRequest;
-use BaksDev\Ozon\Products\Mapper\ItemOzonProducts;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Iterator;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 

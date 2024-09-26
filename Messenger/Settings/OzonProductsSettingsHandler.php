@@ -20,7 +20,10 @@ final class OzonProductsSettingsHandler
         public readonly OzonAttributeValueRequest $ozonAttributeValueRequest,
         public readonly OzonTypeRequest $ozonTypeRequest,
         public readonly OzonProductsSettingsCurrentEventInterface $event
-    ) {}
+    ) {
+    }
 
-    public function __invoke(OzonProductsSettingsMessage $message): void {}
+    public function __invoke(OzonProductsSettingsMessage $message): void
+    {
+    }
 }

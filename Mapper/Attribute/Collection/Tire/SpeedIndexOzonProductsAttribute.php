@@ -102,7 +102,10 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
 
     public static function getConvertValue(?string $value): ?string
     {
-        if(null === $value) return null;
+        if(null === $value)
+        {
+            return null;
+        }
 
         return match ($value)
         {
