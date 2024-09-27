@@ -27,6 +27,9 @@ namespace BaksDev\Ozon\Products\Api\Card\Price\Update;
 
 use App\Kernel;
 use BaksDev\Ozon\Api\Ozon;
+use BaksDev\Reference\Currency\Type\Currencies\RUR;
+use BaksDev\Reference\Currency\Type\Currency;
+use BaksDev\Reference\Money\Type\Money;
 use DomainException;
 use Generator;
 
@@ -38,15 +41,15 @@ final class OzonPriceUpdateRequest extends Ozon
 {
     private string $article;
 
-    private int $price;
+    private Money $price;
 
-    private int|false $oldPrice = false;
+    private Money $oldPrice;
 
-    private int|false $minPrice = false;
+    private Money|false $minPrice = false;
 
     private int|false $product = false;
 
-    private ?string $currency = "RUB";
+    private Currency $currency;
 
     public function article(string $article): self
     {
@@ -54,17 +57,17 @@ final class OzonPriceUpdateRequest extends Ozon
         return $this;
     }
 
-    public function price(int $price): self
+    public function price(Money $price): self
     {
         $this->price = $price;
         return $this;
     }
 
-    public function oldPrice(?int $oldPrice): self
+    public function oldPrice(?Money $oldPrice): self
     {
         if (null === $oldPrice)
         {
-            $this->oldPrice = false;
+            $this->oldPrice = new Money(0);
         }
         else
         {
@@ -74,7 +77,7 @@ final class OzonPriceUpdateRequest extends Ozon
         return $this;
     }
 
-    public function minPrice(?int $minPrice): self
+    public function minPrice(?Money $minPrice): self
     {
         if (null === $minPrice)
         {
@@ -102,9 +105,13 @@ final class OzonPriceUpdateRequest extends Ozon
         return $this;
     }
 
-    public function currency(?string $currency): self
+    public function currency(?Currency $currency): self
     {
-        if(null !== $currency)
+        if(null === $currency)
+        {
+            $this->currency = new Currency(RUR::class);
+        }
+        else
         {
             $this->currency = $currency;
         }
@@ -120,50 +127,58 @@ final class OzonPriceUpdateRequest extends Ozon
             return true;
         }
 
-        $prices = [
-            "auto_action_enabled"       => "UNKNOWN",
-            "currency_code"             => $this->currency,
-            "min_price"                 => $this->minPrice,
-            "offer_id"                  => $this->article,
-            "old_price"                 => $this->oldPrice,
-            "price"                     => $this->price,
-            "price_strategy_enabled"    => "UNKNOWN",
-            "product_id"                => $this->product
-        ];
+        $prices["auto_action_enabled"]      = "UNKNOWN";
+        $prices["currency_code"]            = $this->currency->getCurrencyValueUpper();
+        $prices["offer_id"]                 = $this->article;
+        $prices["old_price"]                = (string)$this->oldPrice->getValue();
+        $prices["price"]                    = (string)$this->price->getValue();
+        $prices["price_strategy_enabled"]   = "UNKNOWN";
+
+        if($this->minPrice)
+        {
+            $prices["min_price"]  = $this->minPrice;
+        }
+
+        if($this->product)
+        {
+            $prices["product_id"] = $this->product;
+        }
 
         /**
          *
          * Пример запроса:
          *
-         * "prices": [
-         *      {
-         *          Атрибут для включения и выключения автоприменения акций
-         *          Enum: "UNKNOWN" "ENABLED" "DISABLED", Default: "UNKNOWN"
-         *          "auto_action_enabled": "UNKNOWN",
+         * "prices":
          *
-         *          Валюта ваших цен
-         *          "currency_code": "RUB",
+         *      [
+         *          {
+         *              Атрибут для включения и выключения автоприменения акций
+         *              Enum: "UNKNOWN" "ENABLED" "DISABLED", Default: "UNKNOWN"
+         *              "auto_action_enabled": "UNKNOWN",
          *
-         *           Минимальная цена товара после применения акций.
-         *          "min_price": "800",
+         *              Валюта ваших цен
+         *              "currency_code": "RUB",
          *
-         *          Идентификатор товара в системе продавца.
-         *          "offer_id": "",
+         *              Минимальная цена товара после применения акций.
+         *              "min_price": "800",
          *
-         *          Цена до скидок (зачеркнута на карточке товара).
-         *          "old_price": "0",
+         *              Идентификатор товара в системе продавца.
+         *              "offer_id": "",
          *
-         *          Цена товара с учётом скидок, отображается на карточке товара.
-         *          "price": "1448",
+         *              Цена до скидок (зачеркнута на карточке товара).
+         *              "old_price": "0",
          *
-         *          Атрибут для автоприменения стратегий цены:
-         *          Enum: "UNKNOWN" "ENABLED" "DISABLED", Default: "UNKNOWN"
-         *          "price_strategy_enabled": "UNKNOWN",
+         *              Цена товара с учётом скидок, отображается на карточке товара.
+         *              "price": "1448",
          *
-         *          Идентификатор товара
-         *          "product_id": 1386
-         *      }
-         *  ]
+         *              Атрибут для автоприменения стратегий цены:
+         *              Enum: "UNKNOWN" "ENABLED" "DISABLED", Default: "UNKNOWN"
+         *              "price_strategy_enabled": "UNKNOWN",
+         *
+         *              Идентификатор товара
+         *              "product_id": 1386
+         *          }
+         *      ]
          *
          */
         $response = $this->TokenHttpClient()
@@ -193,9 +208,7 @@ final class OzonPriceUpdateRequest extends Ozon
 
         foreach ($content['result'] as $item)
         {
-
             yield new OzonPriceUpdateDTO($item);
-
         }
     }
 }

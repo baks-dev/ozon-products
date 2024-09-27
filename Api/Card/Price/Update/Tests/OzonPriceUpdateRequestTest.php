@@ -45,7 +45,6 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 class OzonPriceUpdateRequestTest extends KernelTestCase
 {
-
     public function testComplete(): void
     {
 

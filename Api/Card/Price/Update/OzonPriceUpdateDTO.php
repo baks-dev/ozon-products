@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Price\Update;
 
-
 final readonly class OzonPriceUpdateDTO
 {
     /** Идентификатор товара. */

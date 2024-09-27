@@ -25,7 +25,10 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Price\Info;
 
-final readonly class OzonPriceInfoDTO
+use BaksDev\Reference\Currency\Type\Currency;
+use BaksDev\Reference\Money\Type\Money;
+
+final class OzonPriceInfoDTO
 {
     /** Идентификатор товара. */
     private int $product;
@@ -34,22 +37,22 @@ final readonly class OzonPriceInfoDTO
     private string $offer;
 
     /** Валюта ваших цен.  */
-    private string $currency;
+    private Currency $currency;
 
     /** Цена товара с учётом скидок — это значение показывается на карточке товара. */
-    private string $price;
+    private Money $price;
 
     /** Цена до учёта скидок. На карточке товара отображается зачёркнутой. */
-    private string $oldPrice;
+    private Money $oldPrice;
 
 
     public function __construct(array $data)
     {
         $this->product  = $data['product_id'];
         $this->offer    = $data['offer_id'];
-        $this->currency = $data['price']['currency_code'];
-        $this->price = $data['price']['price'];
-        $this->oldPrice = $data['price']['oldPrice'];
+        $this->currency = new Currency($data['price']['currency_code']);
+        $this->price    = new Money($data['price']['price']);
+        $this->oldPrice = new Money($data['price']['oldPrice']);
 
     }
 
@@ -63,17 +66,17 @@ final readonly class OzonPriceInfoDTO
         return $this->offer;
     }
 
-    public function getCurrencyCode(): string
+    public function getCurrencyCode(): Currency
     {
         return $this->currency;
     }
 
-    public function getPrice(): string
+    public function getPrice(): Money
     {
         return $this->price;
     }
 
-    public function getOldPrice(): string
+    public function getOldPrice(): Money
     {
         return $this->oldPrice;
     }

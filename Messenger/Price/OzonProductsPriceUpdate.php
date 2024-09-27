@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Messenger\Price;
 
 use BaksDev\Core\Cache\AppCacheInterface;
 use BaksDev\Core\Lock\AppLockInterface;
+use BaksDev\Ozon\Products\Api\Card\Price\Info\OzonPriceInfoDTO;
 use BaksDev\Ozon\Products\Api\Card\Price\Info\OzonPriceInfoRequest;
 use BaksDev\Ozon\Products\Api\Card\Price\Update\OzonPriceUpdateRequest;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
@@ -101,7 +102,7 @@ final class OzonProductsPriceUpdate
         /** Проверяем, что карточка добавлена */
         $OzonProduct = $this->ozonPriceInfoRequest
             ->profile($message->getProfile())
-            ->article($Card['article'])
+            ->article([$Card['article']])
             ->findAll();
 
         /** Если карточка новая - понадобится время на публикацию в маркетплейсе */
@@ -119,19 +120,6 @@ final class OzonProductsPriceUpdate
         $Currency = new Currency($Card['product_currency']);
 
 
-        /** Кешируем на сутки результат калькуляции услуг с одинаковыми параметрами */
-        $cache = $this->appCache->init('ozon-products');
-
-        $cacheKey = implode('', [
-            $message->getProfile(),
-            $Card['ozon_category'],
-            $Card['product_price'],
-            $Card['width'],
-            $Card['height'],
-            $Card['length'],
-            $Card['weight'],
-        ]);
-
         /** Лимит: 100 запросов в минуту, добавляем лок */
         $this->appLock
             ->createLock([$message->getProfile(), self::class])
@@ -139,28 +127,12 @@ final class OzonProductsPriceUpdate
             ->waitAllTime();
 
 
-        $marketCalculator = $cache->get($cacheKey, function (ItemInterface $item) use ($Card, $Money, $message): float {
-
-            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
-
-            /** Добавляем к стоимости товара стоимость услуг Ozon */
-            return $this->marketCalculatorRequest
-                ->profile($message->getProfile())
-                ->category($Card['ozon_category'])
-                ->price($Money)
-                ->width(($Card['width'] / 10))
-                ->height(($Card['height'] / 10))
-                ->length(($Card['length'] / 10))
-                ->weight(($Card['weight'] / 100))
-                ->calc();
-        });
-
-        /** @var YandexMarketProductDTO $YandexMarketProductDTO */
-        $YandexMarketProductDTO = $OzonProduct->current();
-        $Price = new Money($marketCalculator);
+        /** @var OzonPriceInfoDTO $OzonProductPriceInfo */
+        $OzonProductPriceInfo = $OzonProduct->current();
+        $Price = $OzonProductPriceInfo->getPrice();
 
         /** Обновляем базовую стоимость товара если цена изменилась */
-        if(false === $YandexMarketProductDTO->getPrice()->equals($Price))
+        if(false === $OzonProductPriceInfo->getPrice()->equals($Money))
         {
             $this->ozonPriceUpdateRequest
                 ->profile($message->getProfile())
@@ -174,7 +146,7 @@ final class OzonProductsPriceUpdate
                     'Обновили стоимость товара %s (%s) : %s => %s %s',
                     $Card['article'],
                     $Money->getValue(), // стоимость в карточке
-                    $YandexMarketProductDTO->getPrice()->getValue(), // предыдущая стоимость на маркетплейс
+                    $OzonProductPriceInfo->getPrice()->getValue(), // предыдущая стоимость на маркетплейс
                     $Price->getValue(), // новая стоимость на маркетплейс
                     $Currency->getCurrencyValueUpper()
                 ),
