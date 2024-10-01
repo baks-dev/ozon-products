@@ -13,7 +13,8 @@ final class OzonProductsSettingsMessage
         private readonly CategoryProductUid $id,
         private readonly OzonProductsSettingsEventUid $event,
         private ?OzonProductsSettingsEventUid $last = null
-    ) {}
+    ) {
+    }
 
 
     /**

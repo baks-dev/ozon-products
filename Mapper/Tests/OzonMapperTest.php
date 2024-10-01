@@ -25,19 +25,14 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Tests;
 
-use BaksDev\Core\Doctrine\DBALQueryBuilder;
-use BaksDev\Ozon\Products\Mapper\ItemOzonProducts;
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
+use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
-use BaksDev\Reference\Money\Type\Money;
-use BaksDev\Yandex\Market\Products\Mapper\YandexMarketMapper;
-use BaksDev\Yandex\Market\Products\Messenger\Card\YaMarketProductsCardMessage;
-use BaksDev\Yandex\Market\Products\Repository\Card\CurrentYaMarketProductsCard\YaMarketProductsCardInterface;
-use BaksDev\Yandex\Market\Products\Repository\Card\ProductYaMarketCard\ProductsYaMarketCardInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
-use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * @group ozon-products
@@ -45,8 +40,22 @@ use Symfony\Contracts\Cache\ItemInterface;
 #[When(env: 'test')]
 class OzonMapperTest extends KernelTestCase
 {
+    private static OzonAuthorizationToken $Authorization;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::$Authorization = new OzonAuthorizationToken(
+            new UserProfileUid(),
+            $_SERVER['TEST_OZON_TOKEN'],
+            $_SERVER['TEST_OZON_CLIENT'],
+        );
+    }
+
     public function testUseCase(): void
     {
+        /** @var OzonAttributeValueSearchRequest $ozonAttributeSearchRequest */
+        $ozonAttributeSearchRequest = self::getContainer()->get(OzonAttributeValueSearchRequest::class);
+        $ozonAttributeSearchRequest->TokenHttpClient(self::$Authorization);
 
         /** @var AllProductsIdentifierInterface $AllProductsIdentifier */
         $AllProductsIdentifier = self::getContainer()->get(AllProductsIdentifierInterface::class);
@@ -54,63 +63,59 @@ class OzonMapperTest extends KernelTestCase
         /** @var ProductsOzonCardInterface $ProductsOzonCard */
         $ProductsOzonCard = self::getContainer()->get(ProductsOzonCardInterface::class);
 
-        /** @var ItemOzonProducts $ItemOzonProducts */
-        $itemOzonProducts = self::getContainer()->get(ItemOzonProducts::class);
-
+        /** @var OzonProductsMapper $itemOzonProducts */
+        $itemOzonProducts = self::getContainer()->get(OzonProductsMapper::class);
 
 
         foreach($AllProductsIdentifier->findAll() as $item)
         {
-            dump($item);
 
-            $OzonCard = $ProductsOzonCard
+            $request = $ProductsOzonCard
                 ->forProduct($item['product_id'])
                 ->forOfferConst($item['offer_const'])
                 ->forVariationConst($item['variation_const'])
-                //->forModificationConst($item['modification_const'])
+                ->forModificationConst($item['modification_const'])
                 ->find();
 
-            dd($OzonCard);
 
-            if($OzonCard === false)
+
+            if($request === false)
             {
                 continue;
             }
 
 
+            $Card = $itemOzonProducts->getData($request);
 
+            dd($Card);
 
-            $request = $itemOzonProducts->getData($OzonCard);
+            self::assertEquals($Card['description_category_id'], $request['ozon_category']);
 
+            self::assertIsString($Card["color_image"]);
+            self::assertNotEmpty($Card["attributes"]);
 
-            self::assertEquals($request['description_category_id'], $OzonCard['ozon_category']);
+            self::assertNotEmpty($Card["dimension_unit"]);
+            self::assertIsString($Card["dimension_unit"]);
 
-            self::assertIsString($request["color_image"]);
-            self::assertNotEmpty($request["attributes"]);
+            self::assertIsArray($Card["images360"]);
+            self::assertIsArray($Card["complex_attributes"]);
 
-            self::assertNotEmpty($request["dimension_unit"]);
-            self::assertIsString($request["dimension_unit"]);
+            self::assertNotNull($Card['currency_code']);
+            self::assertIsString($Card['currency_code']);
 
-            self::assertIsArray($request["images360"]);
-            self::assertIsArray($request["complex_attributes"]);
+            self::assertEquals($Card['offer_id'], $request['article']);
 
-            self::assertNotNull($request['currency_code']);
-            self::assertIsString($request['currency_code']);
+            self::assertEquals($Card['price'], $request['product_price'] / 100);
+            self::assertEquals($Card['width'], $request['width'] / 10);
+            self::assertEquals($Card['height'], $request['height'] / 10);
+            self::assertEquals($Card['depth'], $request['height'] / 10);
+            self::assertEquals($Card['weight'], $request['weight'] / 100);
 
-            self::assertEquals($request['offer_id'], $OzonCard['article']);
-            self::assertNotFalse(stripos($request['name'], $OzonCard['product_name']));
+            self::assertIsArray($Card["images"]);
+            self::assertIsArray($Card["pdf_list"]);
 
-            self::assertEquals($request['price'], $OzonCard['product_price'] / 100);
-            self::assertEquals($request['width'], $OzonCard['width'] / 10);
-            self::assertEquals($request['height'], $OzonCard['height'] / 10);
-            self::assertEquals($request['depth'], $OzonCard['height'] / 10);
-            self::assertEquals($request['weight'], $OzonCard['weight'] / 100);
-
-            self::assertIsArray($request["images"]);
-            self::assertIsArray($request["pdf_list"]);
-
-            self::assertNotNull($request['vat']);
-            self::assertNotNull($request['weight_unit']);
+            self::assertNotNull($Card['vat']);
+            self::assertNotNull($Card['weight_unit']);
 
             break;
         }

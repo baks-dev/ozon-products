@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
-use BaksDev\Ozon\Products\Mapper\Category\Collection\TireOzonProductsCategory;
-use BaksDev\Ozon\Products\Type\Settings\Property\OzonProductProperty;
 
 final class GuaranteePeriodOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -25,25 +23,21 @@ final class GuaranteePeriodOzonProductsAttribute implements OzonProductsAttribut
 
 
 
+    /** 17027949 - Шины */
     private const int CATEGORY = 17027949;
 
-    private const int DICTIONARY = 0;
-
     private const int ID = 4385;
-
-    private const string GUARANTEE_PERIOD = '5 лет';
 
     public function getId(): int
     {
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
-        $requestData = new ItemDataOzonProductsAttribute(
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            self::GUARANTEE_PERIOD,
-            self::DICTIONARY
+            '5 лет'
         );
 
         return $requestData->getData();

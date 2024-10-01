@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
+use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\SeasonOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\Collection\TypeOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('baks.ozon.product.property')]
 final class NameOzonProductsProperty implements OzonProductsPropertyInterface
@@ -19,6 +22,11 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
 
     public const PARAM = 'name';
 
+    public function __construct(
+        private ?TranslatorInterface $translator = null,
+    ) {
+    }
+
     public function getValue(): string
     {
         return self::PARAM;
@@ -29,7 +37,109 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(array $data): mixed
     {
-        return $data['product_name'] ?? '';
+        // Летние шины Triangle 225/65 R17 102H для легковых автомобилей
+        if(!isset($data['ozon_category']))
+        {
+            return false;
+        }
+
+        $name = '';
+
+        if(isset($data['product_attributes']))
+        {
+
+            $productAttributes = json_decode(
+                $data['product_attributes'],
+                false,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+
+            /** Добавляем к названию сезонность */
+            $Season = new SeasonOzonProductsAttribute();
+
+
+            foreach ($productAttributes as $productAttribute)
+            {
+
+                if ($Season::equals($productAttribute->id))
+                {
+                    $value = $Season::getConvertValue($productAttribute->value);
+
+                    if (!null == $value)
+                    {
+                        $name .= mb_ucfirst($value). ' ' ;
+                    }
+                }
+            }
+        }
+
+        if($this->translator)
+        {
+            $typeName = $this->translator->trans(
+                $data['ozon_type'].'.name',
+                domain: 'ozon-products.mapper'
+            );
+            $name .= mb_lcfirst($typeName);
+        }
+
+        $name .= ' '.$data['product_name'];
+
+        if($data['product_variation_value'])
+        {
+            $name .= ' '.$data['product_variation_value'];
+        }
+
+        if($data['product_modification_value'])
+        {
+            $name .= '/'.$data['product_modification_value'];
+        }
+
+        if($data['product_offer_value'])
+        {
+            $name .= ' R'.$data['product_offer_value'];
+        }
+
+        if($data['product_offer_postfix'])
+        {
+            $name .= ' '.$data['product_offer_postfix'];
+        }
+
+        if($data['product_variation_postfix'])
+        {
+            $name .= ' '.$data['product_variation_postfix'];
+        }
+
+        if($data['product_modification_postfix'])
+        {
+            $name .= ' '.$data['product_modification_postfix'];
+        }
+
+
+        if(isset($productAttributes))
+        {
+            /** Добавляем к названию назначение */
+            $Type = new TypeOzonProductsAttribute();
+
+            foreach($productAttributes as $productAttribute)
+            {
+                if($Type::equals($productAttribute->id))
+                {
+                    $value = $Type::getConvertValue($productAttribute->value);
+
+                    if(!empty($value))
+                    {
+                        $valueArr = explode(' ', $value);
+
+                        unset($valueArr[0]);
+
+                        $name .= ' '.mb_lcfirst(implode(' ', $valueArr));
+                    }
+                }
+            }
+        }
+
+        return empty($name) ? null : trim($name);
     }
 
     /**

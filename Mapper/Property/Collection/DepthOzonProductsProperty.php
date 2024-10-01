@@ -29,7 +29,8 @@ final class DepthOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(array $data): mixed
     {
-        return $data['height'] ?? 0;
+
+        return $data['length'] ?? 0;
     }
 
     /**

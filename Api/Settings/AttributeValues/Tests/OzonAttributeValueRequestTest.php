@@ -76,7 +76,7 @@ class OzonAttributeValueRequestTest extends KernelTestCase
         // 17028741 - Столовая посуда
         // 92499 - Кружка
 
-        $attribute = $ozonAttributeRequest->findAll(17027949, 94765, 7390);
+        $attribute = $ozonAttributeRequest->findAll(17027949, 94765, 4389);
 
         //                dd(iterator_to_array($attribute));
 

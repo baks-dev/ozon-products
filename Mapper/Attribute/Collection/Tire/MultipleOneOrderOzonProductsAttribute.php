@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
 final class MultipleOneOrderOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -22,9 +22,8 @@ final class MultipleOneOrderOzonProductsAttribute implements OzonProductsAttribu
     //-dictionary: 0
 
 
+    /** 17027949 - Шины */
     private const int CATEGORY = 17027949;
-
-    private const int DICTIONARY = 0;
 
     private const int ID = 21497;
 
@@ -33,7 +32,7 @@ final class MultipleOneOrderOzonProductsAttribute implements OzonProductsAttribu
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
         return false;
     }

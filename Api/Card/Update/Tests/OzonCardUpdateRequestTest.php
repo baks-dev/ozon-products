@@ -28,7 +28,7 @@ namespace BaksDev\Ozon\Products\Api\Card\Update\Tests;
 use BaksDev\Ozon\Products\Api\Card\Update\OzonCardUpdateRequest;
 use BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO;
 use BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeRequest;
-use BaksDev\Ozon\Products\Mapper\ItemOzonProducts;
+use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
@@ -57,8 +57,8 @@ class OzonCardUpdateRequestTest extends KernelTestCase
         /** @var ProductsOzonCardInterface $ozonProductsCard */
         $ozonProductsCard = self::getContainer()->get(ProductsOzonCardInterface::class);
 
-        /** @var ItemOzonProducts $ItemOzonProducts */
-        $itemOzonProducts = self::getContainer()->get(ItemOzonProducts::class);
+        /** @var OzonProductsMapper $ItemOzonProducts */
+        $itemOzonProducts = self::getContainer()->get(OzonProductsMapper::class);
 
 
         /** @var Iterator $result */

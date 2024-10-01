@@ -23,7 +23,6 @@ use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductM
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -125,6 +124,7 @@ class OzonPostUpdateCardCommand extends Command
         /** Получаем все имеющиеся карточки профиля */
         $result = $this->AllProductsIdentifier->findAll();
 
+
         foreach($result as $product)
         {
             $card = $this->ProductsOzonCard
@@ -134,9 +134,15 @@ class OzonPostUpdateCardCommand extends Command
                 ->forModificationConst($product['modification_const'])
                 ->find();
 
+            if($card === false)
+            {
+                $this->io->warning('Карточка товара либо настройки соотношений не найдено');
+                continue;
+            }
+
             if(empty($card['product_price']))
             {
-                $this->io->success(sprintf('Карточка товара с артикулом %s без цены', $card['article']));
+                $this->io->warning(sprintf('Карточка товара с артикулом %s без цены', $card['article']));
                 continue;
             }
 

@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute;
 
-
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('baks.ozon.product.attribute')]
 interface OzonProductsAttributeInterface
-
 {
-
     public function getId(): int;
 
 
-    public function getData(array $data): mixed;
+    public function getData(array $data): array|false;
 
     /** Возвращает значение по умолчанию */
     public function default(): string|false;
@@ -41,6 +38,3 @@ interface OzonProductsAttributeInterface
     public function equalsCategory(int $category): bool;
 
 }
-
-
-

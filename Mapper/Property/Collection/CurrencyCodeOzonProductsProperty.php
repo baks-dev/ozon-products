@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Reference\Currency\Type\Currency;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('baks.ozon.product.property')]
@@ -34,9 +35,11 @@ final class CurrencyCodeOzonProductsProperty implements OzonProductsPropertyInte
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): string|false
     {
-        return $data['product_currency'] === 'rur' ? 'RUB' : false;
+        return $data['product_currency']
+            ? (new Currency($data['product_currency']))->getCurrencyValueUpper()
+            : false;
     }
 
     /**

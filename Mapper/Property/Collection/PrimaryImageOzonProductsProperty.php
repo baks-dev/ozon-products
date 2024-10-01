@@ -38,7 +38,7 @@ final class PrimaryImageOzonProductsProperty implements OzonProductsPropertyInte
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): string
     {
         if(!empty($data['product_images']))
         {

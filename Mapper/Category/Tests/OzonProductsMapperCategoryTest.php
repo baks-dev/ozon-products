@@ -72,7 +72,6 @@ class OzonProductsMapperCategoryTest extends KernelTestCase
             self::assertNotEmpty(array_filter(
                 iterator_to_array($ozonCategoryRequest->findAll($case->getParentId())),
                 fn ($n) => $n->getId() === $case->getId()
-
             ));
 
         }

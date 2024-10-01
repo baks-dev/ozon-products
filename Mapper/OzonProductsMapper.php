@@ -7,7 +7,7 @@ namespace BaksDev\Ozon\Products\Mapper;
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final readonly class ItemOzonProducts
+final readonly class OzonProductsMapper
 {
     /**
      * Основной класс данных
@@ -42,7 +42,8 @@ final readonly class ItemOzonProducts
 
     public function __construct(
         #[AutowireIterator('baks.ozon.product.property', defaultPriorityMethod: 'priority')] private iterable $property
-    ) {}
+    ) {
+    }
 
 
     /**
