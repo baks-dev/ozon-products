@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
 final class DiameterOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -21,23 +22,45 @@ final class DiameterOzonProductsAttribute implements OzonProductsAttributeInterf
     //-groupName: "Технические свойства"
     //-dictionary: 870
 
+    /** 17027949 - Шины */
     private const int CATEGORY = 17027949;
 
-    private const int DICTIONARY = 870;
-
     private const int ID = 7389;
+
+    private OzonAttributeValueSearchRequest|false $attributeValueRequest;
 
     public function getId(): int
     {
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
-        $requestData = new ItemDataOzonProductsAttribute(
+        if(empty($data['product_attributes']))
+        {
+            return false;
+        }
+
+        $attribute = array_filter(
+            json_decode(
+                $data['product_attributes'],
+                false,
+                512,
+                JSON_THROW_ON_ERROR
+            ),
+            fn ($n) => self::ID === (int)$n->id
+        );
+
+        if(empty($attribute))
+        {
+            return false;
+        }
+
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
+            current($attribute)->value,
             $data,
-            self::DICTIONARY
+            $this->attributeValueRequest
         );
 
         return $requestData->getData();
@@ -76,5 +99,10 @@ final class DiameterOzonProductsAttribute implements OzonProductsAttributeInterf
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 }

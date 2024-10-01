@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\SeasonOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -40,11 +41,6 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
     //-groupName: ""
     //-dictionary: 0
 
-
-    //    private const int CATEGORY = 17027949;
-
-    private const int DICTIONARY = 0;
-
     private const int ID = 4180;
 
     public function __construct(
@@ -57,7 +53,7 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
         if(!isset($data['ozon_category']))
         {
@@ -151,18 +147,13 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
             }
         }
 
-        $attr['value'] = empty($name) ? null : trim($name);
 
-        if(self::DICTIONARY)
-        {
-            $attr['dictionary_value_id'] = self::DICTIONARY;
-        }
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
+            self::ID,
+            empty($name) ? null : trim($name),
+        );
 
-        return [
-            'complex_id' => 0,
-            'id' => self::ID,
-            'values' => [$attr]
-        ];
+        return $requestData->getData();
     }
 
     public function default(): string|false

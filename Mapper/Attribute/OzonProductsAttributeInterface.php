@@ -12,7 +12,7 @@ interface OzonProductsAttributeInterface
     public function getId(): int;
 
 
-    public function getData(array $data): mixed;
+    public function getData(array $data): array|false;
 
     /** Возвращает значение по умолчанию */
     public function default(): string|false;

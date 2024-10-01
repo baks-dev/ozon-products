@@ -29,7 +29,7 @@ final class Images360OzonProductsProperty implements OzonProductsPropertyInterfa
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): array
     {
         return [];
     }

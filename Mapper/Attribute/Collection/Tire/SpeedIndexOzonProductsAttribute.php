@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
 final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -21,11 +22,12 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
     //-groupName: "Технические свойства"
     //-dictionary: 760
 
+    /** 17027949 - Шины */
     private const int CATEGORY = 17027949;
 
-    private const int DICTIONARY = 760;
-
     private const int ID = 7390;
+
+    private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
 
     public function getId(): int
@@ -33,7 +35,7 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
         if(empty($data['product_modification_postfix']))
         {
@@ -56,10 +58,11 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
             $speedIndex = self::getConvertValue($cleaned_str);
         }
 
-        $requestData = new ItemDataOzonProductsAttribute(
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
             $speedIndex,
-            self::DICTIONARY
+            $data,
+            $this->attributeValueRequest
         );
 
         return $requestData->getData();
@@ -126,5 +129,10 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
             'Z/ZR' => 'Z/ZR',
             default => null,
         };
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 }

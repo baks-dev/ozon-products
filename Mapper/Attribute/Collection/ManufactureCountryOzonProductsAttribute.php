@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -22,13 +23,9 @@ final class ManufactureCountryOzonProductsAttribute implements OzonProductsAttri
     //-groupName: ""
     //-dictionary: 1935
 
-
-
-    //    private const int CATEGORY = 17027949;
-
-    private const int DICTIONARY = 1935;
-
     private const int ID = 4389;
+
+    private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
     public function __construct(
         private ?TranslatorInterface $translator = null,
@@ -40,7 +37,7 @@ final class ManufactureCountryOzonProductsAttribute implements OzonProductsAttri
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
         if(empty($data['product_attributes']))
         {
@@ -67,15 +64,16 @@ final class ManufactureCountryOzonProductsAttribute implements OzonProductsAttri
         if($this->translator)
         {
             $country = $this->translator->trans(
-                $attribute[array_key_first($attribute)]->value,
+                current($attribute)->value,
                 domain: 'field-country'
             );
         }
 
-        $requestData = new ItemDataOzonProductsAttribute(
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
             $country,
-            self::DICTIONARY
+            $data,
+            $this->attributeValueRequest
         );
 
         return $requestData->getData();
@@ -114,5 +112,10 @@ final class ManufactureCountryOzonProductsAttribute implements OzonProductsAttri
     public function equalsCategory(int $category): bool
     {
         return true;
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 }

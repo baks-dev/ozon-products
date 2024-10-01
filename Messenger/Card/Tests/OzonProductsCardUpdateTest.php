@@ -40,10 +40,6 @@ class OzonProductsCardUpdateTest extends KernelTestCase
     public function testUseCase(): void
     {
 
-        /** @var OzonCardUpdateRequest $OzonCardUpdateRequest */
-        $OzonCardUpdateRequest = self::getContainer()->get(OzonCardUpdateRequest::class);
-        $OzonCardUpdateRequest->TokenHttpClient(self::$Authorization);
-
         /** @var MessageDispatchInterface $MessageDispatch */
         $MessageDispatch = self::getContainer()->get(MessageDispatchInterface::class);
 

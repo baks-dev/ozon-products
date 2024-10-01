@@ -27,7 +27,7 @@ final class HeightOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): int
     {
         return $data['height'] ?? 0;
     }

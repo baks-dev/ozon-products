@@ -31,9 +31,9 @@ final class VatOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): string
     {
-        return 0.2;
+        return "0.2";
     }
 
     /**

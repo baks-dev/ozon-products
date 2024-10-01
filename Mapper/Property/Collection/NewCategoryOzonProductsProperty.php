@@ -28,7 +28,7 @@ final class NewCategoryOzonProductsProperty implements OzonProductsPropertyInter
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): int
     {
         return 0;
     }

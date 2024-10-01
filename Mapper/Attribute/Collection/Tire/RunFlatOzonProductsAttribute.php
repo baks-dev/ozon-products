@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
 final class RunFlatOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -22,18 +23,19 @@ final class RunFlatOzonProductsAttribute implements OzonProductsAttributeInterfa
     //-dictionary: 1835
 
 
+    /** 17027949 - Шины */
     private const int CATEGORY = 17027949;
 
-    private const int DICTIONARY = 1835;
-
     private const int ID = 10123;
+
+    private OzonAttributeValueSearchRequest|false $attributeValueRequest;
 
     public function getId(): int
     {
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
         if(empty($data['product_attributes']))
         {
@@ -55,10 +57,11 @@ final class RunFlatOzonProductsAttribute implements OzonProductsAttributeInterfa
             return false;
         }
 
-        $requestData = new ItemDataOzonProductsAttribute(
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            self::getConvertValue($attribute[array_key_first($attribute)]->value),
-            self::DICTIONARY
+            self::getConvertValue(current($attribute)->value),
+            $data,
+            $this->attributeValueRequest
         );
 
         return $requestData->getData();
@@ -107,5 +110,10 @@ final class RunFlatOzonProductsAttribute implements OzonProductsAttributeInterfa
             false, 'false'  => 'Нет',
             default         => null
         };
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 }

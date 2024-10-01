@@ -27,7 +27,7 @@ final class ComplexAttributesOzonProductsProperty implements OzonProductsPropert
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): array
     {
         return [];
     }

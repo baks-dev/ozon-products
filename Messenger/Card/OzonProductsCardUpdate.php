@@ -26,18 +26,11 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Messenger\Card;
 
 use BaksDev\Core\Deduplicator\DeduplicatorInterface;
-use BaksDev\Core\Lock\AppLockInterface;
-use BaksDev\Core\Messenger\MessageDispatchInterface;
-use BaksDev\Orders\Order\Type\Status\OrderStatus\OrderStatusNew;
 use BaksDev\Ozon\Products\Api\Card\Update\OzonCardUpdateRequest;
-use BaksDev\Ozon\Products\Mapper\ItemOzonProducts;
-use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
-
+use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
-use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
 use DateInterval;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -48,7 +41,7 @@ final class OzonProductsCardUpdate
     public function __construct(
         private readonly ProductsOzonCardInterface $ozonProductsCard,
         private readonly OzonCardUpdateRequest $ozonCardUpdateRequest,
-        private readonly ItemOzonProducts $itemOzonProducts,
+        private readonly OzonProductsMapper $itemOzonProducts,
         private readonly DeduplicatorInterface $deduplicator,
         LoggerInterface $ozonProductsLogger,
     ) {
@@ -81,6 +74,8 @@ final class OzonProductsCardUpdate
             return;
         }
 
+        /** Присваиваем профиль пользователя для всех Request запросов  */
+        $this->ozonCardUpdateRequest->profile($message->getProfile());
 
         $Card = $this->itemOzonProducts->getData($product);
 
@@ -103,9 +98,7 @@ final class OzonProductsCardUpdate
 
 
         /** Выполняем запрос на создание/обновление карточки */
-        $this->ozonCardUpdateRequest
-            ->profile($message->getProfile())
-            ->update($Card);
+        $this->ozonCardUpdateRequest->update($Card);
 
         $this->logger->info(sprintf('Обновили карточку товара %s', $Card['offer_id']));
 

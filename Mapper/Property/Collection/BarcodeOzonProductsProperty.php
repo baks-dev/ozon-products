@@ -27,14 +27,20 @@ final class BarcodeOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): string|false
     {
+        if(empty($data['product_properties']))
+        {
+            return false;
+        }
+
         foreach (json_decode($data['product_properties'], true) as $property)
         {
             if($property['type'] === self::PARAM)
             {
-                return $property['value'];
+                return $property['value'] ?? false;
             }
+
         }
 
         return '';

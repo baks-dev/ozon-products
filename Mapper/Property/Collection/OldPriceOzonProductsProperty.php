@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Reference\Money\Type\Money;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('baks.ozon.product.property')]
@@ -29,14 +30,16 @@ final class OldPriceOzonProductsProperty implements OzonProductsPropertyInterfac
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): string|false
     {
-        if(!$data['product_old_price'])
+        if(empty(['product_old_price']))
         {
             return false;
         }
 
-        return $data['product_old_price'] ?? '';
+        $oldPrice =  new Money($data['product_old_price'], true);
+
+        return (string)$oldPrice->getValue();
     }
 
     /**

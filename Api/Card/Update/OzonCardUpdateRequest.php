@@ -37,7 +37,10 @@ final class OzonCardUpdateRequest extends Ozon
      */
     public function update(array $card): bool
     {
-        if(Kernel::isTestEnvironment())
+        /**
+         * Выполнять операции запроса ТОЛЬКО в PROD окружении
+         */
+        if($this->isExecuteEnvironment() === false)
         {
             return true;
         }
@@ -47,7 +50,7 @@ final class OzonCardUpdateRequest extends Ozon
                 'POST',
                 '/v3/product/import',
                 [
-                    "json" => ['items' => $card]
+                    "json" => ['items' => [$card]]
                 ]
             );
 

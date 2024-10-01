@@ -23,10 +23,10 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\Products\Api\Settings\AttributeValues\Tests;
+namespace BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\Tests;
 
-use BaksDev\Ozon\Products\Api\Settings\AttributeValues\OzonAttributeValueDTO;
-use BaksDev\Ozon\Products\Api\Settings\AttributeValues\OzonAttributeValueRequest;
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchDTO;
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Psr\Cache\InvalidArgumentException;
@@ -38,7 +38,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
  * @group ozon-products-api
  */
 #[When(env: 'test')]
-class OzonAttributeValueRequestTest extends KernelTestCase
+class OzonAttributeValueSearchRequestTest extends KernelTestCase
 {
     private static OzonAuthorizationToken $Authorization;
 
@@ -56,9 +56,9 @@ class OzonAttributeValueRequestTest extends KernelTestCase
      */
     public function testComplete(): void
     {
-        /** @var OzonAttributeValueRequest $ozonAttributeRequest */
-        $ozonAttributeRequest = self::getContainer()->get(OzonAttributeValueRequest::class);
-        $ozonAttributeRequest->TokenHttpClient(self::$Authorization);
+        /** @var OzonAttributeValueSearchRequest $OzonAttributeValueSearch */
+        $OzonAttributeValueSearch = self::getContainer()->get(OzonAttributeValueSearchRequest::class);
+        $OzonAttributeValueSearch->TokenHttpClient(self::$Authorization);
 
         // 17027949 - Шины
         // 94765 - Шины для легковых автомобилей
@@ -76,13 +76,18 @@ class OzonAttributeValueRequestTest extends KernelTestCase
         // 17028741 - Столовая посуда
         // 92499 - Кружка
 
-        $attribute = $ozonAttributeRequest->findAll(17027949, 94765, 4389);
+        $OzonAttributeValueSearch->attribute(4389);
+        $OzonAttributeValueSearch->category(17027949);
+        $OzonAttributeValueSearch->type(94765);
+        $OzonAttributeValueSearch->value("Triangle");
+        $attribute = $OzonAttributeValueSearch->find();
+
 
         //                dd(iterator_to_array($attribute));
 
         if($attribute->valid())
         {
-            /** @var OzonAttributeValueDTO $OzonAttributeDTO */
+            /** @var OzonAttributeValueSearchDTO $OzonAttributeDTO */
             $OzonAttributeDTO = $attribute->current();
 
             self::assertNotNull($OzonAttributeDTO->getId());
