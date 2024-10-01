@@ -29,7 +29,7 @@ final class WeightOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): int
     {
         return $data['weight'] / 100 ?? 0;
     }

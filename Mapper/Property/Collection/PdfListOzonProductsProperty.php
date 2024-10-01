@@ -27,7 +27,7 @@ final class PdfListOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): array
     {
         return [];
     }

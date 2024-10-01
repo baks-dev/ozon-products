@@ -27,7 +27,7 @@ final class CategoryOzonProductsProperty implements OzonProductsPropertyInterfac
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): int|false
     {
         if(empty($data['ozon_category']))
         {

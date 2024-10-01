@@ -33,9 +33,9 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
     }
 
     /** Возвращает состояние */
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
-        return null;
+        return false;
     }
 
     /** Возвращает значение по умолчанию */

@@ -33,9 +33,9 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
     }
 
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
-        return null;
+        return false;
     }
 
     public function default(): string|false

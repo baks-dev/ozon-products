@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
 final class LoadIndexOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -22,18 +23,19 @@ final class LoadIndexOzonProductsAttribute implements OzonProductsAttributeInter
     //-dictionary: 561
 
 
+    /** 17027949 - Шины */
     private const int CATEGORY = 17027949;
 
-    private const int DICTIONARY = 561;
-
     private const int ID = 7392;
+
+    private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
     public function getId(): int
     {
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
         if(empty($data['product_modification_postfix']))
         {
@@ -44,10 +46,11 @@ final class LoadIndexOzonProductsAttribute implements OzonProductsAttributeInter
         $cleanedInt = filter_var(current($index), FILTER_SANITIZE_NUMBER_INT);
 
 
-        $requestData = new ItemDataOzonProductsAttribute(
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
             $cleanedInt,
-            self::DICTIONARY
+            $data,
+            $this->attributeValueRequest
         );
 
         return $requestData->getData();
@@ -86,5 +89,10 @@ final class LoadIndexOzonProductsAttribute implements OzonProductsAttributeInter
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 }

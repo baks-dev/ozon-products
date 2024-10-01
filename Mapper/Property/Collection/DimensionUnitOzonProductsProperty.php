@@ -31,7 +31,7 @@ final class DimensionUnitOzonProductsProperty implements OzonProductsPropertyInt
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): string
     {
         return 'mm';
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
 final class KeywordsOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -21,11 +21,6 @@ final class KeywordsOzonProductsAttribute implements OzonProductsAttributeInterf
     //-groupName: ""
     //-dictionary: 0
 
-
-    //    private const int CATEGORY = 17027949;
-
-    private const int DICTIONARY = 0;
-
     private const int ID = 22336;
 
     public function getId(): int
@@ -33,17 +28,16 @@ final class KeywordsOzonProductsAttribute implements OzonProductsAttributeInterf
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
         if(empty($data['product_keywords']))
         {
             return false;
         }
 
-        $requestData = new ItemDataOzonProductsAttribute(
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            $data['product_keywords'],
-            self::DICTIONARY
+            $data['product_keywords']
         );
 
         return $requestData->getData();

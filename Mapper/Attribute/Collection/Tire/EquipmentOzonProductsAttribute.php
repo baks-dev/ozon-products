@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
 final class EquipmentOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -21,9 +21,8 @@ final class EquipmentOzonProductsAttribute implements OzonProductsAttributeInter
     //-groupName: ""
     //-dictionary: 0
 
+    /** 17027949 - Шины */
     private const int CATEGORY = 17027949;
-
-    private const int DICTIONARY = 0;
 
     private const int ID = 4384;
 
@@ -32,12 +31,31 @@ final class EquipmentOzonProductsAttribute implements OzonProductsAttributeInter
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
-        $requestData = new ItemDataOzonProductsAttribute(
+        if(empty($data['product_attributes']))
+        {
+            return false;
+        }
+
+        $attribute = array_filter(
+            json_decode(
+                $data['product_attributes'],
+                false,
+                512,
+                JSON_THROW_ON_ERROR
+            ),
+            fn ($n) => self::ID === (int)$n->id
+        );
+
+        if(empty($attribute))
+        {
+            return false;
+        }
+
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            $data,
-            self::DICTIONARY
+            current($attribute)->value
         );
 
         return $requestData->getData();

@@ -62,7 +62,10 @@ final class OzonStockInfoRequest extends Ozon
 
     public function findAll(): Generator
     {
-        if (Kernel::isTestEnvironment())
+        /**
+         * Выполнять операции запроса ТОЛЬКО в PROD окружении
+         */
+        if($this->isExecuteEnvironment() === false)
         {
             return true;
         }

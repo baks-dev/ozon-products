@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataOzonProductsAttribute;
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
 final class QuantityOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -22,25 +23,25 @@ final class QuantityOzonProductsAttribute implements OzonProductsAttributeInterf
     //-dictionary: 1324
 
 
+    /** 17027949 - Шины */
     private const int CATEGORY = 17027949;
-
-    private const int DICTIONARY = 1324;
 
     private const int ID = 7202;
 
-    private const int QUANTITY_PRODUCT = 1;
+    private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
     public function getId(): int
     {
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
-        $requestData = new ItemDataOzonProductsAttribute(
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            (string)self::QUANTITY_PRODUCT,
-            self::DICTIONARY
+            '1',
+            $data,
+            $this->attributeValueRequest
         );
 
         return $requestData->getData();
@@ -79,5 +80,10 @@ final class QuantityOzonProductsAttribute implements OzonProductsAttributeInterf
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 }

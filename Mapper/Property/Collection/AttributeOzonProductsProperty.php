@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 #[AutoconfigureTag('baks.ozon.product.property')]
 final class AttributeOzonProductsProperty implements OzonProductsPropertyInterface
@@ -26,7 +29,8 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
     public const PARAM = 'attributes';
 
     public function __construct(
-        private ?ItemOzonProductsAttribute $attributes = null,
+        #[AutowireIterator('baks.ozon.product.attribute', defaultPriorityMethod: 'priority')] private ?iterable $attribute = null,
+        private readonly ?OzonAttributeValueSearchRequest $attributeValueSearchRequest = null
     ) {
     }
 
@@ -39,14 +43,37 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
-        if($this->attributes !== null && !empty($data))
+        $request = null;
+
+        /** @var OzonProductsAttributeInterface $item */
+        foreach($this->attribute as $item)
         {
-            return $this->attributes->getData($data);
+            /**
+             * Если у аттрибута опредлено значение справочника (DICTIONARY)
+             * в классе этого аттрибута необходимо реализовать метод  'attributeValueRequest',
+             * в который передать поле attributeValueRequest данного класса
+             */
+
+            if(
+                null !== $this->attributeValueSearchRequest &&
+                method_exists($item, 'attributeValueRequest')
+            ) {
+                $item->attributeValueRequest($this->attributeValueSearchRequest);
+            }
+
+            $value = $item->getData($data);
+
+            if($value === false)
+            {
+                continue;
+            }
+
+            $request[] = $value;
         }
 
-        return false;
+        return is_null($request) ? false : $request;
     }
 
     /**

@@ -28,7 +28,7 @@ final class OfferIdOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): string
     {
         return $data['article'] ?? '';
     }

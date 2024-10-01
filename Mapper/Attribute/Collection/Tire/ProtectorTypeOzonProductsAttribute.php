@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 
 final class ProtectorTypeOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -22,18 +24,19 @@ final class ProtectorTypeOzonProductsAttribute implements OzonProductsAttributeI
 
     // "Внедорожный", "Вседорожный", "Дорожный", "Слики"
 
+    /** 17027949 - Шины */
     private const int CATEGORY = 17027949;
 
-    private const int DICTIONARY = 551;
-
     private const int ID = 7385;
+
+    private OzonAttributeValueSearchRequest|false $attributeValueRequest;
 
     public function getId(): int
     {
         return self::ID;
     }
 
-    public function getData(array $data): mixed
+    public function getData(array $data): array|false
     {
         if(empty($data['product_attributes']))
         {
@@ -41,8 +44,13 @@ final class ProtectorTypeOzonProductsAttribute implements OzonProductsAttributeI
         }
 
         $attribute = array_filter(
-            json_decode($data['product_attributes'], true),
-            fn ($n) => self::ID === (int)$n['id']
+            json_decode(
+                $data['product_attributes'],
+                false,
+                512,
+                JSON_THROW_ON_ERROR
+            ),
+            fn ($n) => self::ID === (int)$n->id
         );
 
         if(empty($attribute))
@@ -50,18 +58,15 @@ final class ProtectorTypeOzonProductsAttribute implements OzonProductsAttributeI
             return false;
         }
 
-        $attr['value'] = $attribute[array_key_first($attribute)]['value'];
 
-        if(self::DICTIONARY)
-        {
-            $attr['dictionary_value_id'] = self::DICTIONARY;
-        }
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
+            self::ID,
+            current($attribute)->value,
+            $data,
+            $this->attributeValueRequest
+        );
 
-        return [
-            'complex_id' => 0,
-            'id' => self::ID,
-            'values' => [$attr]
-        ];
+        return $requestData->getData();
     }
 
     public function default(): string|false
@@ -97,5 +102,22 @@ final class ProtectorTypeOzonProductsAttribute implements OzonProductsAttributeI
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
+    }
+
+    public static function getConvertValue(string $value): ?string
+    {
+        return match ($value)
+        {
+            'Внедорожный'   => 'Внедорожный',
+            'Вседорожный'   => 'Вседорожный',
+            'Дорожный'      => 'Дорожный',
+            'Слики'         => 'Слики',
+            default         => null
+        };
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 }

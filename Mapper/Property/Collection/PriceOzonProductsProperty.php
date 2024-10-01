@@ -28,16 +28,16 @@ final class PriceOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(array $data): string|false
     {
         if(empty($data['product_price']))
         {
             return false;
         }
 
-        $price = new Money($data['product_price'] / 100);
+        $price = new Money($data['product_price'], true);
 
-        return $price->getValue();
+        return (string)$price->getValue();
     }
 
     /**
