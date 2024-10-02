@@ -33,7 +33,7 @@ final class WeightUnitOzonProductsProperty implements OzonProductsPropertyInterf
      */
     public function getData(array $data): string
     {
-        return 'kg';
+        return 'g';
     }
 
     /**

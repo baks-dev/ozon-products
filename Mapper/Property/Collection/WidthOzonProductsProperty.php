@@ -29,7 +29,7 @@ final class WidthOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(array $data): int
     {
-        return $data['width'] ? $data['width'] * 10 : 0;
+        return $data['width'] ?? 0;
     }
 
     /**

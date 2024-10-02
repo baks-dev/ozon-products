@@ -87,7 +87,7 @@ class OzonMapperTest extends KernelTestCase
 
             $Card = $itemOzonProducts->getData($request);
 
-            dd($Card);
+            //dd($Card);
 
             self::assertEquals($Card['description_category_id'], $request['ozon_category']);
 
@@ -106,10 +106,10 @@ class OzonMapperTest extends KernelTestCase
             self::assertEquals($Card['offer_id'], $request['article']);
 
             self::assertEquals($Card['price'], $request['product_price'] / 100);
-            self::assertEquals($Card['width'], $request['width'] / 10);
-            self::assertEquals($Card['height'], $request['height'] / 10);
-            self::assertEquals($Card['depth'], $request['height'] / 10);
-            self::assertEquals($Card['weight'], $request['weight'] / 100);
+            self::assertEquals($Card['width'], $request['width']);
+            self::assertEquals($Card['height'], $request['height']);
+            self::assertEquals($Card['depth'], $request['length']);
+            self::assertEquals($Card['weight'], $request['weight'] * 10);
 
             self::assertIsArray($Card["images"]);
             self::assertIsArray($Card["pdf_list"]);
