@@ -122,7 +122,10 @@ final class OzonPriceUpdateRequest extends Ozon
 
     public function update(): Generator
     {
-        if (Kernel::isTestEnvironment())
+        /**
+         * Выполнять операции запроса ТОЛЬКО в PROD окружении
+         */
+        if($this->isExecuteEnvironment() === false)
         {
             return true;
         }
