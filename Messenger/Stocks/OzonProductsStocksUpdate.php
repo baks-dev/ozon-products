@@ -57,6 +57,9 @@ final class OzonProductsStocksUpdate
      */
     public function __invoke(OzonProductsStocksMessage $message): void
     {
+        return;
+
+
         $Card = $this->ozonProductsCard
             ->forProduct($message->getProduct())
             ->forOfferConst($message->getOfferConst())
@@ -92,7 +95,7 @@ final class OzonProductsStocksUpdate
         $productStockQuantity = 0;
 
         /** @var OzonProductStockDTO $stock */
-        foreach ($ProductStocks->getStocks() as $stock)
+        foreach($ProductStocks->getStocks() as $stock)
         {
             if($stock->getType() === 'fbs')
             {

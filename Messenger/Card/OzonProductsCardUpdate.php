@@ -26,12 +26,14 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Messenger\Card;
 
 use BaksDev\Core\Deduplicator\DeduplicatorInterface;
+use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Api\Card\Update\OzonCardUpdateRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use DateInterval;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[AsMessageHandler]
 final class OzonProductsCardUpdate
@@ -43,14 +45,16 @@ final class OzonProductsCardUpdate
         private readonly OzonCardUpdateRequest $ozonCardUpdateRequest,
         private readonly OzonProductsMapper $itemOzonProducts,
         private readonly DeduplicatorInterface $deduplicator,
+        private readonly MessageDispatchInterface $messageDispatch,
         LoggerInterface $ozonProductsLogger,
     ) {
         $this->logger = $ozonProductsLogger;
     }
 
 
-    /** Добавляем (обновляем) карточку товара на Ozon*/
-
+    /**
+     * Добавляем (обновляем) карточку товара на Ozon
+     */
     public function __invoke(OzonProductsCardMessage $message): void
     {
         $product = $this->ozonProductsCard
@@ -60,11 +64,10 @@ final class OzonProductsCardUpdate
             ->forModificationConst($message->getOfferModification())
             ->find();
 
-        if(!$product)
+        if(false === $product)
         {
             return;
         }
-
 
         /** Не добавляем карточку без цены */
 
@@ -82,16 +85,23 @@ final class OzonProductsCardUpdate
         /** Лимит: 1 карточка 1 раз в 2 минуты */
         $Deduplicator = $this->deduplicator
             ->namespace('ozon-products')
+            ->expiresAfter(DateInterval::createFromDateString('2 minutes'))
             ->deduplication([
-                $Card['offer_id'],
-                $message->getProfile(),
+                $message,
                 md5(self::class)
             ]);
 
-        $this->deduplicator->expiresAfter(DateInterval::createFromDateString('2 minutes'));
-
         if($Deduplicator->isExecuted())
         {
+            $this->logger->critical(sprintf('ozon-products: Отложили обновление карточки %s на 2 минуты', $Card['offer_id']));
+
+            /** Добавляем отложенное обновление */
+            $this->messageDispatch->dispatch(
+                message: $message,
+                stamps: [new DelayStamp(120000)], // задержка 120000 млсек = 2 минуты для обновления карточки
+                transport: 'ozon-products'
+            );
+
             return;
         }
 

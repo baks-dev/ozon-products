@@ -58,6 +58,9 @@ final class OzonCardByOrderStatusUpdate
      */
     public function __invoke(OrderMessage $message): void
     {
+
+        return;
+
         /**  Получаем активные токены профилей пользователя */
 
         $profiles = $this
