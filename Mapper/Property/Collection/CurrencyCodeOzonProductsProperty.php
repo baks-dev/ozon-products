@@ -37,9 +37,11 @@ final class CurrencyCodeOzonProductsProperty implements OzonProductsPropertyInte
      */
     public function getData(array $data): string|false
     {
-        return $data['product_currency']
+        /*return $data['product_currency']
             ? (new Currency($data['product_currency']))->getCurrencyValueUpper()
-            : false;
+            : false;*/
+
+        return 'RUB';
     }
 
     /**

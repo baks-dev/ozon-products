@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Products\Product\Type\Barcode\ProductBarcode;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('baks.ozon.product.property')]
@@ -29,21 +30,24 @@ final class BarcodeOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(array $data): string|false
     {
-        if(empty($data['product_properties']))
+        $uuid = $data['id'];
+
+        if(!empty($data['product_offer_const']))
         {
-            return false;
+            $uuid = $data['product_offer_const'];
         }
 
-        foreach (json_decode($data['product_properties'], true) as $property)
+        if(!empty($data['product_variation_const']))
         {
-            if($property['type'] === self::PARAM)
-            {
-                return $property['value'] ?? false;
-            }
-
+            $uuid = $data['product_variation_const'];
         }
 
-        return '';
+        if(!empty($data['product_modification_const']))
+        {
+            $uuid = $data['product_modification_const'];
+        }
+
+        return ProductBarcode::generate($uuid);
     }
 
     /**

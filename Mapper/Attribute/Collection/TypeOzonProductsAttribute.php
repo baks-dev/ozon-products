@@ -109,6 +109,17 @@ final class TypeOzonProductsAttribute implements OzonProductsAttributeInterface
         };
     }
 
+    public static function getConvertName(?string $value): ?string
+    {
+        return match ($value)
+        {
+            'jeep'          => 'для внедорожника',
+            'bus', 'truck'  => 'для грузовых автомобилей',
+            'passenger'     => 'для легковых автомобилей',
+            default         => null,
+        };
+    }
+
     public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
     {
         $this->attributeValueRequest = $attributeValueRequest;

@@ -63,13 +63,19 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
 
         if($this->translator)
         {
-            $name .= $this->translator->trans(
+            $typeName = $this->translator->trans(
                 $data['ozon_type'].'.name',
                 domain: 'ozon-products.mapper'
             );
+
+            $name .= $typeName.' ';
         }
 
-        $name .= ' '.$data['product_name'];
+        $name = mb_strtolower($name);
+        $name = mb_ucfirst($name);
+
+
+        $name .= $data['product_name'];
 
         if($data['product_variation_value'])
         {
@@ -100,52 +106,6 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
         {
             $name .= ' '.$data['product_modification_postfix'];
         }
-
-
-        if(isset($data['product_attributes']))
-        {
-            $productAttributes = json_decode(
-                $data['product_attributes'],
-                false,
-                512,
-                JSON_THROW_ON_ERROR
-            );
-
-            /** Добавляем к названию сезонность */
-            $Season = new SeasonOzonProductsAttribute();
-
-
-            foreach($productAttributes as $productAttribute)
-            {
-
-                if($Season::equals($productAttribute->id))
-                {
-                    $value = $Season::getConvertName($productAttribute->value);
-
-                    if(!null == $value)
-                    {
-                        $name .= ' '.mb_ucfirst($value);
-                    }
-                }
-            }
-
-            /** Добавляем к названию назначение */
-            $Type = new TypeOzonProductsAttribute();
-
-            foreach($productAttributes as $productAttribute)
-            {
-                if($Type::equals($productAttribute->id))
-                {
-                    $value = $Type::getConvertValue($productAttribute->value);
-
-                    if(!empty($value))
-                    {
-                        $name .= ' '.mb_lcfirst($value);
-                    }
-                }
-            }
-        }
-
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,

@@ -24,8 +24,7 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
 
     public function __construct(
         private ?TranslatorInterface $translator = null,
-    ) {
-    }
+    ) {}
 
     public function getValue(): string
     {
@@ -37,7 +36,6 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(array $data): mixed
     {
-        // Летние шины Triangle 225/65 R17 102H для легковых автомобилей
         if(!isset($data['ozon_category']))
         {
             return false;
@@ -59,16 +57,16 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
             $Season = new SeasonOzonProductsAttribute();
 
 
-            foreach ($productAttributes as $productAttribute)
+            foreach($productAttributes as $productAttribute)
             {
 
-                if ($Season::equals($productAttribute->id))
+                if($Season::equals($productAttribute->id))
                 {
-                    $value = $Season::getConvertValue($productAttribute->value);
+                    $value = $Season::getConvertName($productAttribute->value);
 
-                    if (!null == $value)
+                    if(!null == $value)
                     {
-                        $name .= mb_ucfirst($value). ' ' ;
+                        $name .= $value.' ';
                     }
                 }
             }
@@ -80,10 +78,15 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
                 $data['ozon_type'].'.name',
                 domain: 'ozon-products.mapper'
             );
-            $name .= mb_lcfirst($typeName);
+
+            $name .= $typeName.' ';
         }
 
-        $name .= ' '.$data['product_name'];
+        $name = mb_strtolower($name);
+        $name = mb_ucfirst($name);
+
+
+        $name .= $data['product_name'];
 
         if($data['product_variation_value'])
         {
@@ -115,7 +118,6 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
             $name .= ' '.$data['product_modification_postfix'];
         }
 
-
         if(isset($productAttributes))
         {
             /** Добавляем к названию назначение */
@@ -125,15 +127,11 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
             {
                 if($Type::equals($productAttribute->id))
                 {
-                    $value = $Type::getConvertValue($productAttribute->value);
+                    $value = $Type::getConvertName($productAttribute->value);
 
                     if(!empty($value))
                     {
-                        $valueArr = explode(' ', $value);
-
-                        unset($valueArr[0]);
-
-                        $name .= ' '.mb_lcfirst(implode(' ', $valueArr));
+                        $name .= ' '.$value;
                     }
                 }
             }

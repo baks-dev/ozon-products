@@ -101,7 +101,7 @@ class OzonPostUpdateCardCommand extends Command
             /** @var UserProfileUid $profile */
             foreach($profiles as $profile)
             {
-                $this->update($profile);
+                $this->update($profile, $input->getOption('article'));
             }
         }
         else
@@ -120,7 +120,7 @@ class OzonPostUpdateCardCommand extends Command
 
             if($UserProfileUid)
             {
-                $this->update($UserProfileUid);
+                $this->update($UserProfileUid, $input->getOption('article'));
             }
 
         }
@@ -152,12 +152,6 @@ class OzonPostUpdateCardCommand extends Command
                 continue;
             }
 
-            if(empty($card['product_price']))
-            {
-                $this->io->warning(sprintf('Карточка товара с артикулом %s без цены', $card['article']));
-                continue;
-            }
-
             /**
              * Если передан артикул - применяем фильтр по вхождению
              */
@@ -168,6 +162,12 @@ class OzonPostUpdateCardCommand extends Command
                 {
                     continue;
                 }
+            }
+
+            if(empty($card['product_price']))
+            {
+                $this->io->warning(sprintf('Карточка товара с артикулом %s без цены', $card['article']));
+                continue;
             }
 
             $OzonProductsCardMessage = new OzonProductsCardMessage(

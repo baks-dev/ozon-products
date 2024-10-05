@@ -50,6 +50,11 @@ final class ImagesOzonProductsProperty implements OzonProductsPropertyInterface
         {
             foreach (json_decode($data['product_images'], true) as $item)
             {
+                if($item['product_photo_root'] === true)
+                {
+                    continue;
+                }
+
                 $picture = sprintf(
                     'https://%s%s/%s.%s',
                     $item['product_photo_cdn'] ? $this->CDN_HOST : $this->HOST,

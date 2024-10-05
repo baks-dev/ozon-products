@@ -27,8 +27,9 @@ namespace BaksDev\Ozon\Products\Messenger\Card;
 
 use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
-use BaksDev\Ozon\Products\Api\Card\Update\OzonCardUpdateRequest;
+use BaksDev\Ozon\Products\Api\Card\Update\UpdateOzonCardRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
+use BaksDev\Ozon\Products\Messenger\Card\Result\ResultOzonProductsCardUpdateMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use DateInterval;
 use Psr\Log\LoggerInterface;
@@ -42,7 +43,7 @@ final class OzonProductsCardUpdate
 
     public function __construct(
         private readonly ProductsOzonCardInterface $ozonProductsCard,
-        private readonly OzonCardUpdateRequest $ozonCardUpdateRequest,
+        private readonly UpdateOzonCardRequest $ozonCardUpdateRequest,
         private readonly OzonProductsMapper $itemOzonProducts,
         private readonly DeduplicatorInterface $deduplicator,
         private readonly MessageDispatchInterface $messageDispatch,
@@ -106,11 +107,31 @@ final class OzonProductsCardUpdate
         }
 
         /** Выполняем запрос на создание/обновление карточки */
-        $this->ozonCardUpdateRequest->update($Card);
+        $task = $this->ozonCardUpdateRequest->update($Card);
+
+        if($task === false)
+        {
+            $this->logger->critical(sprintf('ozon-products: Ошибка при попытке обновить карточку товара %s', $Card['offer_id']));
+            return;
+        }
 
         $this->logger->info(sprintf('Обновили карточку товара %s', $Card['offer_id']));
-
         $Deduplicator->save();
+
+        /**
+         * Запускаем процесс проверки задания
+         */
+
+        $ResultOzonProductsCardUpdateMessage = new ResultOzonProductsCardUpdateMessage(
+            $task,
+            $message->getProfile()
+        );
+
+        $this->messageDispatch->dispatch(
+            message: $ResultOzonProductsCardUpdateMessage,
+            stamps: [new DelayStamp(5000)], // отложенная на 5 секунд
+            transport: 'ozon-products'
+        );
 
     }
 }

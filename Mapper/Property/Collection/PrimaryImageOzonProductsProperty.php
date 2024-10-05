@@ -23,12 +23,9 @@ final class PrimaryImageOzonProductsProperty implements OzonProductsPropertyInte
     public const string UPLOAD_URL = 'upload/product_photo';
 
     public function __construct(
-        #[Autowire(env: 'HOST')]
-        private readonly ?string $HOST = null,
-        #[Autowire(env: 'CDN_HOST')]
-        private readonly ?string $CDN_HOST = null,
-    ) {
-    }
+        #[Autowire(env: 'HOST')] private readonly ?string $HOST = null,
+        #[Autowire(env: 'CDN_HOST')] private readonly ?string $CDN_HOST = null,
+    ) {}
 
     public function getValue(): string
     {
@@ -42,27 +39,30 @@ final class PrimaryImageOzonProductsProperty implements OzonProductsPropertyInte
     {
         if(!empty($data['product_images']))
         {
-            foreach (json_decode($data['product_images'], true) as $item)
+            foreach(json_decode($data['product_images'], true) as $item)
             {
-                if($item['product_photo_root'])
+                if($item['product_photo_root'] === false)
                 {
-                    $picture = sprintf(
-                        'https://%s%s/%s.%s',
-                        $item['product_photo_cdn'] ? $this->CDN_HOST : $this->HOST,
-                        $item['product_photo_name'],
-                        $item['product_photo_cdn'] ? 'large' : 'image',
-                        $item['product_photo_ext']
-                    );
-
-                    // Проверяе м доступность файла изображения
-                    $Headers = get_headers($picture);
-                    $Headers = current($Headers);
-
-                    if(str_contains($Headers, '200')) // ожидаем HTTP/1.1 200 OK
-                    {
-                        return $picture;
-                    }
+                    continue;
                 }
+
+                $picture = sprintf(
+                    'https://%s%s/%s.%s',
+                    $item['product_photo_cdn'] ? $this->CDN_HOST : $this->HOST,
+                    $item['product_photo_name'],
+                    $item['product_photo_cdn'] ? 'large' : 'image',
+                    $item['product_photo_ext']
+                );
+
+                // Проверяе м доступность файла изображения
+                $Headers = get_headers($picture);
+                $Headers = current($Headers);
+
+                if(str_contains($Headers, '200')) // ожидаем HTTP/1.1 200 OK
+                {
+                    return $picture;
+                }
+
             }
         }
 

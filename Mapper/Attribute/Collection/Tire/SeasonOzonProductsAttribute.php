@@ -48,7 +48,7 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
                 512,
                 JSON_THROW_ON_ERROR
             ),
-            fn ($n) => self::ID === (int)$n->id
+            fn ($n) => self::ID === (int) $n->id
         );
 
         if(empty($attribute))
@@ -106,10 +106,10 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
     {
         return match ($value)
         {
-            'all'       => 'любой', // всесезонные
-            'winter',   => 'зима', // зимние
-            'summer'    => 'лето', // летние
-            default     => null,
+            'all' => 'На любой сезон', // всесезонные
+            'winter', => 'Зима', // зимние
+            'summer' => 'Лето', // летние
+            default => null,
         };
     }
 
