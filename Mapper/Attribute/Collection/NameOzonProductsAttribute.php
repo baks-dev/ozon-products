@@ -59,6 +59,16 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
             return false;
         }
 
+        if(isset($data['product_attributes']))
+        {
+            $productAttributes = json_decode(
+                $data['product_attributes'],
+                false,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+        }
+
         $name = '';
 
         if($this->translator)
@@ -73,7 +83,6 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
 
         $name = mb_strtolower($name);
         $name = mb_ucfirst($name);
-
 
         $name .= $data['product_name'];
 
@@ -105,6 +114,44 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
         if($data['product_modification_postfix'])
         {
             $name .= ' '.$data['product_modification_postfix'];
+        }
+
+        if(isset($productAttributes))
+        {
+            /** Добавляем к названию сезонность */
+            $Season = new SeasonOzonProductsAttribute();
+
+            foreach($productAttributes as $productAttribute)
+            {
+                if($Season::equals($productAttribute->id))
+                {
+                    $value = $Season::getConvertName($productAttribute->value);
+
+                    if(false === empty($value))
+                    {
+                        $name .= ', '.$value;
+                    }
+                }
+            }
+        }
+
+        if(isset($productAttributes))
+        {
+            /** Добавляем к названию назначение */
+            $Type = new TypeOzonProductsAttribute();
+
+            foreach($productAttributes as $productAttribute)
+            {
+                if($Type::equals($productAttribute->id))
+                {
+                    $value = $Type::getConvertName($productAttribute->value);
+
+                    if(false === empty($value))
+                    {
+                        $name .= ', '.$value;
+                    }
+                }
+            }
         }
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
