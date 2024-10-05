@@ -106,10 +106,21 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
     {
         return match ($value)
         {
-            'all'       => 'всесезонные', // всесезонные
-            'winter',   => 'зимние', // зимние
-            'summer'    => 'летние', // летние
+            'all'       => 'любой', // всесезонные
+            'winter',   => 'зима', // зимние
+            'summer'    => 'лето', // летние
             default     => null,
+        };
+    }
+
+    public static function getConvertName(string $value): ?string
+    {
+        return match ($value)
+        {
+            'all' => 'всесезонные', // всесезонные
+            'winter', => 'зимние', // зимние
+            'summer' => 'летние', // летние
+            default => null,
         };
     }
 

@@ -79,7 +79,6 @@ final class OzonProductsCardUpdate
 
         $Card = $this->itemOzonProducts->getData($product);
 
-
         /** Лимит: 1 карточка 1 раз в 2 минуты */
         $Deduplicator = $this->deduplicator
             ->namespace('ozon-products')
@@ -95,7 +94,6 @@ final class OzonProductsCardUpdate
         {
             return;
         }
-
 
         /** Выполняем запрос на создание/обновление карточки */
         $this->ozonCardUpdateRequest->update($Card);

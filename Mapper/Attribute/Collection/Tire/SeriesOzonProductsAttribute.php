@@ -33,6 +33,16 @@ final class SeriesOzonProductsAttribute implements OzonProductsAttributeInterfac
 
     public function getData(array $data): array|false
     {
+        if(!empty($data['product_article']))
+        {
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                $data['product_article'],
+            );
+
+            return $requestData->getData();
+        }
+
         if(empty($data['product_attributes']))
         {
             return false;
@@ -45,7 +55,7 @@ final class SeriesOzonProductsAttribute implements OzonProductsAttributeInterfac
                 512,
                 JSON_THROW_ON_ERROR
             ),
-            fn ($n) => self::ID === (int)$n->id
+            fn ($n) => self::ID === (int) $n->id
         );
 
         if(empty($attribute))

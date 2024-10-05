@@ -66,6 +66,11 @@ final class OzonCardUpdateRequest extends Ozon
             );
         }
 
+        if(isset($content['result']))
+        {
+            $this->logger->debug(sprintf('%s: Номер задания на загрузку товаров %s', $card['offer_id'], current($content['result'])));
+        }
+
         return true;
     }
 }

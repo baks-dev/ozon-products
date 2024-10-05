@@ -45,8 +45,7 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
 
     public function __construct(
         private ?TranslatorInterface $translator = null,
-    ) {
-    }
+    ) {}
 
     public function getId(): int
     {
@@ -121,7 +120,7 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
 
                 if($Season::equals($productAttribute->id))
                 {
-                    $value = $Season::getConvertValue($productAttribute->value);
+                    $value = $Season::getConvertName($productAttribute->value);
 
                     if(!null == $value)
                     {

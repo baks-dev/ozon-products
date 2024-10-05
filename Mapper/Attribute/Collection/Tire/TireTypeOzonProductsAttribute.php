@@ -50,17 +50,14 @@ final class TireTypeOzonProductsAttribute implements OzonProductsAttributeInterf
                 512,
                 JSON_THROW_ON_ERROR
             ),
-            fn ($n) => self::ID === (int)$n->id
+            fn ($n) => self::ID === (int) $n->id
         );
 
-        if(empty($attribute))
-        {
-            return false;
-        }
+        $value = empty($attribute) ? false : current($attribute)->value;
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            self::getConvertValue(current($attribute)->value),
+            self::getConvertValue($value),
             $data,
             $this->attributeValueRequest
         );
@@ -108,9 +105,9 @@ final class TireTypeOzonProductsAttribute implements OzonProductsAttributeInterf
 
         return match ($value)
         {
-            'true', true    => 'Шипованные',
-            'false', false  => 'Нешипованные',
-            default         => null
+            'true', true => 'Шипованные',
+            'false', false => 'Нешипованные',
+            default => null
         };
     }
 

@@ -33,6 +33,10 @@ use BaksDev\Orders\Order\UseCase\Admin\Edit\Products\OrderProductDTO;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierInterface;
+use BaksDev\Products\Product\Type\Id\ProductUid;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use BaksDev\Yandex\Market\Products\Messenger\Card\YaMarketProductsCardMessage;
 use BaksDev\Yandex\Market\Products\Messenger\YaMarketProductsStocksUpdate\YaMarketProductsStocksMessage;
 use BaksDev\Yandex\Market\Repository\AllProfileToken\AllProfileYaMarketTokenInterface;
@@ -47,8 +51,7 @@ final class OzonCardByOrderStatusUpdate
         private readonly CurrentProductIdentifierInterface $currentProductIdentifier,
         private readonly AllProfileYaMarketTokenInterface $allProfileYaMarketToken,
         private readonly MessageDispatchInterface $messageDispatch,
-    ) {
-    }
+    ) {}
 
     /**
      * Обновляем остатки Ozon при изменении статусов заказов
@@ -70,7 +73,7 @@ final class OzonCardByOrderStatusUpdate
 
 
         /** Получаем событие заказа */
-        $OrderEvent = $this->currentOrderEvent->forOrder($message->getId())->find();
+        $OrderEvent = $this->currentOrderEvent->forOrder($message->getId())->execute();
 
         if($OrderEvent === false)
         {
@@ -99,17 +102,17 @@ final class OzonCardByOrderStatusUpdate
                     continue;
                 }
 
-                $ozonProductsCardMessage = new OzonProductsCardMessage(
-                    $profile,
-                    $ProductIdentifier['id'],
-                    $ProductIdentifier['offer_const'],
-                    $ProductIdentifier['variation_const'],
-                    $ProductIdentifier['modification_const']
+                $OzonProductsCardMessage = new OzonProductsCardMessage(
+                    new ProductUid($product['id']),
+                    $product['offer_const'] ? new ProductOfferConst($product['offer_const']) : false,
+                    $product['variation_const'] ? new ProductVariationConst($product['variation_const']) : false,
+                    $product['modification_const'] ? new ProductModificationConst($product['modification_const']) : false,
+                    $profile
                 );
 
                 /** Добавляем в очередь обновление остатков через транспорт профиля */
                 $this->messageDispatch->dispatch(
-                    message: new OzonProductsStocksMessage($ozonProductsCardMessage),
+                    message: new OzonProductsStocksMessage($OzonProductsCardMessage),
                     stamps: [new DelayStamp(3000)], // задержка 3 сек для обновления карточки
                     transport: (string) $profile
                 );

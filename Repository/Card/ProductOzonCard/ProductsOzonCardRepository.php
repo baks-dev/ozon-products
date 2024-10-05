@@ -588,7 +588,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             $dbal
                 ->addSelect('
                 product_offer.postfix AS product_offer_postfix,
-                product_offer.value AS product_offer_value
+                product_offer.value AS product_offer_value,
+                product_offer.const AS product_offer_const
             ')
                 ->join(
                     'product',
@@ -659,7 +660,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             ->addSelect(
                 '
                 product_variation.postfix AS product_variation_postfix,
-                product_variation.value AS product_variation_value
+                product_variation.value AS product_variation_value,
+                product_variation.const AS product_variation_const
             '
             )
             ->join(
@@ -727,7 +729,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             ->addSelect(
                 '
                 product_modification.postfix AS product_modification_postfix,
-                product_modification.value AS product_modification_value
+                product_modification.value AS product_modification_value,
+                product_modification.const AS product_modification_const
             '
             )
             ->join(

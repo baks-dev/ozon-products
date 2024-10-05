@@ -1,13 +1,26 @@
 <?php
-
 /*
- * This file is part of the Symfony package.
+ *  Copyright 2023.  Baks.dev <admin@baks.dev>
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is furnished
+ *  to do so, subject to the following conditions:
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
  */
+
 
 namespace BaksDev\Ozon\Products\Command;
 
@@ -17,6 +30,10 @@ use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
+use BaksDev\Products\Product\Type\Id\ProductUid;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -148,12 +165,13 @@ class OzonProductsCardStocksCommand extends Command
                 }
             }
 
+
             $OzonProductsCardMessage = new OzonProductsCardMessage(
-                $product['product_id'],
-                $product['offer_const'],
-                $product['variation_const'],
-                $product['modification_const'],
-                $profile,
+                new ProductUid($product['product_id']),
+                $product['offer_const'] ? new ProductOfferConst($product['offer_const']) : false,
+                $product['variation_const'] ? new ProductVariationConst($product['variation_const']) : false,
+                $product['modification_const'] ? new ProductModificationConst($product['modification_const']) : false,
+                $profile
             );
 
             $OzonProductsStocksMessage = new OzonProductsStocksMessage($OzonProductsCardMessage);
