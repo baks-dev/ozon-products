@@ -14,8 +14,7 @@ class OzonProductStockDTO
 
         /** Зарезервировано */
         private int $reserved
-    ) {
-    }
+    ) {}
 
     public function getType(): string
     {

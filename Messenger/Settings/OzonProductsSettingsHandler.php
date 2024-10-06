@@ -12,18 +12,12 @@ use BaksDev\Ozon\Products\Repository\Settings\OzonProductsSettingsCurrentEvent\O
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(priority: 0)]
-final class OzonProductsSettingsHandler
+final readonly class OzonProductsSettingsHandler
 {
+    /** Объявляем сервисы для теста */
     public function __construct(
-        public readonly OzonCategoryRequest $ozonCategoryTreeRequest,
-        public readonly OzonAttributeRequest $ozonAttributeRequest,
-        public readonly OzonAttributeValueRequest $ozonAttributeValueRequest,
-        public readonly OzonTypeRequest $ozonTypeRequest,
-        public readonly OzonProductsSettingsCurrentEventInterface $event
-    ) {
-    }
+        public OzonProductsSettingsCurrentEventInterface $event
+    ) {}
 
-    public function __invoke(OzonProductsSettingsMessage $message): void
-    {
-    }
+    public function __invoke(OzonProductsSettingsMessage $message): void {}
 }

@@ -30,10 +30,6 @@ use BaksDev\Ozon\Api\Ozon;
 use DomainException;
 use Generator;
 
-/**
- *  Информация о количестве товаров
- * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_GetProductInfoStocksV3
- */
 final class OzonStockInfoRequest extends Ozon
 {
     private array $article;
@@ -48,7 +44,7 @@ final class OzonStockInfoRequest extends Ozon
 
     public function product(?array $product): self
     {
-        if (null === $product)
+        if(null === $product)
         {
             $this->product = false;
         }
@@ -60,7 +56,11 @@ final class OzonStockInfoRequest extends Ozon
         return $this;
     }
 
-    public function findAll(): Generator
+    /**
+     * Информация о количестве товаров
+     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_GetProductInfoStocksV3
+     */
+    public function findAll(): Generator|bool
     {
         /**
          * Выполнять операции запроса ТОЛЬКО в PROD окружении
@@ -70,33 +70,31 @@ final class OzonStockInfoRequest extends Ozon
             return true;
         }
 
-
+        /**
+         * Формируем массив для отправки JSON
+         * Пример запроса:
+         *  "filter": {
+         *
+         * "offer_id": [
+         *           "136834"
+         *       ],
+         *       "product_id": [
+         *           "214887921"
+         *       ],
+         *       "visibility": "ALL"
+         *       },
+         *  "last_id": "",
+         *  "limit": 100
+         *
+         */
         $filter["offer_id"] = $this->article;
-
         $filter["visibility"] = "ALL";
 
-        if ($this->product)
+        if($this->product)
         {
             $filter["product_id"] = $this->product;
         }
 
-
-        /**
-         *
-         * Пример запроса:
-         * "filter": {
-         *      "offer_id": [
-         *          "136834"
-         *      ],
-         *      "product_id": [
-         *          "214887921"
-         *      ],
-         *      "visibility": "ALL"
-         *      },
-         * "last_id": "",
-         * "limit": 100
-         *
-         */
         $response = $this->TokenHttpClient()
             ->request(
                 'POST',
@@ -112,22 +110,20 @@ final class OzonStockInfoRequest extends Ozon
 
         $content = $response->toArray(false);
 
-        if ($response->getStatusCode() !== 200)
+        if($response->getStatusCode() !== 200)
         {
-
-            $this->logger->critical($content['code'] . ': ' . $content['message'], [self::class . ':' . __LINE__]);
-
-
-            throw new DomainException(
-                message: 'Ошибка ' . self::class,
-                code: $response->getStatusCode()
-            );
+            $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
+            return false;
         }
 
-        foreach ($content['result']['items'] as $item)
+        if(!isset($content['result']['items']))
+        {
+            return false;
+        }
+
+        foreach($content['result']['items'] as $item)
         {
             yield new OzonStockInfoDTO($item);
         }
-
     }
 }

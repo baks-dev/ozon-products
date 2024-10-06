@@ -29,7 +29,7 @@ use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Api\Card\Update\UpdateOzonCardRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
-use BaksDev\Ozon\Products\Messenger\Card\Result\ResultOzonProductsCardUpdateMessage;
+use BaksDev\Ozon\Products\Messenger\Card\Result\ResultOzonProductsCardMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use DateInterval;
 use Psr\Log\LoggerInterface;
@@ -37,7 +37,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[AsMessageHandler]
-final class OzonProductsCardUpdate
+final class OzonProductsCarUpdate
 {
     private LoggerInterface $logger;
 
@@ -122,7 +122,7 @@ final class OzonProductsCardUpdate
          * Запускаем процесс проверки задания
          */
 
-        $ResultOzonProductsCardUpdateMessage = new ResultOzonProductsCardUpdateMessage(
+        $ResultOzonProductsCardUpdateMessage = new ResultOzonProductsCardMessage(
             $task,
             $message->getProfile()
         );

@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Messenger\Stocks;
 
 use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Lock\AppLockInterface;
+use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonProductStockDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoRequest;
@@ -35,6 +36,7 @@ use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterf
 use DateInterval;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[AsMessageHandler]
 final class OzonProductsStocksUpdate
@@ -47,6 +49,7 @@ final class OzonProductsStocksUpdate
         private readonly ProductsOzonCardInterface $ozonProductsCard,
         private readonly DeduplicatorInterface $deduplicator,
         private readonly AppLockInterface $appLock,
+        private readonly MessageDispatchInterface $messageDispatch,
         LoggerInterface $ozonProductsLogger,
     ) {
         $this->logger = $ozonProductsLogger;
@@ -57,9 +60,6 @@ final class OzonProductsStocksUpdate
      */
     public function __invoke(OzonProductsStocksMessage $message): void
     {
-        return;
-
-
         $Card = $this->ozonProductsCard
             ->forProduct($message->getProduct())
             ->forOfferConst($message->getOfferConst())
@@ -83,12 +83,13 @@ final class OzonProductsStocksUpdate
             ->createLock([$message->getProfile(), $Card['article'], self::class])
             ->waitAllTime();
 
+
+        /** Получаем информацию о количестве товаров */
         $ProductStocksInfo = $this->ozonProductStocksInfoRequest
             ->profile($message->getProfile())
             ->article([$Card['article']])
             ->findAll();
 
-        $product_quantity = isset($Card['product_quantity']) ? max($Card['product_quantity'], 0) : 0;
 
         /** @var  OzonStockInfoDTO $ProductStocks */
         $ProductStocks = $ProductStocksInfo->current();
@@ -99,18 +100,26 @@ final class OzonProductsStocksUpdate
         {
             if($stock->getType() === 'fbs')
             {
+                /** Остатки всегда одинаковы для всех */
                 $productStockQuantity = $stock->getPresent();
+                $productStockQuantity = max($productStockQuantity, 0);
+                break;
             }
         }
 
+        /**
+         * Сверяем, что остатки на маркетплейс равны остаткам в системе
+         */
+        $product_quantity = isset($Card['product_quantity']) ? max($Card['product_quantity'], 0) : 0;
+
         if($productStockQuantity === $product_quantity)
         {
-            $this->logger->info(sprintf(
-                'Наличие соответствует %s: %s == %s',
-                $Card['article'],
-                $productStockQuantity,
-                $product_quantity
-            ), [$message->getProfile()]);
+            $this->logger->info('{article}: Наличие соответствует ({old} == {new})', [
+                'article' => $Card['article'],
+                'old' => $productStockQuantity,
+                'new' => $product_quantity,
+                'profile' => $message->getProfile()
+            ]);
 
             $lock->release();
 
@@ -120,16 +129,22 @@ final class OzonProductsStocksUpdate
         /** Лимит: 1 карточка 1 раз в 2 минуты */
         $Deduplicator = $this->deduplicator
             ->namespace('ozon-products')
+            ->expiresAfter(DateInterval::createFromDateString('2 minutes'))
             ->deduplication([
-                $Card['offer_id'],
-                $message->getProfile(),
-                md5(self::class)
+                $message,
+                self::class
             ]);
-
-        $this->deduplicator->expiresAfter(DateInterval::createFromDateString('2 minutes'));
 
         if($Deduplicator->isExecuted())
         {
+            /** Пробуем обновится через 2 минуты */
+            $this->messageDispatch->dispatch(
+                message: $message,
+                stamps: [new DelayStamp(120000)], // задержка 3 сек для обновления карточки
+                transport: 'ozon-products'
+            );
+
+            $lock->release();
             return;
         }
 
@@ -140,16 +155,15 @@ final class OzonProductsStocksUpdate
             ->total($product_quantity)
             ->update();
 
-        $this->logger->info(sprintf(
-            'Обновили наличие %s: %s => %s',
-            $Card['article'],
-            $productStockQuantity,
-            $product_quantity
-        ), [$message->getProfile()]);
-
-
-        $lock->release();
+        $this->logger->info('Обновили наличие {article}: {old} => {new}', [
+            'article' => $Card['article'],
+            'old' => $productStockQuantity,
+            'new' => $product_quantity,
+            'profile' => $message->getProfile()
+        ]);
 
         $Deduplicator->save();
+        $lock->release();
+
     }
 }

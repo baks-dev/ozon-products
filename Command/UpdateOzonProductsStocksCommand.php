@@ -25,6 +25,7 @@ namespace BaksDev\Ozon\Products\Command;
 
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
+use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
@@ -35,7 +36,6 @@ use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductM
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,17 +46,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Получаем карточки товаров и добавляем отсутствующие
  */
 #[AsCommand(
-    name: 'baks:ozon-products:post:update',
-    description: 'Обновляет все карточки на Ozon'
+    name: 'baks:ozon-products:post:stocks',
+    description: 'Обновляет остатки на Ozon'
 )]
-class OzonPostUpdateCardCommand extends Command
+class UpdateOzonProductsStocksCommand extends Command
 {
     private SymfonyStyle $io;
 
     public function __construct(
         private readonly AllProfileOzonTokenInterface $allProfileOzonToken,
-        private readonly AllProductsIdentifierInterface $AllProductsIdentifier,
-        private readonly ProductsOzonCardInterface $ProductsOzonCard,
+        private readonly AllProductsIdentifierInterface $allProductsIdentifier,
+        private readonly ProductsOzonCardInterface $productsOzonCard,
         private readonly MessageDispatchInterface $messageDispatch
     ) {
         parent::__construct();
@@ -70,7 +70,6 @@ class OzonPostUpdateCardCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
-
 
         /** Получаем активные токены авторизации профилей Ozon */
         $profiles = $this->allProfileOzonToken
@@ -125,21 +124,27 @@ class OzonPostUpdateCardCommand extends Command
 
         }
 
-        $this->io->success('Карточки успешно обновлены');
+        $this->io->success('Наличие успешно обновлено');
 
         return Command::SUCCESS;
     }
 
     public function update(UserProfileUid $profile, ?string $article = null): void
     {
-        $this->io->note(sprintf('Обновили профиль %s', $profile->getAttr()));
+        $this->io->note(sprintf('Обновляем профиль %s', $profile->getAttr()));
 
-        /** Получаем все имеющиеся карточки профиля */
-        $result = $this->AllProductsIdentifier->findAll();
+        /* Получаем все имеющиеся карточки в системе */
+        $products = $this->allProductsIdentifier->findAll();
 
-        foreach($result as $product)
+        if($products === false)
         {
-            $card = $this->ProductsOzonCard
+            $this->io->warning('Карточек для обновления не найдено');
+            return;
+        }
+
+        foreach($products as $product)
+        {
+            $card = $this->productsOzonCard
                 ->forProduct($product['product_id'])
                 ->forOfferConst($product['offer_const'])
                 ->forVariationConst($product['variation_const'])
@@ -148,25 +153,19 @@ class OzonPostUpdateCardCommand extends Command
 
             if($card === false)
             {
-                $this->io->warning('Карточка товара либо настройки соотношений не найдено');
+                $this->io->writeln('<fg=red>fooКарточка товара либо настройки соотношений не найдено</>');
                 continue;
             }
 
-            /**
-             * Если передан артикул - применяем фильтр по вхождению
-             */
-            if(!empty($article))
+            /** Пропускаем обновление, если соответствие не найдено */
+            if(!empty($article) && stripos($card['article'], $article) === false)
             {
-                /** Пропускаем обновление, если соответствие не найдено */
-                if($card === false || stripos($card['article'], $article) === false)
-                {
-                    continue;
-                }
+                continue;
             }
 
             if(empty($card['product_price']))
             {
-                $this->io->warning(sprintf('Карточка товара с артикулом %s без цены', $card['article']));
+                $this->io->writeln(sprintf('<fg=yellow>Карточка товара с артикулом %s без цены</>', $card['article']));
                 continue;
             }
 
@@ -178,12 +177,11 @@ class OzonPostUpdateCardCommand extends Command
                 $profile
             );
 
-            /** Консольную комманду выполняем синхронно */
-            $this->messageDispatch->dispatch($OzonProductsCardMessage);
-            $this->io->text(sprintf('Обновили артикул %s', $card['article']));
+            $OzonProductsStocksMessage = new OzonProductsStocksMessage($OzonProductsCardMessage);
 
-            /** Делаем задержку в 1 сек между запросами */
-            sleep(5);
+            /** Консольную комманду выполняем синхронно */
+            $this->messageDispatch->dispatch($OzonProductsStocksMessage);
+            $this->io->text(sprintf('Обновили остатки %s', $card['article']));
         }
     }
 }

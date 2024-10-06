@@ -25,38 +25,39 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Messenger\Card\Result;
 
-use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
-use Symfony\Component\Validator\Constraints as Assert;
+use BaksDev\Ozon\Products\Api\Card\Update\GetOzonCardUpdateResultRequest;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final class ResultOzonProductsCardUpdateMessage
+#[AsMessageHandler(priority: 0)]
+final class ResultOzonProductsCardHandler
 {
-    private string|int $id;
-
-    private UserProfileUid $profile;
+    private LoggerInterface $logger;
 
     public function __construct(
-        int|string $id,
-        UserProfileUid $profile
+        private readonly GetOzonCardUpdateResultRequest $cardUpdateResultRequest,
+        LoggerInterface $ozonProductsLogger,
     ) {
-
-        $this->id = $id;
-        $this->profile = $profile;
+        $this->logger = $ozonProductsLogger;
     }
 
-    /**
-     * Id
-     */
-    public function getId(): int|string
+    public function __invoke(ResultOzonProductsCardMessage $message): void
     {
-        return $this->id;
-    }
+        $result = $this->cardUpdateResultRequest
+            ->profile($message->getProfile())
+            ->get($message->getId());
 
-    /**
-     * Profile
-     */
-    public function getProfile(): UserProfileUid
-    {
-        return $this->profile;
-    }
+        if(empty($result['errors']))
+        {
+            return;
+        }
 
+        foreach($result['errors'] as $error)
+        {
+            $this->logger->critical(
+                sprintf('ozon-products: Ошибка обновления карточки %s', $result['offer_id']),
+                $error
+            );
+        }
+    }
 }

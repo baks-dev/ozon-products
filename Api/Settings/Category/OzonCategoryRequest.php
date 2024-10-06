@@ -31,9 +31,11 @@ use DateInterval;
 use DomainException;
 use Generator;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+#[Autoconfigure(public: true)]
 final class OzonCategoryRequest extends Ozon
 {
     private Locale|false $local = false;

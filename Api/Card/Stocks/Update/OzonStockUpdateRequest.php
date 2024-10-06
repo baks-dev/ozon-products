@@ -25,15 +25,10 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Stocks\Update;
 
-use App\Kernel;
 use BaksDev\Ozon\Api\Ozon;
 use DomainException;
 use Generator;
 
-/**
- *  Обновить количество товаров на складах
- * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsStocks
- */
 final class OzonStockUpdateRequest extends Ozon
 {
     private string $article;
@@ -65,7 +60,7 @@ final class OzonStockUpdateRequest extends Ozon
 
     public function product(?int $product): self
     {
-        if (null === $product)
+        if(null === $product)
         {
             $this->product = false;
         }
@@ -77,8 +72,11 @@ final class OzonStockUpdateRequest extends Ozon
         return $this;
     }
 
-
-    public function update(): Generator
+    /**
+     * Обновить количество товаров на складах
+     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsStocks
+     */
+    public function update(): Generator|false
     {
 
         /**
@@ -90,31 +88,27 @@ final class OzonStockUpdateRequest extends Ozon
         }
 
 
-        $stocks["offer_id"]         = $this->article;
+        /**
+         * Формируем массив с ключами для отправки JSON
+         * Пример запроса:
+         *  "stocks": [
+         *       {
+         *           "offer_id": "PG-2404С1",
+         *           "product_id": 55946,
+         *           "stock": 4,
+         *           "warehouse_id": 22142605386000
+         *       }
+         *   ]
+         */
+        $stocks["offer_id"] = $this->article;
+        $stocks["stock"] = $this->total;
+        $stocks["warehouse_id"] = $this->warehouse;
 
-        $stocks["stock"]            = $this->total;
-
-        $stocks["warehouse_id"]     = $this->warehouse;
-
-        if ($this->product)
+        if($this->product)
         {
-            $stocks["product_id"]   = $this->product;
+            $stocks["product_id"] = $this->product;
         }
 
-
-        /**
-         *
-         * Пример запроса:
-         * "stocks": [
-         *      {
-         *          "offer_id": "PG-2404С1",
-         *          "product_id": 55946,
-         *          "stock": 4,
-         *          "warehouse_id": 22142605386000
-         *      }
-         *  ]
-         *
-         */
         $response = $this->TokenHttpClient()
             ->request(
                 'POST',
@@ -128,19 +122,19 @@ final class OzonStockUpdateRequest extends Ozon
 
         $content = $response->toArray(false);
 
-        if ($response->getStatusCode() !== 200)
+        if($response->getStatusCode() !== 200)
         {
 
-            $this->logger->critical($content['code'] . ': ' . $content['message'], [self::class . ':' . __LINE__]);
+            $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
 
 
             throw new DomainException(
-                message: 'Ошибка ' . self::class,
+                message: 'Ошибка '.self::class,
                 code: $response->getStatusCode()
             );
         }
 
-        foreach ($content['result'] as $item)
+        foreach($content['result'] as $item)
         {
             yield new OzonStockUpdateDTO($item);
         }
