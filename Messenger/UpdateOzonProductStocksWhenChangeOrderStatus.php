@@ -103,10 +103,10 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
                 }
 
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
-                    new ProductUid($product['id']),
-                    $product['offer_const'] ? new ProductOfferConst($product['offer_const']) : false,
-                    $product['variation_const'] ? new ProductVariationConst($product['variation_const']) : false,
-                    $product['modification_const'] ? new ProductModificationConst($product['modification_const']) : false,
+                    new ProductUid($ProductIdentifier['id']),
+                    $ProductIdentifier['offer_const'] ? new ProductOfferConst($ProductIdentifier['offer_const']) : false,
+                    $ProductIdentifier['variation_const'] ? new ProductVariationConst($ProductIdentifier['variation_const']) : false,
+                    $ProductIdentifier['modification_const'] ? new ProductModificationConst($ProductIdentifier['modification_const']) : false,
                     $profile
                 );
 

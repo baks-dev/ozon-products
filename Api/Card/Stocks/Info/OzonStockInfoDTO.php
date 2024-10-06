@@ -48,7 +48,7 @@ final readonly class OzonStockInfoDTO
 
         foreach ($data['stocks'] as $stock)
         {
-            $this->stocks->add($stock);
+            $this->stocks->add(new OzonProductStockDTO(...$stock));
         }
 
     }

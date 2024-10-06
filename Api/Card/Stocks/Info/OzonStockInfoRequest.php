@@ -101,7 +101,7 @@ final class OzonStockInfoRequest extends Ozon
                 '/v3/product/info/stocks',
                 [
                     "json" => [
-                        'filter' => [$filter],
+                        'filter' => $filter,
                         "last_id" => "",
                         "limit" => 100
                     ]

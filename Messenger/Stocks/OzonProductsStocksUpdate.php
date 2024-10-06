@@ -31,6 +31,7 @@ use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonProductStockDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoRequest;
+use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateRequest;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use DateInterval;
@@ -90,6 +91,13 @@ final class OzonProductsStocksUpdate
             ->article([$Card['article']])
             ->findAll();
 
+        if($ProductStocksInfo === false || $ProductStocksInfo->valid() === false)
+        {
+            $lock->release();
+
+            return;
+        }
+
 
         /** @var  OzonStockInfoDTO $ProductStocks */
         $ProductStocks = $ProductStocksInfo->current();
@@ -103,6 +111,7 @@ final class OzonProductsStocksUpdate
                 /** Остатки всегда одинаковы для всех */
                 $productStockQuantity = $stock->getPresent();
                 $productStockQuantity = max($productStockQuantity, 0);
+
                 break;
             }
         }
@@ -140,20 +149,38 @@ final class OzonProductsStocksUpdate
             /** Пробуем обновится через 2 минуты */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new DelayStamp(120000)], // задержка 3 сек для обновления карточки
+                stamps: [new DelayStamp(120000)], // задержка 2 минуты для обновления карточки
                 transport: 'ozon-products'
             );
 
-            $lock->release();
             return;
         }
 
         /** Обновляем остатки товара если наличие изменилось */
-        $this->ozonStockUpdateRequest
+        $result = $this->ozonStockUpdateRequest
             ->profile($message->getProfile())
             ->article($Card['article'])
             ->total($product_quantity)
             ->update();
+
+
+        /** @var OzonStockUpdateDTO $OzonStockUpdateDTO */
+        $OzonStockUpdateDTO = $result->current();
+
+        if(false === $OzonStockUpdateDTO->updated())
+        {
+            /** Пробуем обновится через 2 минуты */
+            $this->messageDispatch->dispatch(
+                message: $message,
+                stamps: [new DelayStamp(120000)], // задержка 2 минуты для обновления карточки
+                transport: 'ozon-products'
+            );
+
+            $Deduplicator->save();
+            $lock->release();
+
+            return;
+        }
 
         $this->logger->info('Обновили наличие {article}: {old} => {new}', [
             'article' => $Card['article'],
