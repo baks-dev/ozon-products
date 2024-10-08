@@ -27,10 +27,12 @@ namespace BaksDev\Ozon\Products\Messenger\Card;
 
 use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
+use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductCalculatorRequest;
 use BaksDev\Ozon\Products\Api\Card\Update\UpdateOzonCardRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Messenger\Card\Result\ResultOzonProductsCardMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
+use BaksDev\Reference\Money\Type\Money;
 use DateInterval;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -42,6 +44,7 @@ final class OzonProductsCarUpdate
     private LoggerInterface $logger;
 
     public function __construct(
+        private readonly GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest,
         private readonly ProductsOzonCardInterface $ozonProductsCard,
         private readonly UpdateOzonCardRequest $ozonCardUpdateRequest,
         private readonly OzonProductsMapper $itemOzonProducts,
@@ -106,7 +109,22 @@ final class OzonProductsCarUpdate
             return;
         }
 
+
+        /** Получаем стоимость услуг и присваиваем полную стоимость */
+
+        $Money = $this->GetOzonProductCalculatorRequest
+            ->category($Card['description_category_id'])
+            ->width($Card['width'] / 10)
+            ->height($Card['height'] / 10)
+            ->length($Card['depth'] / 10)
+            ->weight($Card['weight'] / 1000)
+            ->price(new Money($Card['price']))
+            ->calc();
+
+        $Card['price'] = $Money->getValue();
+
         /** Выполняем запрос на создание/обновление карточки */
+
         $task = $this->ozonCardUpdateRequest->update($Card);
 
         if($task === false)

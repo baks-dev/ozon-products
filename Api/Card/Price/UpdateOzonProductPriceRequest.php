@@ -88,20 +88,34 @@ final class UpdateOzonProductPriceRequest extends Ozon
          */
 
 
+        /** Присваиваем торговую наценка к стоимости товара */
+
+        if(!empty($this->getPercent()))
+        {
+            $percent = $this->price->percent($this->getPercent());
+            $this->price->add($percent);
+        }
+
         $prices['auto_action_enabled'] = 'UNKNOWN';
         $prices["offer_id"] = $this->article;
-        $prices["price"] = $this->price->getValue();
-        $prices['min_price'] = $this->price->getValue();
-        $prices['old_price'] = $this->price->getValue();
+
+        /** Добавляем для скидки клиенту 5% (6% если цена свыше 10к) */
+        $percent = $this->price->percent($this->price->getValue() > 10000 ? 6 : 5);
+
+        $this->price->add($percent);
+        $prices["price"] = (string) round($this->price->getValue());
+
+        /** Присваиваем минимальную цену с учетом скидки клиенту 5% */
+        $this->price->sub($percent);
+        $prices['min_price'] = (string) round($this->price->getValue());
+
+        /** Завышаем старую цену */
+        $old = $this->price->percent(10);
+        $this->price->add($old);
+        $prices['old_price'] = (string) round($this->price->getValue());
+
         $prices['currency_code'] = 'RUB';
         $prices['price_strategy_enabled'] = 'UNKNOWN';
-
-
-        //        if($this->product)
-        //        {
-        //            $stocks["product_id"] = $this->product;
-        //        }
-
 
         $response = $this->TokenHttpClient()
             ->request(
@@ -127,6 +141,15 @@ final class UpdateOzonProductPriceRequest extends Ozon
         }
 
         $result = current($content['result']);
+
+
+        if($result['updated'] === false)
+        {
+            foreach($result['errors'] as $error)
+            {
+                $this->logger->critical($result['offer_id'].': '.$error['message'], [self::class.':'.__LINE__]);
+            }
+        }
 
         return (bool) $result['updated'];
     }

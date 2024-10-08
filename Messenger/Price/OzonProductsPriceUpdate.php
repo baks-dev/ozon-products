@@ -28,12 +28,14 @@ namespace BaksDev\Ozon\Products\Messenger\Price;
 use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Lock\AppLockInterface;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
+use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductCalculatorRequest;
 use BaksDev\Ozon\Products\Api\Card\Price\UpdateOzonProductPriceRequest;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonProductStockDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoRequest;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateRequest;
+use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Reference\Money\Type\Money;
 use DateInterval;
@@ -48,11 +50,13 @@ final class OzonProductsPriceUpdate
 
     public function __construct(
         private readonly UpdateOzonProductPriceRequest $updateOzonProductPriceRequest,
+        private readonly OzonProductsMapper $itemOzonProducts,
         private readonly OzonStockInfoRequest $ozonProductStocksInfoRequest,
         private readonly ProductsOzonCardInterface $ozonProductsCard,
         private readonly DeduplicatorInterface $deduplicator,
         private readonly AppLockInterface $appLock,
         private readonly MessageDispatchInterface $messageDispatch,
+        private readonly GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest,
         LoggerInterface $ozonProductsLogger,
     ) {
         $this->logger = $ozonProductsLogger;
@@ -63,32 +67,45 @@ final class OzonProductsPriceUpdate
      */
     public function __invoke(OzonProductsPriceMessage $message): void
     {
-        $Card = $this->ozonProductsCard
+        $product = $this->ozonProductsCard
             ->forProduct($message->getProduct())
             ->forOfferConst($message->getOfferConst())
             ->forVariationConst($message->getVariationConst())
             ->forModificationConst($message->getModificationConst())
             ->find();
 
-        if($Card === false)
+        if($product === false)
         {
             return;
         }
 
-        /** Не обновляем остатки карточки без цены */
+        /** Не обновляем стоимость без цены */
         if(empty($Card['product_price']))
         {
             return;
         }
 
-        $price = new Money($Card['product_price'], true);
-        $percent = $price->percent(15);
-        $price->add($percent);
+        /** Присваиваем профиль пользователя для всех Request запросов  */
+        $this->updateOzonProductPriceRequest->profile($message->getProfile());
+
+        $Card = $this->itemOzonProducts->getData($product);
+
+        /** Получаем стоимость услуг и присваиваем полную стоимость */
+
+        $price = $this->GetOzonProductCalculatorRequest
+            ->category($Card['description_category_id'])
+            ->width($Card['width'] / 10)
+            ->height($Card['height'] / 10)
+            ->length($Card['depth'] / 10)
+            ->weight($Card['weight'] / 1000)
+            ->price(new Money($Card['price']))
+            ->calc();
+
+        /** Обновляем стоимость */
 
         $result = $this->updateOzonProductPriceRequest
-            ->profile($message->getProfile())
             ->price($price)
-            ->article($Card['article'])
+            ->article($Card['offer_id'])
             ->update();
 
         if($result === false)

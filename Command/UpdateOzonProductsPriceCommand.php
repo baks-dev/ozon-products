@@ -25,6 +25,7 @@ namespace BaksDev\Ozon\Products\Command;
 
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
+use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
@@ -181,7 +182,7 @@ class UpdateOzonProductsPriceCommand extends Command
 
             /** Консольную комманду выполняем синхронно */
             $this->messageDispatch->dispatch($OzonProductsStocksMessage);
-            $this->io->text(sprintf('Обновили остатки %s', $card['article']));
+            $this->io->text(sprintf('Обновили стоимость %s', $card['article']));
         }
     }
 }

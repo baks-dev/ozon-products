@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Api\Card\Update;
 
 use App\Kernel;
 use BaksDev\Ozon\Api\Ozon;
+use BaksDev\Reference\Money\Type\Money;
 use DomainException;
 
 final class UpdateOzonCardRequest extends Ozon
@@ -43,6 +44,17 @@ final class UpdateOzonCardRequest extends Ozon
         if($this->isExecuteEnvironment() === false)
         {
             return false;
+        }
+
+        /**
+         * Добавляем к стоимости товара с услугами торговую надбавку
+         */
+        if(!empty($this->getPercent()))
+        {
+            $price = new Money($card['price']);
+            $percent = $price->percent($this->getPercent());
+            $price->add($percent);
+            $card['price'] = (string) round($price->getValue());
         }
 
         $response = $this->TokenHttpClient()

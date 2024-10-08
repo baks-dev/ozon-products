@@ -147,7 +147,7 @@ class UpdateOzonProductsCardCommand extends Command
 
             if($card === false)
             {
-                $this->io->writeln('<fg=red>fooКарточка товара либо настройки соотношений не найдено</>');
+                $this->io->writeln('<fg=red>Карточка товара либо настройки соотношений не найдено</>');
                 continue;
             }
 
