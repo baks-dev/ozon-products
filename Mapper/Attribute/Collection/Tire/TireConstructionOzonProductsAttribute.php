@@ -54,14 +54,11 @@ final class TireConstructionOzonProductsAttribute implements OzonProductsAttribu
             fn ($n) => self::ID === (int)$n->id
         );
 
-        if(empty($attribute))
-        {
-            return false;
-        }
+        $value = empty($attribute) ? 'Бескамерная' : current($attribute)->value;
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            current($attribute)->value,
+            $value,
             $data,
             $this->attributeValueRequest
         );

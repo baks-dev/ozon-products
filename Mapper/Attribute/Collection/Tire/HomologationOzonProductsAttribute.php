@@ -64,6 +64,14 @@ final class HomologationOzonProductsAttribute implements OzonProductsAttributeIn
             $this->attributeValueRequest
         );
 
+        $attr = $requestData->getData();
+        $values = current($attr['values']);
+
+        if(empty($values['value']) || $values['value'] === 'false')
+        {
+            return false;
+        }
+
         return $requestData->getData();
     }
 

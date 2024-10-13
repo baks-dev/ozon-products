@@ -25,18 +25,15 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Price;
 
-use BaksDev\Ozon\Api\Ozon;
 use BaksDev\Reference\Money\Type\Money;
 use DateInterval;
-use DomainException;
-use Generator;
+use Exception;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\Cache\ItemInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class GetOzonProductCalculatorRequest
 {
@@ -116,10 +113,11 @@ final class GetOzonProductCalculatorRequest
     }
 
     /**
-     * Получаем получаем стоимость услуг Озон
+     * Получаем стоимость услуг Озон
+     *
      * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsStocks
      */
-    public function calc(): Money
+    public function calc(): Money|false
     {
         /** Делаем проверку заполнения всех свойств */
         $reflect = new ReflectionClass($this);
@@ -129,7 +127,6 @@ final class GetOzonProductCalculatorRequest
         {
             $name = $property->getName();
 
-            //if($property->isInitialized($this) === false || empty($this->{$name}))
             if(empty($this->{$name}))
             {
                 throw new InvalidArgumentException(sprintf('Invalid Argument %s', $name));
@@ -140,55 +137,60 @@ final class GetOzonProductCalculatorRequest
 
         $fbs = $cache->get(
             $this->cacheKey,
-            function (ItemInterface $item): int|float {
-
-                //$width = $data['width'] / 10;
-                //$height = $data['height'] / 10;
-                //$length = $data['length'] / 10;
-                //$weight = $data['weight'] / 100;
-
-                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+            function (ItemInterface $item): int|float|false {
 
                 $httpClient = HttpClient::create()
                     ->withOptions(['base_uri' => 'https://calculator.ozon.ru']);
 
-                $response = $httpClient->request(
-                    'POST',
-                    '/p-api/the-calculator-ozon-ru/api/calculate',
-                    [
-                        'json' => [
-                            "categoryId" => 3904,
-                            "price" => $this->price->getValue(), // цена
-                            "dimensions" => [
-                                "length" => (string) $this->length, // длина
-                                "width" => (string) $this->width, // ширина
-                                "height" => (string) $this->height, // высота
-                            ],
-                            "volume" => ($this->width * $this->height * $this->length / 1000), // объем, литры // 108 000  = 108
-                            "weight" => $this->weight, // вес
+                try
+                {
+                    $response = $httpClient->request(
+                        'POST',
+                        '/p-api/the-calculator-ozon-ru/api/calculate',
+                        [
+                            'json' => [
+                                "categoryId" => 3904,
+                                "price" => $this->price->getValue(), // цена
+                                "dimensions" => [
+                                    "length" => (string) $this->length, // длина
+                                    "width" => (string) $this->width, // ширина
+                                    "height" => (string) $this->height, // высота
+                                ],
+                                "volume" => ($this->width * $this->height * $this->length / 1000), // объем, литры // 108 000  = 108
+                                "weight" => $this->weight, // вес
 
-                            "acceptance" => [
-                                "type" => "dropOff",
-                                "acceptanceType" => "ozon",
-                                "postingsPerShipment" => 1,
-                                "dropOffType" => "pickUpPoint"
+                                "acceptance" => [
+                                    "type" => "dropOff",
+                                    "acceptanceType" => "ozon",
+                                    "postingsPerShipment" => 1,
+                                    "dropOffType" => "pickUpPoint"
+                                ]
                             ]
                         ]
-                    ]
-                );
+                    );
 
-                $content = $response->toArray(false);
+                    $content = $response->toArray(false);
+
+                }
+                catch(Exception)
+                {
+                    $item->expiresAfter(DateInterval::createFromDateString('1 second'));
+                    return false;
+                }
 
                 /** Получаем стоимость услуг FBS */
+                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
                 return abs($content['fbs']['totalOzonServicesPerItem']);
             }
         );
 
+        if($fbs === false)
+        {
+            return false;
+        }
+
         $services = new Money($fbs);
         $this->price->add($services);
-
-        //dump('Стоимость услуг '.$services->getValue());
-        //dd('Итого стоимость '.$price->getValue());
 
         return $this->price;
 

@@ -100,7 +100,7 @@ final class UpdateOzonProductPriceRequest extends Ozon
         $prices["offer_id"] = $this->article;
 
         /** Добавляем для скидки клиенту 5% (6% если цена свыше 10к) */
-        $percent = $this->price->percent($this->price->getValue() > 10000 ? 6 : 5);
+        $percent = $this->price->percent(6);
 
         $this->price->add($percent);
         $prices["price"] = (string) round($this->price->getValue());

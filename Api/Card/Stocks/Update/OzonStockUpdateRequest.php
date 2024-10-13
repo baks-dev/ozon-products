@@ -58,20 +58,6 @@ final class OzonStockUpdateRequest extends Ozon
         return $this;
     }
 
-    public function product(?int $product): self
-    {
-        if(null === $product)
-        {
-            $this->product = false;
-        }
-        else
-        {
-            $this->product = $product;
-        }
-
-        return $this;
-    }
-
     /**
      * Обновить количество товаров на складах
      * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsStocks
@@ -101,13 +87,8 @@ final class OzonStockUpdateRequest extends Ozon
          *   ]
          */
         $stocks["offer_id"] = $this->article;
-        $stocks["stock"] = $this->total;
-        $stocks["warehouse_id"] = $this->warehouse;
-
-        if($this->product)
-        {
-            $stocks["product_id"] = $this->product;
-        }
+        $stocks["stock"] = max($this->total, 0);
+        $stocks["warehouse_id"] = $this->getWarehouse();
 
         $response = $this->TokenHttpClient()
             ->request(

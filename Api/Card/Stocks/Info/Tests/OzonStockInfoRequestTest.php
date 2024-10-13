@@ -51,6 +51,7 @@ class OzonStockInfoRequestTest extends KernelTestCase
             new UserProfileUid(),
             $_SERVER['TEST_OZON_TOKEN'],
             $_SERVER['TEST_OZON_CLIENT'],
+            $_SERVER['TEST_OZON_WAREHOUSE'],
         );
     }
 

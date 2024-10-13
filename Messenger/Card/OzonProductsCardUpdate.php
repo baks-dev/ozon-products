@@ -39,7 +39,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[AsMessageHandler]
-final class OzonProductsCarUpdate
+final class OzonProductsCardUpdate
 {
     private LoggerInterface $logger;
 
@@ -92,7 +92,7 @@ final class OzonProductsCarUpdate
             ->expiresAfter(DateInterval::createFromDateString('2 minutes'))
             ->deduplication([
                 $message,
-                md5(self::class)
+                self::class
             ]);
 
         if($Deduplicator->isExecuted())
@@ -102,7 +102,7 @@ final class OzonProductsCarUpdate
             /** Добавляем отложенное обновление */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new DelayStamp(120000)], // задержка 120000 млсек = 2 минуты для обновления карточки
+                stamps: [new DelayStamp(125000)], // задержка 120000 млсек = 2 минуты для обновления карточки
                 transport: 'ozon-products'
             );
 
@@ -120,6 +120,19 @@ final class OzonProductsCarUpdate
             ->weight($Card['weight'] / 1000)
             ->price(new Money($Card['price']))
             ->calc();
+
+
+        /** Если произошла временная ошибка калькулятора - пробуем позже */
+        if($Money === false)
+        {
+            $this->messageDispatch->dispatch(
+                message: $message,
+                stamps: [new DelayStamp(5000)], // отложенная на 5 секунд
+                transport: 'ozon-products'
+            );
+
+            return;
+        }
 
         $Card['price'] = $Money->getValue();
 

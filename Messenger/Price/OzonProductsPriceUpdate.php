@@ -51,10 +51,7 @@ final class OzonProductsPriceUpdate
     public function __construct(
         private readonly UpdateOzonProductPriceRequest $updateOzonProductPriceRequest,
         private readonly OzonProductsMapper $itemOzonProducts,
-        private readonly OzonStockInfoRequest $ozonProductStocksInfoRequest,
         private readonly ProductsOzonCardInterface $ozonProductsCard,
-        private readonly DeduplicatorInterface $deduplicator,
-        private readonly AppLockInterface $appLock,
         private readonly MessageDispatchInterface $messageDispatch,
         private readonly GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest,
         LoggerInterface $ozonProductsLogger,
@@ -80,7 +77,7 @@ final class OzonProductsPriceUpdate
         }
 
         /** Не обновляем стоимость без цены */
-        if(empty($Card['product_price']))
+        if(empty($product['product_price']))
         {
             return;
         }
@@ -101,6 +98,19 @@ final class OzonProductsPriceUpdate
             ->price(new Money($Card['price']))
             ->calc();
 
+        /** Если произошла временная ошибка калькулятора - пробуем позже */
+        if($price === false)
+        {
+            $this->messageDispatch->dispatch(
+                message: $message,
+                stamps: [new DelayStamp(5000)], // отложенная на 5 секунд
+                transport: 'ozon-products'
+            );
+
+            return;
+        }
+
+
         /** Обновляем стоимость */
 
         $result = $this->updateOzonProductPriceRequest
@@ -114,7 +124,7 @@ final class OzonProductsPriceUpdate
         }
 
         $this->logger->info('Обновили стоимость {article}: {rice}', [
-            'article' => $Card['article'],
+            'article' => $Card['offer_id'],
             'rice' => $price->getValue(),
             'profile' => $message->getProfile()
         ]);
