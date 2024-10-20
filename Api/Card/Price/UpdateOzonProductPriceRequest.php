@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2024.  Baks.dev <admin@baks.dev>
- *
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +28,6 @@ namespace BaksDev\Ozon\Products\Api\Card\Price;
 use BaksDev\Ozon\Api\Ozon;
 use BaksDev\Reference\Money\Type\Money;
 use DomainException;
-use Generator;
 
 final class UpdateOzonProductPriceRequest extends Ozon
 {
@@ -87,29 +86,28 @@ final class UpdateOzonProductPriceRequest extends Ozon
          *   ]
          */
 
+        $prices['auto_action_enabled'] = 'UNKNOWN';
+        $prices["offer_id"] = $this->article;
 
-        /** Присваиваем торговую наценка к стоимости товара */
-
+        /** Присваиваем торговую наценку к стоимости товара */
         if(!empty($this->getPercent()))
         {
             $percent = $this->price->percent($this->getPercent());
             $this->price->add($percent);
         }
 
-        $prices['auto_action_enabled'] = 'UNKNOWN';
-        $prices["offer_id"] = $this->article;
-
-        /** Добавляем для скидки клиенту 5% (6% если цена свыше 10к) */
+        /** Добавляем 6% для скидки клиенту */
         $percent = $this->price->percent(6);
 
+        /** Присваиваем базовую цену с учетом будущей скидки клиенту */
         $this->price->add($percent);
         $prices["price"] = (string) round($this->price->getValue());
 
-        /** Присваиваем минимальную цену с учетом скидки клиенту 5% */
+        /** Присваиваем минимальную цену с учетом скидки клиенту 6% */
         $this->price->sub($percent);
         $prices['min_price'] = (string) round($this->price->getValue());
 
-        /** Завышаем старую цену */
+        /** Завышаем старую цену для бейджика */
         $old = $this->price->percent(10);
         $this->price->add($old);
         $prices['old_price'] = (string) round($this->price->getValue());
