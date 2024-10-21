@@ -108,7 +108,7 @@ final class UpdateOzonProductPriceRequest extends Ozon
         $prices['min_price'] = (string) round($this->price->getValue());
 
         /** Завышаем старую цену для бейджика */
-        $old = $this->price->percent(10);
+        $old = $this->price->percent(12);
         $this->price->add($old);
         $prices['old_price'] = (string) round($this->price->getValue());
 

@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2024.  Baks.dev <admin@baks.dev>
- *
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Messenger\Stocks;
 
 use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Lock\AppLockInterface;
+use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonProductStockDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoDTO;
@@ -37,7 +38,6 @@ use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterf
 use DateInterval;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[AsMessageHandler]
 final class OzonProductsStocksUpdate
@@ -52,7 +52,8 @@ final class OzonProductsStocksUpdate
         private readonly AppLockInterface $appLock,
         private readonly MessageDispatchInterface $messageDispatch,
         LoggerInterface $ozonProductsLogger,
-    ) {
+    )
+    {
         $this->logger = $ozonProductsLogger;
     }
 
@@ -146,10 +147,10 @@ final class OzonProductsStocksUpdate
 
         if($Deduplicator->isExecuted())
         {
-            /** Пробуем обновится через 2 минуты */
+            /** Пробуем обновится через 3 минуты */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new DelayStamp(120000)], // задержка 2 минуты для обновления карточки
+                stamps: [new MessageDelay(DateInterval::createFromDateString('3 minutes'))], // задержка 2 минуты для обновления карточки
                 transport: 'ozon-products'
             );
 
@@ -172,7 +173,7 @@ final class OzonProductsStocksUpdate
             /** Пробуем обновится через 2 минуты */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new DelayStamp(120000)], // задержка 2 минуты для обновления карточки
+                stamps: [new MessageDelay(DateInterval::createFromDateString('2 minutes'))], // задержка 2 минуты для обновления карточки
                 transport: 'ozon-products'
             );
 

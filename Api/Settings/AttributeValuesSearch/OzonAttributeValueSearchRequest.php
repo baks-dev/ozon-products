@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2024.  Baks.dev <admin@baks.dev>
- *
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -79,7 +79,7 @@ final class OzonAttributeValueSearchRequest extends Ozon
 
         $response = $cache->get(
             sprintf('%s-%s-%s', 'ozon-products-attribute-value-search', $this->type, $this->attribute),
-            function (ItemInterface $item): ResponseInterface {
+            function(ItemInterface $item): ResponseInterface {
 
                 $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
@@ -89,16 +89,16 @@ final class OzonAttributeValueSearchRequest extends Ozon
                         '/v1/description-category/attribute/values/search',
                         [
                             "json" => [
-                                "attribute_id"              => $this->attribute,
-                                'description_category_id'   => $this->category,
-                                "limit"                     => 1,
-                                "type_id"                   => $this->type,
+                                "attribute_id" => $this->attribute,
+                                'description_category_id' => $this->category,
+                                "limit" => 1,
+                                "type_id" => $this->type,
 
                                 /**
                                  * Минимальное количество символов в значении 'value' 2
                                  * поэтому добавляем пробел пробел после значения
                                  */
-                                "value"  => $this->value . ' '
+                                "value" => $this->value.' '
                             ]
                         ]
                     );
@@ -119,7 +119,7 @@ final class OzonAttributeValueSearchRequest extends Ozon
 
         foreach($content['result'] as $attributeValuesSearch)
         {
-            if($this->value !== $attributeValuesSearch['value'])
+            if(mb_strtolower($this->value) !== mb_strtolower($attributeValuesSearch['value']))
             {
                 $this->logger->critical(
                     sprintf(

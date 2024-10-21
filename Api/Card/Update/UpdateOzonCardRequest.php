@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Update;
 
-use App\Kernel;
 use BaksDev\Ozon\Api\Ozon;
 use BaksDev\Reference\Money\Type\Money;
 
@@ -45,16 +44,23 @@ final class UpdateOzonCardRequest extends Ozon
             return false;
         }
 
+        $price = new Money($card['price']);
+
         /**
          * Добавляем к стоимости товара с услугами торговую надбавку
          */
         if(!empty($this->getPercent()))
         {
-            $price = new Money($card['price']);
             $percent = $price->percent($this->getPercent());
             $price->add($percent);
-            $card['price'] = (string) $price->getRoundValue(10);
         }
+
+        /** Добавляем 6% для скидки клиенту */
+        $percent = $price->percent(6);
+        $price->add($percent);
+
+        /** Присваиваем базовую цену с учетом будущей скидки клиенту */
+        $card["price"] = (string) round($price->getValue());
 
         $response = $this->TokenHttpClient()
             ->request(

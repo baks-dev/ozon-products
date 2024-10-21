@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2024.  Baks.dev <admin@baks.dev>
- *
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,16 +25,10 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Messenger\Price;
 
-use BaksDev\Core\Deduplicator\DeduplicatorInterface;
-use BaksDev\Core\Lock\AppLockInterface;
+use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductCalculatorRequest;
 use BaksDev\Ozon\Products\Api\Card\Price\UpdateOzonProductPriceRequest;
-use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonProductStockDTO;
-use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoDTO;
-use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoRequest;
-use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateDTO;
-use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Reference\Money\Type\Money;
@@ -55,7 +49,8 @@ final class OzonProductsPriceUpdate
         private readonly MessageDispatchInterface $messageDispatch,
         private readonly GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest,
         LoggerInterface $ozonProductsLogger,
-    ) {
+    )
+    {
         $this->logger = $ozonProductsLogger;
     }
 
@@ -87,6 +82,19 @@ final class OzonProductsPriceUpdate
 
         $Card = $this->itemOzonProducts->getData($product);
 
+
+        /** Не обновляем стоимость без параметров упаковки */
+        if(
+            empty($Card['width']) ||
+            empty($Card['height']) ||
+            empty($Card['depth']) ||
+            empty($Card['weight'])
+        )
+        {
+            return;
+        }
+
+
         /** Получаем стоимость услуг и присваиваем полную стоимость */
 
         $price = $this->GetOzonProductCalculatorRequest
@@ -103,7 +111,7 @@ final class OzonProductsPriceUpdate
         {
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new DelayStamp(5000)], // отложенная на 5 секунд
+                stamps: [new MessageDelay(DateInterval::createFromDateString('5 seconds'))], // отложенная на 5 секунд
                 transport: 'ozon-products'
             );
 
