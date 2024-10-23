@@ -50,10 +50,10 @@
         {% for property in form.properties %}
 
             <div class="d-flex p-3 mb-1 gap-2 align-items-end rounded-3 border"
-                    {#style='background-color: {{ property.vars.data.required ? '#fff2f2' : property.vars.data.field is null ? '#fffaef' : '#f8f8f8' }}'#}
+                    {# style='background-color: {{ property.vars.data.required ? '#fff2f2' : property.vars.data.field is null ? '#fffaef' : '#f8f8f8' }}' #}
             >
                 <div class="w-50">
-                   {{ form_label(property.field) }}
+                    {{ form_label(property.field) }}
                     {{ form_help(property.field) }}
                 </div>
 
@@ -84,42 +84,42 @@
 
             <div class="d-flex gap-2">
 
-                <div class=" w-100 d-flex p-3 mb-1 gap-2 align-items-end rounded-3 border" >
+                <div class=" w-100 d-flex p-3 mb-1 gap-2 align-items-end rounded-3 border">
 
                     <div class="w-50">
                         {{ form_label(attribute.field) }}
                         {{ form_help(attribute.field) }}
 
-{#                        {% if attribute.vars.data.help %}#}
+                        {#                        {% if attribute.vars.data.help %} #}
 
 
-{#                            {% set rand = random() %}#}
+                        {#                            {% set rand = random() %} #}
 
-{#                            <div>#}
-{#                                <a tabindex="0"#}
-{#                                   id="{{ rand }}"#}
-{#                                   class="small text-decoration-none"#}
-{#                                   role="button"#}
-{#                                   data-bs-container="body"#}
-{#                                   data-bs-toggle="popover"#}
-{#                                   data-bs-trigger="click"#}
-{#                                   data-bs-placement="bottom"#}
-{#                                >#}
-{#                                    Список ркеомендуемых значений#}
-{#                                </a>#}
+                        {#                            <div> #}
+                        {#                                <a tabindex="0" #}
+                        {#                                   id="{{ rand }}" #}
+                        {#                                   class="small text-decoration-none" #}
+                        {#                                   role="button" #}
+                        {#                                   data-bs-container="body" #}
+                        {#                                   data-bs-toggle="popover" #}
+                        {#                                   data-bs-trigger="click" #}
+                        {#                                   data-bs-placement="bottom" #}
+                        {#                                > #}
+                        {#                                    Список ркеомендуемых значений #}
+                        {#                                </a> #}
 
-{#                                <div id="{{ rand }}-content" class="d-none mt-5">#}
-{#                                    <div class="d-flex gap-3 align-items-center mb-1">#}
-{#                                <span>#}
-{#                                    {% for help in attribute.vars.data.help %}#}
-{#                                        {{ help }}<br>#}
-{#                                    {% endfor %}#}
-{#                                </span>#}
-{#                                    </div>#}
-{#                                </div>#}
+                        {#                                <div id="{{ rand }}-content" class="d-none mt-5"> #}
+                        {#                                    <div class="d-flex gap-3 align-items-center mb-1"> #}
+                        {#                                <span> #}
+                        {#                                    {% for help in attribute.vars.data.help %} #}
+                        {#                                        {{ help }}<br> #}
+                        {#                                    {% endfor %} #}
+                        {#                                </span> #}
+                        {#                                    </div> #}
+                        {#                                </div> #}
 
-{#                            </div>#}
-{#                        {% endif %}#}
+                        {#                            </div> #}
+                        {#                        {% endif %} #}
 
                     </div>
 
@@ -134,12 +134,12 @@
 
 
                 {% if attribute.default is defined %}
-                <div class="w-50 p-3 mb-1 rounded-3 border" >
-                {{ form_widget(attribute.default, {
-                    placeholder: 'Рекомендуемые значения',
-                    attr: { 'placeholder' : 'по умолчанию' }
-                }) }}
-                </div>
+                    <div class="w-50 p-3 mb-1 rounded-3 border">
+                        {{ form_widget(attribute.default, {
+                            placeholder: 'Рекомендуемые значения',
+                            attr: { 'placeholder' : 'по умолчанию' }
+                        }) }}
+                    </div>
                 {% endif %}
             </div>
         {% endfor %}

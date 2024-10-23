@@ -52,8 +52,7 @@ final class ImagesOzonProductsProperty implements OzonProductsPropertyInterface
         private readonly ?string $HOST = null,
         #[Autowire(env: 'CDN_HOST')]
         private readonly ?string $CDN_HOST = null,
-    ) {
-    }
+    ) {}
 
     public function getValue(): string
     {
@@ -69,7 +68,7 @@ final class ImagesOzonProductsProperty implements OzonProductsPropertyInterface
 
         if(!empty($data['product_images']))
         {
-            foreach (json_decode($data['product_images'], true) as $item)
+            foreach(json_decode($data['product_images'], true) as $item)
             {
                 if($item['product_photo_root'] === true)
                 {

@@ -89,6 +89,7 @@ final class ColorImageOzonProductsProperty implements OzonProductsPropertyInterf
     {
         return self::PARAM === $param;
     }
+
     public function choices(): bool
     {
         return false;

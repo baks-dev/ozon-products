@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
-use BaksDev\Reference\Currency\Type\Currency;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('baks.ozon.product.property')]

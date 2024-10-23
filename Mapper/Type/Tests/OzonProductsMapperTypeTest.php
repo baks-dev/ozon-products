@@ -72,15 +72,15 @@ class OzonProductsMapperTypeTest extends KernelTestCase
         /** @var OzonProductsTypeCollection $OzonProductTypeCollection */
         $OzonProductTypeCollection = self::getContainer()->get(OzonProductsTypeCollection::class);
 
-        $OzonProductTypeArray       = $OzonProductTypeCollection->cases();
-        $OzonProductCategoryArray   = $OzonProductCategoryCollection->cases();
+        $OzonProductTypeArray = $OzonProductTypeCollection->cases();
+        $OzonProductCategoryArray = $OzonProductCategoryCollection->cases();
 
 
         /** @var OzonProductsTypeInterface $caseType */
         foreach($OzonProductTypeArray as $caseType)
         {
             /** @var OzonProductsCategoryInterface $caseCategory */
-            foreach ($OzonProductCategoryArray as $caseCategory)
+            foreach($OzonProductCategoryArray as $caseCategory)
             {
                 if(!$caseType->equalsCategory($caseCategory->getId()))
                 {
@@ -89,7 +89,7 @@ class OzonProductsMapperTypeTest extends KernelTestCase
 
                 $typeIds = iterator_to_array($ozonTypeRequest->findAll($caseCategory->getId()));
 
-                assertNotEmpty(array_filter($typeIds, fn ($n) => $n->getId() === $caseType->getId()));
+                assertNotEmpty(array_filter($typeIds, fn($n) => $n->getId() === $caseType->getId()));
             }
 
         }

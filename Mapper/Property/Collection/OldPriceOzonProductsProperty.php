@@ -58,9 +58,9 @@ final class OldPriceOzonProductsProperty implements OzonProductsPropertyInterfac
             return false;
         }
 
-        $oldPrice =  new Money($data['product_old_price'], true);
+        $oldPrice = new Money($data['product_old_price'], true);
 
-        return (string)$oldPrice->getValue();
+        return (string) $oldPrice->getValue();
     }
 
     /**

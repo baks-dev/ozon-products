@@ -25,11 +25,9 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Update\Tests;
 
-use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Ozon\Products\Api\Card\Update\GetOzonCardUpdateResultRequest;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 

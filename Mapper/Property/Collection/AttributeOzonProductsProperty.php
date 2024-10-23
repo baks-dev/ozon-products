@@ -52,8 +52,7 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
     public function __construct(
         #[AutowireIterator('baks.ozon.product.attribute', defaultPriorityMethod: 'priority')] private ?iterable $attribute = null,
         private readonly ?OzonAttributeValueSearchRequest $attributeValueSearchRequest = null
-    ) {
-    }
+    ) {}
 
 
     public function getValue(): string
@@ -80,7 +79,8 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
             if(
                 null !== $this->attributeValueSearchRequest &&
                 method_exists($item, 'attributeValueRequest')
-            ) {
+            )
+            {
                 $item->attributeValueRequest($this->attributeValueSearchRequest);
             }
 

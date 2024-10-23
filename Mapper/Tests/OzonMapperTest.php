@@ -102,7 +102,18 @@ class OzonMapperTest extends KernelTestCase
 
             self::assertEquals($Card['offer_id'], $request['article']);
 
-            self::assertEquals($Card['price'], $request['product_price'] / 100);
+
+            if(isset($Card['price']))
+            {
+                self::assertEquals($Card['price'], $request['product_price'] / 100);
+            }
+
+            /** Если не указана стоимость продукции - request price равен 0 */
+            else
+            {
+                self::assertEquals(0, $request['product_price'] / 100);
+            }
+
             self::assertEquals($Card['width'], $request['width']);
             self::assertEquals($Card['height'], $request['height']);
             self::assertEquals($Card['depth'], $request['length']);

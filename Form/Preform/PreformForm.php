@@ -1,19 +1,24 @@
 <?php
 /*
- *  Copyright 2022.  Baks.dev <admin@baks.dev>
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *   limitations under the License.
- *
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is furnished
+ *  to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
  */
 
 namespace BaksDev\Ozon\Products\Form\Preform;
@@ -40,8 +45,7 @@ final class PreformForm extends AbstractType
         private readonly CategoryChoiceInterface $categoryChoice,
         private readonly OzonProductsCategoryCollection $ozonProductCategoryCollection,
         private readonly OzonProductsTypeCollection $ozonProductTypeCollection
-    ) {
-    }
+    ) {}
 
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -54,10 +58,10 @@ final class PreformForm extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => $this->categoryChoice->findAll(),
-                    'choice_value' => function (?CategoryProductUid $type) {
+                    'choice_value' => function(?CategoryProductUid $type) {
                         return $type?->getValue();
                     },
-                    'choice_label' => function (CategoryProductUid $type) {
+                    'choice_label' => function(CategoryProductUid $type) {
                         return $type->getOptions();
                     },
 
@@ -75,10 +79,10 @@ final class PreformForm extends AbstractType
             ChoiceType::class,
             [
                 'choices' => $this->ozonProductCategoryCollection->casesSettings(),
-                'choice_value' => function (?OzonProductsCategoryInterface $ozonCategory) {
+                'choice_value' => function(?OzonProductsCategoryInterface $ozonCategory) {
                     return $ozonCategory?->getId();
                 },
-                'choice_label' => function (OzonProductsCategoryInterface $ozonCategory) {
+                'choice_label' => function(OzonProductsCategoryInterface $ozonCategory) {
                     return $ozonCategory->getId().'.name';
                 },
                 'expanded' => false,
@@ -102,7 +106,7 @@ final class PreformForm extends AbstractType
             ]
         );
 
-        $formModifier = function (FormInterface $form, ?int $ozonCategoryId = null): void {
+        $formModifier = function(FormInterface $form, ?int $ozonCategoryId = null): void {
 
             if($ozonCategoryId === null)
             {
@@ -115,10 +119,10 @@ final class PreformForm extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => $this->ozonProductTypeCollection->casesSettings($ozonCategoryId),
-                    'choice_value' => function (?OzonProductsTypeInterface $ozonType) {
+                    'choice_value' => function(?OzonProductsTypeInterface $ozonType) {
                         return $ozonType?->getId();
                     },
-                    'choice_label' => function (OzonProductsTypeInterface $ozonType) {
+                    'choice_label' => function(OzonProductsTypeInterface $ozonType) {
                         return $ozonType->getId().'.name';
                     },
                     'expanded' => false,
@@ -132,7 +136,7 @@ final class PreformForm extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($formModifier): void {
+            function(FormEvent $event) use ($formModifier): void {
                 $data = $event->getData();
                 /** @var PreformDTO $data */
                 $formModifier($event->getForm(), $data->getType());
@@ -142,7 +146,7 @@ final class PreformForm extends AbstractType
 
         $builder->get('ozon')->addEventListener(
             FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier): void {
+            function(FormEvent $event) use ($formModifier): void {
                 /** @var OzonCategoryDTO $ozonCategory */
                 $ozonCategory = $event->getForm()->getData();
                 $formModifier($event->getForm()->getParent(), $ozonCategory->getId());

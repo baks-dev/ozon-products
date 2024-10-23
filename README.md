@@ -1,6 +1,6 @@
 # BaksDev Ozon Products
 
-[![Version](https://img.shields.io/badge/version-7.1.16-blue)](https://github.com/baks-dev/ozon-products/releases)
+[![Version](https://img.shields.io/badge/version-7.1.17-blue)](https://github.com/baks-dev/ozon-products/releases)
 ![php 8.3+](https://img.shields.io/badge/php-min%208.3-red.svg)
 
 Модуль продукции Ozon Products
@@ -16,7 +16,6 @@ $ composer require baks-dev/ozon-products
 ``` bash
 $ php bin/phpunit --group=ozon-products
 ```
-
 
 ## Лицензия ![License](https://img.shields.io/badge/MIT-green)
 

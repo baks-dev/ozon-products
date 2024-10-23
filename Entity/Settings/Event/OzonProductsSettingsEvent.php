@@ -1,9 +1,31 @@
 <?php
+/*
+ *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is furnished
+ *  to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
 
 declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Entity\Settings\Event;
 
+use BaksDev\Core\Entity\EntityEvent;
 use BaksDev\Ozon\Products\Entity\Settings\Attribute\OzonProductsSettingsAttribute;
 use BaksDev\Ozon\Products\Entity\Settings\Modify\OzonProductsSettingsModify;
 use BaksDev\Ozon\Products\Entity\Settings\OzonProductsSettings;
@@ -11,9 +33,8 @@ use BaksDev\Ozon\Products\Entity\Settings\Property\OzonProductsSettingsProperty;
 use BaksDev\Ozon\Products\Type\Settings\Event\OzonProductsSettingsEventUid;
 use BaksDev\Products\Category\Type\Id\CategoryProductUid;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
-use BaksDev\Core\Entity\EntityEvent;
+use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
 

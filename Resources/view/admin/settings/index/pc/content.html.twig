@@ -22,10 +22,10 @@
                 {# Добавить #}
                 {% if is_granted(ROLE~'_NEW') or is_granted('ROLE_ADMIN') %}
                     <button data-href="{{ path('ozon-products:admin.settings.preform') }}"
-                       class="btn btn-primary fw-bolder modal-link disabled"
-                       data-bs-toggle="modal"
-                       data-bs-target="#modal"
-                       title='Добавить табель сотруднику'
+                            class="btn btn-primary fw-bolder modal-link disabled"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal"
+                            title='Добавить табель сотруднику'
                     >
                         {{ 'btn.new'|trans({}, 'core.btn') }}
                     </button>
@@ -48,7 +48,7 @@
                 <tr>
                     <th>#</th>
                     <th class='w-100'>Категория</th>
-{#                    <th class='text-nowrap'>Категория Ozon </th>#}
+                    {#                    <th class='text-nowrap'>Категория Ozon </th> #}
                 </tr>
 
                 </thead>
