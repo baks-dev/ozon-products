@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Messenger;
 
-use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Orders\Order\Messenger\OrderMessage;
@@ -41,8 +40,8 @@ use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
 use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use DateInterval;
+use Random\Randomizer;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[AsMessageHandler]
 final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
@@ -85,6 +84,7 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
         $EditOrderDTO = new EditOrderDTO();
         $OrderEvent->getDto($EditOrderDTO);
 
+        $Randomizer = new Randomizer();
 
         foreach($profiles as $profile)
         {
@@ -115,9 +115,13 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
                 /**
                  * Добавляем в очередь обновление остатков через транспорт профиля
                  */
+
+
+                $delay = sprintf('%s seconds', $Randomizer->getInt(5, 10));
+
                 $this->messageDispatch->dispatch(
                     message: new OzonProductsStocksMessage($OzonProductsCardMessage),
-                    stamps: [new MessageDelay(DateInterval::createFromDateString('3 seconds'))], // задержка 3 сек для обновления карточки
+                    stamps: [new MessageDelay(DateInterval::createFromDateString($delay))], // задержка 3 сек для обновления карточки
                     transport: (string) $profile
                 );
             }
