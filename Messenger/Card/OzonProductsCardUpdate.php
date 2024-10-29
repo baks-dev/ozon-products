@@ -115,7 +115,7 @@ final class OzonProductsCardUpdate
             /** Добавляем отложенное обновление */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay(DateInterval::createFromDateString('2 minutes'))], // задержка 2 минуты для обновления карточки
+                stamps: [new MessageDelay('2 minutes')], // задержка 2 минуты для обновления карточки
                 transport: 'ozon-products'
             );
 
@@ -151,7 +151,7 @@ final class OzonProductsCardUpdate
         {
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay(DateInterval::createFromDateString('5 seconds'))], // отложенная на 5 секунд
+                stamps: [new MessageDelay('5 seconds')], // отложенная на 5 секунд
                 transport: 'ozon-products'
             );
 
@@ -184,7 +184,7 @@ final class OzonProductsCardUpdate
 
         $this->messageDispatch->dispatch(
             message: $ResultOzonProductsCardUpdateMessage,
-            stamps: [new MessageDelay(DateInterval::createFromDateString('5 seconds'))], // отложенная на 5 секунд
+            stamps: [new MessageDelay('5 seconds')], // отложенная на 5 секунд
             transport: 'ozon-products'
         );
 

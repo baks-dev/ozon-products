@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Update\Tests;
 
-use BaksDev\Ozon\Products\Api\Card\Update\GetOzonCardUpdateResultRequest;
+use BaksDev\Ozon\Products\Api\Card\Update\GetOzonCardStatusUpdateRequest;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -54,8 +54,8 @@ class GetOzonCardUpdateResultRequestTest extends KernelTestCase
         self::assertTrue(true);
         return;
 
-        /** @var GetOzonCardUpdateResultRequest $GetOzonCardUpdateResultRequest */
-        $GetOzonCardUpdateResultRequest = self::getContainer()->get(GetOzonCardUpdateResultRequest::class);
+        /** @var GetOzonCardStatusUpdateRequest $GetOzonCardUpdateResultRequest */
+        $GetOzonCardUpdateResultRequest = self::getContainer()->get(GetOzonCardStatusUpdateRequest::class);
         $GetOzonCardUpdateResultRequest->TokenHttpClient(self::$Authorization);
 
         $result = $GetOzonCardUpdateResultRequest->get(1342252118);

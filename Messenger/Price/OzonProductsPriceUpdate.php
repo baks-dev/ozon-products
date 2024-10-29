@@ -32,7 +32,6 @@ use BaksDev\Ozon\Products\Api\Card\Price\UpdateOzonProductPriceRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Reference\Money\Type\Money;
-use DateInterval;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
@@ -111,7 +110,7 @@ final class OzonProductsPriceUpdate
         {
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay(DateInterval::createFromDateString('5 seconds'))], // отложенная на 5 секунд
+                stamps: [new MessageDelay('5 seconds')], // отложенная на 5 секунд
                 transport: 'ozon-products'
             );
 

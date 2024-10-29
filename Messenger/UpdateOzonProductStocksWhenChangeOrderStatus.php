@@ -39,8 +39,6 @@ use BaksDev\Products\Product\Type\Id\ProductUid;
 use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
 use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
-use DateInterval;
-use Random\Randomizer;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -84,8 +82,6 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
         $EditOrderDTO = new EditOrderDTO();
         $OrderEvent->getDto($EditOrderDTO);
 
-        $Randomizer = new Randomizer();
-
         foreach($profiles as $profile)
         {
             /** @var OrderProductDTO $product */
@@ -116,12 +112,9 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
                  * Добавляем в очередь обновление остатков через транспорт профиля
                  */
 
-
-                $delay = sprintf('%s seconds', $Randomizer->getInt(5, 10));
-
                 $this->messageDispatch->dispatch(
                     message: new OzonProductsStocksMessage($OzonProductsCardMessage),
-                    stamps: [new MessageDelay(DateInterval::createFromDateString($delay))], // задержка 3 сек для обновления карточки
+                    stamps: [new MessageDelay('5 seconds')], // задержка 3 сек для обновления карточки
                     transport: (string) $profile
                 );
             }

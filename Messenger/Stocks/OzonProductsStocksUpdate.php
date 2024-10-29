@@ -150,7 +150,7 @@ final class OzonProductsStocksUpdate
             /** Пробуем обновится через 3 минуты */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay(DateInterval::createFromDateString('3 minutes'))], // задержка 2 минуты для обновления карточки
+                stamps: [new MessageDelay('2 minutes')], // задержка 2 минуты для обновления карточки
                 transport: 'ozon-products'
             );
 
@@ -173,7 +173,7 @@ final class OzonProductsStocksUpdate
             /** Пробуем обновится через 2 минуты */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay(DateInterval::createFromDateString('2 minutes'))], // задержка 2 минуты для обновления карточки
+                stamps: [new MessageDelay('2 minutes')], // задержка 2 минуты для обновления карточки
                 transport: 'ozon-products'
             );
 

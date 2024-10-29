@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Messenger\Card\Result;
 
-use BaksDev\Ozon\Products\Api\Card\Update\GetOzonCardUpdateResultRequest;
+use BaksDev\Ozon\Products\Api\Card\Update\GetOzonCardStatusUpdateRequest;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -35,7 +35,7 @@ final class ResultOzonProductsCardHandler
     private LoggerInterface $logger;
 
     public function __construct(
-        private readonly GetOzonCardUpdateResultRequest $cardUpdateResultRequest,
+        private readonly GetOzonCardStatusUpdateRequest $cardUpdateResultRequest,
         LoggerInterface $ozonProductsLogger,
     )
     {
