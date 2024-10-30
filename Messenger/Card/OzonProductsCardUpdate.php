@@ -122,17 +122,6 @@ final class OzonProductsCardUpdate
             return;
         }
 
-        /** Не обновляем стоимость без параметров упаковки */
-        if(
-            empty($Card['width']) ||
-            empty($Card['height']) ||
-            empty($Card['depth']) ||
-            empty($Card['weight'])
-        )
-        {
-            return;
-        }
-
 
         /** Получаем стоимость услуг и присваиваем полную стоимость */
 
