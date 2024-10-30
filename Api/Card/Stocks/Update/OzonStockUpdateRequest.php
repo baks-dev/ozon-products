@@ -31,13 +31,11 @@ use Generator;
 
 final class OzonStockUpdateRequest extends Ozon
 {
+    private const bool STOP_SALES = false;
+
     private string $article;
 
     private int $total = 0;
-
-    private int $warehouse;
-
-    private int|false $product = false;
 
     public function article(string $article): self
     {
@@ -48,12 +46,6 @@ final class OzonStockUpdateRequest extends Ozon
     public function total(int $total): self
     {
         $this->total = $total;
-        return $this;
-    }
-
-    public function warehouse(int $warehouse): self
-    {
-        $this->warehouse = $warehouse;
         return $this;
     }
 
@@ -86,8 +78,10 @@ final class OzonStockUpdateRequest extends Ozon
          *   ]
          */
         $stocks["offer_id"] = $this->article;
-        $stocks["stock"] = max($this->total, 0);
+
+        $stocks["stock"] = self::STOP_SALES === true ? 0 : max($this->total, 0);
         $stocks["warehouse_id"] = $this->getWarehouse();
+
 
         $response = $this->TokenHttpClient()
             ->request(
