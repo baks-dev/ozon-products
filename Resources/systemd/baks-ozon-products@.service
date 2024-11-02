@@ -10,7 +10,7 @@
 # systemctl stop baks-ozon-products@1.service
 
 [Unit]
-Description=Symfony messenger ozon-products %i
+Description=ozon-products
 StartLimitBurst=5
 StartLimitIntervalSec=0
 
