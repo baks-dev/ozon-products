@@ -27,11 +27,15 @@ namespace BaksDev\Ozon\Products\Api\Card\Identifier;
 
 use BaksDev\Ozon\Api\Ozon;
 use DateInterval;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 
+#[Autoconfigure(public: true)]
 final class GetOzonCardIdentifierRequest extends Ozon
 {
-
+    /**
+     * Идентификатор товара в системе продавца — артикул.
+     */
     private string $article;
 
     public function article(string $article): self
@@ -40,11 +44,10 @@ final class GetOzonCardIdentifierRequest extends Ozon
         return $this;
     }
 
-
     /**
      * Узнать идентификатор карточки товара по артикулу
      *
-     * @see https://api-seller.ozon.ru/v2/product/info
+     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_GetProductInfoV2
      */
     public function find(): int|false
     {
