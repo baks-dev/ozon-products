@@ -72,21 +72,27 @@ class OzonStockInfoRequestTest extends KernelTestCase
         /** @var Iterator $result */
         $result = $AllProductsIdentifier->findAll();
 
-        $product = $result->current();
+        foreach($result as $product)
+        {
 
-        $Card = $ozonProductsCard
-            ->forProduct($product['product_id'])
-            ->forOfferConst($product['offer_const'])
-            ->forVariationConst($product['variation_const'])
-            ->forModificationConst($product['modification_const'])
-            ->find();
+            $Card = $ozonProductsCard
+                ->forProduct($product['product_id'])
+                ->forOfferConst($product['offer_const'])
+                ->forVariationConst($product['variation_const'])
+                ->forModificationConst($product['modification_const'])
+                ->find();
 
+            if(false !== $Card)
+            {
+                break;
+            }
+        }
 
         $OzonStockInfo = $OzonStockInfoRequest
             ->article([$Card['article']])
             ->findAll();
 
-        if($OzonStockInfo->valid())
+        if(false !== $OzonStockInfo && $OzonStockInfo->valid())
         {
             /** @var OzonStockInfoDTO $OzonStockInfoDTO */
             $OzonStockInfoDTO = $OzonStockInfo->current();
