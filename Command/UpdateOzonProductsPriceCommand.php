@@ -27,6 +27,7 @@ use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
+use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
 use BaksDev\Products\Product\Type\Id\ProductUid;
@@ -46,7 +47,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Получаем карточки товаров и добавляем отсутствующие
  */
 #[AsCommand(
-    name: 'baks:ozon-products:post:price',
+    name: 'baks:ozon-products:update:price',
     description: 'Обновляет остатки на Ozon'
 )]
 class UpdateOzonProductsPriceCommand extends Command

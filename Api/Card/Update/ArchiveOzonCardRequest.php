@@ -26,16 +26,15 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Update;
 
 use BaksDev\Ozon\Api\Ozon;
-use BaksDev\Reference\Money\Type\Money;
 
-final class UpdateOzonCardRequest extends Ozon
+final class ArchiveOzonCardRequest extends Ozon
 {
     /**
-     * Создать или обновить товар
+     * Перенести товар в архив
      *
-     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsV3
+     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ProductArchive
      */
-    public function update(array $card): int|false
+    public function archive(string $article): bool
     {
         /**
          * Выполнять операции запроса ТОЛЬКО в PROD окружении
@@ -45,30 +44,12 @@ final class UpdateOzonCardRequest extends Ozon
             return false;
         }
 
-        $price = new Money($card['price']);
-
-        /**
-         * Добавляем к стоимости товара с услугами торговую надбавку
-         */
-        if(!empty($this->getPercent()))
-        {
-            $percent = $price->percent($this->getPercent());
-            $price->add($percent);
-        }
-
-        /** Добавляем 6% для скидки клиенту */
-        $percent = $price->percent(6);
-        $price->add($percent);
-
-        /** Присваиваем базовую цену с учетом будущей скидки клиенту */
-        $card["price"] = (string) round($price->getValue());
-
         $response = $this->TokenHttpClient()
             ->request(
                 'POST',
-                '/v3/product/import',
+                '/v1/product/archive',
                 [
-                    "json" => ['items' => [$card]]
+                    "json" => ['product_id' => [$article]]
                 ]
             );
 
@@ -81,11 +62,6 @@ final class UpdateOzonCardRequest extends Ozon
             return false;
         }
 
-        if(false === isset($content['result']))
-        {
-            return false;
-        }
-
-        return (int) current($content['result']);
+        return isset($content['result']) && $content['result'] === true;
     }
 }

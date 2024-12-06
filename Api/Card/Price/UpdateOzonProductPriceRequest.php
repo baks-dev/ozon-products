@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Price;
 
 use BaksDev\Ozon\Api\Ozon;
+use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
 use BaksDev\Reference\Money\Type\Money;
 use DomainException;
 
@@ -55,8 +56,25 @@ final class UpdateOzonProductPriceRequest extends Ozon
     }
 
     /**
-     * Обновить количество товаров на складах
-     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsStocks
+     * Обновить цену
+     *
+     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsPrices
+     *
+     * {
+     * "prices": [
+     * {
+     * "auto_action_enabled": "UNKNOWN",
+     * "currency_code": "RUB",
+     * "min_price": "800",
+     * "offer_id": "",
+     * "old_price": "0",
+     * "price": "1448",
+     * "price_strategy_enabled": "UNKNOWN",
+     * "product_id": 1386,
+     * "quant_size": 1
+     * }
+     * ]
+     * }
      */
     public function update(): bool
     {
@@ -68,24 +86,6 @@ final class UpdateOzonProductPriceRequest extends Ozon
             return true;
         }
 
-
-        /**
-         * Формируем массив с ключами для отправки JSON
-         * Пример запроса:
-         *  "prices": [
-         *       {
-         *         "auto_action_enabled": "UNKNOWN",
-         *         "currency_code": "RUB",
-         *         "min_price": "800",
-         *              "offer_id": "",
-         *              "old_price": "0",
-         *              "price": "1448",
-         *              "price_strategy_enabled": "UNKNOWN",
-         *              "product_id": 1386
-         *       }
-         *   ]
-         */
-
         $prices['auto_action_enabled'] = 'UNKNOWN';
         $prices["offer_id"] = $this->article;
 
@@ -96,21 +96,28 @@ final class UpdateOzonProductPriceRequest extends Ozon
             $this->price->add($percent);
         }
 
-        /** Добавляем 6% для скидки клиенту */
-        $percent = $this->price->percent(6);
-
-        /** Присваиваем базовую цену с учетом будущей скидки клиенту */
-        $this->price->add($percent);
         $prices["price"] = (string) round($this->price->getValue());
-
-        /** Присваиваем минимальную цену с учетом скидки клиенту 6% */
-        $this->price->sub($percent);
-        $prices['min_price'] = (string) round($this->price->getValue());
-
-        /** Завышаем старую цену для бейджика */
-        $old = $this->price->percent(12);
-        $this->price->add($old);
+        $prices["min_price"] = (string) round($this->price->getValue());
         $prices['old_price'] = (string) round($this->price->getValue());
+
+        if(class_exists(BaksDevOzonPromotionBundle::class))
+        {
+            /** Добавляем 6% для скидки клиенту */
+            $percent = $this->price->percent(6);
+
+            /** Присваиваем базовую цену с учетом будущей скидки клиенту */
+            $this->price->add($percent);
+            $prices["price"] = (string) round($this->price->getValue());
+
+            /** Присваиваем минимальную цену с учетом скидки клиенту 6% */
+            $this->price->sub($percent);
+            $prices['min_price'] = (string) round($this->price->getValue());
+
+            /** Завышаем старую цену для бейджика */
+            $old = $this->price->percent(12);
+            $this->price->add($old);
+            $prices['old_price'] = (string) round($this->price->getValue());
+        }
 
         $prices['currency_code'] = 'RUB';
         $prices['price_strategy_enabled'] = 'UNKNOWN';

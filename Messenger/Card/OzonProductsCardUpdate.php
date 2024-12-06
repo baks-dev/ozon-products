@@ -32,7 +32,9 @@ use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductCalculatorRequest;
 use BaksDev\Ozon\Products\Api\Card\Update\UpdateOzonCardRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Messenger\Card\Result\ResultOzonProductsCardMessage;
+use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
+use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
 use BaksDev\Reference\Money\Type\Money;
 use DateInterval;
 use Psr\Log\LoggerInterface;
@@ -148,6 +150,17 @@ final class OzonProductsCardUpdate
         }
 
         $Card['price'] = $Money->getValue();
+
+
+        /**
+         * Если установлен модуль ozon-promotion - обновляем цену с учетом скидок
+         */
+
+        if(class_exists(BaksDevOzonPromotionBundle::class))
+        {
+            $this->messageDispatch->dispatch(message: new OzonProductsPriceMessage($message));
+        }
+        
 
         /** Выполняем запрос на создание/обновление карточки */
 

@@ -34,7 +34,6 @@ use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterf
 use BaksDev\Reference\Money\Type\Money;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 #[AsMessageHandler]
 final class OzonProductsPriceUpdate
@@ -76,7 +75,7 @@ final class OzonProductsPriceUpdate
             return;
         }
 
-        /** Присваиваем профиль пользователя для всех Request запросов  */
+        /** Присваиваем профиль пользователя для всех Request запросов Items */
         $this->updateOzonProductPriceRequest->profile($message->getProfile());
 
         $Card = $this->itemOzonProducts->getData($product);
@@ -121,6 +120,7 @@ final class OzonProductsPriceUpdate
         /** Обновляем стоимость */
 
         $result = $this->updateOzonProductPriceRequest
+            ->profile($message->getProfile())
             ->price($price)
             ->article($Card['offer_id'])
             ->update();

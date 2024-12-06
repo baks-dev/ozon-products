@@ -46,7 +46,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Получаем карточки товаров и добавляем отсутствующие
  */
 #[AsCommand(
-    name: 'baks:ozon-products:post:stocks',
+    name: 'baks:ozon-products:update:stocks',
     description: 'Обновляет остатки на Ozon'
 )]
 class UpdateOzonProductsStocksCommand extends Command

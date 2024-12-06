@@ -54,6 +54,29 @@ final class SeriesOzonProductsAttribute implements OzonProductsAttributeInterfac
 
     public function getData(array $data): array|false
     {
+
+        if(!empty($data['product_name']))
+        {
+            $name = trim($data['product_name']);
+
+            // Найти позицию первого пробела
+            $spacePosition = strpos($name, ' ');
+
+            if($spacePosition !== false)
+            {
+                // Извлечь часть строки после первого пробела
+                $name = substr($name, $spacePosition + 1);
+            }
+
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                $name,
+            );
+
+            return $requestData->getData();
+        }
+
+
         if(!empty($data['product_article']))
         {
             $requestData = new ItemDataBuilderOzonProductsAttribute(
