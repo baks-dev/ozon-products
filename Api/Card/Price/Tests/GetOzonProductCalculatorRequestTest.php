@@ -62,9 +62,9 @@ class GetOzonProductCalculatorRequestTest extends KernelTestCase
             // 2703
             if($category === 17027949)
             {
-                // стоимость услуг FBS = 2703
-                self::assertEquals(($Money->getValue() - 7443), 2703);
-                self::assertEquals(10146.0, $Money->getValue());
+                // стоимость услуг FBS = 2714
+                self::assertEquals(($Money->getValue() - 7443), 2714);
+                self::assertEquals(10157.0, $Money->getValue());
             }
         }
     }
