@@ -112,7 +112,10 @@ final class OzonProductsCardUpdate
 
         if($Deduplicator->isExecuted())
         {
-            $this->logger->critical(sprintf('ozon-products: Отложили обновление карточки %s на 2 минуты', $Card['offer_id']));
+            $this->logger->critical(
+                sprintf('ozon-products: Отложили обновление карточки %s на 2 минуты', $Card['offer_id']),
+                [self::class.''.__LINE__]
+            );
 
             /** Добавляем отложенное обновление */
             $this->messageDispatch->dispatch(
@@ -160,7 +163,7 @@ final class OzonProductsCardUpdate
         {
             $this->messageDispatch->dispatch(message: new OzonProductsPriceMessage($message));
         }
-        
+
 
         /** Выполняем запрос на создание/обновление карточки */
 
