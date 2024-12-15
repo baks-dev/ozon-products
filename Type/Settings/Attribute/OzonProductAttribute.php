@@ -28,7 +28,7 @@ use InvalidArgumentException;
 
 final class OzonProductAttribute
 {
-    public const TYPE = 'ozon_product_attribute';
+    public const string TYPE = 'ozon_product_attribute';
 
     private ?OzonProductsAttributeInterface $property = null;
 
