@@ -31,7 +31,7 @@ use Symfony\Component\Uid\AbstractUid;
 final class OzonProductsSettingsEventUid extends Uid
 {
     /** Тестовый идентификатор */
-    public const TEST = '9bdc2c8b-3caa-46f2-810c-cfbab1245380';
+    public const string TEST = '9bdc2c8b-3caa-46f2-810c-cfbab1245380';
 
     public const string TYPE = 'ozon_products_event_uid';
 
