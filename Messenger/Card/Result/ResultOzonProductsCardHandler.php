@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,12 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Messenger\Card\Result;
 
+use BaksDev\Core\Messenger\MessageDelay;
+use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Api\Card\Update\GetOzonCardStatusUpdateRequest;
+use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
+use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
+use BaksDev\Products\Product\Repository\CurrentProductByArticle\ProductConstByArticleInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -36,6 +41,8 @@ final class ResultOzonProductsCardHandler
 
     public function __construct(
         private readonly GetOzonCardStatusUpdateRequest $cardUpdateResultRequest,
+        private readonly ProductConstByArticleInterface $productConstByArticle,
+        private readonly MessageDispatchInterface $messageDispatch,
         LoggerInterface $ozonProductsLogger,
     )
     {
@@ -55,6 +62,42 @@ final class ResultOzonProductsCardHandler
 
         foreach($result['errors'] as $error)
         {
+            /** Если ошибка вызвана обновление цены */
+            if(isset($error['field']) && $error['field'] === 'price')
+            {
+                $product = $this->productConstByArticle->find($result['offer_id']);
+
+                $OzonProductsCardMessage = new OzonProductsCardMessage(
+                    $product->getProduct(),
+                    $product->getOfferConst(),
+                    $product->getVariationConst(),
+                    $product->getModificationConst(),
+                    $message->getProfile()
+                );
+
+                /** Выполняем запрос на обновление цены */
+                $OzonProductsPriceMessage = new OzonProductsPriceMessage($OzonProductsCardMessage);
+
+                $this->messageDispatch->dispatch(
+                    message: $OzonProductsPriceMessage,
+                    transport: 'ozon-products'
+                );
+
+                /** Повторно выполняем обновление карточки */
+                $this->messageDispatch->dispatch(
+                    message: $OzonProductsCardMessage,
+                    stamps: [new MessageDelay('5 seconds')],
+                    transport: 'ozon-products',
+                );
+
+                $this->logger->critical(
+                    sprintf('ozon-products: Ошибка обновления стоимости карточки %s. Пробуем обновить повторно через 5 сек.', $result['offer_id']),
+                    $error
+                );
+
+                return;
+            }
+
             $this->logger->critical(
                 sprintf('ozon-products: Ошибка обновления карточки %s', $result['offer_id']),
                 $error
