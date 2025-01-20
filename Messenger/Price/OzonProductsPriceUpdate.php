@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -33,24 +33,20 @@ use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Reference\Money\Type\Money;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final class OzonProductsPriceUpdate
+final readonly class OzonProductsPriceUpdate
 {
-    private LoggerInterface $logger;
-
     public function __construct(
-        private readonly UpdateOzonProductPriceRequest $updateOzonProductPriceRequest,
-        private readonly OzonProductsMapper $itemOzonProducts,
-        private readonly ProductsOzonCardInterface $ozonProductsCard,
-        private readonly MessageDispatchInterface $messageDispatch,
-        private readonly GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest,
-        LoggerInterface $ozonProductsLogger,
-    )
-    {
-        $this->logger = $ozonProductsLogger;
-    }
+        #[Target('ozonProductsLogger')] private LoggerInterface $logger,
+        private UpdateOzonProductPriceRequest $updateOzonProductPriceRequest,
+        private OzonProductsMapper $itemOzonProducts,
+        private ProductsOzonCardInterface $ozonProductsCard,
+        private MessageDispatchInterface $messageDispatch,
+        private GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest,
+    ) {}
 
     /**
      * Обновляем остатки товаров Ozon

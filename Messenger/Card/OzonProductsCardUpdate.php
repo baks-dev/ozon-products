@@ -38,25 +38,21 @@ use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
 use BaksDev\Reference\Money\Type\Money;
 use DateInterval;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final class OzonProductsCardUpdate
+final readonly class OzonProductsCardUpdate
 {
-    private LoggerInterface $logger;
-
     public function __construct(
-        private readonly GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest,
-        private readonly ProductsOzonCardInterface $ozonProductsCard,
-        private readonly UpdateOzonCardRequest $ozonCardUpdateRequest,
-        private readonly OzonProductsMapper $itemOzonProducts,
-        private readonly DeduplicatorInterface $deduplicator,
-        private readonly MessageDispatchInterface $messageDispatch,
-        LoggerInterface $ozonProductsLogger,
-    )
-    {
-        $this->logger = $ozonProductsLogger;
-    }
+        #[Target('ozonProductsLogger')] private LoggerInterface $logger,
+        private GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest,
+        private ProductsOzonCardInterface $ozonProductsCard,
+        private UpdateOzonCardRequest $ozonCardUpdateRequest,
+        private OzonProductsMapper $itemOzonProducts,
+        private DeduplicatorInterface $deduplicator,
+        private MessageDispatchInterface $messageDispatch,
+    ) {}
 
 
     /**

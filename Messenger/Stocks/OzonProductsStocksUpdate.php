@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -37,25 +37,21 @@ use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateRequest;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use DateInterval;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final class OzonProductsStocksUpdate
+final readonly class OzonProductsStocksUpdate
 {
-    private LoggerInterface $logger;
-
     public function __construct(
-        private readonly OzonStockUpdateRequest $ozonStockUpdateRequest,
-        private readonly OzonStockInfoRequest $ozonProductStocksInfoRequest,
-        private readonly ProductsOzonCardInterface $ozonProductsCard,
-        private readonly DeduplicatorInterface $deduplicator,
-        private readonly AppLockInterface $appLock,
-        private readonly MessageDispatchInterface $messageDispatch,
-        LoggerInterface $ozonProductsLogger,
-    )
-    {
-        $this->logger = $ozonProductsLogger;
-    }
+        #[Target('ozonProductsLogger')] private LoggerInterface $logger,
+        private OzonStockUpdateRequest $ozonStockUpdateRequest,
+        private OzonStockInfoRequest $ozonProductStocksInfoRequest,
+        private ProductsOzonCardInterface $ozonProductsCard,
+        private DeduplicatorInterface $deduplicator,
+        private AppLockInterface $appLock,
+        private MessageDispatchInterface $messageDispatch,
+    ) {}
 
     /**
      * Обновляем остатки товаров Ozon

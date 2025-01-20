@@ -32,22 +32,18 @@ use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
 use BaksDev\Products\Product\Repository\CurrentProductByArticle\ProductConstByArticleInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(priority: 0)]
-final class ResultOzonProductsCardHandler
+final readonly class ResultOzonProductsCardHandler
 {
-    private LoggerInterface $logger;
-
     public function __construct(
-        private readonly GetOzonCardStatusUpdateRequest $cardUpdateResultRequest,
-        private readonly ProductConstByArticleInterface $productConstByArticle,
-        private readonly MessageDispatchInterface $messageDispatch,
-        LoggerInterface $ozonProductsLogger,
-    )
-    {
-        $this->logger = $ozonProductsLogger;
-    }
+        #[Target('ozonProductsLogger')] private LoggerInterface $logger,
+        private GetOzonCardStatusUpdateRequest $cardUpdateResultRequest,
+        private ProductConstByArticleInterface $productConstByArticle,
+        private MessageDispatchInterface $messageDispatch,
+    ) {}
 
     public function __invoke(ResultOzonProductsCardMessage $message): void
     {

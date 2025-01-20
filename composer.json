@@ -21,8 +21,8 @@
     }
   ],
   "require": {
-    "php": ">=8.3",
-    "baks-dev/core": "^7.1"
+    "php": ">=8.4",
+    "baks-dev/core": "^7.2"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
