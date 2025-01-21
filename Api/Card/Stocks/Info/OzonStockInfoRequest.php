@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Stocks\Info;
 
-use App\Kernel;
 use BaksDev\Ozon\Api\Ozon;
 use Generator;
 
@@ -35,8 +34,10 @@ final class OzonStockInfoRequest extends Ozon
 
     private array|false $product = false;
 
-    public function article(array $article): self
+    public function article(array|string $article): self
     {
+        is_array($article) ?: $article = [$article];
+
         $this->article = $article;
         return $this;
     }
@@ -57,18 +58,10 @@ final class OzonStockInfoRequest extends Ozon
 
     /**
      * Информация о количестве товаров
-     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_GetProductInfoStocksV3
+     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_GetProductInfoStocks
      */
-    public function findAll(): Generator|bool
+    public function findAll(): Generator
     {
-        /**
-         * Выполнять операции запроса ТОЛЬКО в PROD окружении
-         */
-        if($this->isExecuteEnvironment() === false)
-        {
-            return true;
-        }
-
         /**
          * Формируем массив для отправки JSON
          * Пример запроса:
@@ -97,11 +90,11 @@ final class OzonStockInfoRequest extends Ozon
         $response = $this->TokenHttpClient()
             ->request(
                 'POST',
-                '/v3/product/info/stocks',
+                '/v4/product/info/stocks',
                 [
                     "json" => [
                         'filter' => $filter,
-                        "last_id" => "",
+                        //"last_id" => "",
                         "limit" => 100
                     ]
                 ]
@@ -115,12 +108,12 @@ final class OzonStockInfoRequest extends Ozon
             return false;
         }
 
-        if(!isset($content['result']['items']))
+        if(!isset($content['items']))
         {
             return false;
         }
 
-        foreach($content['result']['items'] as $item)
+        foreach($content['items'] as $item)
         {
             yield new OzonStockInfoDTO($item);
         }

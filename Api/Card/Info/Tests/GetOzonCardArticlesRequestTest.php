@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -59,20 +59,23 @@ class GetOzonCardArticlesRequestTest extends KernelTestCase
 
     public function testUseCase(): void
     {
-
         /** @var GetOzonCardArticlesRequest $GetOzonCardArticlesRequest */
         $GetOzonCardArticlesRequest = self::getContainer()->get(GetOzonCardArticlesRequest::class);
         $GetOzonCardArticlesRequest->TokenHttpClient(self::$Authorization);
 
         $data = $GetOzonCardArticlesRequest->findAll();
 
+        if($data->valid() === false)
+        {
+            echo PHP_EOL."ozon-products: Не найдено ни одного товара".PHP_EOL;
+            self::assertTrue(true);
+            return;
+        }
+
         foreach($data as $article)
         {
             self::assertNotNull($article);
-            //dump($article);
             break;
         }
-
-        self::assertTrue(true);
     }
 }

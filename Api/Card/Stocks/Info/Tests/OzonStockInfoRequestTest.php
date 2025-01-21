@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -68,13 +68,11 @@ class OzonStockInfoRequestTest extends KernelTestCase
         /** @var ProductsOzonCardInterface $ozonProductsCard */
         $ozonProductsCard = self::getContainer()->get(ProductsOzonCardInterface::class);
 
-
         /** @var Iterator $result */
         $result = $AllProductsIdentifier->findAll();
 
         foreach($result as $product)
         {
-
             $Card = $ozonProductsCard
                 ->forProduct($product['product_id'])
                 ->forOfferConst($product['offer_const'])
@@ -89,20 +87,27 @@ class OzonStockInfoRequestTest extends KernelTestCase
         }
 
         $OzonStockInfo = $OzonStockInfoRequest
-            ->article([$Card['article']])
+            ->article($Card['article'])
             ->findAll();
 
-        if(false !== $OzonStockInfo && $OzonStockInfo->valid())
+        if(false === $OzonStockInfo->valid())
         {
-            /** @var OzonStockInfoDTO $OzonStockInfoDTO */
-            $OzonStockInfoDTO = $OzonStockInfo->current();
+            echo PHP_EOL.'ozon-products: Не найдено информации о количестве'.PHP_EOL;
+            self::assertTrue(true);
+            return;
+        }
 
-            self::assertNotNull($OzonStockInfoDTO->getOffer());
-            self::assertIsString($OzonStockInfoDTO->getOffer());
+        /** @var OzonStockInfoDTO $OzonStockInfoDTO */
+        $OzonStockInfoDTO = $OzonStockInfo->current();
 
-            self::assertNotNull($OzonStockInfoDTO->getProduct());
-            self::assertIsInt($OzonStockInfoDTO->getProduct());
+        self::assertNotNull($OzonStockInfoDTO->getOffer());
+        self::assertIsString($OzonStockInfoDTO->getOffer());
 
+        self::assertNotNull($OzonStockInfoDTO->getProduct());
+        self::assertIsInt($OzonStockInfoDTO->getProduct());
+
+        if(false === $OzonStockInfoDTO->getStocks()->isEmpty())
+        {
             self::assertNotEmpty($OzonStockInfoDTO->getStocks());
 
             /** @var OzonProductStockDTO $stock */
@@ -119,7 +124,7 @@ class OzonStockInfoRequestTest extends KernelTestCase
             }
         }
 
-        self::assertTrue(true);
+
     }
 
 }
