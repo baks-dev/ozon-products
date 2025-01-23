@@ -1,17 +1,17 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
- *
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,35 +37,36 @@ final class OzonProductsPriceMessage
     /**
      * Идентификатор профиля пользователя
      */
-    private UserProfileUid $profile;
+    private string $profile;
 
     /**
      * ID продукта
      */
-    private ProductUid $product;
+    private string $product;
 
     /**
      * Постоянный уникальный идентификатор ТП
      */
-    private ProductOfferConst|null $offerConst;
+    private string|false $offerConst;
 
     /**
      * Постоянный уникальный идентификатор варианта
      */
-    private ProductVariationConst|null $variationConst;
+    private string|false $variationConst;
 
     /**
      * Постоянный уникальный идентификатор модификации
      */
-    private ProductModificationConst|null $modificationConst;
+    private string|false $modificationConst;
 
     public function __construct(OzonProductsCardMessage $message)
     {
-        $this->profile = $message->getProfile();
-        $this->product = $message->getProduct();
-        $this->offerConst = $message->getOfferConst();
-        $this->variationConst = $message->getOfferVariation();
-        $this->modificationConst = $message->getOfferModification();
+        $this->profile = (string) $message->getProfile();
+        $this->product = (string) $message->getProduct();
+
+        $this->offerConst = $message->getOfferConst() ? (string) $message->getOfferConst() : false;
+        $this->variationConst = $message->getVariationConst() ? (string) $message->getVariationConst() : false;
+        $this->modificationConst = $message->getModificationConst() ? (string) $message->getModificationConst() : false;
     }
 
     /**
@@ -73,7 +74,7 @@ final class OzonProductsPriceMessage
      */
     public function getProfile(): UserProfileUid
     {
-        return $this->profile;
+        return new UserProfileUid($this->profile);
     }
 
     /**
@@ -81,30 +82,30 @@ final class OzonProductsPriceMessage
      */
     public function getProduct(): ProductUid
     {
-        return $this->product;
+        return new ProductUid($this->product);
     }
 
     /**
      * OfferConst
      */
-    public function getOfferConst(): ?ProductOfferConst
+    public function getOfferConst(): ProductOfferConst|false
     {
-        return $this->offerConst;
+        return $this->offerConst ? new ProductOfferConst($this->offerConst) : false;
     }
 
     /**
      * VariationConst
      */
-    public function getVariationConst(): ?ProductVariationConst
+    public function getVariationConst(): ProductVariationConst|false
     {
-        return $this->variationConst;
+        return $this->variationConst ? new ProductVariationConst($this->variationConst) : false;
     }
 
     /**
      * ModificationConst
      */
-    public function getModificationConst(): ?ProductModificationConst
+    public function getModificationConst(): ProductModificationConst|false
     {
-        return $this->modificationConst;
+        return $this->modificationConst ? new ProductModificationConst($this->modificationConst) : false;
     }
 }

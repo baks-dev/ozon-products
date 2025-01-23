@@ -105,8 +105,8 @@ final readonly class OzonProductsPriceUpdate
         {
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay('5 seconds')], // отложенная на 5 секунд
-                transport: 'ozon-products'
+                stamps: [new MessageDelay('1 minute')], // отложенная на 5 секунд
+                transport: 'ozon-products-low'
             );
 
             return;
@@ -123,14 +123,20 @@ final readonly class OzonProductsPriceUpdate
 
         if($result === false)
         {
+            /* Пробуем обновить стоимость через 1 минуту */
+            $this->messageDispatch->dispatch(
+                message: $message,
+                stamps: [new MessageDelay('1 minute')],
+                transport: 'ozon-products-low'
+            );
+
             return;
         }
 
-        $this->logger->info('Обновили стоимость {article}: {rice}', [
-            'article' => $Card['offer_id'],
-            'rice' => $price->getValue(),
-            'profile' => $message->getProfile()
-        ]);
+        $this->logger->info(
+            sprintf('Обновили стоимость %s => %s', $Card['offer_id'], $price->getValue()),
+            ['profile' => (string) $message->getProfile()]
+        );
 
     }
 }

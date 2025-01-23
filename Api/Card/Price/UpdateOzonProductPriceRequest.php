@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -28,17 +28,10 @@ namespace BaksDev\Ozon\Products\Api\Card\Price;
 use BaksDev\Ozon\Api\Ozon;
 use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
 use BaksDev\Reference\Money\Type\Money;
-use DomainException;
 
 final class UpdateOzonProductPriceRequest extends Ozon
 {
     private string $article;
-
-    private int $total = 0;
-
-    private int $warehouse;
-
-    private int|false $product = false;
 
     private Money $price;
 
@@ -47,7 +40,6 @@ final class UpdateOzonProductPriceRequest extends Ozon
         $this->article = $article;
         return $this;
     }
-
 
     public function price(Money $price): self
     {
@@ -137,12 +129,12 @@ final class UpdateOzonProductPriceRequest extends Ozon
 
         if($response->getStatusCode() !== 200)
         {
-            $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
-
-            throw new DomainException(
-                message: 'Ошибка '.self::class,
-                code: $response->getStatusCode()
+            $this->logger->critical(
+                sprintf('ozon-products: Ошибка при обновление стоимости артикула %s', $this->article),
+                [$content, self::class.':'.__LINE__]
             );
+
+            return false;
         }
 
         $result = current($content['result']);

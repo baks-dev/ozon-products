@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -101,11 +101,11 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
                 }
 
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
+                    $profile,
                     new ProductUid($ProductIdentifier['id']),
                     $ProductIdentifier['offer_const'] ? new ProductOfferConst($ProductIdentifier['offer_const']) : false,
                     $ProductIdentifier['variation_const'] ? new ProductVariationConst($ProductIdentifier['variation_const']) : false,
                     $ProductIdentifier['modification_const'] ? new ProductModificationConst($ProductIdentifier['modification_const']) : false,
-                    $profile
                 );
 
                 /**

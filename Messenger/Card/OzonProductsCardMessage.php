@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -34,62 +34,63 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 final class OzonProductsCardMessage
 {
     /** ID продукта*/
-    private ProductUid $product;
+    private string $product;
 
     /** Постоянный уникальный идентификатор ТП*/
-    private ProductOfferConst|false $offerConst;
+    private string|false $offerConst;
 
     /** Постоянный уникальный идентификатор варианта */
-    private ProductVariationConst|false $offerVariation;
+    private string|false $offerVariation;
 
     /** Постоянный уникальный идентификатор модификации */
-    private ProductModificationConst|false $offerModification;
+    private string|false $offerModification;
 
     /** Идентификатор профиля пользователя */
-    private UserProfileUid $profile;
+    private string $profile;
 
     public function __construct(
+        UserProfileUid $profile,
         ProductUid $product,
         ProductOfferConst|false $offerConst,
-        ProductVariationConst|false $offerVariation,
-        ProductModificationConst|false $offerModification,
-        UserProfileUid $profile,
+        ProductVariationConst|false $variationConst,
+        ProductModificationConst|false $modificationConst,
     )
     {
-        $this->profile = $profile;
-        $this->product = $product;
-        $this->offerConst = $offerConst;
-        $this->offerVariation = $offerVariation;
-        $this->offerModification = $offerModification;
-    }
+        $this->profile = (string) $profile;
+        $this->product = (string) $product;
 
-    /**  Product */
-    public function getProduct(): ProductUid
-    {
-        return $this->product;
-    }
-
-    /**  OfferConst */
-    public function getOfferConst(): ProductOfferConst|false
-    {
-        return $this->offerConst;
-    }
-
-    /**  OfferVariation */
-    public function getOfferVariation(): ProductVariationConst|false
-    {
-        return $this->offerVariation;
-    }
-
-    /**  OfferModification */
-    public function getOfferModification(): ProductModificationConst|false
-    {
-        return $this->offerModification;
+        $this->offerConst = $offerConst ? (string) $offerConst : false;
+        $this->offerVariation = $variationConst ? (string) $variationConst : false;
+        $this->offerModification = $modificationConst ? (string) $modificationConst : false;
     }
 
     /**  Profile */
     public function getProfile(): UserProfileUid
     {
-        return $this->profile;
+        return new UserProfileUid($this->profile);
+    }
+
+    /**  Product */
+    public function getProduct(): ProductUid
+    {
+        return new ProductUid($this->product);
+    }
+
+    /**  OfferConst */
+    public function getOfferConst(): ProductOfferConst|false
+    {
+        return $this->offerConst ? new ProductOfferConst($this->offerConst) : false;
+    }
+
+    /**  OfferVariation */
+    public function getVariationConst(): ProductVariationConst|false
+    {
+        return $this->offerVariation ? new ProductVariationConst($this->offerVariation) : false;
+    }
+
+    /**  OfferModification */
+    public function getModificationConst(): ProductModificationConst|false
+    {
+        return $this->offerModification ? new ProductModificationConst($this->offerModification) : false;
     }
 }

@@ -64,11 +64,11 @@ final readonly class ResultOzonProductsCardHandler
                 $product = $this->productConstByArticle->find($result['offer_id']);
 
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
+                    $message->getProfile(),
                     $product->getProduct(),
                     $product->getOfferConst(),
                     $product->getVariationConst(),
                     $product->getModificationConst(),
-                    $message->getProfile()
                 );
 
                 /** Выполняем запрос на обновление цены */

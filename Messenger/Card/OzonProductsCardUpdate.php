@@ -63,8 +63,8 @@ final readonly class OzonProductsCardUpdate
         $product = $this->ozonProductsCard
             ->forProduct($message->getProduct())
             ->forOfferConst($message->getOfferConst())
-            ->forVariationConst($message->getOfferVariation())
-            ->forModificationConst($message->getOfferModification())
+            ->forVariationConst($message->getVariationConst())
+            ->forModificationConst($message->getModificationConst())
             ->find();
 
         if(false === $product)
@@ -116,7 +116,7 @@ final readonly class OzonProductsCardUpdate
             /** Добавляем отложенное обновление */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay('2 minutes')], // задержка 2 минуты для обновления карточки
+                stamps: [new MessageDelay('15 seconds')],
                 transport: 'ozon-products-low'
             );
 
@@ -141,13 +141,14 @@ final readonly class OzonProductsCardUpdate
         {
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay('5 seconds')], // отложенная на 5 секунд
-                transport: 'ozon-products'
+                stamps: [new MessageDelay('1 minute')], // отложенная на 5 секунд
+                transport: 'ozon-products-low'
             );
 
             return;
         }
 
+        // Может привести к устаревшему преобразованию «false» в массив.
         $Card['price'] = $Money->getValue();
 
 
@@ -185,8 +186,7 @@ final readonly class OzonProductsCardUpdate
 
         $this->messageDispatch->dispatch(
             message: $ResultOzonProductsCardUpdateMessage,
-            stamps: [new MessageDelay('5 seconds')], // отложенная на 5 секунд
-            transport: 'ozon-products'
+            transport: 'ozon-products-low'
         );
 
     }

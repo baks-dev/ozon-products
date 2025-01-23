@@ -143,11 +143,11 @@ final readonly class OzonProductsStocksUpdate
 
         if($Deduplicator->isExecuted())
         {
-            /** Пробуем обновится через 3 минуты */
+            /** Пробуем обновится через 2 минуты */
             $this->messageDispatch->dispatch(
                 message: $message,
                 stamps: [new MessageDelay('2 minutes')], // задержка 2 минуты для обновления карточки
-                transport: 'ozon-products'
+                transport: 'ozon-products-low'
             );
 
             return;
@@ -170,7 +170,7 @@ final readonly class OzonProductsStocksUpdate
             $this->messageDispatch->dispatch(
                 message: $message,
                 stamps: [new MessageDelay('2 minutes')], // задержка 2 минуты для обновления карточки
-                transport: 'ozon-products'
+                transport: 'ozon-products-low'
             );
 
             $Deduplicator->save();
