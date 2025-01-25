@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Identifier\Tests;
 
 use BaksDev\Orders\Order\UseCase\Admin\Edit\Tests\OrderNewTest;
-use BaksDev\Ozon\Products\Api\Card\Identifier\GetOzonCardIdentifierRequest;
+use BaksDev\Ozon\Products\Api\Card\Identifier\GetOzonCardSkuRequest;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Products\Stocks\UseCase\Admin\Package\Tests\PackageProductStockTest;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
@@ -38,7 +38,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
  * @group ozon-products
  */
 #[When(env: 'test')]
-class GetOzonCardIdentifierRequestTest extends KernelTestCase
+class GetOzonCardSkuRequestTest extends KernelTestCase
 {
     private static OzonAuthorizationToken $Authorization;
 
@@ -58,16 +58,16 @@ class GetOzonCardIdentifierRequestTest extends KernelTestCase
 
     public function testUseCase(): void
     {
-        /** @var GetOzonCardIdentifierRequest $GetOzonCardIdentifierRequest */
-        $GetOzonCardIdentifierRequest = self::getContainer()->get(GetOzonCardIdentifierRequest::class);
-        $GetOzonCardIdentifierRequest->TokenHttpClient(self::$Authorization);
+        /** @var GetOzonCardSkuRequest $GetOzonCardSkuRequest */
+        $GetOzonCardSkuRequest = self::getContainer()->get(GetOzonCardSkuRequest::class);
+        $GetOzonCardSkuRequest->TokenHttpClient(self::$Authorization);
 
-        $identifier = $GetOzonCardIdentifierRequest
+        $identifier = $GetOzonCardSkuRequest
             ->article('TC101-15-185-55-82V')
             ->find();
 
         self::assertIsInt($identifier);
-        dd($identifier);
+        //dd($identifier);
 
     }
 }

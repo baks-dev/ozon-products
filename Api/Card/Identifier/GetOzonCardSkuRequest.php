@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 
 #[Autoconfigure(public: true)]
-final class GetOzonCardIdentifierRequest extends Ozon
+final class GetOzonCardSkuRequest extends Ozon
 {
     /**
      * Идентификатор товара в системе продавца — артикул.
@@ -45,7 +45,7 @@ final class GetOzonCardIdentifierRequest extends Ozon
     }
 
     /**
-     * Узнать идентификатор карточки товара по артикулу
+     * Узнать SKU карточки товара по артикулу
      *
      * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_GetProductInfoList
      */
@@ -54,7 +54,7 @@ final class GetOzonCardIdentifierRequest extends Ozon
         $cache = $this->getCacheInit('ozon-products');
 
         $key = md5($this->getProfile().$this->article);
-        // $cache->delete($key);
+        //$cache->delete($key);
 
         $data = $cache->get($key, function(ItemInterface $item): array|false {
 
@@ -98,6 +98,6 @@ final class GetOzonCardIdentifierRequest extends Ozon
 
         });
 
-        return empty($data['id']) ? false : $data['id'];
+        return empty($data['sources']) ? false : current($data['sources'])['sku'];
     }
 }
