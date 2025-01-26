@@ -103,9 +103,9 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
                     $profile,
                     new ProductUid($ProductIdentifier['id']),
-                    $ProductIdentifier['offer_const'] ? new ProductOfferConst($ProductIdentifier['offer_const']) : false,
-                    $ProductIdentifier['variation_const'] ? new ProductVariationConst($ProductIdentifier['variation_const']) : false,
-                    $ProductIdentifier['modification_const'] ? new ProductModificationConst($ProductIdentifier['modification_const']) : false,
+                    isset($ProductIdentifier['offer_const']) ? new ProductOfferConst($ProductIdentifier['offer_const']) : false,
+                    isset($ProductIdentifier['variation_const']) ? new ProductVariationConst($ProductIdentifier['variation_const']) : false,
+                    isset($ProductIdentifier['modification_const']) ? new ProductModificationConst($ProductIdentifier['modification_const']) : false,
                 );
 
                 /**
