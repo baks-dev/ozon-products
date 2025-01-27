@@ -88,7 +88,7 @@ final readonly class OzonProductsStocksUpdate
             ->article([$Card['article']])
             ->findAll();
 
-        if($ProductStocksInfo === false || $ProductStocksInfo->valid() === false)
+        if(false === $ProductStocksInfo || $ProductStocksInfo->valid() === false)
         {
             $lock->release();
 
