@@ -88,24 +88,24 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
             foreach($EditOrderDTO->getProduct() as $product)
             {
                 /** Получаем идентификаторы обновляемой продукции для получения констант  */
-                $ProductIdentifier = $this->currentProductIdentifier
+                $CurrentProductIdentifier = $this->currentProductIdentifier
                     ->forEvent($product->getProduct())
                     ->forOffer($product->getOffer())
                     ->forVariation($product->getVariation())
                     ->forModification($product->getModification())
                     ->find();
 
-                if($ProductIdentifier === false)
+                if($CurrentProductIdentifier === false)
                 {
                     continue;
                 }
 
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
                     $profile,
-                    new ProductUid($ProductIdentifier['id']),
-                    isset($ProductIdentifier['offer_const']) ? new ProductOfferConst($ProductIdentifier['offer_const']) : false,
-                    isset($ProductIdentifier['variation_const']) ? new ProductVariationConst($ProductIdentifier['variation_const']) : false,
-                    isset($ProductIdentifier['modification_const']) ? new ProductModificationConst($ProductIdentifier['modification_const']) : false,
+                    $CurrentProductIdentifier->getProduct(),
+                    $CurrentProductIdentifier->getOfferConst(),
+                    $CurrentProductIdentifier->getVariationConst(),
+                    $CurrentProductIdentifier->getModificationConst(),
                 );
 
                 /**
