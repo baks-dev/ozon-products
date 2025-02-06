@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Update;
 
 use BaksDev\Ozon\Api\Ozon;
+use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
 use BaksDev\Reference\Money\Type\Money;
 
 final class UpdateOzonCardRequest extends Ozon
@@ -52,16 +53,19 @@ final class UpdateOzonCardRequest extends Ozon
          */
         if(!empty($this->getPercent()))
         {
-            $percent = $price->percent($this->getPercent());
-            $price->add($percent);
+            $price->applyString($this->getPercent());
         }
 
+
         /** Добавляем 6% для скидки клиенту */
-        $percent = $price->percent(6);
-        $price->add($percent);
+        if(class_exists(BaksDevOzonPromotionBundle::class))
+        {
+            $price->applyPercent(6);
+        }
+
 
         /** Присваиваем базовую цену с учетом будущей скидки клиенту */
-        $card["price"] = (string) round($price->getValue());
+        $card["price"] = (string) $price->getRoundValue();
 
         $response = $this->TokenHttpClient()
             ->request(

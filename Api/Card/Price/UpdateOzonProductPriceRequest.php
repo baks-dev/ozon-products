@@ -84,31 +84,27 @@ final class UpdateOzonProductPriceRequest extends Ozon
         /** Присваиваем торговую наценку к стоимости товара */
         if(!empty($this->getPercent()))
         {
-            $percent = $this->price->percent($this->getPercent());
-            $this->price->add($percent);
+            $this->price->applyString($this->getPercent());
+            //$percent = $this->price->percent($this->getPercent());
+            //$this->price->add($percent);
         }
 
-        $prices["price"] = (string) round($this->price->getValue());
-        $prices["min_price"] = (string) round($this->price->getValue());
-        $prices['old_price'] = (string) round($this->price->getValue());
+        $prices["price"] = (string) $this->price->getRoundValue();
+        $prices["min_price"] = (string) $this->price->getRoundValue();
+        $prices['old_price'] = (string) $this->price->getRoundValue();
 
         if(class_exists(BaksDevOzonPromotionBundle::class))
         {
+            /** Присваиваем стоимость продукта как минимальную цену */
+            $prices['min_price'] = (string) $this->price->getRoundValue();
+
             /** Добавляем 6% для скидки клиенту */
-            $percent = $this->price->percent(6);
-
-            /** Присваиваем базовую цену с учетом будущей скидки клиенту */
-            $this->price->add($percent);
-            $prices["price"] = (string) round($this->price->getValue());
-
-            /** Присваиваем минимальную цену с учетом скидки клиенту 6% */
-            $this->price->sub($percent);
-            $prices['min_price'] = (string) round($this->price->getValue());
+            $this->price->applyPercent(6);
+            $prices["price"] = (string) $this->price->getRoundValue();
 
             /** Завышаем старую цену для бейджика */
-            $old = $this->price->percent(12);
-            $this->price->add($old);
-            $prices['old_price'] = (string) round($this->price->getValue());
+            $this->price->applyPercent(6);
+            $prices['old_price'] = $this->price->getRoundValue();
         }
 
         $prices['currency_code'] = 'RUB';
