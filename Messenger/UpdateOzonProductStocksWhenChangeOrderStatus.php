@@ -72,7 +72,7 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
         /** Получаем активное событие заказа */
         $OrderEvent = $this->currentOrderEvent
             ->forOrder($message->getId())
-            ->execute();
+            ->find();
 
         if($OrderEvent === false)
         {
