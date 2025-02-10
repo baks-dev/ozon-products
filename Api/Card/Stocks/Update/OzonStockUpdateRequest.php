@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -55,12 +55,9 @@ final class OzonStockUpdateRequest extends Ozon
      */
     public function update(): Generator|false
     {
-
-        /**
-         * Выполнять операции запроса ТОЛЬКО в PROD окружении
-         */
         if($this->isExecuteEnvironment() === false)
         {
+            $this->logger->critical('Запрос может быть выполнен только в PROD окружении', [self::class.':'.__LINE__]);
             return true;
         }
 

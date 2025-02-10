@@ -38,12 +38,10 @@ final class UpdateOzonCardRequest extends Ozon
      */
     public function update(array $card): int|false
     {
-        /**
-         * Выполнять операции запроса ТОЛЬКО в PROD окружении
-         */
         if($this->isExecuteEnvironment() === false)
         {
-            return false;
+            $this->logger->critical('Запрос может быть выполнен только в PROD окружении', [self::class.':'.__LINE__]);
+            return true;
         }
 
         $price = new Money($card['price']);

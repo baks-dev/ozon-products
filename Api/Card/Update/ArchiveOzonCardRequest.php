@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -36,12 +36,10 @@ final class ArchiveOzonCardRequest extends Ozon
      */
     public function archive(string $article): bool
     {
-        /**
-         * Выполнять операции запроса ТОЛЬКО в PROD окружении
-         */
         if($this->isExecuteEnvironment() === false)
         {
-            return false;
+            $this->logger->critical('Запрос может быть выполнен только в PROD окружении', [self::class.':'.__LINE__]);
+            return true;
         }
 
         $response = $this->TokenHttpClient()
