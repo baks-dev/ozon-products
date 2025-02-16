@@ -49,7 +49,7 @@ final readonly class OzonProductsPriceUpdate
     ) {}
 
     /**
-     * Обновляем остатки товаров Ozon
+     * Обновляем стоимость товаров Ozon
      */
     public function __invoke(OzonProductsPriceMessage $message): void
     {
@@ -65,7 +65,7 @@ final readonly class OzonProductsPriceUpdate
             return;
         }
 
-        /** Не обновляем стоимость без цены */
+        /** Не обновляем стоимость карточки без цены */
         if(empty($product['product_price']))
         {
             return;

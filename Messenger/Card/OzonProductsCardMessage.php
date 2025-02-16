@@ -49,11 +49,11 @@ final class OzonProductsCardMessage
     private string $profile;
 
     public function __construct(
-        UserProfileUid $profile,
-        ProductUid $product,
-        ProductOfferConst|false $offerConst,
-        ProductVariationConst|false $variationConst,
-        ProductModificationConst|false $modificationConst,
+        UserProfileUid|string $profile,
+        ProductUid|string $product,
+        ProductOfferConst|string|false $offerConst,
+        ProductVariationConst|string|false $variationConst,
+        ProductModificationConst|string|false $modificationConst,
     )
     {
         $this->profile = (string) $profile;
