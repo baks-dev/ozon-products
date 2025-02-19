@@ -41,8 +41,12 @@ use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler]
-final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
+/**
+ * Обновляем остатки Ozon при изменении статусов заказов
+ * @see https://api-seller.ozon.ru/v1/product/import/stocks
+ */
+#[AsMessageHandler(priority: 89)]
+final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
 {
     public function __construct(
         private CurrentOrderEventInterface $currentOrderEvent,
@@ -51,10 +55,7 @@ final readonly class UpdateOzonProductStocksWhenChangeOrderStatus
         private MessageDispatchInterface $messageDispatch
     ) {}
 
-    /**
-     * Обновляем остатки Ozon при изменении статусов заказов
-     * @see https://api-seller.ozon.ru/v1/product/import/stocks
-     */
+
     public function __invoke(OrderMessage $message): void
     {
         /** Получаем активные токены профилей пользователя */

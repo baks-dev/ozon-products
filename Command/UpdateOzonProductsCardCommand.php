@@ -81,6 +81,11 @@ class UpdateOzonProductsCardCommand extends Command
 
         $helper = $this->getHelper('question');
 
+
+        /**
+         * Интерактивная форма списка профилей
+         */
+
         $questions[] = 'Все';
 
         foreach($profiles as $quest)
@@ -88,49 +93,75 @@ class UpdateOzonProductsCardCommand extends Command
             $questions[] = $quest->getAttr();
         }
 
+        $questions['+'] = 'Выполнить все асинхронно';
+        $questions['-'] = 'Выйти';
+
         $question = new ChoiceQuestion(
-            'Профиль пользователя',
+            'Профиль пользователя (Ctrl+C чтобы выйти)',
             $questions,
-            0
+            '0'
         );
 
-        $profileName = $helper->ask($input, $output, $question);
+        $key = $helper->ask($input, $output, $question);
 
-        if($profileName === 'Все')
+        /**
+         *  Выходим без выполненного запроса
+         */
+
+        if($key === '-' || $key === 'Выйти')
+        {
+            return Command::SUCCESS;
+        }
+
+
+        /**
+         * Выполняем все с возможностью асинхронно в очереди
+         */
+
+        if($key === '+' || $key === '0' || $key === 'Все')
         {
             /** @var UserProfileUid $profile */
             foreach($profiles as $profile)
             {
-                $this->update($profile, $input->getOption('article'));
+                $this->update($profile, $input->getOption('article'), $key === '+');
             }
+
+            $this->io->success('Заказы успешно обновлены');
+            return Command::SUCCESS;
         }
-        else
+
+
+        /**
+         * Выполняем определенный профиль
+         */
+
+        $UserProfileUid = null;
+
+        foreach($profiles as $profile)
         {
-            $UserProfileUid = null;
-
-            foreach($profiles as $profile)
+            if($profile->getAttr() === $questions[$key])
             {
-                if($profile->getAttr() === $questions[$profileName])
-                {
-                    /* Присваиваем профиль пользователя */
-                    $UserProfileUid = $profile;
-                    break;
-                }
+                /* Присваиваем профиль пользователя */
+                $UserProfileUid = $profile;
+                break;
             }
-
-            if($UserProfileUid)
-            {
-                $this->update($UserProfileUid, $input->getOption('article'));
-            }
-
         }
 
-        $this->io->success('Карточки успешно обновлены');
+        if($UserProfileUid)
+        {
+            $this->update($UserProfileUid, $input->getOption('article'));
 
-        return Command::SUCCESS;
+            $this->io->success('Карточки успешно обновлены');
+            return Command::SUCCESS;
+        }
+
+
+        $this->io->error('Профиль пользователя не найден');
+        return Command::INVALID;
+
     }
 
-    public function update(UserProfileUid $profile, ?string $article = null): void
+    public function update(UserProfileUid $profile, ?string $article = null, bool $async = false): void
     {
         $this->io->note(sprintf('Обновили профиль %s', $profile->getAttr()));
 
@@ -175,7 +206,11 @@ class UpdateOzonProductsCardCommand extends Command
             );
 
             /** Консольную комманду выполняем синхронно */
-            $this->messageDispatch->dispatch($OzonProductsCardMessage);
+            $this->messageDispatch->dispatch(
+                message: $OzonProductsCardMessage,
+                transport: $async === true ? (string) $profile : null
+            );
+
             $this->io->text(sprintf('Обновили карточку %s', $card['article']));
 
         }

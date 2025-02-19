@@ -36,7 +36,10 @@ use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler]
+/**
+ * Обновляем карточку Озон при изменении системной карточки
+ */
+#[AsMessageHandler(priority: 10)]
 final readonly class UpdateOzonProductCardWhenChangeProduct
 {
     public function __construct(
@@ -45,9 +48,7 @@ final readonly class UpdateOzonProductCardWhenChangeProduct
         private MessageDispatchInterface $messageDispatch,
     ) {}
 
-    /**
-     * Обновляем карточку Озон при изменении системной карточки
-     */
+
     public function __invoke(ProductMessage $message): void
     {
         /**  Получаем активные токены профилей пользователя */

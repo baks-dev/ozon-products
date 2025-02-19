@@ -81,6 +81,100 @@ class UpdateOzonProductsStocksCommand extends Command
 
         $helper = $this->getHelper('question');
 
+
+        /**
+         * Интерактивная форма списка профилей
+         */
+
+        $questions[] = 'Все';
+
+        foreach($profiles as $quest)
+        {
+            $questions[] = $quest->getAttr();
+        }
+
+        $questions['+'] = 'Выполнить все асинхронно';
+        $questions['-'] = 'Выйти';
+
+        $question = new ChoiceQuestion(
+            'Профиль пользователя (Ctrl+C чтобы выйти)',
+            $questions,
+            '0'
+        );
+
+        $key = $helper->ask($input, $output, $question);
+
+        /**
+         *  Выходим без выполненного запроса
+         */
+
+        if($key === '-' || $key === 'Выйти')
+        {
+            return Command::SUCCESS;
+        }
+
+
+        /**
+         * Выполняем все с возможностью асинхронно в очереди
+         */
+
+        if($key === '+' || $key === '0' || $key === 'Все')
+        {
+            /** @var UserProfileUid $profile */
+            foreach($profiles as $profile)
+            {
+                $this->update($profile, $input->getOption('article'), $key === '+');
+            }
+
+            $this->io->success('Остатки успешно обновлены');
+            return Command::SUCCESS;
+        }
+
+
+        /**
+         * Выполняем определенный профиль
+         */
+
+        $UserProfileUid = null;
+
+        foreach($profiles as $profile)
+        {
+            if($profile->getAttr() === $questions[$key])
+            {
+                /* Присваиваем профиль пользователя */
+                $UserProfileUid = $profile;
+                break;
+            }
+        }
+
+        if($UserProfileUid)
+        {
+            $this->update($UserProfileUid, $input->getOption('article'));
+
+            $this->io->success('Остатки успешно обновлены');
+            return Command::SUCCESS;
+        }
+
+
+        $this->io->error('Профиль пользователя не найден');
+        return Command::INVALID;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         $questions[] = 'Все';
 
         foreach($profiles as $quest)
@@ -130,7 +224,7 @@ class UpdateOzonProductsStocksCommand extends Command
         return Command::SUCCESS;
     }
 
-    public function update(UserProfileUid $profile, ?string $article = null): void
+    public function update(UserProfileUid $profile, ?string $article = null, bool $async = false): void
     {
         $this->io->note(sprintf('Обновляем профиль %s', $profile->getAttr()));
 
@@ -181,7 +275,11 @@ class UpdateOzonProductsStocksCommand extends Command
             $OzonProductsStocksMessage = new OzonProductsStocksMessage($OzonProductsCardMessage);
 
             /** Консольную комманду выполняем синхронно */
-            $this->messageDispatch->dispatch($OzonProductsStocksMessage);
+            $this->messageDispatch->dispatch(
+                message: $OzonProductsStocksMessage,
+                transport: $async === true ? (string) $profile : null
+            );
+
             $this->io->text(sprintf('Обновили остатки %s', $card['article']));
         }
     }
