@@ -139,7 +139,14 @@ final class UpdateOzonProductPriceRequest extends Ozon
             foreach($result['errors'] as $error)
             {
                 $this->logger->critical($result['offer_id'].': '.$error['message'], [self::class.':'.__LINE__]);
+
+                if(isset($error['code']) && $error['code'] === 'NOT_FOUND')
+                {
+                    return true;
+                }
             }
+
+            return false;
         }
 
         return (bool) $result['updated'];
