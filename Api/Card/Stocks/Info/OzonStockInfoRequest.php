@@ -60,7 +60,7 @@ final class OzonStockInfoRequest extends Ozon
      * Информация о количестве товаров
      * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_GetProductInfoStocks
      */
-    public function findAll(): Generator
+    public function findAll(): Generator|false
     {
         /**
          * Формируем массив для отправки JSON

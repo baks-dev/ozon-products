@@ -49,7 +49,6 @@ final readonly class OzonProductsStocksUpdate
         private OzonStockInfoRequest $ozonProductStocksInfoRequest,
         private ProductsOzonCardInterface $ozonProductsCard,
         private DeduplicatorInterface $deduplicator,
-        private AppLockInterface $appLock,
         private MessageDispatchInterface $messageDispatch,
     ) {}
 
@@ -76,12 +75,6 @@ final readonly class OzonProductsStocksUpdate
             return;
         }
 
-        /** Добавляем лок на процесс, остатки обновляются в порядке очереди! */
-        $lock = $this->appLock
-            ->createLock([$message->getProfile(), $Card['article'], self::class])
-            ->waitAllTime();
-
-
         /** Получаем информацию о количестве товаров */
         $ProductStocksInfo = $this->ozonProductStocksInfoRequest
             ->profile($message->getProfile())
@@ -90,11 +83,8 @@ final readonly class OzonProductsStocksUpdate
 
         if(false === $ProductStocksInfo || $ProductStocksInfo->valid() === false)
         {
-            $lock->release();
-
             return;
         }
-
 
         /** @var  OzonStockInfoDTO $ProductStocks */
         $ProductStocks = $ProductStocksInfo->current();
@@ -127,8 +117,6 @@ final readonly class OzonProductsStocksUpdate
                 'profile' => $message->getProfile()
             ]);
 
-            $lock->release();
-
             return;
         }
 
@@ -146,7 +134,7 @@ final readonly class OzonProductsStocksUpdate
             /** Пробуем обновится через 2 минуты */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay('2 minutes')], // задержка 2 минуты для обновления карточки
+                stamps: [new MessageDelay('1 minutes')], // задержка 1 минуту для обновления карточки
                 transport: 'ozon-products-low'
             );
 
@@ -169,12 +157,9 @@ final readonly class OzonProductsStocksUpdate
             /** Пробуем обновится через 2 минуты */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay('2 minutes')], // задержка 2 минуты для обновления карточки
+                stamps: [new MessageDelay('1 minutes')], // задержка 2 минуты для обновления карточки
                 transport: 'ozon-products-low'
             );
-
-            $Deduplicator->save();
-            $lock->release();
 
             return;
         }
@@ -187,7 +172,5 @@ final readonly class OzonProductsStocksUpdate
         ]);
 
         $Deduplicator->save();
-        $lock->release();
-
     }
 }
