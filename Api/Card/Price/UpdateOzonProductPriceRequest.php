@@ -140,7 +140,7 @@ final class UpdateOzonProductPriceRequest extends Ozon
             {
                 $this->logger->critical($result['offer_id'].': '.$error['message'], [self::class.':'.__LINE__]);
 
-                if(isset($error['code']) && $error['code'] === 'NOT_FOUND')
+                if(isset($error['code']) && ($error['code'] === 'NOT_FOUND' || $error['code'] === 'TOTAL_CREATE_LIMIT_EXCEEDED'))
                 {
                     return true;
                 }
