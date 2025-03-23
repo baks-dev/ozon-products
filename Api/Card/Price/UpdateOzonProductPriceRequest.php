@@ -79,13 +79,17 @@ final class UpdateOzonProductPriceRequest extends Ozon
         $prices['auto_action_enabled'] = 'UNKNOWN';
         $prices["offer_id"] = $this->article;
 
-        /** Присваиваем торговую наценку к стоимости товара */
-        if(!empty($this->getPercent()))
-        {
-            $this->price->applyString($this->getPercent());
+        /**
+         * НЕ!!! Присваиваем торговую наценку к стоимости товара (присваивается при расчете стоимости услуг)
+         * @see GetOzonProductCalculatorRequest
+         */
+
+        ///if(!empty($this->getPercent()))
+        //{
+        //$this->price->applyString($this->getPercent());
             //$percent = $this->price->percent($this->getPercent());
             //$this->price->add($percent);
-        }
+        //}
 
         $prices["price"] = (string) $this->price->getRoundValue();
         $prices["min_price"] = (string) $this->price->getRoundValue();

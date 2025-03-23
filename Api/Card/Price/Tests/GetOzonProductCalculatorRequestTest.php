@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +25,13 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Price\Tests;
 
+use BaksDev\Orders\Order\UseCase\Admin\Edit\Tests\OrderNewTest;
 use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductCalculatorRequest;
+use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
+use BaksDev\Products\Stocks\UseCase\Admin\Package\Tests\PackageProductStockTest;
 use BaksDev\Reference\Money\Type\Money;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use BaksDev\Users\Profile\UserProfile\UseCase\User\NewEdit\Tests\UserNewUserProfileHandleTest;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -36,12 +41,28 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 class GetOzonProductCalculatorRequestTest extends KernelTestCase
 {
+    private static OzonAuthorizationToken $Authorization;
+
+    public static function setUpBeforeClass(): void
+    {
+        OrderNewTest::setUpBeforeClass();
+        PackageProductStockTest::setUpBeforeClass();
+        UserNewUserProfileHandleTest::setUpBeforeClass();
+
+        self::$Authorization = new OzonAuthorizationToken(
+            new UserProfileUid('018d464d-c67a-7285-8192-7235b0510924'),
+            $_SERVER['TEST_OZON_TOKEN'],
+            $_SERVER['TEST_OZON_CLIENT'],
+            $_SERVER['TEST_OZON_WAREHOUSE'],
+        );
+    }
+
     public function testUseCase(): void
     {
         self::assertTrue(true);
 
-        /** @var GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest */
         $GetOzonProductCalculatorRequest = self::getContainer()->get(GetOzonProductCalculatorRequest::class);
+        $GetOzonProductCalculatorRequest->TokenHttpClient(self::$Authorization);
 
         //  - Шины
         $categories = [

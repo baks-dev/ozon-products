@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Price;
 
+use BaksDev\Ozon\Api\Ozon;
 use BaksDev\Reference\Money\Type\Money;
 use DateInterval;
 use Exception;
@@ -35,7 +36,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\Cache\ItemInterface;
 
-final class GetOzonProductCalculatorRequest
+final class GetOzonProductCalculatorRequest extends Ozon
 {
     /**  Категория */
     private int $category;
@@ -109,6 +110,7 @@ final class GetOzonProductCalculatorRequest
     public function price(Money $price): self
     {
         $this->price = $price;
+        $this->cacheKey .= $this->price;
         return $this;
     }
 
@@ -134,6 +136,8 @@ final class GetOzonProductCalculatorRequest
         }
 
         $cache = new FilesystemAdapter();
+        $this->cacheKey .= $this->getPercent();
+        //$cache->deleteItem($this->cacheKey);
 
         $fbs = $cache->get(
             $this->cacheKey,
@@ -144,6 +148,10 @@ final class GetOzonProductCalculatorRequest
 
                 try
                 {
+                    /** Присваиваем торговую наценку для расчета стоимости услуг */
+                    $trade = $this->getPercent();
+                    $this->price->applyString($trade);
+
                     $response = $httpClient->request(
                         'POST',
                         '/p-api/the-calculator-ozon-ru/api/calculate',

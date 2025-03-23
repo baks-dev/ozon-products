@@ -72,6 +72,15 @@ final readonly class OzonProductsCardUpdate
             return;
         }
 
+        /** Не добавляем карточку без наличия */
+
+        if(empty($product['product_quantity']))
+        {
+            $this->logger->warning(sprintf('Не добавляем карточку %s без наличия', $product['article']));
+            return;
+        }
+
+
         /** Не добавляем карточку без цены */
 
         if(!$product['product_price'])
@@ -84,6 +93,16 @@ final readonly class OzonProductsCardUpdate
         $this->ozonCardUpdateRequest->profile($message->getProfile());
 
         $Card = $this->itemOzonProducts->getData($product);
+
+        if(false === $Card)
+        {
+            $this->logger->critical(
+                'ozon-products: Карточка товара не найдена',
+                [self::class.''.__LINE__]
+            );
+
+            return;
+        }
 
 
         /** Не обновляем карточку без параметров упаковки */
@@ -148,9 +167,6 @@ final readonly class OzonProductsCardUpdate
             return;
         }
 
-        // Может привести к устаревшему преобразованию «false» в массив.
-        $Card['price'] = $Money->getValue();
-
 
         /**
          * Если установлен модуль ozon-promotion - обновляем цену с учетом скидок
@@ -158,12 +174,14 @@ final readonly class OzonProductsCardUpdate
 
         if(class_exists(BaksDevOzonPromotionBundle::class))
         {
-            $this->messageDispatch->dispatch(message: new OzonProductsPriceMessage($message));
+            $this->messageDispatch->dispatch(
+                message: new OzonProductsPriceMessage($message),
+                stamps: [new MessageDelay('5 seconds')],
+            );
         }
 
-
         /** Выполняем запрос на создание/обновление карточки */
-
+        $Card['price'] = $Money->getValue();
         $task = $this->ozonCardUpdateRequest->update($Card);
 
         if($task === false)
