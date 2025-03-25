@@ -183,7 +183,6 @@ class UpdateOzonProductsCardCommand extends Command
                 continue;
             }
 
-
             /** Пропускаем обновление, если соответствие не найдено */
             if(!empty($article) && stripos($card['article'], $article) === false)
             {
@@ -218,6 +217,12 @@ class UpdateOzonProductsCardCommand extends Command
             );
 
             $this->io->text(sprintf('Обновили карточку %s', $card['article']));
+
+
+            if($card['article'] === $article)
+            {
+                break;
+            }
 
         }
     }

@@ -159,69 +159,6 @@ class UpdateOzonProductsStocksCommand extends Command
         $this->io->error('Профиль пользователя не найден');
         return Command::INVALID;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        $questions[] = 'Все';
-
-        foreach($profiles as $quest)
-        {
-            $questions[] = $quest->getAttr();
-        }
-
-        $question = new ChoiceQuestion(
-            'Профиль пользователя',
-            $questions,
-            0
-        );
-
-        $profileName = $helper->ask($input, $output, $question);
-
-        if($profileName === 'Все')
-        {
-            /** @var UserProfileUid $profile */
-            foreach($profiles as $profile)
-            {
-                $this->update($profile, $input->getOption('article'));
-            }
-        }
-        else
-        {
-            $UserProfileUid = null;
-
-            foreach($profiles as $profile)
-            {
-                if($profile->getAttr() === $questions[$profileName])
-                {
-                    /* Присваиваем профиль пользователя */
-                    $UserProfileUid = $profile;
-                    break;
-                }
-            }
-
-            if($UserProfileUid)
-            {
-                $this->update($UserProfileUid, $input->getOption('article'));
-            }
-
-        }
-
-        $this->io->success('Наличие успешно обновлено');
-
-        return Command::SUCCESS;
     }
 
     public function update(UserProfileUid $profile, ?string $article = null, bool $async = false): void
@@ -281,6 +218,11 @@ class UpdateOzonProductsStocksCommand extends Command
             );
 
             $this->io->text(sprintf('Обновили остатки %s', $card['article']));
+
+            if($card['article'] === $article)
+            {
+                break;
+            }
         }
     }
 }

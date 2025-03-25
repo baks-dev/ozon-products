@@ -217,7 +217,13 @@ class UpdateOzonProductsPriceCommand extends Command
                 message: $OzonProductsStocksMessage,
                 transport: $async === true ? (string) $profile : null
             );
+
             $this->io->text(sprintf('Обновили стоимость %s', $card['article']));
+
+            if($card['article'] === $article)
+            {
+                break;
+            }
         }
     }
 }
