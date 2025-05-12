@@ -35,6 +35,7 @@ use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierInterface;
+use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierResult;
 use BaksDev\Products\Product\Type\Id\ProductUid;
 use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
 use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
@@ -96,7 +97,7 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
                     ->forModification($product->getModification())
                     ->find();
 
-                if($CurrentProductIdentifier === false)
+                if(false === ($CurrentProductIdentifier instanceof CurrentProductIdentifierResult))
                 {
                     continue;
                 }

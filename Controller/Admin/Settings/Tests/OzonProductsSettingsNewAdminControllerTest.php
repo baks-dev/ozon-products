@@ -23,11 +23,17 @@
 
 namespace BaksDev\Ozon\Products\Controller\Admin\Settings\Tests;
 
-use BaksDev\Ozon\Products\Repository\Settings\OzonProductsSettingsCurrentEvent\OzonProductsSettingsCurrentEventInterface;
+use BaksDev\Ozon\Products\Mapper\Category\OzonProductsCategoryCollection;
+use BaksDev\Ozon\Products\Mapper\Type\OzonProductsTypeCollection;
 use BaksDev\Products\Category\Type\Id\CategoryProductUid;
 use BaksDev\Users\User\Tests\TestUserAccount;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\Attribute\When;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @group ozon-products
@@ -35,24 +41,34 @@ use Symfony\Component\DependencyInjection\Attribute\When;
  * @group ozon-products-controller
  * @group ozon-products-usecase
  *
- * @depends BaksDev\Ozon\Products\Controller\Admin\Settings\Tests\OzonProductsSettingsEditControllerTest::class
+ * @depends BaksDev\Ozon\Products\Controller\Admin\Settings\Tests\OzonProductsSettingsIndexControllerTest::class
  */
 #[When(env: 'test')]
-final class OzonProductsSettingsDeleteControllerTest extends WebTestCase
+final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
 {
     private static ?string $url = null;
 
-    private const string ROLE = 'ROLE_OZON_PRODUCTS_DELETE';
+    private const string ROLE = 'ROLE_OZON_PRODUCTS_NEW';
 
 
     public static function setUpBeforeClass(): void
     {
+        // Бросаем событие консольной комманды
+        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
+        $event = new ConsoleCommandEvent(new Command(), new StringInput(''), new NullOutput());
+        $dispatcher->dispatch($event, 'console.command');
 
-        /** @var OzonProductsSettingsCurrentEventInterface $OzonProductsSettingsCurrentEvent */
-        $OzonProductsSettingsCurrentEvent = self::getContainer()->get(OzonProductsSettingsCurrentEventInterface::class);
-        $OzonProductsSettingsEvent = $OzonProductsSettingsCurrentEvent->findByProfile(CategoryProductUid::TEST);
+        $container = self::getContainer();
 
-        self::$url = sprintf('/admin/ozon/product/setting/delete/%s', $OzonProductsSettingsEvent);
+        /** @var OzonProductsCategoryCollection $OzonProductsCategoryCollection */
+        $OzonProductsCategoryCollection = $container->get(OzonProductsCategoryCollection::class);
+        $ozon = current($OzonProductsCategoryCollection->cases())->getid();
+
+        /** @var OzonProductsTypeCollection $OzonProductsTypeCollection */
+        $OzonProductsTypeCollection = $container->get(OzonProductsTypeCollection::class);
+        $type = current($OzonProductsTypeCollection->cases())->getId();
+
+        self::$url = sprintf('/admin/ozon/product/setting/new/%s/%d/%d', CategoryProductUid::TEST, $ozon, $type);
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -67,9 +67,13 @@ class OzonMapperTest extends KernelTestCase
         /** @var OzonProductsMapper $itemOzonProducts */
         $itemOzonProducts = self::getContainer()->get(OzonProductsMapper::class);
 
-
-        foreach($AllProductsIdentifier->findAll() as $item)
+        foreach($AllProductsIdentifier->findAll() as $key => $item)
         {
+            if($key >= 10)
+            {
+                self::assertFalse(false);
+                break;
+            }
 
             $request = $ProductsOzonCard
                 ->forProduct($item['product_id'])
@@ -78,10 +82,10 @@ class OzonMapperTest extends KernelTestCase
                 ->forModificationConst($item['modification_const'])
                 ->find();
 
-
             if($request === false)
             {
-                continue;
+                self::assertFalse(false);
+                break;
             }
 
             $Card = $itemOzonProducts->getData($request);

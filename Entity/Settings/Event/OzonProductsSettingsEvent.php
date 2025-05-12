@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -81,14 +81,14 @@ class OzonProductsSettingsEvent extends EntityEvent
      * Модификатор
      */
     #[Assert\Valid]
-    #[ORM\OneToOne(targetEntity: OzonProductsSettingsModify::class, mappedBy: 'event', cascade: ['all'])]
+    #[ORM\OneToOne(targetEntity: OzonProductsSettingsModify::class, mappedBy: 'event', cascade: ['all'], fetch: 'EAGER')]
     private OzonProductsSettingsModify $modify;
 
     /**
      * Свойства карточки Ozon
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(targetEntity: OzonProductsSettingsProperty::class, mappedBy: 'event', cascade: ['all'])]
+    #[ORM\OneToMany(targetEntity: OzonProductsSettingsProperty::class, mappedBy: 'event', cascade: ['all'], fetch: 'EAGER')]
     private Collection $properties;
 
 
@@ -96,7 +96,7 @@ class OzonProductsSettingsEvent extends EntityEvent
      * Параметры продукции категории Ozon
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(targetEntity: OzonProductsSettingsAttribute::class, mappedBy: 'event', cascade: ['all'])]
+    #[ORM\OneToMany(targetEntity: OzonProductsSettingsAttribute::class, mappedBy: 'event', cascade: ['all'], fetch: 'EAGER')]
     private Collection $attributes;
 
 

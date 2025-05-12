@@ -50,7 +50,7 @@ class GetOzonProductCalculatorRequestTest extends KernelTestCase
         UserNewUserProfileHandleTest::setUpBeforeClass();
 
         self::$Authorization = new OzonAuthorizationToken(
-            new UserProfileUid('018d464d-c67a-7285-8192-7235b0510924'),
+            new UserProfileUid(UserProfileUid::TEST),
             $_SERVER['TEST_OZON_TOKEN'],
             $_SERVER['TEST_OZON_CLIENT'],
             $_SERVER['TEST_OZON_WAREHOUSE'],

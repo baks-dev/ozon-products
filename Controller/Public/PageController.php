@@ -30,7 +30,7 @@ use BaksDev\Core\Controller\AbstractController;
 use BaksDev\Ozon\Products\Api\Card\Identifier\GetOzonCardSkuRequest;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Entity\Info\ProductInfo;
-use BaksDev\Products\Product\Repository\ProductDetail\ProductDetailByValueInterface;
+use BaksDev\Products\Product\Repository\ProductDetailByValue\ProductDetailByValueInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -42,7 +42,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 final class PageController extends AbstractController
 {
-
+    /**
+     * Редирект на страницу товара Ozon
+     */
     #[Route('/ozon/product/{url}/{offer}/{variation}/{modification}/{postfix}', name: 'public.product', methods: ['GET'])]
     public function index(
         Request $request,

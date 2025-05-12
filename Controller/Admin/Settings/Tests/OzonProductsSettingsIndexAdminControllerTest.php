@@ -23,17 +23,9 @@
 
 namespace BaksDev\Ozon\Products\Controller\Admin\Settings\Tests;
 
-use BaksDev\Ozon\Products\Mapper\Category\OzonProductsCategoryCollection;
-use BaksDev\Ozon\Products\Mapper\Type\OzonProductsTypeCollection;
-use BaksDev\Products\Category\Type\Id\CategoryProductUid;
 use BaksDev\Users\User\Tests\TestUserAccount;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\Attribute\When;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @group ozon-products
@@ -41,36 +33,15 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @group ozon-products-controller
  * @group ozon-products-usecase
  *
- * @depends BaksDev\Ozon\Products\Controller\Admin\Settings\Tests\OzonProductsSettingsIndexControllerTest::class
+ * @depends BaksDev\Ozon\Products\UseCase\Settings\NewEdit\Tests\OzonProductsSettingsNewTest::class
+ *
  */
 #[When(env: 'test')]
-final class OzonProductsSettingsNewControllerTest extends WebTestCase
+final class OzonProductsSettingsIndexAdminControllerTest extends WebTestCase
 {
-    private static ?string $url = null;
+    private const string URL = '/admin/ozon/products/settings';
 
-    private const string ROLE = 'ROLE_OZON_PRODUCTS_NEW';
-
-
-    public static function setUpBeforeClass(): void
-    {
-        // Бросаем событие консольной комманды
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        $event = new ConsoleCommandEvent(new Command(), new StringInput(''), new NullOutput());
-        $dispatcher->dispatch($event, 'console.command');
-
-        $container = self::getContainer();
-
-        /** @var OzonProductsCategoryCollection $OzonProductsCategoryCollection */
-        $OzonProductsCategoryCollection = $container->get(OzonProductsCategoryCollection::class);
-        $ozon = current($OzonProductsCategoryCollection->cases())->getid();
-
-        /** @var OzonProductsTypeCollection $OzonProductsTypeCollection */
-        $OzonProductsTypeCollection = $container->get(OzonProductsTypeCollection::class);
-        $type = current($OzonProductsTypeCollection->cases())->getId();
-
-        self::$url = sprintf('/admin/ozon/product/setting/new/%s/%d/%d', CategoryProductUid::TEST, $ozon, $type);
-    }
-
+    private const string ROLE = 'ROLE_OZON_PRODUCTS';
 
     /** Доступ по роли  */
     public function testRoleSuccessful(): void
@@ -85,15 +56,13 @@ final class OzonProductsSettingsNewControllerTest extends WebTestCase
             $usr = TestUserAccount::getModer(self::ROLE);
 
             $client->loginUser($usr, 'user');
-
-            $client->request('GET', self::$url);
+            $client->request('GET', self::URL);
 
             self::assertResponseIsSuccessful();
         }
 
         self::assertTrue(true);
     }
-
 
     /** Доступ по роли ROLE_ADMIN */
     public function testRoleAdminSuccessful(): void
@@ -108,7 +77,7 @@ final class OzonProductsSettingsNewControllerTest extends WebTestCase
             $usr = TestUserAccount::getAdmin();
 
             $client->loginUser($usr, 'user');
-            $client->request('GET', self::$url);
+            $client->request('GET', self::URL);
 
             self::assertResponseIsSuccessful();
         }
@@ -128,7 +97,7 @@ final class OzonProductsSettingsNewControllerTest extends WebTestCase
 
             $usr = TestUserAccount::getUsr();
             $client->loginUser($usr, 'user');
-            $client->request('GET', self::$url);
+            $client->request('GET', self::URL);
 
             self::assertResponseStatusCodeSame(403);
         }
@@ -146,7 +115,7 @@ final class OzonProductsSettingsNewControllerTest extends WebTestCase
         {
             $client->setServerParameter('HTTP_USER_AGENT', $device);
 
-            $client->request('GET', self::$url);
+            $client->request('GET', self::URL);
 
             // Full authentication is required to access this resource
             self::assertResponseStatusCodeSame(401);

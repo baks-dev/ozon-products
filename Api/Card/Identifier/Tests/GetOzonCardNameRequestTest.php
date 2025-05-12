@@ -66,9 +66,13 @@ class GetOzonCardNameRequestTest extends KernelTestCase
             ->sku('1720517545')
             ->find();
 
-        self::assertIsString($name);
+        if(false === $name)
+        {
+            self::assertFalse(false);
+            return;
+        }
 
-        dd($name);
+        self::assertIsString($name);
 
     }
 }

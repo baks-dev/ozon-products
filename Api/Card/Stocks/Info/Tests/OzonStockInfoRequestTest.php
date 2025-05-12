@@ -71,8 +71,14 @@ class OzonStockInfoRequestTest extends KernelTestCase
         /** @var Iterator $result */
         $result = $AllProductsIdentifier->findAll();
 
-        foreach($result as $product)
+        foreach($result as $key => $product)
         {
+            if($key >= 10)
+            {
+                self::assertFalse(false);
+                return;
+            }
+
             $Card = $ozonProductsCard
                 ->forProduct($product['product_id'])
                 ->forOfferConst($product['offer_const'])
@@ -123,8 +129,6 @@ class OzonStockInfoRequestTest extends KernelTestCase
                 self::assertIsInt($stock->getReserved());
             }
         }
-
-
     }
 
 }

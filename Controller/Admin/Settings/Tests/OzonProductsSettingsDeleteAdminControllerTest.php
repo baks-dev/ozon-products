@@ -35,14 +35,14 @@ use Symfony\Component\DependencyInjection\Attribute\When;
  * @group ozon-products-controller
  * @group ozon-products-usecase
  *
- * @depends BaksDev\Ozon\Products\Controller\Admin\Settings\Tests\OzonProductsSettingsNewControllerTest::class
+ * @depends BaksDev\Ozon\Products\Controller\Admin\Settings\Tests\OzonProductsSettingsEditControllerTest::class
  */
 #[When(env: 'test')]
-final class OzonProductsSettingsEditControllerTest extends WebTestCase
+final class OzonProductsSettingsDeleteAdminControllerTest extends WebTestCase
 {
     private static ?string $url = null;
 
-    private const string ROLE = 'ROLE_OZON_PRODUCTS_EDIT';
+    private const string ROLE = 'ROLE_OZON_PRODUCTS_DELETE';
 
 
     public static function setUpBeforeClass(): void
@@ -52,7 +52,7 @@ final class OzonProductsSettingsEditControllerTest extends WebTestCase
         $OzonProductsSettingsCurrentEvent = self::getContainer()->get(OzonProductsSettingsCurrentEventInterface::class);
         $OzonProductsSettingsEvent = $OzonProductsSettingsCurrentEvent->findByProfile(CategoryProductUid::TEST);
 
-        self::$url = sprintf('/admin/ozon/product/setting/edit/%s', $OzonProductsSettingsEvent);
+        self::$url = sprintf('/admin/ozon/product/setting/delete/%s', $OzonProductsSettingsEvent);
     }
 
 

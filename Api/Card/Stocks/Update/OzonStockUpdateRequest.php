@@ -51,7 +51,7 @@ final class OzonStockUpdateRequest extends Ozon
 
     /**
      * Обновить количество товаров на складах
-     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsStocks
+     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ProductsStocksV2
      */
     public function update(): Generator|false
     {
@@ -60,7 +60,6 @@ final class OzonStockUpdateRequest extends Ozon
             $this->logger->critical('Запрос может быть выполнен только в PROD окружении', [self::class.':'.__LINE__]);
             return true;
         }
-
 
         /**
          * Формируем массив с ключами для отправки JSON
@@ -74,11 +73,13 @@ final class OzonStockUpdateRequest extends Ozon
          *       }
          *   ]
          */
-        $stocks["offer_id"] = $this->article;
 
-        $stocks["stock"] = self::STOP_SALES === true ? 0 : max($this->total, 0);
-        $stocks["warehouse_id"] = $this->getWarehouse();
-
+        foreach($this->getWarehouses() as $key => $warehouse)
+        {
+            $stocks[$key]["offer_id"] = $this->article;
+            $stocks[$key]["stock"] = self::STOP_SALES === true ? 0 : max($this->total, 0);
+            $stocks[$key]["warehouse_id"] = (int) $warehouse;
+        }
 
         $response = $this->TokenHttpClient()
             ->request(
@@ -86,7 +87,7 @@ final class OzonStockUpdateRequest extends Ozon
                 '/v2/products/stocks',
                 [
                     "json" => [
-                        'stocks' => [$stocks]
+                        'stocks' => $stocks
                     ]
                 ]
             );
