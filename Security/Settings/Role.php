@@ -38,6 +38,8 @@ final class Role implements RoleInterface, MenuAdminInterface
 {
     public const string ROLE = 'ROLE_OZON_PRODUCTS';
 
+    public const string KEY = 'vYVhcZt';
+
     public function getRole(): string
     {
         return self::ROLE;
@@ -51,6 +53,14 @@ final class Role implements RoleInterface, MenuAdminInterface
     public function getPath(): string
     {
         return 'ozon-products:admin.settings.index';
+    }
+
+    /**
+     * Метод возвращает ключ раздела (для меню телеграм)
+     */
+    public function getPathKey(): string
+    {
+        return self::KEY;
     }
 
     /**
