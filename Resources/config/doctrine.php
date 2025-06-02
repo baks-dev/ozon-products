@@ -24,6 +24,8 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use BaksDev\Ozon\Products\BaksDevOzonProductsBundle;
+use BaksDev\Ozon\Products\Type\Custom\Image\OzonProductImageType;
+use BaksDev\Ozon\Products\Type\Custom\Image\OzonProductImageUid;
 use BaksDev\Ozon\Products\Type\Settings\Attribute\OzonProductAttribute;
 use BaksDev\Ozon\Products\Type\Settings\Attribute\OzonProductAttributeType;
 use BaksDev\Ozon\Products\Type\Settings\Event\OzonProductsSettingsEventType;
@@ -37,7 +39,7 @@ return static function(DoctrineConfig $doctrine, ContainerConfigurator $configur
     $doctrine->dbal()->type(OzonProductsSettingsEventUid::TYPE)->class(OzonProductsSettingsEventType::class);
     $doctrine->dbal()->type(OzonProductAttribute::TYPE)->class(OzonProductAttributeType::class);
     $doctrine->dbal()->type(OzonProductProperty::TYPE)->class(OzonProductPropertyType::class);
-
+    $doctrine->dbal()->type(OzonProductImageUid::TYPE)->class(OzonProductImageType::class);
 
     $emDefault = $doctrine->orm()->entityManager('default')->autoMapping(true);
 

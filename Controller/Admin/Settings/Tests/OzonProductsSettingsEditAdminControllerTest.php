@@ -31,11 +31,10 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 
 /**
  * @group ozon-products
- *
  * @group ozon-products-controller
  * @group ozon-products-usecase
  *
- * @depends BaksDev\Ozon\Products\Controller\Admin\Settings\Tests\OzonProductsSettingsNewControllerTest::class
+ * @depends BaksDev\Ozon\Products\Controller\Admin\Settings\Tests\OzonProductsSettingsNewAdminControllerTest::class
  */
 #[When(env: 'test')]
 final class OzonProductsSettingsEditAdminControllerTest extends WebTestCase

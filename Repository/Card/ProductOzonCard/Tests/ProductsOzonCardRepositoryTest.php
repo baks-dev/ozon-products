@@ -32,6 +32,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 
 /**
  * @group ozon-products
+ * @group ozon-products-repository
  */
 #[When(env: 'test')]
 class ProductsOzonCardRepositoryTest extends KernelTestCase
