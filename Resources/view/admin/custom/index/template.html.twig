@@ -1,0 +1,30 @@
+{% trans_default_domain('ozon-products.admin.custom') %}
+
+{% set ROLE = 'ROLE_OZON_PRODUCTS' %}
+
+{# ---- CSS ------------------------------------------------------------ #}
+{% block title %}
+    {{ 'page.index'|trans }}
+{% endblock %}
+
+{# ---- ШАБЛОН ------------------------------------------------------------ #}
+{% extends Template('/admin/base.html.twig') %}
+
+{# ---- CSS ------------------------------------------------------------ #}
+{% block stylesheets %}
+    <link href="/assets/plugins/nice-select2/nice-select2.min.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{# ---- КОНТЕНТ-БЛОК ------------------------------------------------------------ #}
+{% block content %}
+    {{ include(_self|replace({ "template.html.twig": baks_settings.device~"/content.html.twig" })) }}
+{% endblock %}
+
+{% block javascript %}
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/plugins/ckeditor/ckeditor.min.js?v={{ version }}" class='lazy'></script>
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/plugins/nice-select2/nice-select2.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async data-src='/assets/js/radio.input.min.js?v={{ version }}' class='lazy'></script>
+<script nonce='{{ csp_nonce() }}' async data-src="/assets/products_product/filter.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async data-src="/assets/ozon-products/filter.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/js/copy.min.js?v={{ version }}" class="lazy"></script>
+{% endblock %}

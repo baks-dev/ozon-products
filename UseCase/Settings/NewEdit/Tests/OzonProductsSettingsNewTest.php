@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 
 /**
  * @group ozon-products
- *
+ * @group ozon-products-controller
  * @group ozon-products-usecase
  */
 #[When(env: 'test')]

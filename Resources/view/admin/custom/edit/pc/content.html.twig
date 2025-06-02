@@ -1,0 +1,102 @@
+{% trans_default_domain 'ozon-products.admin.custom' %}
+
+<div class="modal-dialog modal-dialog-centered " style="max-width: 850px;">
+
+    {% if product %}
+
+        {% set arr_property = product.getCategorySectionField()|json_decode %}
+
+        {{ form_start(form) }}
+
+        <div class="modal-content p-3 border-bottom border-5 border-primary">
+
+            {# Заголовок модального окна #}
+            {{ include('@ozon-products/admin/custom/edit/pc/header.html.twig') }}
+
+            {# Табы #}
+            <ul class="nav nav-pills gap-3 mb-3 mt-3" id="nav-ozon-product">
+
+                <li class="nav-item" role="presentation">
+                    <button class="btn fw-bolder nav-link active"
+                            data-bs-toggle="tab"
+                            type="button"
+                            role="tab"
+                            aria-selected="true"
+
+                            id="tab_images-tab"
+                            data-bs-target="#tab_images"
+                            aria-controls="nav-ozon-product"
+                    >
+                        <small class="text-uppercase px-3">
+                            Изображения
+                        </small>
+                    </button>
+                </li>
+
+            </ul>
+
+            <div class="tab-content">
+
+                {# Изображения #}
+                <div class="tab-pane fade show active" id="tab_images" role="tabpanel">
+                    {{ include('@ozon-products/admin/custom/edit/pc/images.html.twig') }}
+                </div>
+
+            </div>
+
+            {# Кнопки формы #}
+            <div class="modal-footer ">
+                <div class="flex-grow-1">
+                    &nbsp;
+                </div>
+                <div class="mt-3 gap-3 d-flex">
+                    {# Отмена #}
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        {{ 'btn.cancel'|trans({}, 'core.btn') }}
+                    </button>
+
+                    {# Сохранить #}
+                    {{ form_widget(form.ozon_product, { label:
+                        '<span>'~ 'btn.save'|trans({}, 'core.btn') ~'</span>
+                         <span class="spinner-border spinner-border-sm vertical-middle d-none"></span>'}) }}
+                </div>
+            </div>
+
+        </div>
+
+        {# Прототип формы для изображения #}
+        <div id="prototype.gallery.image"
+             data-prototype="{{ include(_self|replace({ "content.html.twig": "prototype.image.html.twig" }))|e('html_attr') }}">
+        </div>
+
+        {{ form_end(form) }}
+
+    {% else %}
+
+        <div class="modal-content p-3 border-bottom border-5 border-primary">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Ошибка товара
+                </h5>
+            </div>
+
+            <div class="modal-body p-3">
+                Данного товара не существует!
+            </div>
+
+            <div class="modal-footer ">
+                <div class="mt-3 gap-3 d-flex">
+                    {# Отмена #}
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        {{ 'btn.cancel'|trans({}, 'core.btn') }}
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+

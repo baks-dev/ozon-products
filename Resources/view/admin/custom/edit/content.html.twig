@@ -1,0 +1,9 @@
+<style></style>
+
+{{ include(_self|replace({ "content.html.twig": baks_settings.device~"/content.html.twig" })) }}
+
+{# скрипт будет работать в модальном окне #}
+{% block javascript %}
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/plugins/ckeditor/classic.min.js?v={{ version }}" class='lazy'></script>
+<script nonce='{{ csp_nonce() }}' async data-src='/assets/ozon-products/ozon.images.min.js?v={{ version }}' class='lazy'></script>
+{% endblock %}

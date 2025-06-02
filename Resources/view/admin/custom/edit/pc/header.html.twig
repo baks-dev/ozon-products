@@ -1,0 +1,58 @@
+<div class="modal-header">
+
+    <div class="d-flex gap-3">
+
+        {# Обложка  #}
+        <div>
+            {% set img_host = product.getProductImageCdn() %}
+            {% set img_dir = product.getProductImage() %}
+            {% set image_path = cdn_image_path(img_dir, product.getProductImageExt(), img_host, 'min') %}
+
+            <div class="icon rounded-3 bg-contain lazy p-1" style="width: 50px; height: 50px;"
+                 data-bg="{{ image_path }}">
+            </div>
+        </div>
+
+        {# Название продукта  #}
+        <div class="d-flex flex-column align-items-start">
+
+            <h5 class="modal-title d-flex align-items-center gap-3">
+
+                {{ product.getProductName() }}
+
+                {# Значение множественного варианта ТП #}
+                {{ product.getProductVariationValue()|call_twig_func(product.getProductVariationReference()~'_render')
+                ~ product.getProductModificationValue()|call_twig_func(product.getProductModificationReference()~'_render') }}
+
+                {# Значение торгового предложения #}
+                {{ product.getProductOfferValue()|call_twig_func(product.getProductOfferReference()~'_render') }}
+
+                {# Постфикс торгового предложения #}
+                {{ product.getProductOfferPostfix() }}
+                {# Постфикс множественного варианта #}
+                {{ product.getProductVariationPostfix() }}
+                {# Постфикс модификации #}
+                {{ product.getProductModificationPostfix() }}
+
+                {# Свойства, учавствующие в названии #}
+                {% for name_property in arr_property | filter(props => props.field_name == true) %}
+                    {{ name_property.field_value|call_twig_func(name_property.field_type) }}
+                {% endfor %}
+
+            </h5>
+
+            <div class="d-flex align-items-center gap-3">
+                <span class="small">Артикул: {{ product.getProductArticle() }}</span>
+
+                {# Свойства, учавствующие в превью карточки #}
+                {% for name_property in  arr_property | filter(props => props.field_card is defined and props.field_card == true) %}
+                    {{ name_property.field_value|call_twig_func(name_property.field_type~'_render') }}
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+

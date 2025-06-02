@@ -1,0 +1,26 @@
+page:
+  index: 'Product settings for Ozon'
+  new: 'Add products for Ozon'
+  edit: 'Edit products for Ozon'
+  delete: 'Delete products for Ozon'
+
+breadcrumb:
+  index: 'Product settings for Ozon'
+  new: 'Add products for Ozon'
+  edit: 'Edit products for Ozon'
+  delete: 'Delete products for Ozon'
+
+success:
+  new: 'Product settings for Ozon have been successfully added'
+  edit: 'Product settings for Ozon have been successfully updated'
+  delete: 'Product settings for Ozon were successfully deleted'
+  restore: 'Product settings for Ozon have been successfully restored'
+
+danger:
+  new: '%s: Error adding product settings for Ozon'
+  edit: '%s: Error when updating product settings for Ozon'
+  delete: '%s: Error updating product settings for Ozon'
+  restore: '%s: Error while restoring product settings for Ozon'
+form:
+  delete:
+    h4: 'Are you sure you want to delete product settings for Ozon?'

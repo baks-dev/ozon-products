@@ -32,8 +32,6 @@ use BaksDev\Ozon\Products\Entity\Settings\Event\OzonProductsSettingsEvent;
 use BaksDev\Ozon\Products\Entity\Settings\OzonProductsSettings;
 use BaksDev\Ozon\Products\Entity\Settings\Property\OzonProductsSettingsProperty;
 use BaksDev\Products\Category\Entity\CategoryProduct;
-use BaksDev\Products\Category\Entity\Seo\CategoryProductSeo;
-use BaksDev\Products\Category\Entity\Trans\CategoryProductTrans;
 use BaksDev\Products\Product\Entity\Category\ProductCategory;
 use BaksDev\Products\Product\Entity\Description\ProductDescription;
 use BaksDev\Products\Product\Entity\Info\ProductInfo;
@@ -52,6 +50,7 @@ use BaksDev\Products\Product\Entity\Offers\Variation\Quantity\ProductVariationQu
 use BaksDev\Products\Product\Entity\Photo\ProductPhoto;
 use BaksDev\Products\Product\Entity\Price\ProductPrice;
 use BaksDev\Products\Product\Entity\Product;
+use BaksDev\Products\Product\Entity\ProductInvariable;
 use BaksDev\Products\Product\Entity\Property\ProductProperty;
 use BaksDev\Products\Product\Entity\Seo\ProductSeo;
 use BaksDev\Products\Product\Entity\Trans\ProductTrans;
@@ -59,9 +58,9 @@ use BaksDev\Products\Product\Type\Id\ProductUid;
 use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
 use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
-use BaksDev\Reference\Money\Type\Money;
-use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use InvalidArgumentException;
+use BaksDev\Ozon\Products\Entity\Custom\OzonProductCustom;
+use BaksDev\Ozon\Products\Entity\Custom\Images\OzonProductCustomImage;
 
 final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 {
@@ -267,6 +266,61 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
         if($this->offerConst)
         {
             $this->dbalOffer($dbal);
+
+            /**
+             * Product Invariable
+             */
+            $dbal->leftJoin(
+                'product_modification',
+                ProductInvariable::class,
+                'product_invariable',
+                '
+                   product_invariable.product = product.id AND
+                   (
+                       (product_offer.const IS NOT NULL AND product_invariable.offer = product_offer.const) OR
+                       (product_offer.const IS NULL AND product_invariable.offer IS NULL)
+                   )
+                   AND
+                   (
+                       (product_variation.const IS NOT NULL AND product_invariable.variation = product_variation.const) OR
+                       (product_variation.const IS NULL AND product_invariable.variation IS NULL)
+                   )
+                  AND
+                  (
+                       (product_modification.const IS NOT NULL AND product_invariable.modification = product_modification.const) OR
+                       (product_modification.const IS NULL AND product_invariable.modification IS NULL)
+                  )
+           ');
+
+            /** Продукт Озон */
+            $dbal
+                ->leftJoin(
+                    'product_invariable',
+                    OzonProductCustom::class,
+                    'ozon_product',
+                    'ozon_product.invariable = product_invariable.id'
+                );
+
+            $dbal->leftJoin(
+                'ozon_product',
+                OzonProductCustomImage::class,
+                'ozon_product_images',
+                '
+                ozon_product_images.invariable = ozon_product.invariable AND
+                ozon_product_images.root = true
+            '
+            );
+
+            /* Массив с селектом фото товара */
+            $selectPhoto[] = "
+                WHEN ozon_product_images.ext IS NOT NULL
+                THEN JSONB_BUILD_OBJECT
+                    (
+                        'product_photo_root', ozon_product_images.root,
+                        'product_photo_name', CONCAT ( '/upload/".$dbal->table(OzonProductCustomImage::class)."' , '/', ozon_product_images.name),
+                        'product_photo_ext', ozon_product_images.ext,
+                        'product_photo_cdn', ozon_product_images.cdn
+                    )";
 
             if($this->variationConst)
             {
