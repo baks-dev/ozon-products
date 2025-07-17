@@ -40,7 +40,10 @@ class OzonProductStockDTO
         private int $sku,
 
         /** Идентификатор товара в системе Ozon */
-        private string $shipment_type
+        private string $shipment_type,
+
+        private array $warehouse_ids,
+
 
     ) {}
 
@@ -59,4 +62,8 @@ class OzonProductStockDTO
         return $this->reserved;
     }
 
+    public function getWarehouseIds(): array
+    {
+        return $this->warehouse_ids;
+    }
 }

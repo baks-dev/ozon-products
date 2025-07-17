@@ -32,7 +32,6 @@ use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterf
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
-use Iterator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -68,7 +67,6 @@ class OzonStockInfoRequestTest extends KernelTestCase
         /** @var ProductsOzonCardInterface $ozonProductsCard */
         $ozonProductsCard = self::getContainer()->get(ProductsOzonCardInterface::class);
 
-        /** @var Iterator $result */
         $result = $AllProductsIdentifier->findAll();
 
         foreach($result as $key => $product)
@@ -80,10 +78,10 @@ class OzonStockInfoRequestTest extends KernelTestCase
             }
 
             $Card = $ozonProductsCard
-                ->forProduct($product['product_id'])
-                ->forOfferConst($product['offer_const'])
-                ->forVariationConst($product['variation_const'])
-                ->forModificationConst($product['modification_const'])
+                ->forProduct($product->getProductId())
+                ->forOfferConst($product->getProductVariationConst())
+                ->forVariationConst($product->getProductVariationConst())
+                ->forModificationConst($product->getProductModificationConst())
                 ->find();
 
             if(false !== $Card)

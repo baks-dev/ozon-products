@@ -35,6 +35,8 @@ final class UpdateOzonProductPriceRequest extends Ozon
 
     private Money $price;
 
+    private Money $oldPrice;
+
     public function article(string $article): self
     {
         $this->article = $article;
@@ -44,6 +46,13 @@ final class UpdateOzonProductPriceRequest extends Ozon
     public function price(Money $price): self
     {
         $this->price = $price;
+        return $this;
+    }
+
+
+    public function oldPrice(Money $price): self
+    {
+        $this->oldPrice = $price;
         return $this;
     }
 
@@ -76,41 +85,39 @@ final class UpdateOzonProductPriceRequest extends Ozon
             return true;
         }
 
-        $prices['auto_action_enabled'] = 'UNKNOWN';
+
         $prices["offer_id"] = $this->article;
 
         /**
-         * НЕ!!! Присваиваем торговую наценку к стоимости товара (присваивается при расчете стоимости услуг)
-         * @see GetOzonProductCalculatorRequest
+         * @note ВАЖНО! Торговая надбавка присваивается при расчете стоимости услуг
          */
 
-        ///if(!empty($this->getPercent()))
-        //{
-        //$this->price->applyString($this->getPercent());
-            //$percent = $this->price->percent($this->getPercent());
-            //$this->price->add($percent);
-        //}
+        // Цена в промежутке от 400 до 10000 — по правилам скидка должна быть больше 5%
 
+        // Старая цена
+        $oldPrice = clone $this->price;
+        $oldPrice->applyString('6%');
+        $prices['old_price'] = (string) $oldPrice->getRoundValue();
+
+        // текущая стоимость
         $prices["price"] = (string) $this->price->getRoundValue();
-        $prices["min_price"] = (string) $this->price->getRoundValue();
-        $prices['old_price'] = (string) $this->price->getRoundValue();
 
-        if(class_exists(BaksDevOzonPromotionBundle::class))
-        {
-            /** Присваиваем стоимость продукта как минимальную цену */
-            $prices['min_price'] = (string) $this->price->getRoundValue();
+        // Минимальная цена
+        $minPrice = clone $this->price;
+        $minPrice->applyString('-6%');
+        $prices["min_price"] = (string) $minPrice->getRoundValue();
 
-            /** Добавляем 6% для скидки клиенту */
-            $this->price->applyPercent(6);
-            $prices["price"] = (string) $this->price->getRoundValue();
-
-            /** Завышаем старую цену для бейджика */
-            $this->price->applyPercent(6);
-            $prices['old_price'] = $this->price->getRoundValue();
-        }
-
+        // Валюта
         $prices['currency_code'] = 'RUB';
-        $prices['price_strategy_enabled'] = 'UNKNOWN';
+
+        // Атрибут для включения и выключения автоматического применения к товару доступных акций Ozon:
+        $prices['auto_action_enabled'] = 'DISABLED';
+
+        // Атрибут для включения и выключения авто добавления товара в акции:
+        $prices['auto_add_to_ozon_actions_list_enabled'] = 'DISABLED';
+
+        // Атрибут для авто применения стратегий цены:
+        $prices['price_strategy_enabled'] = 'DISABLED';
 
         $response = $this->TokenHttpClient()
             ->request(
@@ -118,9 +125,9 @@ final class UpdateOzonProductPriceRequest extends Ozon
                 '/v1/product/import/prices',
                 [
                     "json" => [
-                        'prices' => [$prices]
-                    ]
-                ]
+                        'prices' => [$prices],
+                    ],
+                ],
             );
 
         $content = $response->toArray(false);
@@ -129,7 +136,7 @@ final class UpdateOzonProductPriceRequest extends Ozon
         {
             $this->logger->critical(
                 sprintf('ozon-products: Ошибка при обновление стоимости артикула %s', $this->article),
-                [$content, self::class.':'.__LINE__]
+                [$content, $prices, self::class.':'.__LINE__],
             );
 
             return false;

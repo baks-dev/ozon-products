@@ -27,6 +27,8 @@ namespace BaksDev\Ozon\Products\Repository\Card\ProductOzonCard;
 
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\DeliveryTransport\Entity\ProductParameter\DeliveryPackageProductParameter;
+use BaksDev\Ozon\Products\Entity\Custom\Images\OzonProductCustomImage;
+use BaksDev\Ozon\Products\Entity\Custom\OzonProductCustom;
 use BaksDev\Ozon\Products\Entity\Settings\Attribute\OzonProductsSettingsAttribute;
 use BaksDev\Ozon\Products\Entity\Settings\Event\OzonProductsSettingsEvent;
 use BaksDev\Ozon\Products\Entity\Settings\OzonProductsSettings;
@@ -59,8 +61,6 @@ use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
 use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use InvalidArgumentException;
-use BaksDev\Ozon\Products\Entity\Custom\OzonProductCustom;
-use BaksDev\Ozon\Products\Entity\Custom\Images\OzonProductCustomImage;
 
 final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 {
@@ -170,6 +170,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 
         $dbal
             ->addSelect('product_info.article AS product_article')
+            //->addSelect('product_info.barcode AS product_barcode')
             ->leftJoin(
                 'product',
                 ProductInfo::class,
@@ -263,6 +264,18 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             '
         );
 
+        /** Штрихкод продукта */
+
+        $dbal->addSelect('
+            COALESCE(
+                product_modification.barcode, 
+                product_variation.barcode, 
+                product_offer.barcode, 
+                product_info.barcode,
+                NULL
+            ) AS barcode
+		');
+
         if($this->offerConst)
         {
             $this->dbalOffer($dbal);
@@ -341,6 +354,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                     /* Массив с селектома артикула товара */
                     $selectArticle[] = 'WHEN product_modification.article IS NOT NULL THEN product_modification.article';
 
+                    $selectBarcode[] = 'WHEN product_modification.barcode IS NOT NULL THEN product_modification.barcode';
+
                     /* Массив с селектом наличия продукта */
                     $selectQuantity[] = 'WHEN product_modification_quantity.quantity > 0 AND product_modification_quantity.quantity > product_modification_quantity.reserve 
                                            THEN product_modification_quantity.quantity - ABS(product_modification_quantity.reserve)';
@@ -385,6 +400,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 /* Массив с селектома артикула товара */
                 $selectArticle[] = 'WHEN product_variation.article IS NOT NULL THEN product_variation.article';
 
+                $selectBarcode[] = 'WHEN product_variation.barcode IS NOT NULL THEN product_variation.barcode';
+
                 /* Массив с селектом наличия продукта */
                 $selectQuantity[] = 'WHEN product_variation_quantity.quantity > 0 AND product_variation_quantity.quantity > product_variation_quantity.reserve 
                                        THEN product_variation_quantity.quantity - ABS(product_variation_quantity.reserve)';
@@ -418,6 +435,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 
             /* Массив с селектома артикула товара */
             $selectArticle[] = 'WHEN product_offer.article IS NOT NULL THEN product_offer.article';
+
+            $selectBarcode[] = 'WHEN product_offer.barcode IS NOT NULL THEN product_offer.barcode';
 
             /* Массив с селектом наличия продукта */
             $selectQuantity[] = 'WHEN product_offer_quantity.quantity > 0 AND product_offer_quantity.quantity > product_offer_quantity.reserve 
@@ -453,6 +472,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
         /* Массив с селектома артикула товара */
         $selectArticle[] = 'WHEN product_info.article IS NOT NULL THEN product_info.article';
 
+        $selectBarcode[] = 'WHEN product_info.barcode IS NOT NULL THEN product_info.barcode';
+
         /* Массив с селектом наличия продукта */
         $selectQuantity[] = 'WHEN product_price.quantity > 0 AND product_price.quantity > product_price.reserve 
                                THEN product_price.quantity - ABS(product_price.reserve)';
@@ -483,6 +504,8 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 
         /* Артикул товара */
         $dbal->addSelect('CASE '.implode(' ', $selectArticle).' ELSE NULL END AS article');
+
+        $dbal->addSelect('CASE '.implode(' ', $selectBarcode).' ELSE NULL END AS barcode');
 
         /* Фото товара */
         $dbal->addSelect(

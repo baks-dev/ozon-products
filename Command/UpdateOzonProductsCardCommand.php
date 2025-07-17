@@ -139,7 +139,7 @@ class UpdateOzonProductsCardCommand extends Command
 
         foreach($profiles as $profile)
         {
-            if($profile->getAttr() === $questions[$key])
+            if($profile->getAttr() === $key)
             {
                 /* Присваиваем профиль пользователя */
                 $UserProfileUid = $profile;
@@ -171,21 +171,22 @@ class UpdateOzonProductsCardCommand extends Command
         foreach($result as $product)
         {
             $card = $this->ProductsOzonCard
-                ->forProduct($product['product_id'])
-                ->forOfferConst($product['offer_const'])
-                ->forVariationConst($product['variation_const'])
-                ->forModificationConst($product['modification_const'])
+                ->forProduct($product->getProductId())
+                ->forOfferConst($product->getProductOfferConst())
+                ->forVariationConst($product->getProductVariationConst())
+                ->forModificationConst($product->getProductModificationConst())
                 ->find();
 
             if($card === false)
             {
-                $this->io->writeln('<fg=red>Карточка товара либо настройки соотношений не найдено</>');
+                $this->io->writeln(sprintf('<fg=red>%s: Карточка товара либо настройки соотношений не найдено</>', $product->getProductId()));
                 continue;
             }
 
             /** Пропускаем обновление, если соответствие не найдено */
             if(!empty($article) && stripos($card['article'], $article) === false)
             {
+                $this->io->writeln(sprintf('<fg=gray>... %s</>', $card['article']));
                 continue;
             }
 
@@ -203,10 +204,10 @@ class UpdateOzonProductsCardCommand extends Command
 
             $OzonProductsCardMessage = new OzonProductsCardMessage(
                 $profile,
-                new ProductUid($product['product_id']),
-                $product['offer_const'] ? new ProductOfferConst($product['offer_const']) : false,
-                $product['variation_const'] ? new ProductVariationConst($product['variation_const']) : false,
-                $product['modification_const'] ? new ProductModificationConst($product['modification_const']) : false,
+                $product->getProductId(),
+                $product->getProductOfferConst(),
+                $product->getProductVariationConst(),
+                $product->getProductModificationConst(),
 
             );
 
@@ -217,7 +218,6 @@ class UpdateOzonProductsCardCommand extends Command
             );
 
             $this->io->text(sprintf('Обновили карточку %s', $card['article']));
-
 
             if($card['article'] === $article)
             {

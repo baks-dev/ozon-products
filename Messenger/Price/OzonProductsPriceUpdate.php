@@ -73,7 +73,6 @@ final readonly class OzonProductsPriceUpdate
 
         /** Присваиваем профиль пользователя для всех Request запросов Items */
         $this->updateOzonProductPriceRequest->profile($message->getProfile());
-
         $Card = $this->itemOzonProducts->getData($product);
 
 
@@ -88,29 +87,19 @@ final readonly class OzonProductsPriceUpdate
             return;
         }
 
-
-        /** Получаем стоимость услуг и присваиваем полную стоимость */
+        /**
+         * Получаем стоимость услуг и присваиваем полную стоимость
+         * Важно! При пересчете стоимости присваивается торговая наценка
+         */
 
         $price = $this->GetOzonProductCalculatorRequest
-            ->category($Card['description_category_id'])
+            ->profile($message->getProfile())
             ->width($Card['width'] / 10)
             ->height($Card['height'] / 10)
             ->length($Card['depth'] / 10)
             ->weight($Card['weight'] / 1000)
             ->price(new Money($Card['price']))
             ->calc();
-
-        /** Если произошла временная ошибка калькулятора - пробуем позже */
-        if($price === false)
-        {
-            $this->messageDispatch->dispatch(
-                message: $message,
-                stamps: [new MessageDelay('1 minute')], // отложенная на 5 секунд
-                transport: 'ozon-products-low'
-            );
-
-            return;
-        }
 
 
         /** Обновляем стоимость */

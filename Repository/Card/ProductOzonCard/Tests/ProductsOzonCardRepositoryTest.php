@@ -45,13 +45,13 @@ class ProductsOzonCardRepositoryTest extends KernelTestCase
         /** @var ProductsOzonCardInterface $ProductsOzonCard */
         $ProductsOzonCard = self::getContainer()->get(ProductsOzonCardInterface::class);
 
-        foreach($AllProductsConstIdentifier->findAll() as $product)
+        foreach($AllProductsConstIdentifier->findAll() as $ProductsIdentifierResult)
         {
             $new = $ProductsOzonCard
-                ->forProduct($product['product_id'])
-                ->forOfferConst($product['offer_const'])
-                ->forVariationConst($product['variation_const'])
-                ->forModificationConst($product['modification_const'])
+                ->forProduct($ProductsIdentifierResult->getProductId())
+                ->forOfferConst($ProductsIdentifierResult->getProductOfferConst())
+                ->forVariationConst($ProductsIdentifierResult->getProductVariationConst())
+                ->forModificationConst($ProductsIdentifierResult->getProductModificationConst())
                 ->find();
 
             if($new === false)

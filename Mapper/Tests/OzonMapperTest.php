@@ -67,7 +67,8 @@ class OzonMapperTest extends KernelTestCase
         /** @var OzonProductsMapper $itemOzonProducts */
         $itemOzonProducts = self::getContainer()->get(OzonProductsMapper::class);
 
-        foreach($AllProductsIdentifier->findAll() as $key => $item)
+
+        foreach($AllProductsIdentifier->findAll() as $key => $ProductsIdentifierResult)
         {
             if($key >= 10)
             {
@@ -76,10 +77,10 @@ class OzonMapperTest extends KernelTestCase
             }
 
             $request = $ProductsOzonCard
-                ->forProduct($item['product_id'])
-                ->forOfferConst($item['offer_const'])
-                ->forVariationConst($item['variation_const'])
-                ->forModificationConst($item['modification_const'])
+                ->forProduct($ProductsIdentifierResult->getProductId())
+                ->forOfferConst($ProductsIdentifierResult->getProductOfferConst())
+                ->forVariationConst($ProductsIdentifierResult->getProductVariationConst())
+                ->forModificationConst($ProductsIdentifierResult->getProductModificationConst())
                 ->find();
 
             if($request === false)

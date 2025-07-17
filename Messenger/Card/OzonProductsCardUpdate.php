@@ -32,7 +32,6 @@ use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductCalculatorRequest;
 use BaksDev\Ozon\Products\Api\Card\Update\UpdateOzonCardRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Messenger\Card\Result\ResultOzonProductsCardMessage;
-use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
 use BaksDev\Reference\Money\Type\Money;
@@ -41,6 +40,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+/**
+ * Добавляем (обновляем) карточку товара на Ozon
+ */
 #[AsMessageHandler]
 final readonly class OzonProductsCardUpdate
 {
@@ -55,9 +57,6 @@ final readonly class OzonProductsCardUpdate
     ) {}
 
 
-    /**
-     * Добавляем (обновляем) карточку товара на Ozon
-     */
     public function __invoke(OzonProductsCardMessage $message): void
     {
         $product = $this->ozonProductsCard
@@ -98,12 +97,11 @@ final readonly class OzonProductsCardUpdate
         {
             $this->logger->critical(
                 'ozon-products: Карточка товара не найдена',
-                [self::class.''.__LINE__]
+                [self::class.''.__LINE__],
             );
 
             return;
         }
-
 
         /** Не обновляем карточку без параметров упаковки */
         if(
@@ -122,46 +120,22 @@ final readonly class OzonProductsCardUpdate
             ->expiresAfter(DateInterval::createFromDateString('2 minutes'))
             ->deduplication([
                 $message,
-                self::class
+                self::class,
             ]);
+
 
         if($Deduplicator->isExecuted())
         {
             $this->logger->critical(
                 sprintf('ozon-products: Отложили обновление карточки %s на 2 минуты', $Card['offer_id']),
-                [self::class.''.__LINE__]
+                [self::class.''.__LINE__],
             );
 
             /** Добавляем отложенное обновление */
             $this->messageDispatch->dispatch(
                 message: $message,
-                stamps: [new MessageDelay('15 seconds')],
-                transport: 'ozon-products-low'
-            );
-
-            return;
-        }
-
-
-        /** Получаем стоимость услуг и присваиваем полную стоимость */
-
-        $Money = $this->GetOzonProductCalculatorRequest
-            ->category($Card['description_category_id'])
-            ->width($Card['width'] / 10)
-            ->height($Card['height'] / 10)
-            ->length($Card['depth'] / 10)
-            ->weight($Card['weight'] / 1000)
-            ->price(new Money($Card['price']))
-            ->calc();
-
-
-        /** Если произошла временная ошибка калькулятора - пробуем позже */
-        if($Money === false)
-        {
-            $this->messageDispatch->dispatch(
-                message: $message,
-                stamps: [new MessageDelay('1 minute')], // отложенная на 5 секунд
-                transport: 'ozon-products-low'
+                stamps: [new MessageDelay('2 minutes')],
+                transport: 'ozon-products-low',
             );
 
             return;
@@ -169,20 +143,34 @@ final readonly class OzonProductsCardUpdate
 
 
         /**
-         * Если установлен модуль ozon-promotion - обновляем цену с учетом скидок
+         * Получаем стоимость услуг и присваиваем полную стоимость
+         * Переменная $Money = стоимость товара + стоимость услуг
          */
 
-        if(class_exists(BaksDevOzonPromotionBundle::class))
-        {
-            $this->messageDispatch->dispatch(
-                message: new OzonProductsPriceMessage($message),
-                stamps: [new MessageDelay('5 seconds')],
-            );
-        }
+        $Money = $this->GetOzonProductCalculatorRequest
+            ->profile($message->getProfile())
+            ->width($Card['width'] / 10)
+            ->height($Card['height'] / 10)
+            ->length($Card['depth'] / 10)
+            ->weight($Card['weight'] / 1000)
+            ->price(new Money($Card['price']))
+            ->calc();
 
-        /** Выполняем запрос на создание/обновление карточки */
-        $Card['price'] = $Money->getValue();
-        $task = $this->ozonCardUpdateRequest->update($Card);
+        /**
+         * Выполняем запрос на создание/обновление карточки
+         */
+
+        $Card['price'] = (string) $Money->getRoundValue();
+
+        $oldPrice = clone $Money;
+        $oldPrice->applyString('6%');
+        $Card['old_price'] = (string) $oldPrice->getRoundValue();
+
+        $Card['promotions'] = [['operation' => 'DISABLE']];
+
+        $task = $this->ozonCardUpdateRequest
+            ->profile($message->getProfile())
+            ->update($Card);
 
         if($task === false)
         {
@@ -191,7 +179,7 @@ final readonly class OzonProductsCardUpdate
         }
 
         $this->logger->info(sprintf('Обновили карточку товара %s', $Card['offer_id']));
-        $Deduplicator->save();
+
 
         /**
          * Запускаем процесс проверки задания
@@ -199,13 +187,14 @@ final readonly class OzonProductsCardUpdate
 
         $ResultOzonProductsCardUpdateMessage = new ResultOzonProductsCardMessage(
             $task,
-            $message->getProfile()
+            $message->getProfile(),
         );
 
         $this->messageDispatch->dispatch(
             message: $ResultOzonProductsCardUpdateMessage,
-            transport: 'ozon-products-low'
+            transport: 'ozon-products-low',
         );
 
+        $Deduplicator->save();
     }
 }

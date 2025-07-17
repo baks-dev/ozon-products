@@ -28,7 +28,7 @@
                 {# Фильтр по продукции #}
                 <div class="w-100 d-flex align-items-center align-content-end gap-2">
 
-                    {% include Template('@products-product/filter/'~baks_settings.device~'/filter.html.twig') %}
+                    {% include Template('@products-product/admin/filter/'~baks_settings.device~'/filter.html.twig') %}
 
                     {{ form_start(ozon) }}
                     {{ form_widget(ozon.exists, { attr: { style: 'width: 100px;' } }) }}

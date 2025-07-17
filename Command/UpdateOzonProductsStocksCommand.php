@@ -177,10 +177,10 @@ class UpdateOzonProductsStocksCommand extends Command
         foreach($products as $product)
         {
             $card = $this->productsOzonCard
-                ->forProduct($product['product_id'])
-                ->forOfferConst($product['offer_const'])
-                ->forVariationConst($product['variation_const'])
-                ->forModificationConst($product['modification_const'])
+                ->forProduct($product->getProductId())
+                ->forOfferConst($product->getProductOfferConst())
+                ->forVariationConst($product->getProductVariationConst())
+                ->forModificationConst($product->getProductModificationConst())
                 ->find();
 
             if($card === false)
@@ -192,6 +192,7 @@ class UpdateOzonProductsStocksCommand extends Command
             /** Пропускаем обновление, если соответствие не найдено */
             if(!empty($article) && stripos($card['article'], $article) === false)
             {
+                $this->io->writeln(sprintf('<fg=gray>... %s</>', $card['article']));
                 continue;
             }
 

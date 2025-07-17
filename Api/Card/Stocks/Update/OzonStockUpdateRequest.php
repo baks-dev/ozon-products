@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Stocks\Update;
 
 use BaksDev\Ozon\Api\Ozon;
-use DomainException;
 use Generator;
 
 final class OzonStockUpdateRequest extends Ozon
@@ -51,6 +50,7 @@ final class OzonStockUpdateRequest extends Ozon
 
     /**
      * Обновить количество товаров на складах
+     *
      * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ProductsStocksV2
      */
     public function update(): Generator|false
@@ -74,12 +74,9 @@ final class OzonStockUpdateRequest extends Ozon
          *   ]
          */
 
-        foreach($this->getWarehouses() as $key => $warehouse)
-        {
-            $stocks[$key]["offer_id"] = $this->article;
-            $stocks[$key]["stock"] = self::STOP_SALES === true ? 0 : max($this->total, 0);
-            $stocks[$key]["warehouse_id"] = (int) $warehouse;
-        }
+        $stocks[]["offer_id"] = $this->article;
+        $stocks[]["stock"] = $this->isStocks() ? 0 : max($this->total, 0);
+        $stocks[]["warehouse_id"] = (int) $this->getWarehouse();
 
         $response = $this->TokenHttpClient()
             ->request(
@@ -87,23 +84,21 @@ final class OzonStockUpdateRequest extends Ozon
                 '/v2/products/stocks',
                 [
                     "json" => [
-                        'stocks' => $stocks
-                    ]
-                ]
+                        'stocks' => $stocks,
+                    ],
+                ],
             );
 
         $content = $response->toArray(false);
 
         if($response->getStatusCode() !== 200)
         {
-
-            $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
-
-
-            throw new DomainException(
-                message: 'Ошибка '.self::class,
-                code: $response->getStatusCode()
+            $this->logger->critical(
+                sprintf('ozon-products: Ошибка обновления остатков'),
+                [self::class.':'.__LINE__, $content, $stocks],
             );
+
+            return false;
         }
 
         foreach($content['result'] as $item)

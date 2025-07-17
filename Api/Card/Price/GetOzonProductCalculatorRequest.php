@@ -26,9 +26,8 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Price;
 
 use BaksDev\Ozon\Api\Ozon;
+use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Reference\Money\Type\Money;
-use DateInterval;
-use Exception;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionProperty;
@@ -38,9 +37,6 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 final class GetOzonProductCalculatorRequest extends Ozon
 {
-    /**  Категория */
-    private int $category;
-
     /** Ширина, см */
     private int $width;
 
@@ -53,33 +49,13 @@ final class GetOzonProductCalculatorRequest extends Ozon
     /** Вес, кг */
     private int|float $weight;
 
-    /** Ключ кеширования запроса */
-    private string $cacheKey = '';
-
     /** Стоимость продукта в системе */
     private Money $price;
-
-    /** Предать идентификатор категории от маппера */
-    public function category(int $category): self
-    {
-        $this->category = match ($category)
-        {
-            17027949 => 3904, // Шины
-
-            200000933 => 0, // Одежда
-            17028741 => 1, // Столовая посуда
-            41777465 => 2, // Аксессуары
-        };
-
-        $this->cacheKey .= $this->category;
-        return $this;
-    }
 
     /** Ширина, см */
     public function width(int|float $width): self
     {
         $this->width = (int) ceil($width);
-        $this->cacheKey .= $this->width;
         return $this;
     }
 
@@ -87,7 +63,6 @@ final class GetOzonProductCalculatorRequest extends Ozon
     public function height(int|float $height): self
     {
         $this->height = (int) ceil($height);
-        $this->cacheKey .= $this->height;
         return $this;
     }
 
@@ -95,7 +70,6 @@ final class GetOzonProductCalculatorRequest extends Ozon
     public function length(int|float $length): self
     {
         $this->length = (int) ceil($length);
-        $this->cacheKey .= $this->length;
         return $this;
     }
 
@@ -103,24 +77,22 @@ final class GetOzonProductCalculatorRequest extends Ozon
     public function weight(int|float $weight): self
     {
         $this->weight = $weight;
-        $this->cacheKey .= $this->weight;
         return $this;
     }
 
     public function price(Money $price): self
     {
         $this->price = $price;
-        $this->cacheKey .= $this->price;
         return $this;
     }
 
     /**
-     * Получаем стоимость услуг Озон
-     *
-     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsStocks
+     * Расчет стоимости услуг Озон
      */
     public function calc(): Money|false
     {
+        $debug = null;
+
         /** Делаем проверку заполнения всех свойств */
         $reflect = new ReflectionClass($this);
         $properties = $reflect->getProperties(ReflectionProperty::IS_PRIVATE);
@@ -135,70 +107,81 @@ final class GetOzonProductCalculatorRequest extends Ozon
             }
         }
 
-        $cache = new FilesystemAdapter();
-        $this->cacheKey .= $this->getPercent();
-        //$cache->deleteItem($this->cacheKey);
+        $debug['Первоначальная стоимость продукта'] = $this->price;
 
-        $fbs = $cache->get(
-            $this->cacheKey,
-            function(ItemInterface $item): int|float|false {
+        /**
+         * Присваиваем торговую наценку для расчета стоимости услуг
+         */
+        $trade = $this->getPercent();
+        $this->price->applyString($trade);
+        $startPrice = $this->price->getValue();
+        $debug['После процента токена'] = $this->price;
 
-                $httpClient = HttpClient::create()
-                    ->withOptions(['base_uri' => 'https://calculator.ozon.ru']);
 
-                try
-                {
-                    /** Присваиваем торговую наценку для расчета стоимости услуг */
-                    $trade = $this->getPercent();
-                    $this->price->applyString($trade);
+        $this->getType()->equals(TypeProfileFbsOzon::class);
 
-                    $response = $httpClient->request(
-                        'POST',
-                        '/p-api/the-calculator-ozon-ru/api/calculate',
-                        [
-                            'json' => [
-                                "categoryId" => 3904,
-                                "price" => $this->price->getValue(), // цена
-                                "dimensions" => [
-                                    "length" => (string) $this->length, // длина
-                                    "width" => (string) $this->width, // ширина
-                                    "height" => (string) $this->height, // высота
-                                ],
-                                "volume" => ($this->width * $this->height * $this->length / 1000), // объем, литры // 108 000  = 108
-                                "weight" => $this->weight, // вес
-
-                                "acceptance" => [
-                                    "type" => "dropOff",
-                                    "acceptanceType" => "ozon",
-                                    "postingsPerShipment" => 1,
-                                    "dropOffType" => "pickUpPoint"
-                                ]
-                            ]
-                        ]
-                    );
-
-                    $content = $response->toArray(false);
-
-                }
-                catch(Exception)
-                {
-                    $item->expiresAfter(DateInterval::createFromDateString('1 second'));
-                    return false;
-                }
-
-                /** Получаем стоимость услуг FBS */
-                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
-                return abs($content['fbs']['totalOzonServicesPerItem']);
-            }
-        );
-
-        if($fbs === false)
+        if($this->getType()->equals(TypeProfileFbsOzon::class))
         {
-            return false;
+
         }
 
-        $services = new Money($fbs);
-        $this->price->add($services);
+        /**
+         * Вознаграждение   FBO 8%     FBS 10%
+         */
+        $offset = $this->price->percent(10);
+        $debug['Вознаграждение'] = $offset;
+
+
+        /**
+         * Эквайринг 1.9% (округляем до 2-х)
+         */
+        $eqv = $this->price->percent(2);
+        $debug['Эквайринг'] = $eqv;
+
+
+        /**
+         * Стоимость логистики (объем, литры)
+         *
+         * @see https://seller-edu.ozon.ru/commissions-tariffs/commissions-tariffs-ozon/rashody-na-dostavku#fbs
+         */
+
+        $volume = ($this->width * $this->height * $this->length / 1000);
+
+        // Логистика FBS
+        $logistics = match (true)
+        {
+            // до 0,4 литра включительно — 43 ₽;
+            $volume <= 0.4 => 43,
+
+            // свыше 0,4 литра до 1 литра включительно — 76 ₽;
+            $volume <= 1 => 76,
+
+            // до 190 литров включительно — 18 ₽ за каждый дополнительный литр свыше объёма 1 л;
+            $volume <= 190 => (76 + (ceil($volume - 1) * 18)),
+
+            // свыше 190 литров — 3478 ₽.
+            default => 3478
+        };
+
+
+        $debug['Логистика'] = '('.$this->width.'x'.$this->height.'x'.$this->length.') '.$logistics;
+
+
+        $this->price->add($offset); // Вознаграждение
+
+        $this->price->add($eqv); // Эквайринг
+
+        $this->price->add(new Money($logistics)); // Логистика
+
+        $this->price->add(new Money(500)); // Последняя миля - 500 руб
+        $debug['Последняя миля'] = 500;
+
+        $this->price->add(new Money(30)); // Обработка отправления - 30 руб
+        $debug['Обработка отправления'] = 30;
+
+
+        //$debug['Итого затраты на логистику'] = ($this->price->getValue() - $startPrice);
+        //dd($debug);
 
         return $this->price;
 

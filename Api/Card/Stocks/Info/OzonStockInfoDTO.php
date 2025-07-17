@@ -50,6 +50,9 @@ final readonly class OzonStockInfoDTO
         {
             $this->stocks->add(new OzonProductStockDTO(...$stock));
         }
+
+        // warehouse_ids
+
     }
 
     public function getProduct(): int

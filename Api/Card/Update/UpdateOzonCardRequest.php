@@ -38,32 +38,22 @@ final class UpdateOzonCardRequest extends Ozon
      */
     public function update(array $card): int|false
     {
-        if($this->isExecuteEnvironment() === false)
+        if(false === $this->getProfile() || $this->isExecuteEnvironment() === false)
         {
             $this->logger->critical('Запрос может быть выполнен только в PROD окружении', [self::class.':'.__LINE__]);
             return true;
         }
 
-        $price = new Money($card['price']);
-
         /**
-         * Добавляем к стоимости товара с услугами торговую надбавку
+         * @note ВАЖНО! Торговая надбавка присваивается при расчете стоимости услуг
          */
-        if(!empty($this->getPercent()))
-        {
-            $price->applyString($this->getPercent());
-        }
 
+        /** Присваиваем идентификатор типа товара */
+        $type = array_filter($card['attributes'], fn($n) => $n['id'] === 8229);
+        $type = current($type);
+        $type = current($type['values']);
 
-        /** Добавляем 6% для скидки клиенту */
-        if(class_exists(BaksDevOzonPromotionBundle::class))
-        {
-            $price->applyPercent(6);
-        }
-
-
-        /** Присваиваем базовую цену с учетом будущей скидки клиенту */
-        $card["price"] = (string) $price->getRoundValue();
+        $card["type_id"] = $type['dictionary_value_id'] ?? false; // ШИНЫ
 
         $response = $this->TokenHttpClient()
             ->request(
@@ -78,7 +68,9 @@ final class UpdateOzonCardRequest extends Ozon
 
         if($response->getStatusCode() !== 200)
         {
-            $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
+            $this->logger->critical(
+                sprintf('ozon-products: Ошибка %s обновления карточки', $content['code']),
+                [self::class.':'.__LINE__, $content]);
 
             return false;
         }

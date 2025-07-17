@@ -27,24 +27,21 @@ namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 #[AutoconfigureTag('baks.ozon.product.property')]
-final class PrimaryImageOzonProductsProperty implements OzonProductsPropertyInterface
+final class TypeIdOzonProductsProperty implements OzonProductsPropertyInterface
 {
     /**
-     * Ссылка на главное изображение товара.
-     * example: "primary_image": ""
+     * Идентификатор типа товара. Значения можно получить из такого же параметра type_id
+     * в ответе метода /v1/description-category/tree.
+     * При заполнении этого параметра можно не указывать в attibutes атрибут с параметром id:8229,
+     * type_id будет использоваться в приоритете.
+     *
+     * integer
+     * example: "type_id": 17028922
      */
 
-    public const string PARAM = 'primary_image';
-
-    public const string UPLOAD_URL = 'upload/product_photo';
-
-    public function __construct(
-        #[Autowire(env: 'HOST')] private readonly ?string $HOST = null,
-        #[Autowire(env: 'CDN_HOST')] private readonly ?string $CDN_HOST = null,
-    ) {}
+    public const string PARAM = 'type_id';
 
     public function getValue(): string
     {
@@ -54,44 +51,14 @@ final class PrimaryImageOzonProductsProperty implements OzonProductsPropertyInte
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): string
+    public function getData(array $data): int|false
     {
-        if(empty($data['product_images']))
-        {
-            return '';
-        }
+        /** Присваиваем идентификатор типа товара */
+        $type = array_filter($data['attributes'], fn($n) => $n['id'] === 8229);
+        $type = current($type);
+        $type = current($type['values']);
 
-        $images = json_decode($data['product_images'], true, 512, JSON_THROW_ON_ERROR);
-
-        $picture = array_filter($images, static function($v) {
-            return $v['product_photo_root'] === true;
-        });
-
-        if(empty($picture))
-        {
-            return '';
-        }
-
-        $picture = current($picture);
-
-        $picture = sprintf(
-            'https://%s%s/%s.%s',
-            $picture['product_photo_cdn'] ? $this->CDN_HOST : $this->HOST,
-            $picture['product_photo_name'],
-            $picture['product_photo_cdn'] ? 'large' : 'image',
-            $picture['product_photo_ext'],
-        );
-
-        // Проверяе м доступность файла изображения
-        $Headers = get_headers($picture);
-        $Headers = current($Headers);
-
-        if(str_contains($Headers, '200')) // ожидаем HTTP/1.1 200 OK
-        {
-            return $picture;
-        }
-
-        return '';
+        return $type['dictionary_value_id'] ?? false;
     }
 
     /**
@@ -133,5 +100,4 @@ final class PrimaryImageOzonProductsProperty implements OzonProductsPropertyInte
     {
         return false;
     }
-
 }

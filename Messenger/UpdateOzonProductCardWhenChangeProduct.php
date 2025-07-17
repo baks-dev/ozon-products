@@ -79,10 +79,10 @@ final readonly class UpdateOzonProductCardWhenChangeProduct
             {
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
                     $profile,
-                    new ProductUid($product['product_id']),
-                    $product['offer_const'] ? new ProductOfferConst($product['offer_const']) : false,
-                    $product['variation_const'] ? new ProductVariationConst($product['variation_const']) : false,
-                    $product['modification_const'] ? new ProductModificationConst($product['modification_const']) : false,
+                    $product->getProductId(),
+                    $product->getProductOfferConst(),
+                    $product->getProductVariationConst(),
+                    $product->getProductModificationConst(),
                 );
 
                 /** Транспорт LOW чтобы не мешать общей очереди */
