@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -62,45 +63,83 @@ final class ImagesOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): array
+    public function getData(ProductsOzonCardResult $data): array
     {
-        $result = [];
 
-        if(!empty($data['product_images']))
+        if(empty($data->getProductImages()))
         {
-            foreach(json_decode($data['product_images'], true) as $item)
+            return [];
+        }
+
+        /** @var object{ product_img: string, product_img_cdn: bool, product_img_ext: string, product_img_root: bool } $productImage */
+        foreach($data->getProductImages() as $productImage)
+        {
+            if(true === $productImage->product_img_root)
             {
-                if($item['product_photo_root'] === true)
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                $picture = sprintf(
-                    'https://%s%s/%s.%s',
-                    $item['product_photo_cdn'] ? $this->CDN_HOST : $this->HOST,
-                    $item['product_photo_name'],
-                    $item['product_photo_cdn'] ? 'large' : 'image',
-                    $item['product_photo_ext']
-                );
+            $picture = sprintf(
+                'https://%s%s/%s.%s',
+                $productImage->product_img_cdn ? $this->CDN_HOST : $this->HOST,
+                $productImage->product_img,
+                $productImage->product_img_cdn ? 'large' : 'image',
+                $productImage->product_img_ext,
+            );
 
-                // Проверяе м доступность файла изображения
-                $Headers = get_headers($picture);
+            // Проверяем доступность файла изображения
+            $Headers = get_headers($picture);
 
-                if(false === $Headers)
-                {
-                    continue;
-                }
+            if(false === $Headers)
+            {
+                continue;
+            }
 
-                $Headers = current($Headers);
+            $Headers = current($Headers);
 
-                if(str_contains($Headers, '200')) // ожидаем HTTP/1.1 200 OK
-                {
-                    $result[] = $picture;
-                }
+            if(str_contains($Headers, '200')) // ожидаем HTTP/1.1 200 OK
+            {
+                $result[] = $picture;
             }
         }
 
-        return $result;
+        return empty($result) ? [] : $result;
+
+        //        if(!empty($data['product_images']))
+        //        {
+        //            foreach(json_decode($data['product_images'], true) as $item)
+        //            {
+        ////                if($item['product_photo_root'] === true)
+        ////                {
+        ////                    continue;
+        ////                }
+        //
+        //                $picture = sprintf(
+        //                    'https://%s%s/%s.%s',
+        //                    $item['product_photo_cdn'] ? $this->CDN_HOST : $this->HOST,
+        //                    $item['product_photo_name'],
+        //                    $item['product_photo_cdn'] ? 'large' : 'image',
+        //                    $item['product_photo_ext']
+        //                );
+        //
+        //                // Проверяе м доступность файла изображения
+        //                $Headers = get_headers($picture);
+        //
+        //                if(false === $Headers)
+        //                {
+        //                    continue;
+        //                }
+        //
+        //                $Headers = current($Headers);
+        //
+        //                if(str_contains($Headers, '200')) // ожидаем HTTP/1.1 200 OK
+        //                {
+        //                    $result[] = $picture;
+        //                }
+        //            }
+        //        }
+        //
+        //        return $result;
     }
 
     /**

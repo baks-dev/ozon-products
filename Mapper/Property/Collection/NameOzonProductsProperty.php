@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\SeasonOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\Collection\TypeOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -55,40 +56,32 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): mixed
+    public function getData(ProductsOzonCardResult $data): mixed
     {
-        if(!isset($data['ozon_category']))
+        if(empty($data->getOzonCategory()))
         {
             return false;
         }
 
         $name = '';
 
-        if(isset($data['product_attributes']))
+        if($data->getProductAttributes())
         {
-
-            $productAttributes = json_decode(
-                $data['product_attributes'],
-                false,
-                512,
-                JSON_THROW_ON_ERROR
-            );
-
             /** Добавляем к названию сезонность */
             $Season = new SeasonOzonProductsAttribute();
 
-
-            foreach($productAttributes as $productAttribute)
+            foreach($data->getProductAttributes() as $productAttribute)
             {
-
                 if($Season::equals($productAttribute->id))
                 {
                     $value = $Season::getConvertName($productAttribute->value);
 
-                    if(!null == $value)
+                    if(empty($value))
                     {
-                        $name .= $value.' ';
+                        continue;
                     }
+
+                    $name .= $value.' ';
                 }
             }
         }
@@ -96,8 +89,8 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
         if($this->translator)
         {
             $typeName = $this->translator->trans(
-                $data['ozon_type'].'.name',
-                domain: 'ozon-products.mapper'
+                $data->getOzonType().'.name',
+                domain: 'ozon-products.mapper',
             );
 
             $name .= $typeName.' ';
@@ -107,44 +100,44 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
         $name = mb_ucfirst($name);
 
 
-        $name .= $data['product_name'];
+        $name .= $data->getProductName();
 
-        if($data['product_variation_value'])
+        if($data->getProductVariationValue())
         {
-            $name .= ' '.$data['product_variation_value'];
+            $name .= ' '.$data->getProductVariationValue();
         }
 
-        if($data['product_modification_value'])
+        if($data->getProductModificationValue())
         {
-            $name .= '/'.$data['product_modification_value'];
+            $name .= '/'.$data->getProductModificationValue();
         }
 
-        if($data['product_offer_value'])
+        if($data->getProductOfferValue())
         {
-            $name .= ' R'.$data['product_offer_value'];
+            $name .= ' R'.$data->getProductOfferValue();
         }
 
-        if($data['product_offer_postfix'])
+        if($data->getProductOfferPostfix())
         {
-            $name .= ' '.$data['product_offer_postfix'];
+            $name .= ' '.$data->getProductOfferPostfix();
         }
 
-        if($data['product_variation_postfix'])
+        if($data->getProductVariationPostfix())
         {
-            $name .= ' '.$data['product_variation_postfix'];
+            $name .= ' '.$data->getProductVariationPostfix();
         }
 
-        if($data['product_modification_postfix'])
+        if($data->getProductModificationPostfix())
         {
-            $name .= ' '.$data['product_modification_postfix'];
+            $name .= ' '.$data->getProductModificationPostfix();
         }
 
-        if(isset($productAttributes))
+        if($data->getProductAttributes())
         {
             /** Добавляем к названию назначение */
             $Type = new TypeOzonProductsAttribute();
 
-            foreach($productAttributes as $productAttribute)
+            foreach($data->getProductAttributes() as $productAttribute)
             {
                 if($Type::equals($productAttribute->id))
                 {

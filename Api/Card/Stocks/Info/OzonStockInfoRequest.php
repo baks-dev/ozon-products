@@ -57,8 +57,9 @@ final class OzonStockInfoRequest extends Ozon
     }
 
     /**
-     * Информация о количестве товаров
-     * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_GetProductInfoStocks
+     * Информация об остатках на складах продавца (FBS и rFBS)
+     *
+     * @see https://api-seller.ozon.ru/v1/product/info/stocks-by-warehouse/fbs
      */
     public function findAll(): Generator|false
     {
@@ -115,6 +116,16 @@ final class OzonStockInfoRequest extends Ozon
 
         foreach($content['items'] as $item)
         {
+            // Фильтрация по FBS идентификатору склада
+            $filter = array_filter($item['stocks'], function($stock) {
+                return $stock['type'] === 'fbs' && in_array($this->getWarehouse(), $stock['warehouse_ids'], true);
+            });
+
+            if(empty($filter))
+            {
+                continue;
+            }
+
             yield new OzonStockInfoDTO($item);
         }
     }

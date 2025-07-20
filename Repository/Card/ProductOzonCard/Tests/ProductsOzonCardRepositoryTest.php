@@ -26,7 +26,16 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\Tests;
 
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
+use BaksDev\Products\Product\Repository\AllProductsIdentifier\ProductsIdentifierResult;
+use BaksDev\Products\Product\Type\Id\ProductUid;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -37,58 +46,134 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 class ProductsOzonCardRepositoryTest extends KernelTestCase
 {
-    public function testUseCase(): void
+    public function testEnv(): void
     {
-        /** @var AllProductsIdentifierInterface $AllProductsConstIdentifier */
-        $AllProductsConstIdentifier = self::getContainer()->get(AllProductsIdentifierInterface::class);
-
-        /** @var ProductsOzonCardInterface $ProductsOzonCard */
-        $ProductsOzonCard = self::getContainer()->get(ProductsOzonCardInterface::class);
-
-        foreach($AllProductsConstIdentifier->findAll() as $ProductsIdentifierResult)
+        if(!isset($_SERVER['TEST_OZON_PRODUCT']))
         {
-            $new = $ProductsOzonCard
-                ->forProduct($ProductsIdentifierResult->getProductId())
-                ->forOfferConst($ProductsIdentifierResult->getProductOfferConst())
-                ->forVariationConst($ProductsIdentifierResult->getProductVariationConst())
-                ->forModificationConst($ProductsIdentifierResult->getProductModificationConst())
-                ->find();
+            echo PHP_EOL.'В .env.test не определены параметры тестового продукта Озон : '.self::class.':'.__LINE__.PHP_EOL;
 
-            if($new === false)
-            {
-                self::assertFalse($new);
-                break;
-            }
-
-            self::assertTrue(array_key_exists("product_offer_value", $new));
-            self::assertTrue(array_key_exists("product_offer_postfix", $new));
-            self::assertTrue(array_key_exists("product_variation_value", $new));
-            self::assertTrue(array_key_exists("product_variation_postfix", $new));
-            self::assertTrue(array_key_exists("product_modification_value", $new));
-            self::assertTrue(array_key_exists("product_modification_postfix", $new));
-            self::assertTrue(array_key_exists("product_name", $new));
-            self::assertTrue(array_key_exists("product_preview", $new));
-            self::assertTrue(array_key_exists("length", $new));
-            self::assertTrue(array_key_exists("width", $new));
-            self::assertTrue(array_key_exists("height", $new));
-            self::assertTrue(array_key_exists("weight", $new));
-            self::assertTrue(array_key_exists("ozon_category", $new));
-            self::assertTrue(array_key_exists("ozon_type", $new));
-            self::assertTrue(array_key_exists("category_id", $new));
-            self::assertTrue(array_key_exists("product_properties", $new));
-            self::assertTrue(array_key_exists("product_attributes", $new));
-            self::assertTrue(array_key_exists("product_keywords", $new));
-            self::assertTrue(array_key_exists("product_images", $new));
-            self::assertTrue(array_key_exists("product_price", $new));
-            self::assertTrue(array_key_exists("product_old_price", $new));
-            self::assertTrue(array_key_exists("product_currency", $new));
-            self::assertTrue(array_key_exists("product_quantity", $new));
-            self::assertTrue(array_key_exists("product_article", $new));
-            self::assertTrue(array_key_exists("article", $new));
-
-            break;
+            /**
+             * TEST_OZON_PRODUCT=018954cb-0a6e-744a-97f0-128e7f05d76d
+             * TEST_OZON_OFFER_CONST=018db273-839d-7f69-8b4b-228aac5934f1
+             * TEST_OZON_VARIATION_CONST=018db273-839c-72dd-bb36-de5c52445d28
+             * TEST_OZON_MODIFICATION_CONST=018db273-839c-72dd-bb36-de5c523881be
+             */
         }
 
         self::assertTrue(true);
+    }
+
+    public function testFindReturnsNullWhenCardDoesNotExist(): void
+    {
+        self::bootKernel();
+        $container = self::getContainer();
+
+        /** @var ProductsOzonCardInterface $productsOzonCardRepository */
+        $productsOzonCardRepository = $container->get(ProductsOzonCardInterface::class);
+
+        // Используем заведомо не существующие в тестовой базе данных UUID.
+        $productUid = new ProductUid();
+        $offerConst = new ProductOfferConst();
+        $variationConst = new ProductVariationConst();
+        $modificationConst = new ProductModificationConst();
+
+        $ozonCardResult = $productsOzonCardRepository
+            ->forProduct($productUid)
+            ->forOfferConst($offerConst)
+            ->forVariationConst($variationConst)
+            ->forModificationConst($modificationConst)
+            ->forProfile(new UserProfileUid())
+            ->find();
+
+        // Проверяем, что результат равен null, так как карточка не должна быть найдена.
+        self::assertFalse($ozonCardResult, 'Не должно быть найдено карточки Ozon для несуществующих идентификаторов.');
+    }
+
+    public function testUseCase(): void
+    {
+        self::bootKernel();
+
+        /** @var ProductsOzonCardInterface $ProductsOzonCard */
+        $ProductsOzonCardRepository = self::getContainer()->get(ProductsOzonCardInterface::class);
+
+        if(!isset($_SERVER['TEST_OZON_PRODUCT']))
+        {
+            echo PHP_EOL.'В .env.test не определены параметры тестового продукта Озон : '.self::class.':'.__LINE__.PHP_EOL;
+
+            /**
+             * TEST_OZON_PRODUCT=018954cb-0a6e-744a-97f0-128e7f05d76d
+             * TEST_OZON_OFFER_CONST=018db273-839d-7f69-8b4b-228aac5934f1
+             * TEST_OZON_VARIATION_CONST=018db273-839c-72dd-bb36-de5c52445d28
+             * TEST_OZON_MODIFICATION_CONST=018db273-839c-72dd-bb36-de5c523881be
+             */
+
+            self::assertFalse(false);
+            return;
+        }
+
+        // Предполагается, что эти UUID соответствуют данным, загруженным вашими тестовыми фикстурами.
+        $productUid = new ProductUid($_SERVER['TEST_OZON_PRODUCT']);
+        $offerConst = new ProductOfferConst($_SERVER['TEST_OZON_OFFER_CONST']);
+        $variationConst = new ProductVariationConst($_SERVER['TEST_OZON_VARIATION_CONST']);
+        $modificationConst = new ProductModificationConst($_SERVER['TEST_OZON_MODIFICATION_CONST']);
+
+        /** @var ProductsOzonCardResult $ProductsOzonCardResult */
+
+        $ProductsOzonCardResult = $ProductsOzonCardRepository
+            ->forProduct($productUid)
+            ->forOfferConst($offerConst)
+            ->forVariationConst($variationConst)
+            ->forModificationConst($modificationConst)
+            ->find();
+
+        if(false === $ProductsOzonCardResult)
+        {
+            self::assertFalse(false);
+            return;
+        }
+
+        self::assertNotNull($ProductsOzonCardResult, 'Карточка Ozon должна быть найдена для указанных идентификаторов продукта.');
+        self::assertInstanceOf(ProductsOzonCardResult::class, $ProductsOzonCardResult);
+
+        // Вызываем все геттеры
+        $reflectionClass = new ReflectionClass(ProductsOzonCardResult::class);
+        $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+        foreach($methods as $method)
+        {
+            // Методы без аргументов
+            if($method->getNumberOfParameters() === 0)
+            {
+                // Вызываем метод
+                $method->invoke($ProductsOzonCardResult);
+            }
+        }
+
+        foreach($ProductsOzonCardResult->getProductImages() as $productImage)
+        {
+            self::assertTrue(isset($productImage->product_img));
+            self::assertTrue(isset($productImage->product_img_cdn));
+            self::assertTrue(isset($productImage->product_img_ext));
+            self::assertTrue(isset($productImage->product_img_root));
+        }
+
+        if($ProductsOzonCardResult->getProductAttributes())
+        {
+            foreach($ProductsOzonCardResult->getProductAttributes() as $productAttribute)
+            {
+                self::assertTrue(isset($productAttribute->id));
+                self::assertTrue(isset($productAttribute->value));
+            }
+        }
+
+        if($ProductsOzonCardResult->getProductProperties())
+        {
+            foreach($ProductsOzonCardResult->getProductProperties() as $productProperties)
+            {
+                self::assertTrue(isset($productProperties->id));
+                self::assertTrue(isset($productProperties->value));
+            }
+        }
+
     }
 }

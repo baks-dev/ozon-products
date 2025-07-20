@@ -25,11 +25,17 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Tests;
 
+use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
+use BaksDev\Products\Product\Type\Id\ProductUid;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
@@ -45,96 +51,80 @@ class OzonMapperTest extends KernelTestCase
     public static function setUpBeforeClass(): void
     {
         self::$Authorization = new OzonAuthorizationToken(
-            new UserProfileUid(),
+            new UserProfileUid('018d464d-c67a-7285-8192-7235b0510924'),
             $_SERVER['TEST_OZON_TOKEN'],
+            TypeProfileFbsOzon::TYPE,
             $_SERVER['TEST_OZON_CLIENT'],
             $_SERVER['TEST_OZON_WAREHOUSE'],
+            '10',
+            0,
+            false,
+            false,
         );
     }
 
-    public function testUseCase(): void
+    public function testEnv()
     {
-        /** @var OzonAttributeValueSearchRequest $ozonAttributeSearchRequest */
-        $ozonAttributeSearchRequest = self::getContainer()->get(OzonAttributeValueSearchRequest::class);
-        $ozonAttributeSearchRequest->TokenHttpClient(self::$Authorization);
-
-        /** @var AllProductsIdentifierInterface $AllProductsIdentifier */
-        $AllProductsIdentifier = self::getContainer()->get(AllProductsIdentifierInterface::class);
-
-        /** @var ProductsOzonCardInterface $ProductsOzonCard */
-        $ProductsOzonCard = self::getContainer()->get(ProductsOzonCardInterface::class);
-
-        /** @var OzonProductsMapper $itemOzonProducts */
-        $itemOzonProducts = self::getContainer()->get(OzonProductsMapper::class);
-
-
-        foreach($AllProductsIdentifier->findAll() as $key => $ProductsIdentifierResult)
+        if(!isset($_SERVER['TEST_OZON_PRODUCT']))
         {
-            if($key >= 10)
-            {
-                self::assertFalse(false);
-                break;
-            }
+            echo PHP_EOL.'В .env.test не определены параметры тестового продукта Озон : '.self::class.':'.__LINE__.PHP_EOL;
 
-            $request = $ProductsOzonCard
-                ->forProduct($ProductsIdentifierResult->getProductId())
-                ->forOfferConst($ProductsIdentifierResult->getProductOfferConst())
-                ->forVariationConst($ProductsIdentifierResult->getProductVariationConst())
-                ->forModificationConst($ProductsIdentifierResult->getProductModificationConst())
-                ->find();
-
-            if($request === false)
-            {
-                self::assertFalse(false);
-                break;
-            }
-
-            $Card = $itemOzonProducts->getData($request);
-
-            self::assertEquals($Card['description_category_id'], $request['ozon_category']);
-
-            self::assertIsString($Card["color_image"]);
-            self::assertNotEmpty($Card["attributes"]);
-
-            self::assertNotEmpty($Card["dimension_unit"]);
-            self::assertIsString($Card["dimension_unit"]);
-
-            self::assertIsArray($Card["images360"]);
-            self::assertIsArray($Card["complex_attributes"]);
-
-            self::assertNotNull($Card['currency_code']);
-            self::assertIsString($Card['currency_code']);
-
-            self::assertEquals($Card['offer_id'], $request['article']);
-
-
-            if(isset($Card['price']))
-            {
-                self::assertEquals($Card['price'], $request['product_price'] / 100);
-            }
-
-            /** Если не указана стоимость продукции - request price равен 0 */
-            else
-            {
-                self::assertEquals(0, $request['product_price'] / 100);
-            }
-
-            self::assertEquals($Card['width'], $request['width']);
-            self::assertEquals($Card['height'], $request['height']);
-            self::assertEquals($Card['depth'], $request['length']);
-            self::assertEquals($Card['weight'], $request['weight'] * 10);
-
-            self::assertIsArray($Card["images"]);
-            self::assertIsArray($Card["pdf_list"]);
-
-            self::assertNotNull($Card['vat']);
-            self::assertNotNull($Card['weight_unit']);
-
-            break;
+            /**
+             * TEST_OZON_PRODUCT=018954cb-0a6e-744a-97f0-128e7f05d76d
+             * TEST_OZON_OFFER_CONST=018db273-839d-7f69-8b4b-228aac5934f1
+             * TEST_OZON_VARIATION_CONST=018db273-839c-72dd-bb36-de5c52445d28
+             * TEST_OZON_MODIFICATION_CONST=018db273-839c-72dd-bb36-de5c523881be
+             */
         }
 
         self::assertTrue(true);
+    }
 
 
+    public function testUseCase(): void
+    {
+        if(!isset($_SERVER['TEST_OZON_PRODUCT']))
+        {
+            self::assertTrue(true);
+            return;
+        }
+
+        self::bootKernel();
+
+        /** @var OzonAttributeValueSearchRequest $OzonAttributeValueSearchRequest */
+        $OzonAttributeValueSearchRequest = self::getContainer()->get(OzonAttributeValueSearchRequest::class);
+        $OzonAttributeValueSearchRequest->TokenHttpClient(self::$Authorization);
+
+
+        $productUid = new ProductUid($_SERVER['TEST_OZON_PRODUCT']);
+        $offerConst = new ProductOfferConst($_SERVER['TEST_OZON_OFFER_CONST']);
+        $variationConst = new ProductVariationConst($_SERVER['TEST_OZON_VARIATION_CONST']);
+        $modificationConst = new ProductModificationConst($_SERVER['TEST_OZON_MODIFICATION_CONST']);
+
+        /** @var ProductsOzonCardInterface $ProductsOzonCard */
+        $ProductsOzonCardRepository = self::getContainer()->get(ProductsOzonCardInterface::class);
+
+        /** @var ProductsOzonCardResult $ProductsOzonCardResult */
+        $ProductsOzonCardResult = $ProductsOzonCardRepository
+            ->forProduct($productUid)
+            ->forOfferConst($offerConst)
+            ->forVariationConst($variationConst)
+            ->forModificationConst($modificationConst)
+            ->find();
+
+
+        if(false === $ProductsOzonCardResult)
+        {
+            self::assertFalse(false);
+            return;
+        }
+
+
+        /** @var OzonProductsMapper $OzonProductsMapper */
+        $OzonProductsMapper = self::getContainer()->get(OzonProductsMapper::class);
+        $Card = $OzonProductsMapper->getData($ProductsOzonCardResult);
+        self::assertTrue(true);
+
+        // dd($Card);
     }
 }

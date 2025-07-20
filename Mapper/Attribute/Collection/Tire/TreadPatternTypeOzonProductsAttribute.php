@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 
 final class TreadPatternTypeOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -59,21 +60,16 @@ final class TreadPatternTypeOzonProductsAttribute implements OzonProductsAttribu
         return self::ID;
     }
 
-    public function getData(array $data): array|false
+    public function getData(ProductsOzonCardResult $data): array|false
     {
-        if(empty($data['product_attributes']))
+        if(empty($data->getProductAttributes()))
         {
             return false;
         }
 
         $attribute = array_filter(
-            json_decode(
-                $data['product_attributes'],
-                false,
-                512,
-                JSON_THROW_ON_ERROR
-            ),
-            fn($n) => self::ID === (int) $n->id
+            $data->getProductAttributes(),
+            static fn($n) => self::ID === (int) $n->id,
         );
 
         if(empty($attribute))
@@ -85,7 +81,7 @@ final class TreadPatternTypeOzonProductsAttribute implements OzonProductsAttribu
             self::ID,
             self::getConvertValue(current($attribute)->value),
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
@@ -130,8 +126,14 @@ final class TreadPatternTypeOzonProductsAttribute implements OzonProductsAttribu
     {
         return match ($value)
         {
-            'asymmetric' => 'асимметричный', // асимметричный
-            'symmetric', => 'симметричный', // симметричный
+            'asymmetric' => 'асимметричный',
+            'directed' => 'направленный',
+            'directed_asymmetric' => 'направленный ассиметричный',
+            'directed_symmetric' => 'направленный симметричный',
+            'non_directional' => 'ненаправленный',
+            'non_directional_asymmetric' => 'ненаправленный ассиметричный',
+            'non_directional_symmetric' => 'ненаправленный симметричный',
+
             default => null,
         };
     }

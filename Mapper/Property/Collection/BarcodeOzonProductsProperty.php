@@ -26,7 +26,11 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use BaksDev\Products\Product\Type\Barcode\ProductBarcode;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('baks.ozon.product.property')]
@@ -49,31 +53,29 @@ final class BarcodeOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): string|false
+    public function getData(ProductsOzonCardResult $data): string|false
     {
-        if(!empty($data['barcode']))
+        if(!empty($data->getBarcode()))
         {
-            return $data['barcode'];
+            return $data->getBarcode();
         }
 
-        $uuid = $data['id'];
-
-        if(!empty($data['product_offer_const']))
+        if($data->getProductModificationConst() instanceof ProductModificationConst)
         {
-            $uuid = $data['product_offer_const'];
+            return ProductBarcode::generate($data->getProductModificationConst());
         }
 
-        if(!empty($data['product_variation_const']))
+        if($data->getProductVariationConst() instanceof ProductVariationConst)
         {
-            $uuid = $data['product_variation_const'];
+            return ProductBarcode::generate($data->getProductVariationConst());
         }
 
-        if(!empty($data['product_modification_const']))
+        if($data->getProductOfferConst() instanceof ProductOfferConst)
         {
-            $uuid = $data['product_modification_const'];
+            return ProductBarcode::generate($data->getProductOfferConst());
         }
 
-        return ProductBarcode::generate($uuid);
+        return ProductBarcode::generate($data->getProductId());
     }
 
     /**

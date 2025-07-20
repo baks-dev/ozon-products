@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Price;
 
 use BaksDev\Ozon\Api\Ozon;
+use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileDbsOzon;
 use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Reference\Money\Type\Money;
 use InvalidArgumentException;
@@ -52,31 +53,38 @@ final class GetOzonProductCalculatorRequest extends Ozon
     /** Стоимость продукта в системе */
     private Money $price;
 
+    /** Включить DEBUG */
+    private bool $debug = false;
+
     /** Ширина, см */
     public function width(int|float $width): self
     {
-        $this->width = (int) ceil($width);
+        /** Переводим миллиметры в сантиметры */
+        $this->width = (int) (ceil($width * 0.1));
         return $this;
     }
 
     /** Высота, см */
     public function height(int|float $height): self
     {
-        $this->height = (int) ceil($height);
+        /** Переводим миллиметры в сантиметры */
+        $this->height = (int) (ceil($height * 0.1));
         return $this;
     }
 
     /** Длина, см */
     public function length(int|float $length): self
     {
-        $this->length = (int) ceil($length);
+        /** Переводим миллиметры в сантиметры */
+        $this->length = (int) (ceil($length * 0.1));
         return $this;
     }
 
     /** Вес, кг */
     public function weight(int|float $weight): self
     {
-        $this->weight = $weight;
+        /** Переводим граммы в килограммы */
+        $this->weight = (int) ceil($weight * 0.001);
         return $this;
     }
 
@@ -86,14 +94,25 @@ final class GetOzonProductCalculatorRequest extends Ozon
         return $this;
     }
 
+
+    public function enableDebug(): self
+    {
+        $this->debug = true;
+        return $this;
+    }
+
     /**
      * Расчет стоимости услуг Озон
      */
     public function calc(): Money|false
     {
-        $debug = null;
+        /**
+         * null || array
+         * array - включит и покажет DEBUG
+         */
+        $debug = true === $this->debug ? [] : null;
 
-        /** Делаем проверку заполнения всех свойств */
+        /** Делаем проверку всех свойств */
         $reflect = new ReflectionClass($this);
         $properties = $reflect->getProperties(ReflectionProperty::IS_PRIVATE);
 
@@ -101,42 +120,65 @@ final class GetOzonProductCalculatorRequest extends Ozon
         {
             $name = $property->getName();
 
+            if($name === 'debug')
+            {
+                continue;
+            }
+
             if(empty($this->{$name}))
             {
                 throw new InvalidArgumentException(sprintf('Invalid Argument %s', $name));
             }
         }
 
-        $debug['Первоначальная стоимость продукта'] = $this->price;
 
         /**
-         * Присваиваем торговую наценку для расчета стоимости услуг
+         * Присваиваем торговую наценку токена для расчета стоимости услуг
          */
+
+        is_array($debug) ? $debug['Первоначальная стоимость продукта'] = $this->price->getValue() : $debug = null;
+
+        $startPrice = $this->price->getValue();
         $trade = $this->getPercent();
         $this->price->applyString($trade);
-        $startPrice = $this->price->getValue();
-        $debug['После процента токена'] = $this->price;
+
+        is_array($debug) ? $debug['После процента токена'] = $this->price->getValue() : $debug = null;
 
 
-        $this->getType()->equals(TypeProfileFbsOzon::class);
+        /** Объём отгрузки, Расчет литров */
+        $volume = ($this->width * $this->height * $this->length / 1000);
+        $volume = ceil($volume);
 
-        if($this->getType()->equals(TypeProfileFbsOzon::class))
-        {
-
-        }
 
         /**
-         * Вознаграждение   FBO 8%     FBS 10%
+         * Вознаграждение для автомобильных шин
+         * - FBO 8%
+         * - FBS 10%
          */
         $offset = $this->price->percent(10);
-        $debug['Вознаграждение'] = $offset;
+        $this->price->add($offset);
+        is_array($debug) ? $debug['Вознаграждение 10%'] = $offset->getValue() : $debug = null;
 
 
         /**
-         * Эквайринг 1.9% (округляем до 2-х)
+         * Эквайринг 1.9%
          */
-        $eqv = $this->price->percent(2);
-        $debug['Эквайринг'] = $eqv;
+        $eqv = $this->price->percent(1.9);
+        $this->price->add($eqv);
+        is_array($debug) ? $debug['Эквайринг 2%'] = $eqv->getValue() : $debug = null;
+
+
+        /**
+         * Обработка отправления селлере - 20 руб
+         */
+        $this->price->add(new Money(20)); // Обработка отправления - 20 руб
+        is_array($debug) ? $debug['Обработка отправления селлере'] = 20 : $debug = null;
+
+        /**
+         * Доставка до места выдачи - 25 руб
+         */
+        $this->price->add(new Money(25)); // Доставка до места выдачи
+        is_array($debug) ? $debug['Доставка до места выдачи'] = 25 : $debug = null;
 
 
         /**
@@ -145,43 +187,58 @@ final class GetOzonProductCalculatorRequest extends Ozon
          * @see https://seller-edu.ozon.ru/commissions-tariffs/commissions-tariffs-ozon/rashody-na-dostavku#fbs
          */
 
-        $volume = ($this->width * $this->height * $this->length / 1000);
 
-        // Логистика FBS
-        $logistics = match (true)
+        if(true === $this->getType()->equals(TypeProfileFbsOzon::class))
         {
-            // до 0,4 литра включительно — 43 ₽;
-            $volume <= 0.4 => 43,
+            /**
+             * 1. Обработка отправления в сортировочном центе
+             */
 
-            // свыше 0,4 литра до 1 литра включительно — 76 ₽;
-            $volume <= 1 => 76,
+            $post = match (true)
+            {
+                $volume <= 1000 => 1.9,
+                $volume > 1000 && $volume <= 4000 => 1.7,
+                $volume > 4000 && $volume <= 16000 => 1.5,
+                $volume > 16000 => 1.3,
+                default => 0 // На случай, если объем отрицательный
+            };
 
-            // до 190 литров включительно — 18 ₽ за каждый дополнительный литр свыше объёма 1 л;
-            $volume <= 190 => (76 + (ceil($volume - 1) * 18)),
+            $post *= $volume;
 
-            // свыше 190 литров — 3478 ₽.
-            default => 3478
-        };
+            $this->price->add(new Money($post)); // Обработка отправления за литры
+            is_array($debug) ? $debug['Обработка в сортировочном центре'] = $post : $debug = null;
 
+            /**
+             * 2. Логистика отправления
+             */
 
-        $debug['Логистика'] = '('.$this->width.'x'.$this->height.'x'.$this->length.') '.$logistics;
+            // Логистика FBS
+            $logistics = match (true)
+            {
+                // до 0,4 литра включительно — 43 ₽;
+                // отключено после 1 июня
+                // $volume <= 0.4 => 43,
 
+                // свыше 0,4 литра до 1 литра включительно — 80 ₽;
+                $volume <= 1 => 80,
 
-        $this->price->add($offset); // Вознаграждение
+                // до 190 литров включительно — 18 ₽ за каждый дополнительный литр свыше объёма 1 л;
+                $volume <= 190 => ($volume * 18 + 80),
 
-        $this->price->add($eqv); // Эквайринг
+                // свыше 190 литров — 3478 ₽.
+                default => 3478
+            };
 
-        $this->price->add(new Money($logistics)); // Логистика
+            $this->price->add(new Money($logistics)); // Логистика
+            is_array($debug) ? $debug['Логистика'] = '('.$this->width.'x'.$this->height.'x'.$this->length.') '.$logistics : $debug = null;
+        }
 
-        $this->price->add(new Money(500)); // Последняя миля - 500 руб
-        $debug['Последняя миля'] = 500;
+        if(is_array($debug))
+        {
+            $debug['Итого затраты'] = ($this->price->getValue() - $startPrice);
 
-        $this->price->add(new Money(30)); // Обработка отправления - 30 руб
-        $debug['Обработка отправления'] = 30;
-
-
-        //$debug['Итого затраты на логистику'] = ($this->price->getValue() - $startPrice);
-        //dd($debug);
+            dd($debug);
+        }
 
         return $this->price;
 

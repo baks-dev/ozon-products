@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\Tests;
 
+use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchDTO;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
@@ -45,10 +46,15 @@ class OzonAttributeValueSearchRequestTest extends KernelTestCase
     public static function setUpBeforeClass(): void
     {
         self::$Authorization = new OzonAuthorizationToken(
-            new UserProfileUid(),
+            new UserProfileUid('018d464d-c67a-7285-8192-7235b0510924'),
             $_SERVER['TEST_OZON_TOKEN'],
+            TypeProfileFbsOzon::TYPE,
             $_SERVER['TEST_OZON_CLIENT'],
             $_SERVER['TEST_OZON_WAREHOUSE'],
+            '10',
+            0,
+            false,
+            false,
         );
     }
 

@@ -161,49 +161,59 @@ class UpdateOzonProductsCardCommand extends Command
 
     }
 
-    public function update(UserProfileUid $profile, ?string $article = null, bool $async = false): void
+    public function update(UserProfileUid $UserProfileUid, ?string $article = null, bool $async = false): void
     {
-        $this->io->note(sprintf('Обновили профиль %s', $profile->getAttr()));
+        $this->io->note(sprintf('Обновили профиль %s', $UserProfileUid->getAttr()));
 
         /** Получаем все имеющиеся карточки профиля */
         $result = $this->AllProductsIdentifier->findAll();
 
         foreach($result as $product)
         {
-            $card = $this->ProductsOzonCard
+            $ProductsOzonCardResult = $this->ProductsOzonCard
                 ->forProduct($product->getProductId())
                 ->forOfferConst($product->getProductOfferConst())
                 ->forVariationConst($product->getProductVariationConst())
                 ->forModificationConst($product->getProductModificationConst())
+                ->forProfile($UserProfileUid)
                 ->find();
 
-            if($card === false)
+            if($ProductsOzonCardResult === false)
             {
-                $this->io->writeln(sprintf('<fg=red>%s: Карточка товара либо настройки соотношений не найдено</>', $product->getProductId()));
+                $this->io->writeln(sprintf(
+                    '<fg=red>%s: Карточка товара либо настройки соотношений не найдено</>', $product->getProductId()));
                 continue;
             }
 
             /** Пропускаем обновление, если соответствие не найдено */
-            if(!empty($article) && stripos($card['article'], $article) === false)
+            if(!empty($article) && stripos($ProductsOzonCardResult->getArticle(), $article) === false)
             {
-                $this->io->writeln(sprintf('<fg=gray>... %s</>', $card['article']));
+                $this->io->writeln(sprintf('<fg=gray>... %s</>', $ProductsOzonCardResult->getArticle()));
                 continue;
             }
 
-            if(empty($card['product_price']))
+            if(empty($ProductsOzonCardResult->getProductPrice()?->getRoundValue()))
             {
-                $this->io->writeln(sprintf('<fg=yellow>Карточка товара с артикулом %s без цены</>', $card['article']));
+                $this->io->writeln(sprintf(
+                    '<fg=yellow>Карточка товара с артикулом %s без цены</>',
+                    $ProductsOzonCardResult->getArticle(),
+                ));
+
                 continue;
             }
 
-            if(empty($card['product_quantity']))
+            if(empty($ProductsOzonCardResult->getProductQuantity()))
             {
-                $this->io->writeln(sprintf('<fg=yellow>Карточка товара с артикулом %s без наличия</>', $card['article']));
+                $this->io->writeln(sprintf(
+                    '<fg=yellow>Карточка товара с артикулом %s без наличия</>',
+                    $ProductsOzonCardResult->getArticle()),
+                );
+
                 continue;
             }
 
             $OzonProductsCardMessage = new OzonProductsCardMessage(
-                $profile,
+                $UserProfileUid,
                 $product->getProductId(),
                 $product->getProductOfferConst(),
                 $product->getProductVariationConst(),
@@ -214,16 +224,15 @@ class UpdateOzonProductsCardCommand extends Command
             /** Консольную комманду выполняем синхронно */
             $this->messageDispatch->dispatch(
                 message: $OzonProductsCardMessage,
-                transport: $async === true ? (string) $profile : null
+                transport: $async === true ? (string) $UserProfileUid : null,
             );
 
-            $this->io->text(sprintf('Обновили карточку %s', $card['article']));
+            $this->io->text(sprintf('Обновили карточку %s', $ProductsOzonCardResult->getArticle()));
 
-            if($card['article'] === $article)
+            if($ProductsOzonCardResult->getArticle() === $article)
             {
                 break;
             }
-
         }
     }
 }

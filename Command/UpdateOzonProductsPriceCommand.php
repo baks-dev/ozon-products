@@ -162,9 +162,9 @@ class UpdateOzonProductsPriceCommand extends Command
 
     }
 
-    public function update(UserProfileUid $profile, ?string $article = null, bool $async = false): void
+    public function update(UserProfileUid $UserProfileUid, ?string $article = null, bool $async = false): void
     {
-        $this->io->note(sprintf('Обновляем профиль %s', $profile->getAttr()));
+        $this->io->note(sprintf('Обновляем профиль %s', $UserProfileUid->getAttr()));
 
         /* Получаем все имеющиеся карточки в системе */
         $products = $this->allProductsIdentifier->findAll();
@@ -175,40 +175,45 @@ class UpdateOzonProductsPriceCommand extends Command
             return;
         }
 
-        foreach($products as $product)
+        foreach($products as $ProductsIdentifierResult)
         {
-            $card = $this->productsOzonCard
-                ->forProduct($product->getProductId())
-                ->forOfferConst($product->getProductOfferConst())
-                ->forVariationConst($product->getProductVariationConst())
-                ->forModificationConst($product->getProductModificationConst())
+            $ProductsOzonCardResult = $this->productsOzonCard
+                ->forProduct($ProductsIdentifierResult->getProductId())
+                ->forOfferConst($ProductsIdentifierResult->getProductOfferConst())
+                ->forVariationConst($ProductsIdentifierResult->getProductVariationConst())
+                ->forModificationConst($ProductsIdentifierResult->getProductModificationConst())
+                ->forProfile($UserProfileUid)
                 ->find();
 
-            if($card === false)
+            if($ProductsOzonCardResult === false)
             {
                 $this->io->writeln('<fg=red>Карточка товара либо настройки соотношений не найдено</>');
                 continue;
             }
 
             /** Пропускаем обновление, если соответствие не найдено */
-            if(!empty($article) && stripos($card['article'], $article) === false)
+            if(false === empty($article) && stripos($ProductsOzonCardResult->getArticle(), $article) === false)
             {
-                $this->io->writeln(sprintf('<fg=gray>... %s</>', $card['article']));
+                $this->io->writeln(sprintf('<fg=gray>... %s</>', $ProductsOzonCardResult->getArticle()));
                 continue;
             }
 
-            if(empty($card['product_price']))
+            if(true === empty($ProductsOzonCardResult->getProductPrice()?->getRoundValue()))
             {
-                $this->io->writeln(sprintf('<fg=yellow>Карточка товара с артикулом %s без цены</>', $card['article']));
+                $this->io->writeln(sprintf(
+                    '<fg=yellow>Карточка товара с артикулом %s без цены</>',
+                    $ProductsOzonCardResult->getArticle()),
+                );
+
                 continue;
             }
 
             $OzonProductsCardMessage = new OzonProductsCardMessage(
-                $profile,
-                new ProductUid($product['product_id']),
-                $product['offer_const'] ? new ProductOfferConst($product['offer_const']) : false,
-                $product['variation_const'] ? new ProductVariationConst($product['variation_const']) : false,
-                $product['modification_const'] ? new ProductModificationConst($product['modification_const']) : false,
+                $UserProfileUid,
+                $ProductsIdentifierResult->getProductId(),
+                $ProductsIdentifierResult->getProductOfferConst(),
+                $ProductsIdentifierResult->getProductVariationConst(),
+                $ProductsIdentifierResult->getProductModificationConst(),
             );
 
             $OzonProductsStocksMessage = new OzonProductsPriceMessage($OzonProductsCardMessage);
@@ -216,12 +221,12 @@ class UpdateOzonProductsPriceCommand extends Command
             /** Консольную комманду выполняем синхронно */
             $this->messageDispatch->dispatch(
                 message: $OzonProductsStocksMessage,
-                transport: $async === true ? (string) $profile : null
+                transport: $async === true ? (string) $UserProfileUid : null,
             );
 
-            $this->io->text(sprintf('Обновили стоимость %s', $card['article']));
+            $this->io->text(sprintf('Обновили стоимость %s', $ProductsOzonCardResult->getArticle()));
 
-            if($card['article'] === $article)
+            if($ProductsOzonCardResult->getArticle() === $article)
             {
                 break;
             }

@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 
 final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -55,23 +56,21 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
         return self::ID;
     }
 
-    public function getData(array $data): array|false
+    public function getData(ProductsOzonCardResult $data): array|false
     {
 
-        if(empty($data['product_name']))
+        if(empty($data->getProductName()))
         {
             return false;
         }
 
-
         /* Берем только name продукта для бренда */
 
-        $name = explode(' ', trim($data['product_name']));
-
+        $name = explode(' ', trim($data->getProductName()));
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            $name[0],
+            current($name),
             $data,
             $this->attributeValueRequest
         );

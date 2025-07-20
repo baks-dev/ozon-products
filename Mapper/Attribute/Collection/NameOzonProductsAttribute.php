@@ -1,4 +1,25 @@
 <?php
+/*
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is furnished
+ *  to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
 
 declare(strict_types=1);
 
@@ -7,6 +28,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection;
 use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\SeasonOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -52,21 +74,11 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
         return self::ID;
     }
 
-    public function getData(array $data): array|false
+    public function getData(ProductsOzonCardResult $data): array|false
     {
-        if(!isset($data['ozon_category']))
+        if(empty($data->getOzonCategory()))
         {
             return false;
-        }
-
-        if(isset($data['product_attributes']))
-        {
-            $productAttributes = json_decode(
-                $data['product_attributes'],
-                false,
-                512,
-                JSON_THROW_ON_ERROR
-            );
         }
 
         $name = '';
@@ -74,7 +86,7 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
         if($this->translator)
         {
             $typeName = $this->translator->trans(
-                $data['ozon_type'].'.name',
+                $data->getOzonType().'.name',
                 domain: 'ozon-products.mapper'
             );
 
@@ -84,44 +96,44 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
         $name = mb_strtolower($name);
         $name = mb_ucfirst($name);
 
-        $name .= $data['product_name'];
+        $name .= $data->getProductName();
 
-        if($data['product_variation_value'])
+        if($data->getProductVariationValue())
         {
-            $name .= ' '.$data['product_variation_value'];
+            $name .= ' '.$data->getProductVariationValue();
         }
 
-        if($data['product_modification_value'])
+        if($data->getProductModificationValue())
         {
-            $name .= '/'.$data['product_modification_value'];
+            $name .= '/'.$data->getProductModificationValue();
         }
 
-        if($data['product_offer_value'])
+        if($data->getProductOfferValue())
         {
-            $name .= ' R'.$data['product_offer_value'];
+            $name .= ' R'.$data->getProductOfferValue();
         }
 
-        if($data['product_offer_postfix'])
+        if($data->getProductOfferPostfix())
         {
-            $name .= ' '.$data['product_offer_postfix'];
+            $name .= ' '.$data->getProductOfferPostfix();
         }
 
-        if($data['product_variation_postfix'])
+        if($data->getProductVariationPostfix())
         {
-            $name .= ' '.$data['product_variation_postfix'];
+            $name .= ' '.$data->getProductVariationPostfix();
         }
 
-        if($data['product_modification_postfix'])
+        if($data->getProductModificationPostfix())
         {
-            $name .= ' '.$data['product_modification_postfix'];
+            $name .= ' '.$data->getProductModificationPostfix();
         }
 
-        if(isset($productAttributes))
+        if($data->getProductAttributes())
         {
             /** Добавляем к названию сезонность */
             $Season = new SeasonOzonProductsAttribute();
 
-            foreach($productAttributes as $productAttribute)
+            foreach($data->getProductAttributes() as $productAttribute)
             {
                 if($Season::equals($productAttribute->id))
                 {
@@ -133,14 +145,11 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
                     }
                 }
             }
-        }
 
-        if(isset($productAttributes))
-        {
             /** Добавляем к названию назначение */
             $Type = new TypeOzonProductsAttribute();
 
-            foreach($productAttributes as $productAttribute)
+            foreach($data->getProductAttributes() as $productAttribute)
             {
                 if($Type::equals($productAttribute->id))
                 {

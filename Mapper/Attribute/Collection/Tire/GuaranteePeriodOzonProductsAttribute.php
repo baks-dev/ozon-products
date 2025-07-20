@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 
 final class GuaranteePeriodOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -53,7 +54,7 @@ final class GuaranteePeriodOzonProductsAttribute implements OzonProductsAttribut
         return self::ID;
     }
 
-    public function getData(array $data): array|false
+    public function getData(ProductsOzonCardResult $data): array|false
     {
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,

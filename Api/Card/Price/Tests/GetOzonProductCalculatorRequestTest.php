@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Price\Tests;
 
 use BaksDev\Orders\Order\UseCase\Admin\Edit\Tests\OrderNewTest;
+use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductCalculatorRequest;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Products\Stocks\UseCase\Admin\Package\Tests\PackageProductStockTest;
@@ -50,10 +51,15 @@ class GetOzonProductCalculatorRequestTest extends KernelTestCase
         UserNewUserProfileHandleTest::setUpBeforeClass();
 
         self::$Authorization = new OzonAuthorizationToken(
-            new UserProfileUid(UserProfileUid::TEST),
+            new UserProfileUid('018d464d-c67a-7285-8192-7235b0510924'),
             $_SERVER['TEST_OZON_TOKEN'],
+            TypeProfileFbsOzon::TYPE,
             $_SERVER['TEST_OZON_CLIENT'],
             $_SERVER['TEST_OZON_WAREHOUSE'],
+            '10',
+            0,
+            false,
+            false,
         );
     }
 
@@ -61,6 +67,7 @@ class GetOzonProductCalculatorRequestTest extends KernelTestCase
     {
         self::assertTrue(true);
 
+        /** @var GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest */
         $GetOzonProductCalculatorRequest = self::getContainer()->get(GetOzonProductCalculatorRequest::class);
         $GetOzonProductCalculatorRequest->TokenHttpClient(self::$Authorization);
 
@@ -71,22 +78,20 @@ class GetOzonProductCalculatorRequestTest extends KernelTestCase
 
         foreach($categories as $category)
         {
+            $GetOzonProductCalculatorRequest->enableDebug();
+
             $Money = $GetOzonProductCalculatorRequest
-                ->category($category)
-                ->length((682 / 10)) // Длина 69 см
-                ->width((691 / 10)) // Ширина 70 см
-                ->height((253 / 10)) // Высота 26 см
-                ->weight((12600 / 1000)) // Вес 12.6
+                ->length((682)) // Длина 69 см
+                ->width((691)) // Ширина 70 см
+                ->height((253)) // Высота 26 см
+                ->weight((12600)) // Вес 12.6
                 ->price(new Money(7443)) // Цена 7443
                 ->calc();
 
-            // 2703
-            if($category === 17027949)
-            {
-                // стоимость услуг FBS = 2714
-                self::assertEquals(($Money->getValue() - 7443), 2863);
-                self::assertEquals(10306.0, $Money->getValue());
-            }
+            // dd($Money);
+
+            self::assertEquals($Money->getValue(), 10986.47);
+            self::assertEquals($Money->getRoundValue(), 10986);
         }
     }
 }

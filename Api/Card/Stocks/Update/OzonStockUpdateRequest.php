@@ -53,11 +53,16 @@ final class OzonStockUpdateRequest extends Ozon
      *
      * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ProductsStocksV2
      */
-    public function update(): Generator|false
+    public function update(): Generator|bool
     {
         if($this->isExecuteEnvironment() === false)
         {
             $this->logger->critical('Запрос может быть выполнен только в PROD окружении', [self::class.':'.__LINE__]);
+            return true;
+        }
+
+        if(false === $this->isStocks())
+        {
             return true;
         }
 
@@ -74,9 +79,12 @@ final class OzonStockUpdateRequest extends Ozon
          *   ]
          */
 
+
         $stocks[]["offer_id"] = $this->article;
-        $stocks[]["stock"] = $this->isStocks() ? 0 : max($this->total, 0);
         $stocks[]["warehouse_id"] = (int) $this->getWarehouse();
+
+        // Обнуляем остаток если продажи остановлены
+        $stocks[]["stock"] = $this->isStocks() ? 0 : max($this->total, 0);
 
         $response = $this->TokenHttpClient()
             ->request(

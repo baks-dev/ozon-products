@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Identifier\Tests;
 
 use BaksDev\Orders\Order\UseCase\Admin\Edit\Tests\OrderNewTest;
+use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Card\Identifier\GetOzonCardIdentifierRequest;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Products\Stocks\UseCase\Admin\Package\Tests\PackageProductStockTest;
@@ -49,10 +50,15 @@ class GetOzonCardIdentifierRequestTest extends KernelTestCase
         UserNewUserProfileHandleTest::setUpBeforeClass();
 
         self::$Authorization = new OzonAuthorizationToken(
-            new UserProfileUid(UserProfileUid::TEST),
+            new UserProfileUid('018d464d-c67a-7285-8192-7235b0510924'),
             $_SERVER['TEST_OZON_TOKEN'],
+            TypeProfileFbsOzon::TYPE,
             $_SERVER['TEST_OZON_CLIENT'],
             $_SERVER['TEST_OZON_WAREHOUSE'],
+            '10',
+            0,
+            false,
+            false,
         );
     }
 

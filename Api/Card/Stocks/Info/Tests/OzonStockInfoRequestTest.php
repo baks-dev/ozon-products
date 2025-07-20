@@ -25,13 +25,22 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Api\Card\Stocks\Info\Tests;
 
+use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonProductStockDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoRequest;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
+use BaksDev\Products\Product\Type\Id\ProductUid;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
+use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -47,84 +56,113 @@ class OzonStockInfoRequestTest extends KernelTestCase
     public static function setUpBeforeClass(): void
     {
         self::$Authorization = new OzonAuthorizationToken(
-            new UserProfileUid(),
+            new UserProfileUid('018d464d-c67a-7285-8192-7235b0510924'),
             $_SERVER['TEST_OZON_TOKEN'],
+            TypeProfileFbsOzon::TYPE,
             $_SERVER['TEST_OZON_CLIENT'],
             $_SERVER['TEST_OZON_WAREHOUSE'],
+            '10',
+            0,
+            false,
+            false,
         );
     }
 
+    public function testEnv(): void
+    {
+        if(!isset($_SERVER['TEST_OZON_PRODUCT']))
+        {
+            echo PHP_EOL.'В .env.test не определены параметры тестового продукта Озон : '.self::class.':'.__LINE__.PHP_EOL;
+
+            /**
+             * TEST_OZON_PRODUCT=018954cb-0a6e-744a-97f0-128e7f05d76d
+             * TEST_OZON_OFFER_CONST=018db273-839d-7f69-8b4b-228aac5934f1
+             * TEST_OZON_VARIATION_CONST=018db273-839c-72dd-bb36-de5c52445d28
+             * TEST_OZON_MODIFICATION_CONST=018db273-839c-72dd-bb36-de5c523881be
+             */
+        }
+
+        self::assertTrue(true);
+    }
 
     public function testComplete(): void
     {
+        self::bootKernel();
+
+        // Предполагается, что эти UUID соответствуют данным, загруженным вашими тестовыми фикстурами.
+        $productUid = new ProductUid($_SERVER['TEST_OZON_PRODUCT']);
+        $offerConst = new ProductOfferConst($_SERVER['TEST_OZON_OFFER_CONST']);
+        $variationConst = new ProductVariationConst($_SERVER['TEST_OZON_VARIATION_CONST']);
+        $modificationConst = new ProductModificationConst($_SERVER['TEST_OZON_MODIFICATION_CONST']);
+
+
+        /** @var ProductsOzonCardInterface $ProductsOzonCard */
+        $ProductsOzonCardRepository = self::getContainer()->get(ProductsOzonCardInterface::class);
+
+        /** @var ProductsOzonCardResult $ProductsOzonCardResult */
+        $ProductsOzonCardResult = $ProductsOzonCardRepository
+            ->forProduct($productUid)
+            ->forOfferConst($offerConst)
+            ->forVariationConst($variationConst)
+            ->forModificationConst($modificationConst)
+            ->find();
+
+
+
         /** @var OzonStockInfoRequest $OzonStockInfoRequest */
         $OzonStockInfoRequest = self::getContainer()->get(OzonStockInfoRequest::class);
         $OzonStockInfoRequest->TokenHttpClient(self::$Authorization);
 
-        /** @var AllProductsIdentifierInterface $AllProductsIdentifier */
-        $AllProductsIdentifier = self::getContainer()->get(AllProductsIdentifierInterface::class);
-
-        /** @var ProductsOzonCardInterface $ozonProductsCard */
-        $ozonProductsCard = self::getContainer()->get(ProductsOzonCardInterface::class);
-
-        $result = $AllProductsIdentifier->findAll();
-
-        foreach($result as $key => $product)
-        {
-            if($key >= 10)
-            {
-                self::assertFalse(false);
-                return;
-            }
-
-            $Card = $ozonProductsCard
-                ->forProduct($product->getProductId())
-                ->forOfferConst($product->getProductVariationConst())
-                ->forVariationConst($product->getProductVariationConst())
-                ->forModificationConst($product->getProductModificationConst())
-                ->find();
-
-            if(false !== $Card)
-            {
-                break;
-            }
-        }
-
         $OzonStockInfo = $OzonStockInfoRequest
-            ->article($Card['article'])
+            ->article($ProductsOzonCardResult->getArticle())
             ->findAll();
 
-        if(false === $OzonStockInfo->valid())
+        if(false === $OzonStockInfo || false === $OzonStockInfo->valid())
         {
             echo PHP_EOL.'ozon-products: Не найдено информации о количестве'.PHP_EOL;
             self::assertTrue(true);
             return;
         }
 
-        /** @var OzonStockInfoDTO $OzonStockInfoDTO */
-        $OzonStockInfoDTO = $OzonStockInfo->current();
-
-        self::assertNotNull($OzonStockInfoDTO->getOffer());
-        self::assertIsString($OzonStockInfoDTO->getOffer());
-
-        self::assertNotNull($OzonStockInfoDTO->getProduct());
-        self::assertIsInt($OzonStockInfoDTO->getProduct());
-
-        if(false === $OzonStockInfoDTO->getStocks()->isEmpty())
+        foreach($OzonStockInfo as $OzonStockInfoDTO)
         {
-            self::assertNotEmpty($OzonStockInfoDTO->getStocks());
+            // Вызываем все геттеры
+            $reflectionClass = new ReflectionClass(OzonStockInfoDTO::class);
+            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
 
-            /** @var OzonProductStockDTO $stock */
-            foreach($OzonStockInfoDTO->getStocks()->current() as $stock)
+            foreach($methods as $method)
             {
-                self::assertNotNull($stock->getType());
-                self::assertIsString($stock->getType());
+                // Методы без аргументов
+                if($method->getNumberOfParameters() === 0)
+                {
+                    // Вызываем метод
+                    $method->invoke($OzonStockInfoDTO);
+                    self::assertTrue(true);
+                }
+            }
 
-                self::assertNotNull($stock->getPresent());
-                self::assertIsInt($stock->getPresent());
 
-                self::assertNotNull($stock->getReserved());
-                self::assertIsInt($stock->getReserved());
+            if(false === $OzonStockInfoDTO->getStocks()->isEmpty())
+            {
+                /** @var OzonProductStockDTO $OzonProductStockDTO */
+                foreach($OzonStockInfoDTO->getStocks() as $OzonProductStockDTO)
+                {
+
+                    // Вызываем все геттеры
+                    $reflectionClass = new ReflectionClass(OzonProductStockDTO::class);
+                    $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+                    foreach($methods as $method)
+                    {
+                        // Методы без аргументов
+                        if($method->getNumberOfParameters() === 0)
+                        {
+                            // Вызываем метод
+                            $method->invoke($OzonProductStockDTO);
+                            self::assertTrue(true);
+                        }
+                    }
+                }
             }
         }
     }

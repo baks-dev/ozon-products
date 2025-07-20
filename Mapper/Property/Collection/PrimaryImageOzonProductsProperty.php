@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -54,17 +55,18 @@ final class PrimaryImageOzonProductsProperty implements OzonProductsPropertyInte
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): string
+    public function getData(ProductsOzonCardResult $data): string
     {
-        if(empty($data['product_images']))
+        if(empty($data->getProductImages()))
         {
             return '';
         }
 
-        $images = json_decode($data['product_images'], true, 512, JSON_THROW_ON_ERROR);
+        // $images = json_decode($data['product_images'], true, 512, JSON_THROW_ON_ERROR);
+        /** var object{ product_img: string, product_img_cdn: bool, product_img_ext: string, product_img_root: bool } $picture */
 
-        $picture = array_filter($images, static function($v) {
-            return $v['product_photo_root'] === true;
+        $picture = array_filter($data->getProductImages(), static function($v) {
+            return $v->product_img_root === true;
         });
 
         if(empty($picture))
@@ -76,13 +78,13 @@ final class PrimaryImageOzonProductsProperty implements OzonProductsPropertyInte
 
         $picture = sprintf(
             'https://%s%s/%s.%s',
-            $picture['product_photo_cdn'] ? $this->CDN_HOST : $this->HOST,
-            $picture['product_photo_name'],
-            $picture['product_photo_cdn'] ? 'large' : 'image',
-            $picture['product_photo_ext'],
+            $picture->product_img_cdn ? $this->CDN_HOST : $this->HOST,
+            $picture->product_img,
+            $picture->product_img_cdn ? 'large' : 'image',
+            $picture->product_img_ext,
         );
 
-        // Проверяе м доступность файла изображения
+        // Проверяем доступность файла изображения
         $Headers = get_headers($picture);
         $Headers = current($Headers);
 

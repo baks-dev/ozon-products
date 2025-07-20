@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute;
 
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchDTO;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 
 final class ItemDataBuilderOzonProductsAttribute
 {
@@ -38,26 +39,10 @@ final class ItemDataBuilderOzonProductsAttribute
     public function __construct(
         private readonly int $id,
         private readonly string|null $value,
-        private readonly array $data = [],
-        private OzonAttributeValueSearchRequest|false $attributeValueSearchRequest = false,
-    )
-    {
-        if(!empty($this->data))
-        {
-            /** Получаем категорию */
-            if(!empty($data['ozon_category']))
-            {
-                $this->category = $data['ozon_category'];
-            }
 
-            /** Получаем тип */
-            if(!empty($data['ozon_type']))
-            {
-                $this->type = $data['ozon_type'];
-            }
-
-        }
-    }
+        private readonly ProductsOzonCardResult|false $data = false,
+        private readonly OzonAttributeValueSearchRequest|false $attributeValueSearchRequest = false,
+    ) {}
 
 
     /**
@@ -65,31 +50,53 @@ final class ItemDataBuilderOzonProductsAttribute
      */
     public function getData(): array|false
     {
+
         if(empty($this->value))
         {
             return false;
         }
 
-
-        $attr = [];
-
-        if($this->attributeValueSearchRequest && $this->category && $this->type)
+        if(true === ($this->data instanceof ProductsOzonCardResult))
         {
-            $this->attributeValueSearchRequest->attribute($this->id);
-            $this->attributeValueSearchRequest->category($this->category);
-            $this->attributeValueSearchRequest->type($this->type);
-            $this->attributeValueSearchRequest->value($this->value);
 
-            $attrValues = $this->attributeValueSearchRequest->find();
+            //            /** Получаем категорию */
+            //            if(false === empty($this->data->getOzonCategory()))
+            //            {
+            //                $this->category = $this->data->getOzonCategory();
+            //            }
+            //
+            //            /** Получаем тип */
+            //            if(false === empty($this->data->getOzonType()))
+            //            {
+            //                $this->type = $this->data->getOzonType();
+            //            }
 
-            if($attrValues->valid())
+
+            $attr = [];
+
+            if(
+                $this->attributeValueSearchRequest &&
+                $this->data->getOzonCategory() &&
+                $this->data->getOzonType()
+            )
             {
-                /** @var OzonAttributeValueSearchDTO $OzonAttributeValueSearchDTO */
-                $OzonAttributeValueSearchDTO = $attrValues->current();
+                $this->attributeValueSearchRequest->attribute($this->id);
+                $this->attributeValueSearchRequest->category($this->data->getOzonCategory());
+                $this->attributeValueSearchRequest->type($this->data->getOzonType());
+                $this->attributeValueSearchRequest->value($this->value);
 
-                /** Берем значине 'value' из реквеста */
-                $attr['value'] = $OzonAttributeValueSearchDTO->getValue();
-                $attr['dictionary_value_id'] = $OzonAttributeValueSearchDTO->getId();
+                $attrValues = $this->attributeValueSearchRequest->find();
+
+                if($attrValues !== false && $attrValues->valid() !== false)
+                {
+                    /** @var OzonAttributeValueSearchDTO $OzonAttributeValueSearchDTO */
+                    $OzonAttributeValueSearchDTO = $attrValues->current();
+
+                    /** Берем значине 'value' из реквеста */
+                    $attr['value'] = $OzonAttributeValueSearchDTO->getValue();
+                    $attr['dictionary_value_id'] = $OzonAttributeValueSearchDTO->getId();
+
+                }
 
             }
 
@@ -105,7 +112,7 @@ final class ItemDataBuilderOzonProductsAttribute
         return [
             'complex_id' => 0,
             'id' => $this->id,
-            'values' => [$attr]
+            'values' => [$attr],
         ];
     }
 }

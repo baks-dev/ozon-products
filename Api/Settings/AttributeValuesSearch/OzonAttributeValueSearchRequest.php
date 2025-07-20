@@ -34,14 +34,16 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Возвращает справочные значения характеристики по заданному значению value в запросе.
+ *
  * @see https://docs.ozon.ru/api/seller/#operation/DescriptionCategoryAPI_SearchAttributeValues
  */
 final class OzonAttributeValueSearchRequest extends Ozon
 {
     private int $attribute;
-    private int $category;
-    private int $type;
     private string $value;
+
+    private int|false $category;
+    private int|false $type;
 
 
     public function attribute(int $attribute): self
@@ -51,15 +53,27 @@ final class OzonAttributeValueSearchRequest extends Ozon
         return $this;
     }
 
-    public function category(int $category): self
+    public function category(int|false|null $category): self
     {
+        if(empty($category))
+        {
+            $this->category = false;
+            return $this;
+        }
+
         $this->category = $category;
 
         return $this;
     }
 
-    public function type(int $type): self
+    public function type(int|false|null $type): self
     {
+        if(empty($type))
+        {
+            $this->type = false;
+            return $this;
+        }
+
         $this->type = $type;
 
         return $this;
@@ -73,8 +87,21 @@ final class OzonAttributeValueSearchRequest extends Ozon
     }
 
 
-    public function find(): Generator
+    /**
+     * @return Generator<int, OzonAttributeValueSearchDTO>|false
+     */
+    public function find(): Generator|false
     {
+        if(empty($this->category))
+        {
+            return false;
+        }
+
+        if(empty($this->type))
+        {
+            return false;
+        }
+
         $cache = $this->getCacheInit('ozon-products');
 
         $response = $cache->get(
@@ -98,11 +125,11 @@ final class OzonAttributeValueSearchRequest extends Ozon
                                  * Минимальное количество символов в значении 'value' 2
                                  * поэтому добавляем пробел пробел после значения
                                  */
-                                "value" => $this->value.' '
-                            ]
-                        ]
+                                "value" => $this->value.' ',
+                            ],
+                        ],
                     );
-            }
+            },
         );
 
         $content = $response->toArray(false);
@@ -113,7 +140,7 @@ final class OzonAttributeValueSearchRequest extends Ozon
 
             throw new DomainException(
                 message: 'Ошибка '.self::class,
-                code: $response->getStatusCode()
+                code: $response->getStatusCode(),
             );
         }
 
@@ -126,8 +153,8 @@ final class OzonAttributeValueSearchRequest extends Ozon
                         'Искомое значение %s не совпадает с найденным %s, аттрибут ID = %s',
                         $this->value,
                         $attributeValuesSearch['value'],
-                        $this->attribute
-                    ), [self::class.':'.__LINE__]
+                        $this->attribute,
+                    ), [self::class.':'.__LINE__],
                 );
             }
 

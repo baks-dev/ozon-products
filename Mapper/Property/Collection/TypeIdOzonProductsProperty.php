@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('baks.ozon.product.property')]
@@ -41,6 +42,8 @@ final class TypeIdOzonProductsProperty implements OzonProductsPropertyInterface
      * example: "type_id": 17028922
      */
 
+    private const int ID = 8229;
+
     public const string PARAM = 'type_id';
 
     public function getValue(): string
@@ -51,14 +54,14 @@ final class TypeIdOzonProductsProperty implements OzonProductsPropertyInterface
     /**
      * Возвращает состояние
      */
-    public function getData(array $data): int|false
+    public function getData(ProductsOzonCardResult $data): int|false
     {
-        /** Присваиваем идентификатор типа товара */
-        $type = array_filter($data['attributes'], fn($n) => $n['id'] === 8229);
-        $type = current($type);
-        $type = current($type['values']);
+        if(empty($data->getTypeDictionary()))
+        {
+            return false;
+        }
 
-        return $type['dictionary_value_id'] ?? false;
+        return $data->getTypeDictionary();
     }
 
     /**

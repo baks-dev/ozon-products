@@ -38,9 +38,14 @@ final class UpdateOzonCardRequest extends Ozon
      */
     public function update(array $card): int|false
     {
-        if(false === $this->getProfile() || $this->isExecuteEnvironment() === false)
+        if($this->isExecuteEnvironment() === false)
         {
             $this->logger->critical('Запрос может быть выполнен только в PROD окружении', [self::class.':'.__LINE__]);
+            return true;
+        }
+
+        if(false === $this->isCard())
+        {
             return true;
         }
 
@@ -48,12 +53,15 @@ final class UpdateOzonCardRequest extends Ozon
          * @note ВАЖНО! Торговая надбавка присваивается при расчете стоимости услуг
          */
 
-        /** Присваиваем идентификатор типа товара */
-        $type = array_filter($card['attributes'], fn($n) => $n['id'] === 8229);
-        $type = current($type);
-        $type = current($type['values']);
+        //        /** Присваиваем идентификатор типа товара */
+        //        $type = array_filter($card['attributes'], fn($n) => $n['id'] === 8229);
+        //        $type = current($type);
+        //        $type = current($type['values']);
+        //        $card["type_id"] = $type['dictionary_value_id'] ?? false; // ШИНЫ
 
-        $card["type_id"] = $type['dictionary_value_id'] ?? false; // ШИНЫ
+
+        $card['promotions'] = [['operation' => 'DISABLE']];
+
 
         $response = $this->TokenHttpClient()
             ->request(
@@ -69,8 +77,8 @@ final class UpdateOzonCardRequest extends Ozon
         if($response->getStatusCode() !== 200)
         {
             $this->logger->critical(
-                sprintf('ozon-products: Ошибка %s обновления карточки', $content['code']),
-                [self::class.':'.__LINE__, $content]);
+                sprintf('ozon-products: Ошибка %s при обновлении карточки', $content['code']),
+                [self::class.':'.__LINE__, $content, $card]);
 
             return false;
         }

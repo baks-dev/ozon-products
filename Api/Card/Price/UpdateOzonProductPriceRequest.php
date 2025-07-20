@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Api\Card\Price;
 
 use BaksDev\Ozon\Api\Ozon;
 use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
+use BaksDev\Reference\Currency\Type\Currency;
 use BaksDev\Reference\Money\Type\Money;
 
 final class UpdateOzonProductPriceRequest extends Ozon
@@ -36,6 +37,8 @@ final class UpdateOzonProductPriceRequest extends Ozon
     private Money $price;
 
     private Money $oldPrice;
+
+    private Currency|false $currency = false;
 
     public function article(string $article): self
     {
@@ -49,10 +52,15 @@ final class UpdateOzonProductPriceRequest extends Ozon
         return $this;
     }
 
-
     public function oldPrice(Money $price): self
     {
         $this->oldPrice = $price;
+        return $this;
+    }
+
+    public function currency(Currency $currency): self
+    {
+        $this->currency = $currency;
         return $this;
     }
 
@@ -85,6 +93,15 @@ final class UpdateOzonProductPriceRequest extends Ozon
             return true;
         }
 
+        /**
+         * Обновляем цены только если указан флаг обновления карточки
+         */
+
+        if($this->isCard() === false)
+        {
+            return true;
+        }
+
 
         $prices["offer_id"] = $this->article;
 
@@ -108,7 +125,7 @@ final class UpdateOzonProductPriceRequest extends Ozon
         $prices["min_price"] = (string) $minPrice->getRoundValue();
 
         // Валюта
-        $prices['currency_code'] = 'RUB';
+        $prices['currency_code'] = $this->currency instanceof Currency ? $this->currency->getCurrencyValueUpper() : 'RUB';
 
         // Атрибут для включения и выключения автоматического применения к товару доступных акций Ozon:
         $prices['auto_action_enabled'] = 'DISABLED';

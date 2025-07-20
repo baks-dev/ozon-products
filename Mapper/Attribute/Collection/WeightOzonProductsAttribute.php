@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection;
 
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 
 final class WeightOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -49,31 +50,11 @@ final class WeightOzonProductsAttribute implements OzonProductsAttributeInterfac
         return self::ID;
     }
 
-    public function getData(array $data): array|false
+    public function getData(ProductsOzonCardResult $data): array|false
     {
-        if(empty($data['product_attributes']))
-        {
-            return false;
-        }
-
-        $attribute = array_filter(
-            json_decode(
-                $data['product_attributes'],
-                false,
-                512,
-                JSON_THROW_ON_ERROR
-            ),
-            fn($n) => self::ID === (int) $n->id
-        );
-
-        if(empty($attribute))
-        {
-            return false;
-        }
-
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            current($attribute)->value,
+            (string) $data->getWeight(),
         );
 
         return $requestData->getData();
@@ -86,7 +67,7 @@ final class WeightOzonProductsAttribute implements OzonProductsAttributeInterfac
 
     public function isSetting(): bool
     {
-        return true;
+        return false;
     }
 
     public function required(): bool
