@@ -35,6 +35,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+/** Проверка выполнения задания */
 #[AsMessageHandler(priority: 0)]
 final readonly class ResultOzonProductsCardDispatcher
 {
@@ -48,7 +49,7 @@ final readonly class ResultOzonProductsCardDispatcher
     public function __invoke(ResultOzonProductsCardMessage $message): void
     {
         $result = $this->cardUpdateResultRequest
-            ->profile($message->getProfile())
+            ->forTokenIdentifier($message->getProfile())
             ->get($message->getId());
 
         if(empty($result['errors']))

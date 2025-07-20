@@ -75,7 +75,7 @@ final class PageController extends AbstractController
         foreach($profiles as $profile)
         {
             $sku = $GetOzonCardSku
-                ->profile($profile)
+                ->forTokenIdentifier($profile)
                 ->article($productCard['product_article'])
                 ->find();
 

@@ -122,7 +122,7 @@ class ClearOzonProductsCardCommand extends Command
         $this->io->note(sprintf('Обновляем профиль %s', $profile->getAttr()));
 
         $articles = $this->GetOzonCardArticlesRequest
-            ->profile($profile)
+            ->forTokenIdentifier($profile)
             ->findAll();
 
         foreach($articles as $article)
@@ -133,7 +133,7 @@ class ClearOzonProductsCardCommand extends Command
             {
                 /** Архивируем на Ozon отсутствующую карточку */
                 $archive = $this->ArchiveOzonCardRequest
-                    ->profile($profile)
+                    ->forTokenIdentifier($profile)
                     ->archive($article);
 
                 if($archive)
