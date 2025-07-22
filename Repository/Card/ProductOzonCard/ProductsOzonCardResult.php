@@ -88,7 +88,7 @@ final  class ProductsOzonCardResult
         private readonly ?int $product_price, //" => 530000
         private readonly ?int $product_old_price, //" => 0
         private readonly ?string $product_currency, //" => "rur"
-        private readonly ?int $product_quantity, //" => 0
+        private readonly ?string $product_quantity, //" => 0
 
         private readonly ?int $ozon_category, //" => 17027949
         private readonly ?int $ozon_type, //" => 94765
@@ -268,7 +268,27 @@ final  class ProductsOzonCardResult
 
     public function getProductQuantity(): int
     {
-        return $this->product_quantity ? max($this->product_quantity, 0) : 0;
+        if(empty($this->product_quantity))
+        {
+            return 0;
+        }
+
+        if(false === json_validate($this->product_quantity))
+        {
+            return 0;
+        }
+
+        $decode = json_decode($this->product_quantity, false, 512, JSON_THROW_ON_ERROR);
+
+        $quantity = 0;
+
+        foreach($decode as $item)
+        {
+            $quantity += $item->total;
+            $quantity -= $item->reserve;
+        }
+
+        return max($quantity, 0);
     }
 
     public function getBarcode(): ?string

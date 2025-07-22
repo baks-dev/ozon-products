@@ -160,7 +160,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
             if($productStockQuantity === $ProductQuantity)
             {
                 $this->logger->info('{article}: Наличие соответствует ({old} == {new})', [
-                    'article' => $ProductsOzonCardResult['article'],
+                    'article' => $ProductsOzonCardResult->getArticle(),
                     'old' => $productStockQuantity,
                     'new' => $ProductQuantity,
                     'profile' => $message->getProfile(),
@@ -199,7 +199,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
 
             /** TRUE возвращается если токен не предполагает обновление остатков */
-            if(true === $result)
+            if(true === $result || false === $result->valid())
             {
                 return;
             }
@@ -220,9 +220,9 @@ final readonly class OzonProductsStocksUpdateDispatcher
             }
 
             $this->logger->info('Обновили наличие {article}: {old} => {new}', [
-                'article' => $ProductsOzonCardResult['article'],
+                'article' => $ProductsOzonCardResult->getArticle(),
                 'old' => $productStockQuantity,
-                'new' => $ProductsOzonCardResult->getArticle(),
+                'new' => $ProductsOzonCardResult->getProductQuantity(),
                 'profile' => $message->getProfile(),
             ]);
 

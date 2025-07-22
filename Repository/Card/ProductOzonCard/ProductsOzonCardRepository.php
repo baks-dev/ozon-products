@@ -75,7 +75,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 
     private ProductModificationConst|false $modificationConst = false;
 
-    private UserProfileUid $profile;
+    private UserProfileUid|false $profile = false;
 
 
     public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
@@ -310,14 +310,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 		    ',
         );
 
-        /* Наличие и резерв торгового предложения */
-        $dbal->leftJoin(
-            'product_offer',
-            ProductOfferQuantity::class,
-            'product_offer_quantity',
-            'product_offer_quantity.offer = product_offer.id',
-        );
-
 
         /**
          * Множественный вариант торгового предложения
@@ -372,13 +364,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 			',
         );
 
-        /* Наличие и резерв множественного варианта */
-        $dbal->leftJoin(
-            'product_variation',
-            ProductVariationQuantity::class,
-            'product_variation_quantity',
-            'product_variation_quantity.variation = product_variation.id',
-        );
 
 
         /**
@@ -433,13 +418,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             'product_modification_image.modification = product_modification.id',
         );
 
-        /* Наличие и резерв модификации множественного варианта */
-        $dbal->leftJoin(
-            'product_modification',
-            ProductModificationQuantity::class,
-            'product_modification_quantity',
-            'product_modification_quantity.modification = product_modification.id',
-        );
 
 
         /** Параметры упаковки товара  */
@@ -678,21 +656,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 
         /* Наличие продукта */
 
-        $dbal->addSelect('
-            COALESCE(
-                CASE WHEN product_modification_quantity.quantity > 0 AND product_modification_quantity.quantity > product_modification_quantity.reserve 
-                     THEN product_modification_quantity.quantity - ABS(product_modification_quantity.reserve) END,
-                CASE WHEN product_variation_quantity.quantity > 0 AND product_variation_quantity.quantity > product_variation_quantity.reserve 
-                     THEN product_variation_quantity.quantity - ABS(product_variation_quantity.reserve) END,
-                CASE WHEN product_offer_quantity.quantity > 0 AND product_offer_quantity.quantity > product_offer_quantity.reserve 
-                     THEN product_offer_quantity.quantity - ABS(product_offer_quantity.reserve) END,
-                CASE WHEN product_price.quantity > 0 AND product_price.quantity > product_price.reserve 
-                     THEN product_price.quantity - ABS(product_price.reserve) 
-                ELSE 0
-                     END
-            ) AS product_quantity
-		');
-
 
         /**
          * Наличие продукции на складе
@@ -703,9 +666,16 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
         {
 
             $dbal
-                ->addSelect('(SUM(stock.total) - SUM(stock.reserve)) AS product_quantity')
+                ->addSelect("JSON_AGG ( 
+                        DISTINCT JSONB_BUILD_OBJECT (
+                            'total', stock.total, 
+                            'reserve', stock.reserve 
+                        )) FILTER (WHERE stock.total > stock.reserve)
+            
+                        AS product_quantity",
+                )
                 ->leftJoin(
-                    'product',
+                    'product_modification',
                     ProductStockTotal::class,
                     'stock',
                     '
@@ -735,8 +705,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                             THEN stock.modification = product_modification.const
                             ELSE stock.modification IS NULL
                         END
-                    
-                    
+
                 ',
                 )
                 ->setParameter(
@@ -745,6 +714,60 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                     UserProfileUid::TYPE,
                 );
 
+        }
+        else
+        {
+
+            /* Наличие и резерв торгового предложения */
+            $dbal->leftJoin(
+                'product_offer',
+                ProductOfferQuantity::class,
+                'product_offer_quantity',
+                'product_offer_quantity.offer = product_offer.id',
+            );
+
+            /* Наличие и резерв множественного варианта */
+            $dbal->leftJoin(
+                'product_variation',
+                ProductVariationQuantity::class,
+                'product_variation_quantity',
+                'product_variation_quantity.variation = product_variation.id',
+            );
+
+            /* Наличие и резерв модификации множественного варианта */
+            $dbal->leftJoin(
+                'product_modification',
+                ProductModificationQuantity::class,
+                'product_modification_quantity',
+                'product_modification_quantity.modification = product_modification.id',
+            );
+
+
+            $dbal
+                ->addSelect("JSON_AGG (
+                        DISTINCT JSONB_BUILD_OBJECT (
+                            
+                            
+                            'total', COALESCE(
+                                            product_modification_quantity.quantity, 
+                                            product_variation_quantity.quantity, 
+                                            product_offer_quantity.quantity, 
+                                            product_price.quantity,
+                                            0
+                                        ), 
+                            
+                            
+                            'reserve', COALESCE(
+                                            product_modification_quantity.reserve, 
+                                            product_variation_quantity.reserve, 
+                                            product_offer_quantity.reserve, 
+                                            product_price.reserve,
+                                            0
+                                        )
+                        ) )
+            
+                        AS product_quantity",
+                );
         }
 
 

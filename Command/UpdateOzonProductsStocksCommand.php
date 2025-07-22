@@ -197,7 +197,7 @@ class UpdateOzonProductsStocksCommand extends Command
                 continue;
             }
 
-            if(empty($card['product_price']))
+            if(empty($ProductsOzonCardResult->getProductPrice()?->getRoundValue()))
             {
                 $this->io->writeln(sprintf('<fg=yellow>Карточка товара с артикулом %s без цены</>', $ProductsOzonCardResult->getArticle()));
                 continue;

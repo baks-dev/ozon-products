@@ -79,12 +79,12 @@ final class OzonStockUpdateRequest extends Ozon
          *   ]
          */
 
-
-        $stocks[]["offer_id"] = $this->article;
-        $stocks[]["warehouse_id"] = (int) $this->getWarehouse();
+        $stocks = null;
+        $stocks["offer_id"] = $this->article;
+        $stocks["warehouse_id"] = (int) $this->getWarehouse();
 
         // Обнуляем остаток если продажи остановлены
-        $stocks[]["stock"] = $this->isStocks() ? 0 : max($this->total, 0);
+        $stocks["stock"] = $this->isStocks() ? 0 : max($this->total, 0);
 
         $response = $this->TokenHttpClient()
             ->request(
@@ -92,7 +92,7 @@ final class OzonStockUpdateRequest extends Ozon
                 '/v2/products/stocks',
                 [
                     "json" => [
-                        'stocks' => $stocks,
+                        'stocks' => [$stocks],
                     ],
                 ],
             );
