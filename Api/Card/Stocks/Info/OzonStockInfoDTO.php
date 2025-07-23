@@ -29,30 +29,38 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 final readonly class OzonStockInfoDTO
 {
-    /** Идентификатор товара. */
+    private string $article;
+
+    /** Идентификатор товара в системе Ozon. */
     private int $product;
 
-    /** Идентификатор товара в системе продавца — артикул. */
-    private string $offer;
+    private int $sku;
 
-    /** Информация об остатках */
-    private ArrayCollection $stocks;
+    private int $total;
+
+    private int $reserve;
+
+    private int $warehouse;
 
 
-    public function __construct(array $data)
+    public function __construct(array $data, string $article)
     {
         $this->product = $data['product_id'];
-        $this->offer = $data['offer_id'];
 
-        $this->stocks = new ArrayCollection();
+        $this->total = $data['present'];
 
-        foreach($data['stocks'] as $stock)
-        {
-            $this->stocks->add(new OzonProductStockDTO(...$stock));
-        }
+        $this->reserve = $data['reserved'];
 
-        // warehouse_ids
+        $this->sku = $data['sku'];
 
+        $this->warehouse = $data['warehouse_id'];
+
+        $this->article = $article;
+    }
+
+    public function getArticle(): string
+    {
+        return $this->article;
     }
 
     public function getProduct(): int
@@ -60,14 +68,24 @@ final readonly class OzonStockInfoDTO
         return $this->product;
     }
 
-    public function getOffer(): string
+    public function getSku(): int
     {
-        return $this->offer;
+        return $this->sku;
     }
 
-    public function getStocks(): ArrayCollection
+    public function getTotal(): int
     {
-        return $this->stocks;
+        return $this->total;
+    }
+
+    public function getReserve(): int
+    {
+        return $this->reserve;
+    }
+
+    public function getWarehouse(): int
+    {
+        return $this->warehouse;
     }
 
 }

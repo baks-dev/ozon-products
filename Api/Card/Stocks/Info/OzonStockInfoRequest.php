@@ -26,19 +26,19 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Stocks\Info;
 
 use BaksDev\Ozon\Api\Ozon;
-use Generator;
+use DateInterval;
+use Symfony\Contracts\Cache\ItemInterface;
 
 final class OzonStockInfoRequest extends Ozon
 {
-    private array $article;
+    private string $article;
 
     private array|false $product = false;
 
-    public function article(array|string $article): self
+    public function article(string $article): self
     {
-        is_array($article) ?: $article = [$article];
-
         $this->article = $article;
+
         return $this;
     }
 
@@ -61,8 +61,9 @@ final class OzonStockInfoRequest extends Ozon
      *
      * @see https://api-seller.ozon.ru/v1/product/info/stocks-by-warehouse/fbs
      */
-    public function findAll(): Generator|false
+    public function find(): OzonStockInfoDTO|false
     {
+
         /**
          * Формируем массив для отправки JSON
          * Пример запроса:
@@ -80,53 +81,97 @@ final class OzonStockInfoRequest extends Ozon
          *  "limit": 100
          *
          */
-        $filter["offer_id"] = $this->article;
-        $filter["visibility"] = "ALL";
 
-        if($this->product)
+
+        $cache = $this->getCacheInit('ozon-products');
+        $key = md5(self::class.$this->article);
+
+        $result = $cache->get($key, function(ItemInterface $item): array|false {
+
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+
+            $filter["offer_id"] = [$this->article];
+            $filter["visibility"] = "ALL";
+
+            if($this->product)
+            {
+                $filter["product_id"] = $this->product;
+            }
+
+            $response = $this->TokenHttpClient()
+                ->request(
+                    'POST',
+                    '/v4/product/info/stocks',
+                    [
+                        "json" => [
+                            'filter' => $filter,
+                            "limit" => 1,
+                        ],
+                    ],
+                );
+
+            $content = $response->toArray(false);
+
+            if($response->getStatusCode() !== 200)
+            {
+                $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
+                return false;
+            }
+
+            if(!isset($content['items']))
+            {
+                return false;
+            }
+
+            foreach($content['items'] as $data)
+            {
+                // Фильтрация по FBS идентификатору склада
+                $filter = array_filter($data['stocks'], function($stock) {
+                    return $stock['type'] === 'fbs' && in_array((int) $this->getWarehouse(), $stock['warehouse_ids'], true);
+                });
+
+                if(empty($filter))
+                {
+                    continue;
+                }
+
+                break;
+            }
+
+            return empty($filter) ? false : current($filter);
+        });
+
+
+        if(empty($result) || false === isset($result['sku']))
         {
-            $filter["product_id"] = $this->product;
+            return false;
         }
+
+        /**
+         * Выполняем запрос на точный остаток склада
+         */
 
         $response = $this->TokenHttpClient()
             ->request(
                 'POST',
-                '/v4/product/info/stocks',
+                '/v1/product/info/stocks-by-warehouse/fbs',
                 [
-                    "json" => [
-                        'filter' => $filter,
-                        //"last_id" => "",
-                        "limit" => 100
-                    ]
-                ]
+                    "json" => ['sku' => [(string) $result['sku']]],
+                ],
             );
 
         $content = $response->toArray(false);
 
-        if($response->getStatusCode() !== 200)
+        // Фильтрация по FBS идентификатору склада
+        $filter = array_filter($content['result'], function($stock) {
+            return $stock['warehouse_id'] === (int) $this->getWarehouse();
+        });
+
+        if(empty($filter))
         {
-            $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
             return false;
         }
 
-        if(!isset($content['items']))
-        {
-            return false;
-        }
-
-        foreach($content['items'] as $item)
-        {
-            // Фильтрация по FBS идентификатору склада
-            $filter = array_filter($item['stocks'], function($stock) {
-                return $stock['type'] === 'fbs' && in_array($this->getWarehouse(), $stock['warehouse_ids'], true);
-            });
-
-            if(empty($filter))
-            {
-                continue;
-            }
-
-            yield new OzonStockInfoDTO($item);
-        }
+        return new OzonStockInfoDTO(current($filter), $this->article);
     }
 }

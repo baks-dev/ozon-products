@@ -61,11 +61,6 @@ final class OzonStockUpdateRequest extends Ozon
             return true;
         }
 
-        if(false === $this->isStocks())
-        {
-            return true;
-        }
-
         /**
          * Формируем массив с ключами для отправки JSON
          * Пример запроса:
@@ -84,7 +79,7 @@ final class OzonStockUpdateRequest extends Ozon
         $stocks["warehouse_id"] = (int) $this->getWarehouse();
 
         // Обнуляем остаток если продажи остановлены
-        $stocks["stock"] = $this->isStocks() ? 0 : max($this->total, 0);
+        $stocks["stock"] = $this->isStocks() ? max($this->total, 0) : 0;
 
         $response = $this->TokenHttpClient()
             ->request(

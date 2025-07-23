@@ -129,29 +129,10 @@ final readonly class OzonProductsStocksUpdateDispatcher
             /** Получаем информацию о количестве товаров */
             $ProductStocksInfo = $this->ozonProductStocksInfoRequest
                 ->forTokenIdentifier($OzonTokenUid)
-                ->article([$ProductsOzonCardResult->getArticle()])
-                ->findAll();
+                ->article($ProductsOzonCardResult->getArticle())
+                ->find();
 
-            $productStockQuantity = 0;
-
-            if(false !== $ProductStocksInfo && $ProductStocksInfo->valid() !== false)
-            {
-                /** @var  OzonStockInfoDTO $ProductStocks */
-                $ProductStocks = $ProductStocksInfo->current();
-
-                /** @var OzonProductStockDTO $stock */
-                foreach($ProductStocks->getStocks() as $stock)
-                {
-                    if($stock->getType() === 'fbs')
-                    {
-                        /** Остатки всегда одинаковы для всех */
-                        $productStockQuantity = $stock->getPresent();
-                        $productStockQuantity = max($productStockQuantity, 0);
-
-                        break;
-                    }
-                }
-            }
+            $productStockQuantity = ($ProductStocksInfo instanceof OzonStockInfoDTO) ? $ProductStocksInfo->getTotal() : 0;
 
             /**
              * Сверяем, что остатки на маркетплейс равны остаткам в системе
@@ -175,6 +156,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->expiresAfter(DateInterval::createFromDateString('2 minutes'))
                 ->deduplication([
                     $message,
+                    $OzonTokenUid,
                     self::class,
                 ]);
 
