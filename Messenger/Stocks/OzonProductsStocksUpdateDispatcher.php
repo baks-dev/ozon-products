@@ -132,7 +132,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->article($ProductsOzonCardResult->getArticle())
                 ->find();
 
-            $productStockQuantity = ($ProductStocksInfo instanceof OzonStockInfoDTO) ? $ProductStocksInfo->getTotal() : 0;
+            $productStockQuantity = ($ProductStocksInfo instanceof OzonStockInfoDTO) ? $ProductStocksInfo->getTotal() : -1;
 
             /**
              * Сверяем, что остатки на маркетплейс равны остаткам в системе
@@ -144,7 +144,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     'article' => $ProductsOzonCardResult->getArticle(),
                     'old' => $productStockQuantity,
                     'new' => $ProductQuantity,
-                    'profile' => $message->getProfile(),
+                    'token' => $OzonTokenUid,
                 ]);
 
                 continue;
@@ -180,9 +180,14 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->update();
 
 
-            /** TRUE возвращается если токен не предполагает обновление остатков */
+            /** TRUE возвращается если токен не предполагает обновление остатков (либо обнуляет) */
             if(true === $result || false === $result->valid())
             {
+                $this->logger->info('Остановили продажу товара {article}', [
+                    'article' => $ProductsOzonCardResult->getArticle(),
+                    'token' => $OzonTokenUid,
+                ]);
+
                 return;
             }
 
@@ -205,7 +210,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 'article' => $ProductsOzonCardResult->getArticle(),
                 'old' => $productStockQuantity,
                 'new' => $ProductsOzonCardResult->getProductQuantity(),
-                'profile' => $message->getProfile(),
+                'token' => $OzonTokenUid,
             ]);
 
             $Deduplicator->save();

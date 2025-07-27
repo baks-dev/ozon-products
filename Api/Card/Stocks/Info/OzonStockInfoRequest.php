@@ -82,6 +82,11 @@ final class OzonStockInfoRequest extends Ozon
          *
          */
 
+        /** Если остановлены продажи - всегда возвращаем FALSE для принудительного обновления */
+        if(false === $this->isStocks())
+        {
+            return false;
+        }
 
         $cache = $this->getCacheInit('ozon-products');
         $key = md5(self::class.$this->article);

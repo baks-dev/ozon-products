@@ -104,6 +104,11 @@ final class OzonStockUpdateRequest extends Ozon
             return false;
         }
 
+        if(false === $this->isStocks())
+        {
+            return true;
+        }
+
         foreach($content['result'] as $item)
         {
             yield new OzonStockUpdateDTO($item);
