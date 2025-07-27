@@ -29,6 +29,7 @@ use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Messenger\OzonTokenMessage;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
+use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
 use BaksDev\Products\Product\Type\Id\ProductUid;
@@ -50,7 +51,7 @@ final readonly class UpdateOzonProductsPriceWhenChangeOzonToken
     ) {}
 
     /**
-     * Обновляем стоимость при обновлении настроек токена
+     * Обновляем стоимость и остатки при обновлении настроек токена
      */
     public function __invoke(OzonTokenMessage $message): void
     {
@@ -86,12 +87,25 @@ final readonly class UpdateOzonProductsPriceWhenChangeOzonToken
                     $product->getProductModificationConst(),
                 );
 
-                $OzonProductsStocksMessage = new OzonProductsPriceMessage($OzonProductsCardMessage);
+                /** Обновляем цены на случай, если изменился процент */
+
+                $OzonProductsPriceMessage = new OzonProductsPriceMessage($OzonProductsCardMessage);
+
+                $this->messageDispatch->dispatch(
+                    message: $OzonProductsPriceMessage,
+                    transport: 'ozon-products',
+                );
+
+
+                /** Обновляем остатки на случай, если остановились продажи */
+
+                $OzonProductsStocksMessage = new OzonProductsStocksMessage($OzonProductsCardMessage);
 
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsStocksMessage,
                     transport: 'ozon-products',
                 );
+
             }
         }
     }
