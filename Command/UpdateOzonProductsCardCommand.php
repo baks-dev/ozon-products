@@ -81,7 +81,6 @@ class UpdateOzonProductsCardCommand extends Command
 
         $helper = $this->getHelper('question');
 
-
         /**
          * Интерактивная форма списка профилей
          */

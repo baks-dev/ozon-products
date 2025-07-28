@@ -134,14 +134,17 @@ final readonly class OzonProductsPriceUpdateDispatcher
 
             if($result === false)
             {
-                /* Пробуем обновить стоимость через 1 минуту */
+                /**
+                 * Цену каждого товара можно обновлять не больше 10 раз в час.
+                 * Пробуем обновить стоимость через 30 минут
+                 */
                 $this->messageDispatch->dispatch(
                     message: $message,
-                    stamps: [new MessageDelay('1 minute')],
+                    stamps: [new MessageDelay('30 minute')],
                     transport: 'ozon-products-low',
                 );
 
-                return;
+                continue;
             }
 
             $this->logger->info(

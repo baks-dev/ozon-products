@@ -136,6 +136,11 @@ final class UpdateOzonProductPriceRequest extends Ozon
         // Атрибут для авто применения стратегий цены:
         $prices['price_strategy_enabled'] = 'DISABLED';
 
+        if(false !== $this->getVat())
+        {
+            $prices['vat'] = $this->getVat();
+        }
+
         $response = $this->TokenHttpClient()
             ->request(
                 'POST',

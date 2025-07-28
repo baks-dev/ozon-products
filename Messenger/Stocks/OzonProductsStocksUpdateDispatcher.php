@@ -180,10 +180,20 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->update();
 
 
+            if(false === $result)
+            {
+                $this->logger->info('{article}: Продукт с артикулом не найден', [
+                    'article' => $ProductsOzonCardResult->getArticle(),
+                    'token' => $OzonTokenUid,
+                ]);
+
+                return;
+            }
+
             /** TRUE возвращается если токен не предполагает обновление остатков (либо обнуляет) */
             if(true === $result || false === $result->valid())
             {
-                $this->logger->info('Остановили продажу товара {article}', [
+                $this->logger->info('{article}: Остановили продажу товара', [
                     'article' => $ProductsOzonCardResult->getArticle(),
                     'token' => $OzonTokenUid,
                 ]);

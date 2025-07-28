@@ -109,9 +109,27 @@ final class OzonStockUpdateRequest extends Ozon
             return true;
         }
 
-        foreach($content['result'] as $item)
+        /** Проверяем наличие ошибки (возвращается статус 200) */
+        $NotFound = false;
+
+        array_walk_recursive(current($content['result'])['errors'], function($value) use (&$NotFound) {
+            if($value === 'NOT_FOUND_ERROR')
+            {
+                $NotFound = true;
+            }
+        });
+
+        /** Продукт не найден */
+        if($NotFound)
         {
-            yield new OzonStockUpdateDTO($item);
+            return false;
         }
+
+        return (static function() use ($content) {
+            foreach($content['result'] as $item)
+            {
+                yield new OzonStockUpdateDTO($item);
+            }
+        })();
     }
 }
