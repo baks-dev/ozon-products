@@ -5,6 +5,7 @@ ROLE_OZON_PRODUCTS:
   name: 'Соотношения свойств Ozon'
   desc: 'Настройки соотношений данных Ozon'
 
+
 # Правила
 
 ROLE_OZON_PRODUCTS_INDEX:
@@ -21,6 +22,11 @@ ROLE_OZON_PRODUCTS_EDIT:
 
 ROLE_OZON_PRODUCTS_DELETE:
   name: 'Удалить'
+  desc: ''
+
+ROLE_OZON_PRODUCTS_CUSTOM:
+  header: 'Настройки продукта Яндекс Маркет'
+  name: 'Настройки продукта Озон'
   desc: ''
 
 
