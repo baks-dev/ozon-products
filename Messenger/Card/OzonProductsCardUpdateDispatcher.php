@@ -34,9 +34,7 @@ use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
 use BaksDev\Ozon\Products\Messenger\Card\Result\ResultOzonProductsCardMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
-use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
 use BaksDev\Ozon\Repository\OzonTokensByProfile\OzonTokensByProfileInterface;
-use BaksDev\Reference\Money\Type\Money;
 use DateInterval;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -56,7 +54,7 @@ final readonly class OzonProductsCardUpdateDispatcher
         private OzonProductsMapper $OzonProductsMapper,
         private DeduplicatorInterface $deduplicator,
         private MessageDispatchInterface $messageDispatch,
-        private OzonTokensByProfileInterface $OzonTokensByProfile
+        private OzonTokensByProfileInterface $OzonTokensByProfile,
     ) {}
 
     /**
@@ -118,9 +116,9 @@ final readonly class OzonProductsCardUpdateDispatcher
 
 
         /** Гидрируем карточку на свойства запроса */
+
         $request = $this->OzonProductsMapper
             ->getData($ProductsOzonCardResult);
-
 
         foreach($tokensByProfile as $OzonTokenUid)
         {

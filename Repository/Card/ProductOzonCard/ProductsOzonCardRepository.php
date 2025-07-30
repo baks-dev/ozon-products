@@ -164,9 +164,14 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
      */
     public function find(): ProductsOzonCardResult|false
     {
-        if($this->product === false)
+        if(false === ($this->product instanceof ProductUid))
         {
-            throw new InvalidArgumentException('Invalid Argument product');
+            throw new InvalidArgumentException('Invalid Argument Product');
+        }
+
+        if(false === ($this->profile instanceof UserProfileUid))
+        {
+            throw new InvalidArgumentException('Invalid Argument UserProfile');
         }
 
         $dbal = $this
@@ -654,15 +659,20 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 		');
 
 
-        /* Наличие продукта */
-
+        $dbal
+            ->addSelect(':profile AS profile')
+            ->setParameter(
+                'profile',
+                $this->profile,
+                UserProfileUid::TYPE,
+            );
 
         /**
          * Наличие продукции на складе
          * Если подключен модуль складского учета и передан идентификатор профиля
          */
 
-        if(true === ($this->profile instanceof UserProfileUid) && class_exists(BaksDevProductsStocksBundle::class))
+        if(class_exists(BaksDevProductsStocksBundle::class))
         {
 
             $dbal
@@ -706,13 +716,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                             ELSE stock.modification IS NULL
                         END
 
-                ',
-                )
-                ->setParameter(
-                    'profile',
-                    $this->profile,
-                    UserProfileUid::TYPE,
-                );
+                ');
 
         }
         else

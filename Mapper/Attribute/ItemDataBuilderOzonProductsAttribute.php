@@ -58,48 +58,33 @@ final class ItemDataBuilderOzonProductsAttribute
 
         if(true === ($this->data instanceof ProductsOzonCardResult))
         {
-
-            //            /** Получаем категорию */
-            //            if(false === empty($this->data->getOzonCategory()))
-            //            {
-            //                $this->category = $this->data->getOzonCategory();
-            //            }
-            //
-            //            /** Получаем тип */
-            //            if(false === empty($this->data->getOzonType()))
-            //            {
-            //                $this->type = $this->data->getOzonType();
-            //            }
-
-
             $attr = [];
 
             if(
-                $this->attributeValueSearchRequest &&
+                true === ($this->attributeValueSearchRequest instanceof OzonAttributeValueSearchRequest) &&
                 $this->data->getOzonCategory() &&
                 $this->data->getOzonType()
             )
             {
-                $this->attributeValueSearchRequest->attribute($this->id);
-                $this->attributeValueSearchRequest->category($this->data->getOzonCategory());
-                $this->attributeValueSearchRequest->type($this->data->getOzonType());
-                $this->attributeValueSearchRequest->value($this->value);
-
-                $attrValues = $this->attributeValueSearchRequest->find();
+                $attrValues = $this->attributeValueSearchRequest
+                    ->forTokenIdentifier($this->data->getProfile())
+                    ->attribute($this->id)
+                    ->category($this->data->getOzonCategory())
+                    ->type($this->data->getOzonType())
+                    ->value($this->value)
+                    ->find();
 
                 if($attrValues !== false && $attrValues->valid() !== false)
                 {
                     /** @var OzonAttributeValueSearchDTO $OzonAttributeValueSearchDTO */
                     $OzonAttributeValueSearchDTO = $attrValues->current();
 
-                    /** Берем значине 'value' из реквеста */
+                    /** Берем значение 'value' из реквеста */
                     $attr['value'] = $OzonAttributeValueSearchDTO->getValue();
                     $attr['dictionary_value_id'] = $OzonAttributeValueSearchDTO->getId();
 
                 }
-
             }
-
         }
 
         if(empty($attr['value']))

@@ -34,6 +34,7 @@ use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use BaksDev\Reference\Currency\Type\Currency;
 use BaksDev\Reference\Money\Type\Money;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use JsonException;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -51,6 +52,7 @@ final  class ProductsOzonCardResult
 
     public function __construct(
 
+        private readonly string $profile, //" => "018954cb-0a6e-744a-97f0-128e7f05d76d"
         private readonly string $id, //" => "018954cb-0a6e-744a-97f0-128e7f05d76d"
         private readonly string $event, //" => "018954cb-0a6e-744a-97f0-128e7f05d76d"
 
@@ -106,6 +108,11 @@ final  class ProductsOzonCardResult
 
 
     ) {}
+
+    public function getProfile(): UserProfileUid
+    {
+        return new UserProfileUid($this->profile);
+    }
 
     public function getProductId(): ProductUid
     {

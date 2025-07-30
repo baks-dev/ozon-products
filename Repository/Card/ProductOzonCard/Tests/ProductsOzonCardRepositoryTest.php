@@ -124,6 +124,7 @@ class ProductsOzonCardRepositoryTest extends KernelTestCase
             ->forOfferConst($offerConst)
             ->forVariationConst($variationConst)
             ->forModificationConst($modificationConst)
+            ->forProfile(new UserProfileUid())
             ->find();
 
         if(false === $ProductsOzonCardResult)

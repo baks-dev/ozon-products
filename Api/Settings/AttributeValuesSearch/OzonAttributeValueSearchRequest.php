@@ -103,33 +103,33 @@ final class OzonAttributeValueSearchRequest extends Ozon
         }
 
         $cache = $this->getCacheInit('ozon-products');
+        $key = md5($this->type.$this->attribute);
+        // $cache->deleteItem($key);
 
-        $response = $cache->get(
-            sprintf('%s-%s-%s', 'ozon-products-attribute-value-search', $this->type, $this->attribute),
-            function(ItemInterface $item): ResponseInterface {
+        $response = $cache->get($key, function(ItemInterface $item): ResponseInterface {
 
-                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-                return $this->TokenHttpClient()
-                    ->request(
-                        'POST',
-                        '/v1/description-category/attribute/values/search',
-                        [
-                            "json" => [
-                                "attribute_id" => $this->attribute,
-                                'description_category_id' => $this->category,
-                                "limit" => 1,
-                                "type_id" => $this->type,
+            return $this->TokenHttpClient()
+                ->request(
+                    'POST',
+                    '/v1/description-category/attribute/values/search',
+                    [
+                        "json" => [
+                            "attribute_id" => $this->attribute,
+                            'description_category_id' => $this->category,
+                            "limit" => 1,
+                            "type_id" => $this->type,
 
-                                /**
-                                 * Минимальное количество символов в значении 'value' 2
-                                 * поэтому добавляем пробел пробел после значения
-                                 */
-                                "value" => $this->value.' ',
-                            ],
+                            /**
+                             * Минимальное количество символов в значении 'value' 2
+                             * поэтому добавляем пробел пробел после значения
+                             */
+                            "value" => $this->value.' ',
                         ],
-                    );
-            },
+                    ],
+                );
+        },
         );
 
         $content = $response->toArray(false);
