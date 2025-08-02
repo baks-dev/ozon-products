@@ -138,7 +138,7 @@ class UpdateOzonProductsCardCommand extends Command
 
         foreach($profiles as $profile)
         {
-            if($profile->getAttr() === $key)
+            if($profile->getAttr() === $questions[$key])
             {
                 /* Присваиваем профиль пользователя */
                 $UserProfileUid = $profile;
