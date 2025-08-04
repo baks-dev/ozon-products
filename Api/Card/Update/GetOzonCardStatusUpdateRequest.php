@@ -54,7 +54,10 @@ final class GetOzonCardStatusUpdateRequest extends Ozon
                 return false;
             }
 
-            $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
+            $this->logger->critical(
+                sprintf('ozon-products: Ошибка %s при получении задания на обновление карточки', $response->getStatusCode()),
+                [self::class.':'.__LINE__, $content],
+            );
 
             return false;
         }
