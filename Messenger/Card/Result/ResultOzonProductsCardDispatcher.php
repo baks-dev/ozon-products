@@ -52,7 +52,7 @@ final readonly class ResultOzonProductsCardDispatcher
             ->forTokenIdentifier($message->getProfile())
             ->get($message->getId());
 
-        if(empty($result['errors']))
+        if(false === $result || empty($result['errors']))
         {
             return;
         }
