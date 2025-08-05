@@ -138,7 +138,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
              * Сверяем, что остатки на маркетплейс равны остаткам в системе
              */
 
-            if($productStockQuantity === $ProductQuantity)
+            if(($productStockQuantity === $ProductQuantity) || ($productStockQuantity === -1 && empty($ProductQuantity)))
             {
                 $this->logger->info('{article}: Наличие соответствует ({old} == {new})', [
                     'article' => $ProductsOzonCardResult->getArticle(),
@@ -169,7 +169,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     transport: 'ozon-products-low',
                 );
 
-                return;
+                continue;
             }
 
             /** Обновляем остатки товара если наличие изменилось */
@@ -187,7 +187,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     'token' => $OzonTokenUid,
                 ]);
 
-                return;
+                continue;
             }
 
             /** TRUE возвращается если токен не предполагает обновление остатков (либо обнуляет) */
@@ -198,7 +198,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     'token' => $OzonTokenUid,
                 ]);
 
-                return;
+                continue;
             }
 
             /** @var OzonStockUpdateDTO $OzonStockUpdateDTO */
@@ -213,7 +213,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     transport: 'ozon-products-low',
                 );
 
-                return;
+                continue;
             }
 
             $this->logger->info('Обновили наличие {article}: {old} => {new}', [
