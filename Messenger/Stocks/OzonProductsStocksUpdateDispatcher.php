@@ -123,9 +123,24 @@ final readonly class OzonProductsStocksUpdateDispatcher
             $ProductQuantity -= $unprocessed;
         }
 
-
         foreach($tokensByProfile as $OzonTokenUid)
         {
+            /** Лимит: 1 карточка 1 раз в 1 минуты */
+            $Deduplicator = $this->deduplicator
+                ->namespace('ozon-products')
+                ->expiresAfter(DateInterval::createFromDateString('1 minutes'))
+                ->deduplication([
+                    $message,
+                    $OzonTokenUid,
+                    $ProductQuantity,
+                    self::class,
+                ]);
+
+            if($Deduplicator->isExecuted())
+            {
+                continue;
+            }
+
             /** Получаем информацию о количестве товаров */
             $ProductStocksInfo = $this->ozonProductStocksInfoRequest
                 ->forTokenIdentifier($OzonTokenUid)
@@ -135,7 +150,9 @@ final readonly class OzonProductsStocksUpdateDispatcher
             $productStockQuantity = ($ProductStocksInfo instanceof OzonStockInfoDTO) ? $ProductStocksInfo->getTotal() : -1;
 
             /**
-             * Сверяем, что остатки на маркетплейс равны остаткам в системе
+             * Сверяем, что остатки Озон равны остаткам в системе
+             * не обновляем если карточка Озон не найдена (-1) и остаток в системе 0
+             * либо если остаток Озон равен остатку в системе
              */
 
             if(($productStockQuantity === $ProductQuantity) || ($productStockQuantity === -1 && empty($ProductQuantity)))
@@ -147,22 +164,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     'token' => $OzonTokenUid,
                 ]);
 
-                continue;
-            }
-
-            /** Лимит: 1 карточка 1 раз в 1 минуты */
-            $Deduplicator = $this->deduplicator
-                ->namespace('ozon-products')
-                ->expiresAfter(DateInterval::createFromDateString('1 minutes'))
-                ->deduplication([
-                    $message,
-                    $OzonTokenUid,
-                    $productStockQuantity,
-                    self::class,
-                ]);
-
-            if($Deduplicator->isExecuted())
-            {
                 continue;
             }
 

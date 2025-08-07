@@ -91,9 +91,12 @@ final class OzonStockInfoRequest extends Ozon
         $cache = $this->getCacheInit('ozon-products');
         $key = md5(self::class.$this->article);
 
+        /**
+         * Получаем информацию о карточке товара
+         */
         $result = $cache->get($key, function(ItemInterface $item): array|false {
 
-            $item->expiresAfter(DateInterval::createFromDateString('1 minutes'));
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
             $filter["offer_id"] = [$this->article];
             $filter["visibility"] = "ALL";
@@ -147,6 +150,9 @@ final class OzonStockInfoRequest extends Ozon
         });
 
 
+        /**
+         * Карточка на маркетплейсе не найдено
+         */
         if(empty($result) || false === isset($result['sku']))
         {
             return false;
