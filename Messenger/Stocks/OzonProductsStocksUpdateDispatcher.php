@@ -150,25 +150,19 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 continue;
             }
 
-            /** Лимит: 1 карточка 1 раз в 2 минуты */
+            /** Лимит: 1 карточка 1 раз в 1 минуты */
             $Deduplicator = $this->deduplicator
                 ->namespace('ozon-products')
-                ->expiresAfter(DateInterval::createFromDateString('2 minutes'))
+                ->expiresAfter(DateInterval::createFromDateString('1 minutes'))
                 ->deduplication([
                     $message,
                     $OzonTokenUid,
+                    $productStockQuantity,
                     self::class,
                 ]);
 
             if($Deduplicator->isExecuted())
             {
-                /** Пробуем обновится через 2 минуты */
-                $this->messageDispatch->dispatch(
-                    message: $message,
-                    stamps: [new MessageDelay('1 minutes')], // задержка 1 минуту для обновления карточки
-                    transport: 'ozon-products-low',
-                );
-
                 continue;
             }
 
@@ -182,7 +176,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
             if(false === $result)
             {
-                $this->logger->info('{article}: Продукт с артикулом не найден', [
+                $this->logger->info('{article}: Продукт с артикулом на маркетплейcе не найден', [
                     'article' => $ProductsOzonCardResult->getArticle(),
                     'token' => $OzonTokenUid,
                 ]);

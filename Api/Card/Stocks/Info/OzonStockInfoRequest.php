@@ -93,7 +93,7 @@ final class OzonStockInfoRequest extends Ozon
 
         $result = $cache->get($key, function(ItemInterface $item): array|false {
 
-            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+            $item->expiresAfter(DateInterval::createFromDateString('1 minutes'));
 
             $filter["offer_id"] = [$this->article];
             $filter["visibility"] = "ALL";
