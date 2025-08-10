@@ -49,7 +49,7 @@ final class GetOzonCardStatusUpdateRequest extends Ozon
 
         if($response->getStatusCode() !== 200)
         {
-            if($content['code'] === 'task not found id')
+            if(str_starts_with($content['message'], 'task not found'))
             {
                 return false;
             }
