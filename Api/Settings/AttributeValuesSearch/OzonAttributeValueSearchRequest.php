@@ -40,7 +40,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class OzonAttributeValueSearchRequest extends Ozon
 {
     private int $attribute;
-    private string $value;
+    private int|string $value;
 
     private int|false $category;
     private int|false $type;
@@ -79,7 +79,7 @@ final class OzonAttributeValueSearchRequest extends Ozon
         return $this;
     }
 
-    public function value(string $value): self
+    public function value(string|int $value): self
     {
         $this->value = $value;
 

@@ -122,6 +122,19 @@ final class TypeOzonProductsAttribute implements OzonProductsAttributeInterface
         return true;
     }
 
+    public static function getValue(?string $value): ?string
+    {
+        return match ($value)
+        {
+            'jeep' => 'Внедорожники',
+            'bus' => 'Коммерческий транспорт',
+            'truck' => 'Грузовые автомобили и автобусы',
+            'passenger' => 'Легковые автомобили',
+            default => null,
+        };
+    }
+
+
     public static function getConvertValue(?string $value): ?string
     {
         return match ($value)

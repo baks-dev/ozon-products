@@ -38,7 +38,7 @@ final class ItemDataBuilderOzonProductsAttribute
 
     public function __construct(
         private readonly int $id,
-        private readonly string|null $value,
+        private readonly int|string|null $value,
 
         private readonly ProductsOzonCardResult|false $data = false,
         private readonly OzonAttributeValueSearchRequest|false $attributeValueSearchRequest = false,

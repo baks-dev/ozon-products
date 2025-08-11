@@ -65,14 +65,11 @@ final class EquipmentOzonProductsAttribute implements OzonProductsAttributeInter
             static fn($n) => self::ID === (int) $n->id,
         );
 
-        if(empty($attribute))
-        {
-            return false;
-        }
+        $value = empty($attribute) ? $this->default() : current($attribute)->value;
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
-            self::ID,
-            current($attribute)->value
+            id: self::ID,
+            value: $value,
         );
 
         return $requestData->getData();
@@ -80,7 +77,7 @@ final class EquipmentOzonProductsAttribute implements OzonProductsAttributeInter
 
     public function default(): string|false
     {
-        return false;
+        return '1 шт.';
     }
 
     public function isSetting(): bool

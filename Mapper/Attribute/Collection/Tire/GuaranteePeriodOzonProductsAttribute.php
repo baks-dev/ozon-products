@@ -57,8 +57,8 @@ final class GuaranteePeriodOzonProductsAttribute implements OzonProductsAttribut
     public function getData(ProductsOzonCardResult $data): array|false
     {
         $requestData = new ItemDataBuilderOzonProductsAttribute(
-            self::ID,
-            '5 лет'
+            id: self::ID,
+            value: $this->default(),
         );
 
         return $requestData->getData();
@@ -66,7 +66,7 @@ final class GuaranteePeriodOzonProductsAttribute implements OzonProductsAttribut
 
     public function default(): string|false
     {
-        return false;
+        return '5 лет';
     }
 
     public function isSetting(): bool

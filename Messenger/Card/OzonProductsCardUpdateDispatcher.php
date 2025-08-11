@@ -189,7 +189,10 @@ final readonly class OzonProductsCardUpdateDispatcher
                 return;
             }
 
-            $this->logger->info(sprintf('Обновили карточку товара %s', $ProductsOzonCardResult->getArticle()));
+            $this->logger->info(
+                sprintf('Обновили карточку товара %s', $ProductsOzonCardResult->getArticle()),
+                [(string) $OzonTokenUid],
+            );
 
 
             /**

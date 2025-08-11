@@ -66,14 +66,11 @@ final class PartNumberOzonProductsAttribute implements OzonProductsAttributeInte
             static fn($n) => self::ID === (int) $n->id,
         );
 
-        if(empty($attribute))
-        {
-            return false;
-        }
+        $value = empty($attribute) ? str_replace('-', '', $data->getArticle()) : current($attribute)->value;
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            current($attribute)->value
+            $value,
         );
 
         return $requestData->getData();

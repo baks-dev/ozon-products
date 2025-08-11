@@ -115,13 +115,40 @@ class OzonProductsMapperAttributeTest extends KernelTestCase
                     continue;
                 }
 
+
                 //                echo PHP_EOL;
                 //                echo 'Категория '.$caseCategory->getId().PHP_EOL;
                 //                echo '-- Тип '.$caseType->getId().PHP_EOL;
 
+
                 /** Получаем все аттрибуты категории и типа  */
                 $attributes = iterator_to_array($ozonAttributeRequest->findAll($caseCategory->getId(), $caseType->getId()));
 
+
+                if($caseCategory->getId() !== 17027949)
+                {
+                    continue;
+                }
+
+
+                foreach($attributes as $attribute)
+                {
+                    /** Проверяем по всем параметрам */
+
+                    $isset = array_filter($OzonProductAttributeArray,
+                        static function(OzonProductsAttributeInterface $param) use ($attribute) {
+                            return $param->equals($attribute->getId());
+                        });
+
+                    if(empty($isset))
+                    {
+                        dump($attribute);
+                    }
+
+
+                    self::assertNotEmpty($isset, sprintf('Отсутствует элемент ID = %s ( %s ) для категории %s', $attribute->getId(), $attribute->getName(), $caseCategory->getId()));
+
+                }
 
                 /**
                  * @var OzonProductsAttributeInterface $caseAttribute
