@@ -106,6 +106,7 @@ class OzonMapperTest extends KernelTestCase
 
         /** @var ProductsOzonCardResult $ProductsOzonCardResult */
         $ProductsOzonCardResult = $ProductsOzonCardRepository
+            ->forProfile(new UserProfileUid())
             ->forProduct($productUid)
             ->forOfferConst($offerConst)
             ->forVariationConst($variationConst)

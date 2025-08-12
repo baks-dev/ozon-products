@@ -80,8 +80,12 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
             $hashtags = null;
 
             $hashtags[] = '#шины';
+            $hashtags[] = '#шина';
+            $hashtags[] = '#автошина';
             $hashtags[] = '#автомобильные_шины';
             $hashtags[] = '#покрышки';
+            $hashtags[] = '#купить_шины';
+            $hashtags[] = '#шины_с_доставкой';
 
             if($data->getProductAttributes())
             {
@@ -101,8 +105,9 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
                             continue;
                         }
 
+                        $hashtags[] = '#'.$value;
                         $hashtags[] = '#'.$value.'_шины';
-                        $hashtags[] = '#'.$value.'_автомобильные_шины';
+                        $hashtags[] = '#шины_'.$value;
                     }
 
                     /** Добавляем назначение */
@@ -113,7 +118,7 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
                         if(!empty($value))
                         {
                             $hashtags[] = '#шины_'.str_replace(' ', '_', $value);
-                            $hashtags[] = '#автомобильные_шины_'.str_replace(' ', '_', $value);
+                            //$hashtags[] = '#автомобильные_шины_'.str_replace(' ', '_', $value);
                         }
                     }
                 }
@@ -122,7 +127,7 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            current($attribute)->value,
+            implode(' ', $hashtags),
         );
 
         return $requestData->getData();

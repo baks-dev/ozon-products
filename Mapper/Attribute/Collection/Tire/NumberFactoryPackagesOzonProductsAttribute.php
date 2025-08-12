@@ -74,15 +74,15 @@ final class NumberFactoryPackagesOzonProductsAttribute implements OzonProductsAt
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            (int) $value,
+            (string) $value,
         );
 
         return $requestData->getData();
     }
 
-    public function default(): int|false
+    public function default(): string|false
     {
-        return 1;
+        return '1';
     }
 
     public function isSetting(): bool
