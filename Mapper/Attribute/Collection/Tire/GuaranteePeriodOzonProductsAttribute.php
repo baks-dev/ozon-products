@@ -66,7 +66,7 @@ final class GuaranteePeriodOzonProductsAttribute implements OzonProductsAttribut
 
     public function default(): string|false
     {
-        return '5 лет';
+        return '1 год на заводской брак.';
     }
 
     public function isSetting(): bool
