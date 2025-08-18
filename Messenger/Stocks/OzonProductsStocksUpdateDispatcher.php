@@ -161,7 +161,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
             {
                 $this->logger->info('{article}: Наличие соответствует ({old} == {new})', [
                     'article' => $ProductsOzonCardResult->getArticle(),
-                    'old' => $productStockQuantity,
+                    'old' => max($productStockQuantity, 0),
                     'new' => $ProductQuantity,
                     'token' => $OzonTokenUid,
                 ]);
@@ -176,10 +176,15 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->total($ProductQuantity)
                 ->update();
 
-
             if(is_null($result))
             {
                 /** Пробуем обновится позже */
+
+                $this->logger->warning('{article}: пробуем обновить остаток позже', [
+                    'article' => $ProductsOzonCardResult->getArticle(),
+                    'token' => $OzonTokenUid,
+                ]);
+
                 $this->messageDispatch->dispatch(
                     message: $message,
                     stamps: [new MessageDelay('1 minutes')],
@@ -216,7 +221,14 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
             if(false === $OzonStockUpdateDTO->updated())
             {
-                /** Пробуем обновится через 2 минуты */
+                /** Пробуем обновится позже */
+
+                $this->logger->warning('{article}: пробуем обновить остаток позже', [
+                    'article' => $ProductsOzonCardResult->getArticle(),
+                    'token' => $OzonTokenUid,
+                ]);
+
+                /** Пробуем обновится позже */
                 $this->messageDispatch->dispatch(
                     message: $message,
                     stamps: [new MessageDelay('1 minutes')], // задержка 2 минуты для обновления карточки
