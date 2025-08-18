@@ -96,6 +96,17 @@ final class OzonStockUpdateRequest extends Ozon
 
         if($response->getStatusCode() !== 200)
         {
+            if(str_contains($content['message'], 'limit'))
+            {
+                $item = null;
+                $item['product_id'] = 0;
+                $item['offer_id'] = $stocks["offer_id"];
+                $item['updated'] = false;
+                $item['errors'] = [];
+
+                yield new OzonStockUpdateDTO($item);
+            }
+
             $this->logger->critical(
                 sprintf('ozon-products: Ошибка обновления остатков'),
                 [self::class.':'.__LINE__, $content, $stocks],
