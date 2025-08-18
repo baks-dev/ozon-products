@@ -240,8 +240,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
             $this->logger->info('Обновили наличие {article}: {old} => {new}', [
                 'article' => $ProductsOzonCardResult->getArticle(),
-                'old' => $productStockQuantity,
-                'new' => $ProductsOzonCardResult->getProductQuantity(),
+                'old' => max($productStockQuantity, 0),
+                'new' => $ProductQuantity,
                 'token' => $OzonTokenUid,
             ]);
 
