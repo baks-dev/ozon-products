@@ -123,6 +123,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
             $ProductQuantity -= $unprocessed;
         }
 
+        $ProductQuantity = max($ProductQuantity, 0);
+
         foreach($tokensByProfile as $OzonTokenUid)
         {
             /** Лимит: 1 карточка 1 раз в 1 минуты */
