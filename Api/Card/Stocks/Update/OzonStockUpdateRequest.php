@@ -53,7 +53,7 @@ final class OzonStockUpdateRequest extends Ozon
      *
      * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ProductsStocksV2
      */
-    public function update(): Generator|bool
+    public function update(): Generator|bool|null
     {
         if($this->isExecuteEnvironment() === false)
         {
@@ -98,13 +98,7 @@ final class OzonStockUpdateRequest extends Ozon
         {
             if(str_contains($content['message'], 'limit'))
             {
-                $item = null;
-                $item['product_id'] = 0;
-                $item['offer_id'] = $stocks["offer_id"];
-                $item['updated'] = false;
-                $item['errors'] = [];
-
-                yield new OzonStockUpdateDTO($item);
+                return null;
             }
 
             $this->logger->critical(

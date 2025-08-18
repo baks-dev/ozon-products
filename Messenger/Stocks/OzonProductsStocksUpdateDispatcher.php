@@ -177,6 +177,19 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->update();
 
 
+            if(is_null($result))
+            {
+                /** Пробуем обновится позже */
+                $this->messageDispatch->dispatch(
+                    message: $message,
+                    stamps: [new MessageDelay('1 minutes')],
+                    transport: 'ozon-products-low',
+                );
+
+                continue;
+            }
+
+
             if(false === $result)
             {
                 $this->logger->info('{article}: Продукт с артикулом на маркетплейcе не найден', [
