@@ -1,0 +1,29 @@
+{% trans_default_domain("ozon-products.barcode") %}
+{# {% trans_default_domain("admin.ozon.products.settings") %} #}
+
+{% set ROLE = 'ROLE_OZON_BARCODE' %}
+
+{# ---- ШАБЛОН ------------------------------------------------------------ #}
+{% extends Template('/admin/base.html.twig') %}
+
+{# ---- CSS ------------------------------------------------------------ #}
+{% block title %}
+    {{ 'admin.page.index'|trans }}
+{% endblock %}
+
+
+{# ---- CSS ------------------------------------------------------------ #}
+{% block stylesheets %}
+    <link href="/assets/plugins/nice-select2/nice-select2.min.css" rel="stylesheet">
+{% endblock %}
+
+
+{# ---- КОНТЕНТ-БЛОК ------------------------------------------------------------ #}
+{% block content %}
+
+    {{ include(_self|replace({ "template.html.twig": baks_settings.device~"/content.html.twig" })) }}
+{% endblock %}
+
+{% block javascript %}
+<script nonce='{{ csp_nonce() }}' async data-src='/assets/plugins/nice-select2/nice-select2.min.js?v={{ version }}' class='lazy'></script>
+{% endblock %}

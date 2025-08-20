@@ -22,15 +22,29 @@
  *
  */
 
-namespace BaksDev\Ozon\Products\Repository\Settings\AllProductsSettings;
+namespace BaksDev\Ozon\Products\UseCase\Barcode\Delete\Modify;
 
-use BaksDev\Core\Form\Search\SearchDTO;
-use BaksDev\Core\Services\Paginator\PaginatorInterface;
+use BaksDev\Core\Type\Modify\Modify\ModifyActionDelete;
+use BaksDev\Core\Type\Modify\ModifyAction;
+use BaksDev\Ozon\Products\Entity\Barcode\Event\Modify\OzonBarcodeModifyInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
-interface AllProductsSettingsInterface
+/** @see OzonBarcodeModify */
+final class ModifyDTO implements OzonBarcodeModifyInterface
 {
-    public function search(SearchDTO $search): self;
+    /**
+     * Модификатор
+     */
+    #[Assert\NotBlank]
+    private readonly ModifyAction $action;
 
-    /** Метод возвращает пагинатор */
-    public function findPaginator(): PaginatorInterface;
+    public function __construct()
+    {
+        $this->action = new ModifyAction(ModifyActionDelete::class);
+    }
+
+    public function getAction(): ModifyAction
+    {
+        return $this->action;
+    }
 }

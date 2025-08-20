@@ -1,0 +1,43 @@
+{% trans_default_domain("ozon-products.barcode") %}
+
+<div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">
+    {{ form_start(form) }}
+    <div class="modal-content p-3 border-bottom border-5 border-primary">
+        <div class="modal-header">
+
+
+            <h5 class="modal-title">
+                {# Заголовок модального окна #}
+                {{ 'admin.page.new'|trans }}
+            </h5>
+
+            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <span class="svg-icon svg-icon-2x"></span>
+            </div>
+        </div>
+
+        <div class="modal-body ">
+            {{ include('@ozon-products/admin/barcode/newedit/_form/pc/form.html.twig') }}
+        </div>
+
+        <div class="modal-footer" id="collectionProperty">
+            {% for property in form.property %}
+                <div class="item-collection-property w-100">
+                    {{ include('@ozon-products/admin/barcode/newedit/_form/pc/prototype.property.html.twig') }}
+                </div>
+            {% endfor %}
+
+            {% for custom in form.custom %}
+                <div class="item-collection-custom w-100">
+                    {{ include('@ozon-products/admin/barcode/newedit/_form/pc/prototype.custom.html.twig') }}
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="modal-footer">
+            {{ include(_self|replace({ "content.html.twig": "_btn.html.twig"})) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>

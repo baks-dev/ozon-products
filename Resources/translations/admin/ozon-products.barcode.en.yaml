@@ -1,0 +1,24 @@
+admin:
+  page:
+    index: 'Setting up Ozon barcodes'
+    new: 'Add Ozon barcode setting'
+    edit: 'Edit Ozon barcode settings'
+    delete: 'Delete Ozon barcode setting'
+
+  breadcrumb:
+    index: 'Setting up Ozon product card barcodes'
+    new: 'Add barcode settings for Ozon product cards'
+    edit: 'Edit the barcode settings for the Ozon product card'
+    delete: 'Delete the Ozon product card barcode setting'
+
+  success:
+    new: 'Ozon barcode settings added'
+    edit: 'Ozon barcode settings have been successfully updated'
+    delete: 'Ozon barcode settings have been successfully deleted'
+    restore: 'Ozon barcode settings have been successfully restored'
+
+  danger:
+    new: '%s: Error when adding barcode settings for Ozon product cards'
+    edit: '%s: Error when updating the Ozon product card barcode settings'
+    delete: '%s: Error when updating the Ozon product card barcode settings'
+    restore: '%s: Error when restoring the Ozon product card barcode settings'

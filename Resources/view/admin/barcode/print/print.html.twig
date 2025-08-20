@@ -1,0 +1,52 @@
+{# ПЕЧАТЬ #}
+<div class="{{ app.request.headers.get('X-Requested-With') is not null ? 'd-none' }} d-print-block p-0 w-100">
+
+    {% set break = false %}
+
+    {% for i in 1..total %}
+
+        {% for i in 1..settings.counter %}
+
+            {% if break %}
+                {# разрыв старницы #}
+                <div style="page-break-after: always !important;"></div>
+            {% endif %}
+
+            <div style="height: 140px; max-height: 140px; max-width: 200px; margin-left: 20px; margin-top: 2px;">
+
+                <div style="text-align: center;">
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            style="width: 180px;"
+                            viewBox="5 0 125 25"
+                    >
+                        {{ barcode|raw }}
+                    </svg>
+                </div>
+
+                {# Идентификатор штрихкода #}
+
+                {% if product.product_barcode %}
+                    <div style="width: 100%; text-align: center; margin-bottom: 5px;">
+                        {{ product.product_barcode }}
+                    </div>
+                {% endif %}
+
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: flex-end; font-size: 8px;">
+                    {{ include(_self|replace({ "print.html.twig" : "sticker.html.twig" }), {
+                        card : product,
+                        settings: settings
+                    }) }}
+                </div>
+
+            </div>
+
+            {% set break = true %}
+
+        {% endfor %}
+
+
+    {% endfor %}
+
+</div>

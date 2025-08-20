@@ -22,15 +22,19 @@
  *
  */
 
-namespace BaksDev\Ozon\Products\Repository\Settings\AllProductsSettings;
+namespace BaksDev\Ozon\Products\Type\Barcode\Event;
 
-use BaksDev\Core\Form\Search\SearchDTO;
-use BaksDev\Core\Services\Paginator\PaginatorInterface;
+use BaksDev\Core\Type\UidType\UidType;
 
-interface AllProductsSettingsInterface
+final class OzonBarcodeEventUidType extends UidType
 {
-    public function search(SearchDTO $search): self;
+    public function getClassType(): string
+    {
+        return OzonBarcodeEventUid::class;
+    }
 
-    /** Метод возвращает пагинатор */
-    public function findPaginator(): PaginatorInterface;
+    public function getName(): string
+    {
+        return OzonBarcodeEventUid::TYPE;
+    }
 }

@@ -1,0 +1,43 @@
+{% trans_default_domain("ozon-products.barcode") %}
+
+<div class="d-flex gap-3">
+    <div class="w-100">
+        {{ form_row(form.main, { label: 'Категория', placeholder: 'Выберите Категорию из списка...', attr: { 'data-select' : 'select2' } }) }}
+    </div>
+
+    <div class="w-50">
+        {{ form_row(form.counter.value, { label : 'Количество стикеров' }) }}
+    </div>
+
+</div>
+
+<div class="d-flex gap-3 align-items-center mb-3">
+    <strong class="text-nowrap">
+        Настройки отображений в стикере
+    </strong>
+    <div class="w-100">
+        <hr class="m-0">
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center gap-3">
+
+    <div class="w-100">
+        {{ form_row(form.name.value, { label : 'Название' }) }}
+    </div>
+
+    <div class="w-100">
+        {{ form_row(form.offer.value, { label : 'Оффер' }) }}
+    </div>
+
+    <div class="w-100">
+        {{ form_row(form.variation.value, { label : 'Вариант' }) }}
+    </div>
+
+    <div class="w-100">
+        {{ form_row(form.modification.value, { label : 'Модификация' }) }}
+    </div>
+
+</div>
+
+
