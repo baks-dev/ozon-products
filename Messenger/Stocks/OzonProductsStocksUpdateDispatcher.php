@@ -129,8 +129,11 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->namespace('ozon-products')
                 ->expiresAfter('5 seconds')
                 ->deduplication([
-                    $message,
-                    $OzonTokenUid,
+                    (string) $message->getProduct(),
+                    (string) $message->getOfferConst(),
+                    (string) $message->getVariationConst(),
+                    (string) $message->getModificationConst(),
+                    (string) $OzonTokenUid,
                     $ProductQuantity,
                     self::class,
                 ]);
@@ -139,6 +142,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
             {
                 continue;
             }
+
+            $Deduplicator->save();
 
             /** Обновляем остатки товара если наличие изменилось */
             $result = $this->ozonStockUpdateRequest
@@ -153,7 +158,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
                 $this->logger->warning('{article}: пробуем обновить остаток позже', [
                     'article' => $ProductsOzonCardResult->getArticle(),
-                    'token' => $OzonTokenUid,
+                    'token' => (string) $OzonTokenUid,
+                    self::class.':'.__LINE__,
                 ]);
 
                 $this->messageDispatch->dispatch(
@@ -170,7 +176,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
             {
                 $this->logger->info('{article}: Продукт с артикулом на маркетплейcе не найден', [
                     'article' => $ProductsOzonCardResult->getArticle(),
-                    'token' => $OzonTokenUid,
+                    'token' => (string) $OzonTokenUid,
+                    self::class.':'.__LINE__,
                 ]);
 
                 continue;
@@ -181,7 +188,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
             {
                 $this->logger->info('{article}: Остановили продажу товара', [
                     'article' => $ProductsOzonCardResult->getArticle(),
-                    'token' => $OzonTokenUid,
+                    'token' => (string) $OzonTokenUid,
+                    self::class.':'.__LINE__,
                 ]);
 
                 continue;
@@ -196,7 +204,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
                 $this->logger->warning('{article}: пробуем обновить остаток позже', [
                     'article' => $ProductsOzonCardResult->getArticle(),
-                    'token' => $OzonTokenUid,
+                    'token' => (string) $OzonTokenUid,
+                    self::class.':'.__LINE__,
                 ]);
 
                 /** Пробуем обновится позже */
@@ -212,10 +221,11 @@ final readonly class OzonProductsStocksUpdateDispatcher
             $this->logger->info('{article}: Обновили наличие => {new}', [
                 'article' => $ProductsOzonCardResult->getArticle(),
                 'new' => $ProductQuantity,
-                'token' => $OzonTokenUid,
+                'token' => (string) $OzonTokenUid,
+                self::class.':'.__LINE__,
             ]);
 
-            $Deduplicator->save();
+
         }
     }
 }
