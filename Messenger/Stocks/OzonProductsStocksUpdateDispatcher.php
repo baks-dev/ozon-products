@@ -38,7 +38,6 @@ use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateRequest;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Repository\OzonTokensByProfile\OzonTokensByProfileInterface;
 use BaksDev\Products\Stocks\BaksDevProductsStocksBundle;
-use DateInterval;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -54,7 +53,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
         private OzonStockUpdateRequest $ozonStockUpdateRequest,
         private OzonStockInfoRequest $ozonProductStocksInfoRequest,
         private ProductsOzonCardInterface $ozonProductsCard,
-        private DeduplicatorInterface $deduplicator,
         private MessageDispatchInterface $messageDispatch,
         private OzonTokensByProfileInterface $OzonTokensByProfile,
         private ProductTotalInOrdersInterface $ProductTotalInOrders,
@@ -127,21 +125,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
         foreach($tokensByProfile as $OzonTokenUid)
         {
-            /** Лимит: 1 карточка 1 раз в 1 минуты */
-            $Deduplicator = $this->deduplicator
-                ->namespace('ozon-products')
-                ->expiresAfter(DateInterval::createFromDateString('1 minutes'))
-                ->deduplication([
-                    $message,
-                    $OzonTokenUid,
-                    $ProductQuantity,
-                    self::class,
-                ]);
-
-            if($Deduplicator->isExecuted())
-            {
-                continue;
-            }
 
             /** Получаем информацию о количестве товаров */
             $ProductStocksInfo = $this->ozonProductStocksInfoRequest
@@ -244,8 +227,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 'new' => $ProductQuantity,
                 'token' => $OzonTokenUid,
             ]);
-
-            $Deduplicator->save();
         }
     }
 }
