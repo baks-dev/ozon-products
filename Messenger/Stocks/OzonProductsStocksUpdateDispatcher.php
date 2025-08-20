@@ -31,7 +31,6 @@ use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Orders\Order\Repository\ProductTotalInOrders\ProductTotalInOrdersInterface;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonProductStockDTO;
-use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoRequest;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateRequest;
@@ -53,6 +52,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
         private OzonStockUpdateRequest $ozonStockUpdateRequest,
         private OzonStockInfoRequest $ozonProductStocksInfoRequest,
         private ProductsOzonCardInterface $ozonProductsCard,
+        private DeduplicatorInterface $deduplicator,
         private MessageDispatchInterface $messageDispatch,
         private OzonTokensByProfileInterface $OzonTokensByProfile,
         private ProductTotalInOrdersInterface $ProductTotalInOrders,
@@ -125,30 +125,18 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
         foreach($tokensByProfile as $OzonTokenUid)
         {
-
-            /** Получаем информацию о количестве товаров */
-            $ProductStocksInfo = $this->ozonProductStocksInfoRequest
-                ->forTokenIdentifier($OzonTokenUid)
-                ->article($ProductsOzonCardResult->getArticle())
-                ->find();
-
-            $productStockQuantity = ($ProductStocksInfo instanceof OzonStockInfoDTO) ? $ProductStocksInfo->getTotal() : -1;
-
-            /**
-             * Сверяем, что остатки Озон равны остаткам в системе
-             * не обновляем если карточка Озон не найдена (-1) и остаток в системе 0
-             * либо если остаток Озон равен остатку в системе
-             */
-
-            if(($productStockQuantity === $ProductQuantity) || ($productStockQuantity === -1 && empty($ProductQuantity)))
-            {
-                $this->logger->info('{article}: Наличие соответствует ({old} == {new})', [
-                    'article' => $ProductsOzonCardResult->getArticle(),
-                    'old' => max($productStockQuantity, 0),
-                    'new' => $ProductQuantity,
-                    'token' => $OzonTokenUid,
+            $Deduplicator = $this->deduplicator
+                ->namespace('ozon-products')
+                ->expiresAfter('5 seconds')
+                ->deduplication([
+                    $message,
+                    $OzonTokenUid,
+                    $ProductQuantity,
+                    self::class,
                 ]);
 
+            if($Deduplicator->isExecuted())
+            {
                 continue;
             }
 
@@ -221,12 +209,13 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 continue;
             }
 
-            $this->logger->info('Обновили наличие {article}: {old} => {new}', [
+            $this->logger->info('{article}: Обновили наличие => {new}', [
                 'article' => $ProductsOzonCardResult->getArticle(),
-                'old' => max($productStockQuantity, 0),
                 'new' => $ProductQuantity,
                 'token' => $OzonTokenUid,
             ]);
+
+            $Deduplicator->save();
         }
     }
 }
