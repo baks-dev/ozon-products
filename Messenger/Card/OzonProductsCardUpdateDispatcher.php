@@ -197,7 +197,7 @@ final readonly class OzonProductsCardUpdateDispatcher
 
             $this->messageDispatch->dispatch(
                 message: $ResultOzonProductsCardUpdateMessage,
-                transport: 'ozon-products-low',
+                transport: $message->getProfile().'-low',
             );
         }
     }
