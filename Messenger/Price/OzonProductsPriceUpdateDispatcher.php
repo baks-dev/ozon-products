@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Messenger\Price;
 
+use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductCalculatorRequest;
@@ -46,7 +47,8 @@ final readonly class OzonProductsPriceUpdateDispatcher
         private ProductsOzonCardInterface $ozonProductsCard,
         private MessageDispatchInterface $messageDispatch,
         private GetOzonProductCalculatorRequest $GetOzonProductCalculatorRequest,
-        private OzonTokensByProfileInterface $OzonTokensByProfile
+        private OzonTokensByProfileInterface $OzonTokensByProfile,
+        private DeduplicatorInterface $deduplicator,
     ) {}
 
     /**
@@ -98,6 +100,28 @@ final readonly class OzonProductsPriceUpdateDispatcher
 
         foreach($tokensByProfile as $OzonTokenUid)
         {
+
+            /** Лимит: 1 карточка 1 раз в 2 минуты */
+            $Deduplicator = $this->deduplicator
+                ->namespace('ozon-products')
+                ->expiresAfter('5 seconds')
+                ->deduplication([
+                    (string) $message->getProduct(),
+                    (string) $message->getOfferConst(),
+                    (string) $message->getVariationConst(),
+                    (string) $message->getModificationConst(),
+                    (string) $OzonTokenUid,
+                    self::class,
+                ]);
+
+            if($Deduplicator->isExecuted())
+            {
+                continue;
+            }
+
+            $Deduplicator->save();
+
+
             /**
              * Получаем стоимость услуг и присваиваем полную стоимость
              * Переменная $Money = стоимость товара + стоимость услуг

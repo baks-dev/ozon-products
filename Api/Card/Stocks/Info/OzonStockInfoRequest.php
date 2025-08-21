@@ -92,7 +92,7 @@ final class OzonStockInfoRequest extends Ozon
         $key = md5(self::class.$this->article);
 
         /**
-         * Получаем информацию о карточке товара
+         * Получаем информацию о карточке товара для получения SCU
          */
         $result = $cache->get($key, function(ItemInterface $item): array|false {
 

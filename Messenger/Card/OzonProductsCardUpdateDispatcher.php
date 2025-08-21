@@ -35,7 +35,6 @@ use BaksDev\Ozon\Products\Messenger\Card\Result\ResultOzonProductsCardMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use BaksDev\Ozon\Repository\OzonTokensByProfile\OzonTokensByProfileInterface;
-use DateInterval;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -125,30 +124,22 @@ final readonly class OzonProductsCardUpdateDispatcher
             /** Лимит: 1 карточка 1 раз в 2 минуты */
             $Deduplicator = $this->deduplicator
                 ->namespace('ozon-products')
-                ->expiresAfter(DateInterval::createFromDateString('2 minutes'))
+                ->expiresAfter('5 seconds')
                 ->deduplication([
+                    (string) $message->getProduct(),
+                    (string) $message->getOfferConst(),
+                    (string) $message->getVariationConst(),
+                    (string) $message->getModificationConst(),
                     (string) $OzonTokenUid,
-                    $message,
                     self::class,
                 ]);
 
-
             if($Deduplicator->isExecuted())
             {
-                $this->logger->critical(
-                    sprintf('ozon-products: Отложили обновление карточки %s на 2 минуты', $ProductsOzonCardResult->getArticle()),
-                    [self::class.''.__LINE__],
-                );
-
-                /** Добавляем отложенное обновление */
-                $this->messageDispatch->dispatch(
-                    message: $message,
-                    stamps: [new MessageDelay('2 minutes')],
-                    transport: 'ozon-products-low',
-                );
-
-                return;
+                continue;
             }
+
+            $Deduplicator->save();
 
             /**
              * Получаем стоимость услуг и присваиваем полную стоимость
@@ -208,8 +199,6 @@ final readonly class OzonProductsCardUpdateDispatcher
                 message: $ResultOzonProductsCardUpdateMessage,
                 transport: 'ozon-products-low',
             );
-
-            $Deduplicator->save();
         }
     }
 }
