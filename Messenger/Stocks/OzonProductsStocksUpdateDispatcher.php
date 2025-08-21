@@ -134,7 +134,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     (string) $message->getVariationConst(),
                     (string) $message->getModificationConst(),
                     (string) $OzonTokenUid,
-                    $ProductQuantity,
                     self::class,
                 ]);
 
