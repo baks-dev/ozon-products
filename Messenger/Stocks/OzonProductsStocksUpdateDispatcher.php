@@ -129,10 +129,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->namespace('ozon-products')
                 ->expiresAfter('1 minutes')
                 ->deduplication([
-                    (string) $message->getProduct(),
-                    (string) $message->getOfferConst(),
-                    (string) $message->getVariationConst(),
-                    (string) $message->getModificationConst(),
+                    $ProductsOzonCardResult->getArticle(),
                     (string) $OzonTokenUid,
                     self::class,
                 ]);
