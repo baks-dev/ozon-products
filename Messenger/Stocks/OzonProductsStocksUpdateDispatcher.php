@@ -127,14 +127,10 @@ final readonly class OzonProductsStocksUpdateDispatcher
         {
             $Deduplicator = $this->deduplicator
                 ->namespace('ozon-products')
-                ->expiresAfter('5 seconds')
+                ->expiresAfter('1 minutes')
                 ->deduplication([
-                    (string) $message->getProduct(),
-                    (string) $message->getOfferConst(),
-                    (string) $message->getVariationConst(),
-                    (string) $message->getModificationConst(),
+                    $ProductsOzonCardResult->getArticle(),
                     (string) $OzonTokenUid,
-                    $ProductQuantity,
                     self::class,
                 ]);
 
@@ -165,7 +161,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 $this->messageDispatch->dispatch(
                     message: $message,
                     stamps: [new MessageDelay('1 minutes')],
-                    transport: 'ozon-products-low',
+                    transport: $message->getProfile().'-low',
                 );
 
                 continue;
@@ -211,8 +207,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 /** Пробуем обновится позже */
                 $this->messageDispatch->dispatch(
                     message: $message,
-                    stamps: [new MessageDelay('1 minutes')], // задержка 2 минуты для обновления карточки
-                    transport: 'ozon-products-low',
+                    stamps: [new MessageDelay('1 minutes')],
+                    transport: $message->getProfile().'-low',
                 );
 
                 continue;
@@ -225,6 +221,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 self::class.':'.__LINE__,
             ]);
 
+            $Deduplicator->delete();
 
         }
     }

@@ -100,7 +100,6 @@ final readonly class OzonProductsPriceUpdateDispatcher
 
         foreach($tokensByProfile as $OzonTokenUid)
         {
-
             /** Лимит: 1 карточка 1 раз в 2 минуты */
             $Deduplicator = $this->deduplicator
                 ->namespace('ozon-products')
@@ -165,7 +164,7 @@ final readonly class OzonProductsPriceUpdateDispatcher
                 $this->messageDispatch->dispatch(
                     message: $message,
                     stamps: [new MessageDelay('30 minute')],
-                    transport: 'ozon-products-low',
+                    transport: $message->getProfile().'-low',
                 );
 
                 continue;
@@ -175,6 +174,8 @@ final readonly class OzonProductsPriceUpdateDispatcher
                 sprintf('Обновили стоимость %s => %s', $ProductsOzonCardResult->getArticle(), $Money->getRoundValue()),
                 ['token' => (string) $OzonTokenUid],
             );
+
+            $Deduplicator->delete();
 
         }
     }
