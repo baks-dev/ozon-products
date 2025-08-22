@@ -48,15 +48,15 @@ class ProductsOzonCardRepositoryTest extends KernelTestCase
 {
     public function testEnv(): void
     {
-        if(!isset($_SERVER['TEST_OZON_PRODUCT']))
+        if(!isset($_SERVER['TEST_PRODUCT']))
         {
             echo PHP_EOL.'В .env.test не определены параметры тестового продукта Озон : '.self::class.':'.__LINE__.PHP_EOL;
 
             /**
-             * TEST_OZON_PRODUCT=018954cb-0a6e-744a-97f0-128e7f05d76d
-             * TEST_OZON_OFFER_CONST=018db273-839d-7f69-8b4b-228aac5934f1
-             * TEST_OZON_VARIATION_CONST=018db273-839c-72dd-bb36-de5c52445d28
-             * TEST_OZON_MODIFICATION_CONST=018db273-839c-72dd-bb36-de5c523881be
+             * TEST_PRODUCT=018954cb-0a6e-744a-97f0-128e7f05d76d
+             * TEST_OFFER_CONST=018db273-839d-7f69-8b4b-228aac5934f1
+             * TEST_VARIATION_CONST=018db273-839c-72dd-bb36-de5c52445d28
+             * TEST_MODIFICATION_CONST=018db273-839c-72dd-bb36-de5c523881be
              */
         }
 
@@ -96,15 +96,15 @@ class ProductsOzonCardRepositoryTest extends KernelTestCase
         /** @var ProductsOzonCardInterface $ProductsOzonCard */
         $ProductsOzonCardRepository = self::getContainer()->get(ProductsOzonCardInterface::class);
 
-        if(!isset($_SERVER['TEST_OZON_PRODUCT']))
+        if(!isset($_SERVER['TEST_PRODUCT']))
         {
             echo PHP_EOL.'В .env.test не определены параметры тестового продукта Озон : '.self::class.':'.__LINE__.PHP_EOL;
 
             /**
-             * TEST_OZON_PRODUCT=018954cb-0a6e-744a-97f0-128e7f05d76d
-             * TEST_OZON_OFFER_CONST=018db273-839d-7f69-8b4b-228aac5934f1
-             * TEST_OZON_VARIATION_CONST=018db273-839c-72dd-bb36-de5c52445d28
-             * TEST_OZON_MODIFICATION_CONST=018db273-839c-72dd-bb36-de5c523881be
+             * TEST_PRODUCT=018954cb-0a6e-744a-97f0-128e7f05d76d
+             * TEST_OFFER_CONST=018db273-839d-7f69-8b4b-228aac5934f1
+             * TEST_VARIATION_CONST=018db273-839c-72dd-bb36-de5c52445d28
+             * TEST_MODIFICATION_CONST=018db273-839c-72dd-bb36-de5c523881be
              */
 
             self::assertFalse(false);
@@ -112,10 +112,10 @@ class ProductsOzonCardRepositoryTest extends KernelTestCase
         }
 
         // Предполагается, что эти UUID соответствуют данным, загруженным вашими тестовыми фикстурами.
-        $productUid = new ProductUid($_SERVER['TEST_OZON_PRODUCT']);
-        $offerConst = new ProductOfferConst($_SERVER['TEST_OZON_OFFER_CONST']);
-        $variationConst = new ProductVariationConst($_SERVER['TEST_OZON_VARIATION_CONST']);
-        $modificationConst = new ProductModificationConst($_SERVER['TEST_OZON_MODIFICATION_CONST']);
+        $productUid = new ProductUid($_SERVER['TEST_PRODUCT']);
+        $offerConst = new ProductOfferConst($_SERVER['TEST_OFFER_CONST']);
+        $variationConst = new ProductVariationConst($_SERVER['TEST_VARIATION_CONST']);
+        $modificationConst = new ProductModificationConst($_SERVER['TEST_MODIFICATION_CONST']);
 
         /** @var ProductsOzonCardResult $ProductsOzonCardResult */
 
