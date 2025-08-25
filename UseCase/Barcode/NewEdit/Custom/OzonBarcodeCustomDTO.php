@@ -22,15 +22,60 @@
  *
  */
 
-namespace BaksDev\Ozon\Products\Repository\Settings\AllProductsSettings;
+namespace BaksDev\Ozon\Products\UseCase\Barcode\NewEdit\Custom;
 
-use BaksDev\Core\Form\Search\SearchDTO;
-use BaksDev\Core\Services\Paginator\PaginatorInterface;
+use BaksDev\Ozon\Products\Entity\Barcode\Event\Custom\OzonBarcodeCustomInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
-interface AllProductsSettingsInterface
+/** @see OzonBarcodeCustom */
+final class OzonBarcodeCustomDTO implements OzonBarcodeCustomInterface
 {
-    public function search(SearchDTO $search): self;
+    /**
+     * Сортировка
+     */
+    #[Assert\NotBlank]
+    #[Assert\Range(min: 1, max: 999)]
+    private int $sort = 100;
 
-    /** Метод возвращает пагинатор */
-    public function findPaginator(): PaginatorInterface;
+    /**
+     * Название поля
+     */
+    #[Assert\NotBlank]
+    private string $name;
+
+    /**
+     * Значение
+     */
+    #[Assert\NotBlank]
+    private string $value;
+
+    public function getSort(): int
+    {
+        return $this->sort;
+    }
+
+    public function setSort(int $sort): void
+    {
+        $this->sort = $sort;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    public function setValue(string $value): void
+    {
+        $this->value = $value;
+    }
 }

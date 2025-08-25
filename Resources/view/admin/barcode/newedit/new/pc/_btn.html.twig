@@ -1,0 +1,70 @@
+{# Блок кнопок #}
+<div class="position-sticky d-flex flex-column w-100 bg-body" style="bottom: 0;">
+
+    <div class="d-flex justify-content-between">
+
+        <div class="d-flex gap-3">
+
+            {{ form_widget(form.addProperty, { label: '
+				<span class="svg-icon svg-icon-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="24" height="24" viewBox="0 0 24 24"
+                             fill="none">
+                            <rect opacity="0.5" x="11" y="18" width="12"
+                                  height="2" rx="1"
+                                  transform="rotate(-90 11 18)"
+                                  fill="currentColor"></rect>
+                            <rect x="6" y="11" width="12" height="2"
+                                  rx="1" fill="currentColor"></rect>
+                        </svg>
+                    </span>'~ 'Добавить свойство'|trans({}, 'messages') ~'   ',
+
+                attr: {
+                    'data-index' : form.property.count,
+                    'data-prototype' : include('@ozon-products/admin/barcode/newedit/_form/pc/prototype.property.html.twig', { property : form.property.vars.prototype })
+                }
+
+            }) }}
+
+
+
+            {{ form_widget(form.addCustom, { label: '
+				<span class="svg-icon svg-icon-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="24" height="24" viewBox="0 0 24 24"
+                             fill="none">
+                            <rect opacity="0.5" x="11" y="18" width="12"
+                                  height="2" rx="1"
+                                  transform="rotate(-90 11 18)"
+                                  fill="currentColor"></rect>
+                            <rect x="6" y="11" width="12" height="2"
+                                  rx="1" fill="currentColor"></rect>
+                        </svg>
+                    </span>'~ 'Пользовательское'|trans({}, 'messages') ~'   ',
+
+                attr: {
+                    'data-index' : form.custom.count,
+                    'data-prototype' : include('@ozon-products/admin/barcode/newedit/_form/pc/prototype.custom.html.twig', { custom : form.custom.vars.prototype })
+                }
+
+            }) }}
+
+
+        </div>
+
+
+        <div class="d-flex gap-3">
+
+            {# Отмена #}
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                {{ 'btn.cancel'|trans({}, 'core.btn') }}
+            </button>
+
+            {{ form_widget(form.ozon_barcode, { label: '
+				<span>'~ 'btn.new'|trans({}, 'core.btn') ~'</span>
+				<span class="spinner-border spinner-border-sm vertical-middle d-none"></span>
+			'}) }}
+
+        </div>
+    </div>
+</div>

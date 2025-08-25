@@ -59,3 +59,30 @@ ROLE_OZON_PRODUCTS_CARD_GET:
 ROLE_OZON_PRODUCTS_CARD_POST:
   name: 'Обновить новые'
   desc: 'Обновить новые карточки на Ozon'
+
+
+# Ozon Barcode
+
+ROLE_OZON_BARCODE:
+  name: 'Штрихкоды Ozon'
+  desc: 'Настройки стикеров для штрихкода Ozon'
+
+ROLE_OZON_BARCODE_INDEX:
+  name: 'Просмотр'
+  desc: ''
+
+ROLE_OZON_BARCODE_PRINT:
+  name: 'Печать'
+  desc: ''
+
+ROLE_OZON_BARCODE_NEW:
+  name: 'Добавить'
+  desc: ''
+
+ROLE_OZON_BARCODE_EDIT:
+  name: 'Редактировать'
+  desc: ''
+
+ROLE_OZON_BARCODE_DELETE:
+  name: 'Удалить'
+  desc: ''

@@ -1,0 +1,53 @@
+{% trans_default_domain("ozon-products.barcode") %}
+
+<tr class="vertical-middle">
+
+    <td class="text-nowrap">
+        {# Пользовательское меню #}
+        {{ include(_self|replace({ "card.html.twig": "_usecase.html.twig" })) }}
+    </td>
+
+    <td class="ps-5">
+        <div class="d-flex align-items-center">
+
+            {# Обложка #}
+            {% set image_path = '/assets/img/blank.svg' %}
+
+            {% if item.ext is defined and item.ext is not null %}
+                {% set img_host =  item.cdn == true  ? CDN_HOST : '' %}
+                {% set img_dir = item.cover %}
+                {% set img_file = (img_host is empty ? '/image.' : '/small.') ~ item.ext %}
+                {% set image_path = img_host ~ img_dir ~ img_file %}
+            {% endif %}
+
+
+            <a href="{{ path('ozon-products:admin.settings.newedit.edit', { id: item.event }) }}" class="pe-3">
+                <div class="rounded-circle bg-contain lazy p-1" style="width: 50px; height: 50px;"
+                     data-bg="{{ image_path }}"
+                >
+                </div>
+            </a>
+
+            <div>
+                {# Название #}
+                <a href="{{ path('ozon-products:admin.barcode.newedit.edit', { id: item.event }) }}"
+                   class="fw-bolder text-decoration-none mb-1 modal-link disabled"
+                   data-bs-toggle="modal"
+                   data-bs-target="#modal"
+                >
+                    {{ item.category_name }}
+                </a>
+
+                {# Описание #}
+                {% if item.category_description %}
+                    <div class="text-muted fw-bolder">
+                        {{ item.category_description }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </td>
+
+</tr>

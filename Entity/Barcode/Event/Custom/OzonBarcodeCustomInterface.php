@@ -22,15 +22,6 @@
  *
  */
 
-namespace BaksDev\Ozon\Products\Repository\Settings\AllProductsSettings;
+namespace BaksDev\Ozon\Products\Entity\Barcode\Event\Custom;
 
-use BaksDev\Core\Form\Search\SearchDTO;
-use BaksDev\Core\Services\Paginator\PaginatorInterface;
-
-interface AllProductsSettingsInterface
-{
-    public function search(SearchDTO $search): self;
-
-    /** Метод возвращает пагинатор */
-    public function findPaginator(): PaginatorInterface;
-}
+interface OzonBarcodeCustomInterface { }

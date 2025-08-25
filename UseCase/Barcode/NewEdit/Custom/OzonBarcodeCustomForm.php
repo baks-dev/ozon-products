@@ -22,15 +22,41 @@
  *
  */
 
-namespace BaksDev\Ozon\Products\Repository\Settings\AllProductsSettings;
+namespace BaksDev\Ozon\Products\UseCase\Barcode\NewEdit\Custom;
 
-use BaksDev\Core\Form\Search\SearchDTO;
-use BaksDev\Core\Services\Paginator\PaginatorInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-interface AllProductsSettingsInterface
+final class OzonBarcodeCustomForm extends AbstractType
 {
-    public function search(SearchDTO $search): self;
 
-    /** Метод возвращает пагинатор */
-    public function findPaginator(): PaginatorInterface;
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add('sort', IntegerType::class);
+        $builder->add('name', TextType::class);
+        $builder->add('value', TextType::class);
+
+        $builder->add
+        (
+            'DeleteCustom',
+            ButtonType::class,
+            [
+                'label_html' => true,
+                'attr' =>
+                    ['class' => 'btn btn-outline-danger border-0 del-item-custom'],
+            ]
+        );
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => OzonBarcodeCustomDTO::class
+        ]);
+    }
+
 }
