@@ -77,9 +77,16 @@ final class OzonStockUpdateRequest extends Ozon
         $stocks = null;
         $stocks["offer_id"] = $this->article;
         $stocks["warehouse_id"] = (int) $this->getWarehouse();
+        $stocks["stock"] = max($this->total, 0);
+
 
         // Обнуляем остаток если продажи остановлены
-        $stocks["stock"] = $this->isStocks() ? max($this->total, 0) : 0;
+        if(false === $this->isStocks())
+        {
+            $stocks["stock"] = 0;
+            $this->logger->warning(sprintf(' %s: Останавливаем продажи артикула', $this->article));
+        }
+
 
         $response = $this->TokenHttpClient()
             ->request(
