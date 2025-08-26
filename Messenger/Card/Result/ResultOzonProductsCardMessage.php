@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Messenger\Card\Result;
 
+use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -32,16 +33,16 @@ final class ResultOzonProductsCardMessage
 {
     private string|int $id;
 
-    private string $profile;
+    private string $token;
 
     public function __construct(
         int|string $id,
-        UserProfileUid $profile
+        OzonTokenUid $token
     )
     {
 
         $this->id = $id;
-        $this->profile = (string) $profile;
+        $this->token = (string) $token;
     }
 
     /**
@@ -55,9 +56,9 @@ final class ResultOzonProductsCardMessage
     /**
      * Profile
      */
-    public function getProfile(): UserProfileUid
+    public function getToken(): OzonTokenUid
     {
-        return new UserProfileUid($this->profile);
+        return new OzonTokenUid($this->token);
     }
 
 }

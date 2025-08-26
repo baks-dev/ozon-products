@@ -85,7 +85,7 @@ final class UpdateOzonProductPriceRequest extends Ozon
      * ]
      * }
      */
-    public function update(): bool
+    public function update(): bool|null
     {
         if($this->isExecuteEnvironment() === false)
         {
@@ -99,7 +99,7 @@ final class UpdateOzonProductPriceRequest extends Ozon
 
         if($this->isCard() === false)
         {
-            return true;
+            return null;
         }
 
 

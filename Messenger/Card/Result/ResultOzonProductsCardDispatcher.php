@@ -49,7 +49,7 @@ final readonly class ResultOzonProductsCardDispatcher
     public function __invoke(ResultOzonProductsCardMessage $message): void
     {
         $result = $this->cardUpdateResultRequest
-            ->forTokenIdentifier($message->getProfile())
+            ->forTokenIdentifier($message->getToken())
             ->get($message->getId());
 
         /** false - если задание не найдено */
@@ -66,7 +66,7 @@ final readonly class ResultOzonProductsCardDispatcher
                 $product = $this->productConstByArticle->find($result['offer_id']);
 
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
-                    $message->getProfile(),
+                    $message->getToken(),
                     $product->getProduct(),
                     $product->getOfferConst(),
                     $product->getVariationConst(),

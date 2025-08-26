@@ -36,7 +36,7 @@ final class UpdateOzonCardRequest extends Ozon
      *
      * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ImportProductsV3
      */
-    public function update(array $card): int|false
+    public function update(array $card): int|bool
     {
         if($this->isExecuteEnvironment() === false)
         {
@@ -49,27 +49,26 @@ final class UpdateOzonCardRequest extends Ozon
             return true;
         }
 
-        /**
-         * @note ВАЖНО! Торговая надбавка присваивается при расчете стоимости услуг
-         */
+        $card['promotions'] = [
+            [
+                'operation' => 'DISABLE',
+                'type' => 'REVIEWS_PROMO',
+            ],
+            [
+                'operation' => 'DISABLE',
+                'type' => 'STOCK_DISCOUNT',
+            ],
+        ];
 
-        //        /** Присваиваем идентификатор типа товара */
-        //        $type = array_filter($card['attributes'], fn($n) => $n['id'] === 8229);
-        //        $type = current($type);
-        //        $type = current($type['values']);
-        //        $card["type_id"] = $type['dictionary_value_id'] ?? false; // ШИНЫ
-
-
-        $card['promotions'] = [['operation' => 'DISABLE']];
-
+        $card['vat'] = $this->getVat();
 
         $response = $this->TokenHttpClient()
             ->request(
                 'POST',
                 '/v3/product/import',
                 [
-                    "json" => ['items' => [$card]]
-                ]
+                    "json" => ['items' => [$card]],
+                ],
             );
 
         $content = $response->toArray(false);

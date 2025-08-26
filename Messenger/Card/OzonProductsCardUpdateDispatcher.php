@@ -170,14 +170,19 @@ final readonly class OzonProductsCardUpdateDispatcher
                 ->forTokenIdentifier($OzonTokenUid)
                 ->update($request);
 
+            /** Пропускаем, если токен авторизации без обновления карточки */
+            if(true === $task)
+            {
+                continue;
+            }
+
             if($task === false)
             {
-                /**
-                 * Ошибка запишется в лог
-                 *
-                 * @see UpdateOzonCardRequest
-                 */
-                return;
+                $this->logger->critical(
+                    sprintf('ozon-products: Ошибка при обновлении карточки с артикулом %s', $ProductsOzonCardResult->getArticle()),
+                    [self::class.':'.__LINE__, 'token' => (string) $OzonTokenUid]);
+
+                continue;
             }
 
             $this->logger->info(
@@ -192,7 +197,7 @@ final readonly class OzonProductsCardUpdateDispatcher
 
             $ResultOzonProductsCardUpdateMessage = new ResultOzonProductsCardMessage(
                 $task,
-                $message->getProfile(),
+                $OzonTokenUid,
             );
 
             $this->messageDispatch->dispatch(

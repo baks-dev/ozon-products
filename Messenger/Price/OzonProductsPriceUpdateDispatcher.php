@@ -154,6 +154,11 @@ final readonly class OzonProductsPriceUpdateDispatcher
                 ->article($ProductsOzonCardResult->getArticle())
                 ->update();
 
+            /** Пропускаем, если токен авторизации без обновления карточки */
+            if(is_null($result))
+            {
+                continue;
+            }
 
             if($result === false)
             {
