@@ -143,25 +143,12 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->deduplication([
                     $ProductsOzonCardResult->getArticle(),
                     (string) $OzonTokenUid,
+                    $ProductQuantity,
                     self::class,
                 ]);
 
             if($Deduplicator->isExecuted())
             {
-                /** Пробуем обновится позже */
-
-                $this->logger->warning('{article}: пробуем обновить остаток позже', [
-                    'article' => $ProductsOzonCardResult->getArticle(),
-                    'token' => (string) $OzonTokenUid,
-                    self::class.':'.__LINE__,
-                ]);
-
-                $this->messageDispatch->dispatch(
-                    message: $message,
-                    stamps: [new MessageDelay('1 minutes')],
-                    transport: $message->getProfile().'-low',
-                );
-
                 continue;
             }
 
