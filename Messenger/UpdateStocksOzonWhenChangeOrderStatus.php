@@ -51,8 +51,8 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 final readonly class UpdateStocksOzonWhenChangeOrderStatus
 {
     public function __construct(
-        private CurrentOrderEventInterface $currentOrderEvent,
-        private CurrentProductIdentifierInterface $currentProductIdentifier,
+        private CurrentOrderEventInterface $CurrentOrderEventRepository,
+        private CurrentProductIdentifierInterface $CurrentProductIdentifierRepository,
         private AllProfileOzonTokenInterface $allProfileOzonToken,
         private MessageDispatchInterface $messageDispatch
     ) {}
@@ -73,7 +73,7 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatus
         }
 
         /** Получаем активное событие заказа */
-        $OrderEvent = $this->currentOrderEvent
+        $OrderEvent = $this->CurrentOrderEventRepository
             ->forOrder($message->getId())
             ->find();
 
@@ -91,7 +91,7 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatus
             foreach($EditOrderDTO->getProduct() as $product)
             {
                 /** Получаем идентификаторы обновляемой продукции для получения констант  */
-                $CurrentProductIdentifier = $this->currentProductIdentifier
+                $CurrentProductIdentifier = $this->CurrentProductIdentifierRepository
                     ->forEvent($product->getProduct())
                     ->forOffer($product->getOffer())
                     ->forVariation($product->getVariation())
