@@ -19,7 +19,6 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
- *
  */
 
 namespace BaksDev\Ozon\Products\Repository\Barcode\AllOzonBarcodeSettings\Tests;
@@ -29,9 +28,6 @@ use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- */
 #[Group('ozon-products')]
 #[When(env: 'test')]
 class AllOzonBarcodeSettingsRepositoryTest extends KernelTestCase

@@ -23,19 +23,14 @@
 
 namespace BaksDev\Ozon\Products\Controller\Admin\Settings\Tests;
 
+use BaksDev\Ozon\Products\UseCase\Settings\NewEdit\Tests\OzonProductsSettingsNewTest;
 use BaksDev\Users\User\Tests\TestUserAccount;
+use PHPUnit\Framework\Attributes\DependsOnClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- *
- * @group ozon-products-controller
- * @group ozon-products-usecase
- *
- * @depends BaksDev\Ozon\Products\UseCase\Settings\NewEdit\Tests\OzonProductsSettingsNewTest::class
- *
- */
+#[Group('ozon-products')]
 #[When(env: 'test')]
 final class OzonProductsSettingsIndexAdminControllerTest extends WebTestCase
 {
@@ -44,6 +39,7 @@ final class OzonProductsSettingsIndexAdminControllerTest extends WebTestCase
     private const string ROLE = 'ROLE_OZON_PRODUCTS';
 
     /** Доступ по роли  */
+    #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     public function testRoleSuccessful(): void
     {
         self::ensureKernelShutdown();
@@ -65,6 +61,7 @@ final class OzonProductsSettingsIndexAdminControllerTest extends WebTestCase
     }
 
     /** Доступ по роли ROLE_ADMIN */
+    #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     public function testRoleAdminSuccessful(): void
     {
         self::ensureKernelShutdown();
@@ -86,6 +83,7 @@ final class OzonProductsSettingsIndexAdminControllerTest extends WebTestCase
     }
 
     /** Доступ по роли ROLE_USER */
+    #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     public function testRoleUserFiled(): void
     {
         self::ensureKernelShutdown();
@@ -106,6 +104,7 @@ final class OzonProductsSettingsIndexAdminControllerTest extends WebTestCase
     }
 
     /** Доступ по без роли */
+    #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     public function testGuestFiled(): void
     {
         self::ensureKernelShutdown();

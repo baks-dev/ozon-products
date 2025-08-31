@@ -44,10 +44,6 @@ use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- * @group ozon-products-api
- */
 #[Group('ozon-products')]
 #[When(env: 'test')]
 class OzonStockInfoRequestTest extends KernelTestCase

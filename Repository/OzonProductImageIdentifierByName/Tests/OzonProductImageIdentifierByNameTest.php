@@ -33,10 +33,6 @@ use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-
-/**
- * @group ozon-products
- */
 #[Group('ozon-products')]
 #[When(env: 'test')]
 class OzonProductImageIdentifierByNameTest extends KernelTestCase

@@ -27,6 +27,8 @@ use BaksDev\Ozon\Products\Mapper\Category\OzonProductsCategoryCollection;
 use BaksDev\Ozon\Products\Mapper\Type\OzonProductsTypeCollection;
 use BaksDev\Products\Category\Type\Id\CategoryProductUid;
 use BaksDev\Users\User\Tests\TestUserAccount;
+use PHPUnit\Framework\Attributes\DependsOnClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -35,14 +37,7 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\Attribute\When;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-/**
- * @group ozon-products
- *
- * @group ozon-products-controller
- * @group ozon-products-usecase
- *
- * @depends BaksDev\Ozon\Products\Controller\Admin\Settings\Tests\OzonProductsSettingsIndexAdminControllerTest::class
- */
+#[Group('ozon-products')]
 #[When(env: 'test')]
 final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
 {
@@ -50,7 +45,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
 
     private const string ROLE = 'ROLE_OZON_PRODUCTS_NEW';
 
-
+    #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public static function setUpBeforeClass(): void
     {
         // Бросаем событие консольной комманды
@@ -73,6 +68,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
 
 
     /** Доступ по роли  */
+    #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public function testRoleSuccessful(): void
     {
         self::ensureKernelShutdown();
@@ -96,6 +92,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
 
 
     /** Доступ по роли ROLE_ADMIN */
+    #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public function testRoleAdminSuccessful(): void
     {
         self::ensureKernelShutdown();
@@ -117,6 +114,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
     }
 
     /** Доступ по роли ROLE_USER */
+    #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public function testRoleUserFiled(): void
     {
         self::ensureKernelShutdown();
@@ -137,6 +135,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
     }
 
     /** Доступ по без роли */
+    #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public function testGuestFiled(): void
     {
         self::ensureKernelShutdown();

@@ -33,15 +33,13 @@ use BaksDev\Ozon\Products\Mapper\Type\OzonProductsTypeCollection;
 use BaksDev\Ozon\Products\Mapper\Type\OzonProductsTypeInterface;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 use function PHPUnit\Framework\assertNotEmpty;
 
-/**
- * @group ozon-products
- * @group ozon-products-mapper
- */
+#[Group('ozon-products')]
 #[When(env: 'test')]
 class OzonProductsMapperTypeTest extends KernelTestCase
 {

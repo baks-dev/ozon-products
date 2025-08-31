@@ -19,7 +19,6 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
- *
  */
 
 declare(strict_types=1);
@@ -41,15 +40,7 @@ use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- * @group ozon-products-barcode
- *
- * @depends BaksDev\Ozon\Products\UseCase\Barcode\NewEdit\Tests\NewHandleTest::class
- * @see     NewOzonSupplyHandleTest
- */
 #[Group('ozon-products')]
-#[Group('ozon-products-barcode')]
 #[When(env: 'test')]
 final class EditHandleTest extends KernelTestCase
 {

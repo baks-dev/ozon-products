@@ -27,7 +27,6 @@ namespace BaksDev\Ozon\Products\Repository\OzonProductImageLocal\Tests;
 
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Ozon\Products\Repository\OzonProductImageLocal\OzonProductImageLocalInterface;
-use BaksDev\Ozon\Products\Repository\OzonProductImageLocal\OzonProductImageLocalRepository;
 use BaksDev\Ozon\Products\Repository\OzonProductImageLocal\OzonProductImageLocalResult;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DependsOnClass;
@@ -37,10 +36,6 @@ use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-
-/**
- * @group ozon-products
- */
 #[Group('ozon-products')]
 #[When(env: 'test')]
 class OzonProductImageLocalRepositoryTest extends KernelTestCase

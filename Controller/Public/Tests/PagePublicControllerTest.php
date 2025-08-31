@@ -29,10 +29,11 @@ use BaksDev\Products\Product\Type\Offers\Id\ProductOfferUid;
 use BaksDev\Products\Product\Type\Offers\Variation\Id\ProductVariationUid;
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\Id\ProductModificationUid;
 use BaksDev\Users\User\Tests\TestUserAccount;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/** @group page-public-controller-tests */
+#[Group('ozon-products')]
 #[When(env: 'test')]
 final class PagePublicControllerTest extends WebTestCase
 {

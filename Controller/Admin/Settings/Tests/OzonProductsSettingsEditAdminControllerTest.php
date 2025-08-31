@@ -26,16 +26,12 @@ namespace BaksDev\Ozon\Products\Controller\Admin\Settings\Tests;
 use BaksDev\Ozon\Products\Repository\Settings\OzonProductsSettingsCurrentEvent\OzonProductsSettingsCurrentEventInterface;
 use BaksDev\Products\Category\Type\Id\CategoryProductUid;
 use BaksDev\Users\User\Tests\TestUserAccount;
+use PHPUnit\Framework\Attributes\DependsOnClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- * @group ozon-products-controller
- * @group ozon-products-usecase
- *
- * @depends BaksDev\Ozon\Products\Controller\Admin\Settings\Tests\OzonProductsSettingsNewAdminControllerTest::class
- */
+#[Group('ozon-products')]
 #[When(env: 'test')]
 final class OzonProductsSettingsEditAdminControllerTest extends WebTestCase
 {
@@ -56,6 +52,7 @@ final class OzonProductsSettingsEditAdminControllerTest extends WebTestCase
 
 
     /** Доступ по роли  */
+    #[DependsOnClass(OzonProductsSettingsNewAdminControllerTest::class)]
     public function testRoleSuccessful(): void
     {
         self::ensureKernelShutdown();
@@ -79,6 +76,7 @@ final class OzonProductsSettingsEditAdminControllerTest extends WebTestCase
 
 
     /** Доступ по роли ROLE_ADMIN */
+    #[DependsOnClass(OzonProductsSettingsNewAdminControllerTest::class)]
     public function testRoleAdminSuccessful(): void
     {
         self::ensureKernelShutdown();
@@ -100,6 +98,7 @@ final class OzonProductsSettingsEditAdminControllerTest extends WebTestCase
     }
 
     /** Доступ по роли ROLE_USER */
+    #[DependsOnClass(OzonProductsSettingsNewAdminControllerTest::class)]
     public function testRoleUserFiled(): void
     {
         self::ensureKernelShutdown();
@@ -120,6 +119,7 @@ final class OzonProductsSettingsEditAdminControllerTest extends WebTestCase
     }
 
     /** Доступ по без роли */
+    #[DependsOnClass(OzonProductsSettingsNewAdminControllerTest::class)]
     public function testGuestFiled(): void
     {
         self::ensureKernelShutdown();

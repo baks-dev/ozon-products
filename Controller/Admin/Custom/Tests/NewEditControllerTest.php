@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -27,14 +27,11 @@ namespace BaksDev\Ozon\Products\Controller\Admin\Custom\Tests;
 
 use BaksDev\Products\Product\Type\Invariable\ProductInvariableUid;
 use BaksDev\Users\User\Tests\TestUserAccount;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- * @group ozon-products-controller
- * @group ozon-products-controller-edit
- */
+#[Group('ozon-products')]
 #[When(env: 'test')]
 final class NewEditControllerTest extends WebTestCase
 {

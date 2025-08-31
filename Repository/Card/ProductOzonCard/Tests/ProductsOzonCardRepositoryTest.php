@@ -34,15 +34,13 @@ use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
 use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use PHPUnit\Framework\Attributes\Group;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- * @group ozon-products-repository
- */
+#[Group('ozon-products')]
 #[When(env: 'test')]
 class ProductsOzonCardRepositoryTest extends KernelTestCase
 {

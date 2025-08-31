@@ -19,7 +19,6 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
- *
  */
 
 namespace BaksDev\Ozon\Products\Controller\Admin\Barcode\Tests;
@@ -32,14 +31,7 @@ use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- * @group ozon-products-barcode
- *
- * @depends BaksDev\Ozon\Products\UseCase\Barcode\NewEdit\Tests\NewHandleTest::class
- */
 #[Group('ozon-products')]
-#[Group('ozon-products-barcode')]
 #[When(env: 'test')]
 final class DeleteControllerTest extends WebTestCase
 {

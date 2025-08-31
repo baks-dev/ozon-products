@@ -30,14 +30,12 @@ use BaksDev\Ozon\Products\Api\Settings\AttributeValues\OzonAttributeValueDTO;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValues\OzonAttributeValueRequest;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- * @group ozon-products-api
- */
+#[Group('ozon-products')]
 #[When(env: 'test')]
 class OzonAttributeValueRequestTest extends KernelTestCase
 {

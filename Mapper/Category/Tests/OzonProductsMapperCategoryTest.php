@@ -31,14 +31,12 @@ use BaksDev\Ozon\Products\Mapper\Category\OzonProductsCategoryCollection;
 use BaksDev\Ozon\Products\Mapper\Category\OzonProductsCategoryInterface;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon-products
- * @group ozon-products-mapper
- */
+#[Group('ozon-products')]
 #[When(env: 'test')]
 class OzonProductsMapperCategoryTest extends KernelTestCase
 {
