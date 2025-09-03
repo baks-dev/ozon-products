@@ -61,21 +61,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
      */
     public function __invoke(OzonProductsStocksMessage $message): void
     {
-        /**
-         * Дедубликатор вызова
-         */
-
-        $Deduplicator = $this->deduplicator
-            ->namespace('ozon-products')
-            ->expiresAfter('1 minutes')
-            ->deduplication([(string) $message->getProfile(), self::class]);
-
-        if($Deduplicator->isExecuted())
-        {
-            return;
-        }
-
-        $Deduplicator->save();
 
 
         /** Получаем все токены профиля */
@@ -154,6 +139,20 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
         foreach($tokensByProfile as $OzonTokenUid)
         {
+            $Deduplicator = $this->deduplicator
+                ->namespace('ozon-products')
+                ->expiresAfter('30 seconds')
+                ->deduplication([
+                    $ProductsOzonCardResult->getArticle(),
+                    (string) $OzonTokenUid,
+                    self::class,
+                ]);
+
+            if($Deduplicator->isExecuted())
+            {
+                continue;
+            }
+
             /**
              * Обновляем остатки товара
              */
@@ -179,6 +178,9 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     stamps: [new MessageDelay('1 minutes')],
                     transport: $message->getProfile().'-low',
                 );
+
+                /** Сохраняем дедубликатор */
+                $Deduplicator->save();
 
                 continue;
             }
@@ -227,6 +229,9 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     transport: $message->getProfile().'-low',
                 );
 
+                /** Сохраняем дедубликатор */
+                $Deduplicator->save();
+
                 continue;
             }
 
@@ -236,8 +241,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 'token' => (string) $OzonTokenUid,
                 self::class.':'.__LINE__,
             ]);
-        }
 
-        $Deduplicator->delete();
+            $Deduplicator->delete();
+        }
     }
 }
