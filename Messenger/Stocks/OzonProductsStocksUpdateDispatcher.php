@@ -150,6 +150,10 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
             if($Deduplicator->isExecuted())
             {
+                $this->logger->warning(
+                    sprintf('%s: Пропустили обновление остатков', $ProductsOzonCardResult->getArticle()),
+                    [(string) $OzonTokenUid, self::class.':'.__LINE__]);
+
                 continue;
             }
 
