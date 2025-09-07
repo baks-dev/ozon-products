@@ -145,6 +145,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 ->deduplication([
                     $ProductsOzonCardResult->getArticle(),
                     (string) $OzonTokenUid,
+                    $ProductQuantity,
                     self::class,
                 ]);
 
@@ -156,6 +157,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
                 continue;
             }
+
+            $Deduplicator->save();
 
             /**
              * Обновляем остатки товара
@@ -182,9 +185,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     stamps: [new MessageDelay('1 minutes')],
                     transport: $message->getProfile().'-low',
                 );
-
-                /** Сохраняем дедубликатор */
-                $Deduplicator->save();
 
                 continue;
             }
@@ -233,9 +233,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     transport: $message->getProfile().'-low',
                 );
 
-                /** Сохраняем дедубликатор */
-                $Deduplicator->save();
-
                 continue;
             }
 
@@ -245,8 +242,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 'token' => (string) $OzonTokenUid,
                 self::class.':'.__LINE__,
             ]);
-
-            $Deduplicator->delete();
         }
     }
 }
