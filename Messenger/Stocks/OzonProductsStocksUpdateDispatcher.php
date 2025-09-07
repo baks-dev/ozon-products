@@ -36,6 +36,7 @@ use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult
 use BaksDev\Ozon\Repository\OzonTokensByProfile\OzonTokensByProfileInterface;
 use BaksDev\Products\Stocks\BaksDevProductsStocksBundle;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -43,6 +44,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  * Обновляем остатки товаров Ozon
  */
 #[AsMessageHandler]
+#[Autoconfigure(shared: false)]
 final readonly class OzonProductsStocksUpdateDispatcher
 {
     public function __construct(
@@ -61,8 +63,6 @@ final readonly class OzonProductsStocksUpdateDispatcher
      */
     public function __invoke(OzonProductsStocksMessage $message): void
     {
-
-
         /** Получаем все токены профиля */
 
         $tokensByProfile = $this->OzonTokensByProfile->findAll($message->getProfile());
@@ -141,7 +141,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
         {
             $Deduplicator = $this->deduplicator
                 ->namespace('ozon-products')
-                ->expiresAfter('5 seconds')
+                ->expiresAfter('1 minutes')
                 ->deduplication([
                     $ProductsOzonCardResult->getArticle(),
                     (string) $OzonTokenUid,
@@ -152,8 +152,14 @@ final readonly class OzonProductsStocksUpdateDispatcher
             if($Deduplicator->isExecuted())
             {
                 $this->logger->warning(
-                    sprintf('%s: Пропустили обновление остатков', $ProductsOzonCardResult->getArticle()),
-                    [(string) $OzonTokenUid, self::class.':'.__LINE__]);
+                    sprintf('%s: Пропустили обновление остатков => {new}', $ProductsOzonCardResult->getArticle()),
+                    [
+                        'new' => $ProductQuantity,
+                        (string) $OzonTokenUid,
+                        self::class.':'.__LINE__,
+                    ]);
+
+                $Deduplicator->save();
 
                 continue;
             }
@@ -174,9 +180,10 @@ final readonly class OzonProductsStocksUpdateDispatcher
             {
                 /** Пробуем обновится позже */
 
-                $this->logger->warning('{article}: пробуем обновить остаток позже', [
+                $this->logger->warning('{article}: пробуем обновить остаток позже => {new}', [
                     'article' => $ProductsOzonCardResult->getArticle(),
                     'token' => (string) $OzonTokenUid,
+                    'new' => $ProductQuantity,
                     self::class.':'.__LINE__,
                 ]);
 
@@ -185,6 +192,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     stamps: [new MessageDelay('1 minutes')],
                     transport: $message->getProfile().'-low',
                 );
+
+                $Deduplicator->delete();
 
                 continue;
             }
@@ -204,9 +213,10 @@ final readonly class OzonProductsStocksUpdateDispatcher
             /** TRUE возвращается если токен не предполагает обновление остатков (либо обнуляет) */
             if(true === $result || false === $result->valid())
             {
-                $this->logger->info('{article}: Остановили продажу товара', [
+                $this->logger->info('{article}: Остановили продажу товара => {new}', [
                     'article' => $ProductsOzonCardResult->getArticle(),
                     'token' => (string) $OzonTokenUid,
+                    'new' => $ProductQuantity,
                     self::class.':'.__LINE__,
                 ]);
 
@@ -220,9 +230,10 @@ final readonly class OzonProductsStocksUpdateDispatcher
             {
                 /** Пробуем обновится позже */
 
-                $this->logger->warning('{article}: пробуем обновить остаток позже', [
+                $this->logger->warning('{article}: пробуем обновить остаток позже => {new}', [
                     'article' => $ProductsOzonCardResult->getArticle(),
                     'token' => (string) $OzonTokenUid,
+                    'new' => $ProductQuantity,
                     self::class.':'.__LINE__,
                 ]);
 
@@ -233,6 +244,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     transport: $message->getProfile().'-low',
                 );
 
+                $Deduplicator->delete();
+
                 continue;
             }
 
@@ -242,6 +255,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
                 'token' => (string) $OzonTokenUid,
                 self::class.':'.__LINE__,
             ]);
+
         }
     }
 }
