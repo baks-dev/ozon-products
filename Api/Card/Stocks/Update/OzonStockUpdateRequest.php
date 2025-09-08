@@ -61,6 +61,8 @@ final class OzonStockUpdateRequest extends Ozon
             return true;
         }
 
+        sleep(1);
+
         /**
          * Формируем массив с ключами для отправки JSON
          * Пример запроса:
