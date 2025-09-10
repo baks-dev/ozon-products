@@ -66,7 +66,7 @@ final readonly class ResultOzonProductsCardDispatcher
                 $product = $this->productConstByArticle->find($result['offer_id']);
 
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
-                    $message->getToken(),
+                    $message->getProfile(),
                     $product->getProduct(),
                     $product->getOfferConst(),
                     $product->getVariationConst(),

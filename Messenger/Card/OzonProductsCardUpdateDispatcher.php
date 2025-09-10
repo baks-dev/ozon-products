@@ -196,8 +196,9 @@ final readonly class OzonProductsCardUpdateDispatcher
              */
 
             $ResultOzonProductsCardUpdateMessage = new ResultOzonProductsCardMessage(
-                $task,
-                $OzonTokenUid,
+                id: $task,
+                token: $OzonTokenUid,
+                profile: $message->getProfile(),
             );
 
             $this->messageDispatch->dispatch(

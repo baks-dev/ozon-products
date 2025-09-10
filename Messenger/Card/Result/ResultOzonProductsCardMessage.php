@@ -35,14 +35,18 @@ final class ResultOzonProductsCardMessage
 
     private string $token;
 
+    private string $profile;
+
     public function __construct(
         int|string $id,
-        OzonTokenUid $token
+        OzonTokenUid $token,
+        UserProfileUid $profile
     )
     {
 
         $this->id = $id;
         $this->token = (string) $token;
+        $this->profile = (string) $profile;
     }
 
     /**
@@ -61,4 +65,8 @@ final class ResultOzonProductsCardMessage
         return new OzonTokenUid($this->token);
     }
 
+    public function getProfile(): UserProfileUid
+    {
+        return new UserProfileUid($this->profile);
+    }
 }
