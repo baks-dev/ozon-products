@@ -88,7 +88,7 @@ final readonly class UpdateOzonProductCardWhenChangeProduct
                 /** Транспорт LOW чтобы не мешать общей очереди */
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsCardMessage,
-                    transport: 'ozon-products-low'
+                    transport: $profile.'-low',
                 );
             }
         }

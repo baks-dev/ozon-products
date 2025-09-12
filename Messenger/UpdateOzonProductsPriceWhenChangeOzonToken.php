@@ -93,7 +93,7 @@ final readonly class UpdateOzonProductsPriceWhenChangeOzonToken
 
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsPriceMessage,
-                    transport: 'ozon-products',
+                    transport: $profile.'-low',
                 );
 
 
@@ -103,7 +103,7 @@ final readonly class UpdateOzonProductsPriceWhenChangeOzonToken
 
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsStocksMessage,
-                    transport: 'ozon-products',
+                    transport: $profile.'-low',
                 );
 
             }
