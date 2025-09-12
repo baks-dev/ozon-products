@@ -26,9 +26,11 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Messenger;
 
 use BaksDev\Core\Messenger\MessageDispatchInterface;
+use BaksDev\Ozon\Messenger\OzonTokenMessage;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
+use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
+use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
-use BaksDev\Products\Product\Messenger\ProductMessage;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
 use BaksDev\Products\Product\Type\Id\ProductUid;
 use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
@@ -37,45 +39,45 @@ use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductM
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**
- * Обновляем карточку Озон при изменении системной карточки
+ * Обновляем стоимость при обновлении настроек токена
  */
-#[AsMessageHandler(priority: 10)]
-final readonly class UpdateOzonProductCardWhenChangeProduct
+#[AsMessageHandler(priority: 0)]
+final readonly class UpdatePriceOzonWhenChangeOzonTokenDispatcher
 {
     public function __construct(
-        private AllProductsIdentifierInterface $allProductsIdentifier,
         private AllProfileOzonTokenInterface $allProfileOzonToken,
-        private MessageDispatchInterface $messageDispatch,
+        private AllProductsIdentifierInterface $allProductsIdentifier,
+        private MessageDispatchInterface $messageDispatch
     ) {}
 
-
-    public function __invoke(ProductMessage $message): void
+    /**
+     * Обновляем стоимость и остатки при обновлении настроек токена
+     */
+    public function __invoke(OzonTokenMessage $message): void
     {
-        /**  Получаем активные токены профилей пользователя */
-        $profiles = $this
-            ->allProfileOzonToken
+        /** Получаем активные токены авторизации профилей Ozon */
+        $profiles = $this->allProfileOzonToken
             ->onlyActiveToken()
             ->findAll();
 
-        if($profiles->valid() === false)
+        if(false === $profiles->valid())
         {
             return;
         }
 
-        foreach($profiles as $profile)
+        /* Получаем все имеющиеся карточки в системе */
+        $products = $this->allProductsIdentifier->findAll();
+
+        if($products === false || false === $products->valid())
         {
-            /** Получаем идентификаторы обновляемой продукции  */
-            $products = $this
-                ->allProductsIdentifier
-                ->forProduct($message->getId())
-                ->findAll();
+            return;
+        }
 
-            if($products === false)
-            {
-                return;
-            }
+        $profiles = iterator_to_array($profiles);
 
-            foreach($products as $product)
+        foreach($products as $product)
+        {
+            foreach($profiles as $profile)
             {
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
                     $profile,
@@ -85,11 +87,25 @@ final readonly class UpdateOzonProductCardWhenChangeProduct
                     $product->getProductModificationConst(),
                 );
 
-                /** Транспорт LOW чтобы не мешать общей очереди */
+                /** Обновляем цены на случай, если изменился процент */
+
+                $OzonProductsPriceMessage = new OzonProductsPriceMessage($OzonProductsCardMessage);
+
                 $this->messageDispatch->dispatch(
-                    message: $OzonProductsCardMessage,
+                    message: $OzonProductsPriceMessage,
                     transport: $profile.'-low',
                 );
+
+
+                /** Обновляем остатки на случай, если остановились продажи */
+
+                $OzonProductsStocksMessage = new OzonProductsStocksMessage($OzonProductsCardMessage);
+
+                $this->messageDispatch->dispatch(
+                    message: $OzonProductsStocksMessage,
+                    transport: $profile.'-low',
+                );
+
             }
         }
     }

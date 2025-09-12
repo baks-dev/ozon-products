@@ -44,7 +44,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  * @see https://api-seller.ozon.ru/v1/product/import/stocks
  */
 #[AsMessageHandler(priority: 89)]
-final readonly class UpdateStocksOzonWhenChangeOrderStatus
+final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
 {
     public function __construct(
         private CurrentOrderEventInterface $CurrentOrderEventRepository,
