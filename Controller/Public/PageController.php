@@ -59,13 +59,13 @@ final class PageController extends AbstractController
         ?string $postfix = null,
     ): Response
     {
-        $productCard = $productDetail->fetchProductAssociative(
-            $info->getProduct(),
-            $offer,
-            $variation,
-            $modification,
-            $postfix
-        );
+        $productCard = $productDetail
+            ->byProduct($info->getProduct())
+            ->byOfferValue($offer)
+            ->byVariationValue($variation)
+            ->byModificationValue($modification)
+            ->byPostfix($postfix)
+            ->find();
 
         $profiles = $allProfileToken
             ->onlyActiveToken()
@@ -76,7 +76,7 @@ final class PageController extends AbstractController
         {
             $sku = $GetOzonCardSku
                 ->forTokenIdentifier($profile)
-                ->article($productCard['product_article'])
+                ->article($productCard->getProductArticle())
                 ->find();
 
             if($sku)
