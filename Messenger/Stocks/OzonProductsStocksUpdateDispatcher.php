@@ -141,7 +141,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
         {
             $Deduplicator = $this->deduplicator
                 ->namespace('ozon-products')
-                ->expiresAfter('1 minutes')
+                ->expiresAfter('45 seconds')
                 ->deduplication([
                     $ProductsOzonCardResult->getArticle(),
                     (string) $OzonTokenUid,

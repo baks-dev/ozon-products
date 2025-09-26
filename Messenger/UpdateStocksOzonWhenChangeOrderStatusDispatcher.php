@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Messenger;
 
+use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Orders\Order\Messenger\OrderMessage;
@@ -50,7 +51,8 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
         private CurrentOrderEventInterface $CurrentOrderEventRepository,
         private CurrentProductIdentifierInterface $CurrentProductIdentifierRepository,
         private AllProfileOzonTokenInterface $allProfileOzonToken,
-        private MessageDispatchInterface $messageDispatch
+        private MessageDispatchInterface $messageDispatch,
+        private DeduplicatorInterface $deduplicator
     ) {}
 
 
@@ -77,6 +79,28 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
         {
             return;
         }
+
+        /** Дедубликатор изменения статусов (обновляем только один раз в сутки на статус) */
+
+        $Deduplicator = $this->deduplicator
+            ->namespace('ozon-products')
+            ->expiresAfter('1 day')
+            ->deduplication([
+                (string) $message->getId(),
+                $OrderEvent->getStatus()->getOrderStatusValue(),
+                self::class,
+            ]);
+
+        if($Deduplicator->isExecuted())
+        {
+            return;
+        }
+
+        $Deduplicator->save();
+
+        /**
+         * Обновляем остатки
+         */
 
         $EditOrderDTO = new EditOrderDTO();
         $OrderEvent->getDto($EditOrderDTO);
@@ -113,7 +137,7 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
 
                 $this->messageDispatch->dispatch(
                     message: new OzonProductsStocksMessage($OzonProductsCardMessage),
-                    stamps: [new MessageDelay('5 seconds')], // задержка 3 сек для обновления карточки
+                    stamps: [new MessageDelay('5 seconds')],
                     transport: (string) $profile,
                 );
             }
