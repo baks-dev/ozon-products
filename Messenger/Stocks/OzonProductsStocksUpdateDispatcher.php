@@ -44,7 +44,6 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  * Обновляем остатки товаров Ozon
  */
 #[AsMessageHandler]
-#[Autoconfigure(shared: false)]
 final readonly class OzonProductsStocksUpdateDispatcher
 {
     public function __construct(
@@ -65,7 +64,9 @@ final readonly class OzonProductsStocksUpdateDispatcher
     {
         /** Получаем все токены профиля */
 
-        $tokensByProfile = $this->OzonTokensByProfile->findAll($message->getProfile());
+        $tokensByProfile = $this->OzonTokensByProfile
+            ->onlyStocksUpdate()
+            ->findAll($message->getProfile());
 
         if(false === $tokensByProfile || false === $tokensByProfile->valid())
         {
