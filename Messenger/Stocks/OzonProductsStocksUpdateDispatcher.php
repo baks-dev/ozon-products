@@ -65,8 +65,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
         /** Получаем все токены профиля */
 
         $tokensByProfile = $this->OzonTokensByProfile
-            ->onlyStocksUpdate()
-            ->findAll($message->getProfile());
+            ->forProfile($message->getProfile())
+            ->findAll();
 
         if(false === $tokensByProfile || false === $tokensByProfile->valid())
         {
