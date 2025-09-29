@@ -161,6 +161,12 @@ final class UpdateOzonProductPriceRequest extends Ozon
                 [$content, $prices, self::class.':'.__LINE__],
             );
 
+            /** Если лимит обновления цены - задерживаем выполнение программы  */
+            if(str_contains($content['message'], 'limit'))
+            {
+                sleep(10);
+            }
+
             return false;
         }
 
