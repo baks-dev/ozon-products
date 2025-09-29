@@ -101,27 +101,6 @@ final readonly class OzonProductsPriceUpdateDispatcher
 
         foreach($tokensByProfile as $OzonTokenUid)
         {
-            /** Лимит: 1 карточка 1 раз в 2 минуты */
-            $Deduplicator = $this->deduplicator
-                ->namespace('ozon-products')
-                ->expiresAfter('5 seconds')
-                ->deduplication([
-                    (string) $message->getProduct(),
-                    (string) $message->getOfferConst(),
-                    (string) $message->getVariationConst(),
-                    (string) $message->getModificationConst(),
-                    (string) $OzonTokenUid,
-                    self::class,
-                ]);
-
-            if($Deduplicator->isExecuted())
-            {
-                continue;
-            }
-
-            $Deduplicator->save();
-
-
             /**
              * Получаем стоимость услуг и присваиваем полную стоимость
              * Переменная $Money = стоимость товара + стоимость услуг
@@ -146,9 +125,23 @@ final readonly class OzonProductsPriceUpdateDispatcher
                 continue;
             }
 
+            /** Лимит: 1 карточка 1 раз в 2 минуты */
+            $Deduplicator = $this->deduplicator
+                ->namespace('ozon-products')
+                ->expiresAfter('1 day')
+                ->deduplication([
+                    $ProductsOzonCardResult->getArticle(),
+                    $Money->getValue(),
+                    (string) $OzonTokenUid,
+                    self::class,
+                ]);
+
+            if($Deduplicator->isExecuted())
+            {
+                continue;
+            }
 
             /** Обновляем стоимость */
-
             $result = $this->updateOzonProductPriceRequest
                 ->forTokenIdentifier($OzonTokenUid)
                 ->price($Money)
@@ -158,6 +151,7 @@ final readonly class OzonProductsPriceUpdateDispatcher
             /** Пропускаем, если токен авторизации без обновления карточки */
             if(is_null($result))
             {
+                $Deduplicator->save();
                 continue;
             }
 
@@ -181,7 +175,7 @@ final readonly class OzonProductsPriceUpdateDispatcher
                 ['token' => (string) $OzonTokenUid],
             );
 
-            $Deduplicator->delete();
+            $Deduplicator->save();
 
         }
     }
