@@ -120,8 +120,10 @@ final class OzonStockUpdateRequest extends Ozon
 
         if(false === $this->isStocks())
         {
+            $this->logger->debug('Ответ сервера', [$content, self::class.':'.__LINE__]);
             return true;
         }
+
 
         /** Проверяем наличие ошибки (возвращается статус 200) */
         $NotFound = false;
@@ -133,7 +135,8 @@ final class OzonStockUpdateRequest extends Ozon
             }
         });
 
-        /** Продукт не найден */
+        $this->logger->debug('Ответ сервера', [$content, self::class.':'.__LINE__]);
+
         if($NotFound)
         {
             return false;
