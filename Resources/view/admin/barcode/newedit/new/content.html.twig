@@ -2,5 +2,5 @@
 
 {{ include(_self|replace({ "content.html.twig": baks_settings.device~"/content.html.twig" })) }}
 
-<script nonce='{{ csp_nonce() }}' async data-src="/assets/ozon-products/barcode.min.js?v={{ version }}"
+<script nonce='{{ csp_nonce() }}' async data-src="/assets/{{ version }}/ozon-products/barcode.min.js?v={{ version }}"
         class='lazy'></script>

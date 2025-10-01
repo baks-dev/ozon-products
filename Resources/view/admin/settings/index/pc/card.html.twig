@@ -11,7 +11,7 @@
         <div class="d-flex align-items-center">
 
             {# Обложка  #}
-            {% set image_path = '/assets/img/blank.svg' %}
+            {% set image_path = '/assets/'~version~'/img/blank.svg' %}
 
             {% if item.ext is defined and item.ext is not null %}
                 {% set img_host =  item.cdn == true  ? CDN_HOST : '' %}

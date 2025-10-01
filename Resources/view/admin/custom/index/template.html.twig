@@ -12,7 +12,7 @@
 
 {# ---- CSS ------------------------------------------------------------ #}
 {% block stylesheets %}
-    <link href="/assets/plugins/nice-select2/nice-select2.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/{{ version }}/plugins/nice-select2/nice-select2.min.css" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {# ---- КОНТЕНТ-БЛОК ------------------------------------------------------------ #}
@@ -21,10 +21,10 @@
 {% endblock %}
 
 {% block javascript %}
-<script nonce='{{ csp_nonce() }}' async  data-src="/assets/plugins/ckeditor/ckeditor.min.js?v={{ version }}" class='lazy'></script>
-<script nonce='{{ csp_nonce() }}' async  data-src="/assets/plugins/nice-select2/nice-select2.min.js?v={{ version }}" class="lazy"></script>
-<script nonce='{{ csp_nonce() }}' async data-src='/assets/js/radio.input.min.js?v={{ version }}' class='lazy'></script>
-<script nonce='{{ csp_nonce() }}' async data-src="/assets/products_product/filter.min.js?v={{ version }}" class="lazy"></script>
-<script nonce='{{ csp_nonce() }}' async data-src="/assets/ozon-products/filter.min.js?v={{ version }}" class="lazy"></script>
-<script nonce='{{ csp_nonce() }}' async  data-src="/assets/js/copy.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/{{ version }}/plugins/ckeditor/ckeditor.min.js?v={{ version }}" class='lazy'></script>
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/{{ version }}/plugins/nice-select2/nice-select2.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async data-src='/assets/{{ version }}/js/radio.input.min.js?v={{ version }}' class='lazy'></script>
+<script nonce='{{ csp_nonce() }}' async data-src="/assets/{{ version }}/products-product/filter.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async data-src="/assets/{{ version }}/ozon-products/filter.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/{{ version }}/js/copy.min.js?v={{ version }}" class="lazy"></script>
 {% endblock %}

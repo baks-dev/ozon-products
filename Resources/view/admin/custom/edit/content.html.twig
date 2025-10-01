@@ -4,6 +4,6 @@
 
 {# скрипт будет работать в модальном окне #}
 {% block javascript %}
-<script nonce='{{ csp_nonce() }}' async  data-src="/assets/plugins/ckeditor/classic.min.js?v={{ version }}" class='lazy'></script>
-<script nonce='{{ csp_nonce() }}' async data-src='/assets/ozon-products/ozon.images.min.js?v={{ version }}' class='lazy'></script>
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/{{ version }}/plugins/ckeditor/classic.min.js?v={{ version }}" class='lazy'></script>
+<script nonce='{{ csp_nonce() }}' async data-src='/assets/{{ version }}/ozon-products/ozon.images.min.js?v={{ version }}' class='lazy'></script>
 {% endblock %}
