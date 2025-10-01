@@ -171,8 +171,8 @@ final class GetOzonProductCalculatorRequest extends Ozon
         /**
          * Обработка отправления селлере - 20 руб
          */
-        $this->price->add(new Money(20)); // Обработка отправления - 20 руб
-        is_array($debug) ? $debug['Обработка отправления селлере'] = 20 : $debug = null;
+        $this->price->add(new Money(30)); // Обработка отправления - 20 руб
+        is_array($debug) ? $debug['Обработка отправления селлере'] = 30 : $debug = null;
 
         /**
          * Доставка до места выдачи - 25 руб
@@ -223,10 +223,10 @@ final class GetOzonProductCalculatorRequest extends Ozon
                 $volume <= 1 => 80,
 
                 // до 190 литров включительно — 18 ₽ за каждый дополнительный литр свыше объёма 1 л;
-                $volume <= 190 => ($volume * 18 + 80),
+                $volume <= 190 => ($volume * 23 + 80),
 
                 // свыше 190 литров — 3478 ₽.
-                default => 3478
+                default => 4417
             };
 
             $this->price->add(new Money($logistics)); // Логистика

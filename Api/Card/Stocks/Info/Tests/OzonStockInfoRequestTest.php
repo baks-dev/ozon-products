@@ -73,6 +73,10 @@ class OzonStockInfoRequestTest extends KernelTestCase
         $OzonStockInfoRequest = self::getContainer()->get(OzonStockInfoRequest::class);
         $OzonStockInfoRequest->TokenHttpClient(self::$Authorization);
 
+        /**
+         * @note закомментировать проверку $this->isStocks()
+         * приблизительно @see OzonStockInfoRequest:90
+         */
         $OzonStockInfo = $OzonStockInfoRequest
             ->article('qhEeZVHak')
             ->find();

@@ -27,8 +27,10 @@ namespace BaksDev\Ozon\Products\Api\Card\Stocks\Info;
 
 use BaksDev\Ozon\Api\Ozon;
 use DateInterval;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 
+#[Autoconfigure(public: true)]
 final class OzonStockInfoRequest extends Ozon
 {
     private string $article;
@@ -37,7 +39,7 @@ final class OzonStockInfoRequest extends Ozon
 
     public function article(string $article): self
     {
-        $this->article = $article;
+        $this->article = trim($article);
 
         return $this;
     }
@@ -58,8 +60,6 @@ final class OzonStockInfoRequest extends Ozon
 
     /**
      * Информация об остатках на складах продавца (FBS и rFBS)
-     *
-     * @see https://api-seller.ozon.ru/v1/product/info/stocks-by-warehouse/fbs
      */
     public function find(): OzonStockInfoDTO|false
     {
@@ -85,18 +85,20 @@ final class OzonStockInfoRequest extends Ozon
         /** Если остановлены продажи - всегда возвращаем FALSE для принудительного обновления */
         if(false === $this->isStocks())
         {
-            return false;
+            //return false;
         }
 
         $cache = $this->getCacheInit('ozon-products');
         $key = md5(self::class.$this->article);
+        $cache->deleteItem($key);
+        $cache->delete($key);
 
         /**
-         * Получаем информацию о карточке товара для получения SCU
+         * Вначале получаем информацию о карточке товара для получения SCU
          */
         $result = $cache->get($key, function(ItemInterface $item): array|false {
 
-            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+            $item->expiresAfter(DateInterval::createFromDateString('1 seconds'));
 
             $filter["offer_id"] = [$this->article];
             $filter["visibility"] = "ALL";
@@ -126,7 +128,7 @@ final class OzonStockInfoRequest extends Ozon
                 return false;
             }
 
-            if(!isset($content['items']))
+            if(false === isset($content['items']))
             {
                 return false;
             }
@@ -138,13 +140,15 @@ final class OzonStockInfoRequest extends Ozon
                     return $stock['type'] === 'fbs' && in_array((int) $this->getWarehouse(), $stock['warehouse_ids'], true);
                 });
 
-                if(empty($filter))
+                if(true === empty($filter))
                 {
                     continue;
                 }
 
                 break;
             }
+
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
             return empty($filter) ? false : current($filter);
         });
@@ -160,6 +164,9 @@ final class OzonStockInfoRequest extends Ozon
 
         /**
          * Выполняем запрос на точный остаток склада
+         *
+         * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_ProductStocksByWarehouseFbs
+         *
          */
 
         $response = $this->TokenHttpClient()
@@ -173,7 +180,17 @@ final class OzonStockInfoRequest extends Ozon
 
         $content = $response->toArray(false);
 
-        // Фильтрация по FBS идентификатору склада
+        if($response->getStatusCode() !== 200)
+        {
+            $this->logger->critical(
+                sprintf('ozon-products: Ошибка при получении информации о остатках артикула %s', $this->article)
+                , [$result, $content, self::class.':'.__LINE__]);
+
+            return false;
+        }
+
+
+        // Фильтрация по идентификатору склада
         $filter = array_filter($content['result'], function($stock) {
             return $stock['warehouse_id'] === (int) $this->getWarehouse();
         });

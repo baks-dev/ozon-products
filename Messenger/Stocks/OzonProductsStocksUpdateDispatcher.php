@@ -29,6 +29,8 @@ use BaksDev\Core\Deduplicator\DeduplicatorInterface;
 use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Orders\Order\Repository\ProductTotalInOrders\ProductTotalInOrdersInterface;
+use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoDTO;
+use BaksDev\Ozon\Products\Api\Card\Stocks\Info\OzonStockInfoRequest;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateDTO;
 use BaksDev\Ozon\Products\Api\Card\Stocks\Update\OzonStockUpdateRequest;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
@@ -54,6 +56,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
         private MessageDispatchInterface $messageDispatch,
         private OzonTokensByProfileInterface $OzonTokensByProfile,
         private ProductTotalInOrdersInterface $ProductTotalInOrders,
+        private OzonStockInfoRequest $OzonStockInfoRequest
 
     ) {}
 
@@ -166,6 +169,56 @@ final readonly class OzonProductsStocksUpdateDispatcher
             }
 
             $Deduplicator->save();
+
+            /** Получаем текущие остатки на складе */
+
+            $OzonStockInfoDTO = $this->OzonStockInfoRequest
+                ->forTokenIdentifier($OzonTokenUid)
+                ->article($ProductsOzonCardResult->getArticle())
+                ->find();
+
+            /**
+             * Сверяем остатки селлера с указанными остатками на складе
+             */
+            if($OzonStockInfoDTO instanceof OzonStockInfoDTO)
+            {
+                /** Пропускаем если остатки равны */
+                if($ProductQuantity === $OzonStockInfoDTO->getTotal())
+                {
+                    $this->logger->warning('{article}: остаток соответствует наличию {seller} == {new}', [
+                        'article' => $ProductsOzonCardResult->getArticle(),
+                        'token' => (string) $OzonTokenUid,
+                        'seller' => $OzonStockInfoDTO->getTotal(),
+                        'new' => $ProductQuantity,
+                        self::class.':'.__LINE__,
+                    ]);
+
+                    continue;
+                }
+
+                /** Если остаток 0 и на селлере разница резерва и остатка равны - пропускаем */
+                if(empty($ProductQuantity) === true && $OzonStockInfoDTO->getTotal() === $OzonStockInfoDTO->getReserve())
+                {
+                    continue;
+                }
+
+                /**
+                 * Если остаток на складе меньше резерва - передаем в качестве остатка резерв селлера для баланса чисел
+                 *  т.о. делаем доступным для заказа - 0 остатков
+                 */
+                if($OzonStockInfoDTO->getReserve() > $ProductQuantity)
+                {
+                    $this->logger->warning('{article}: передаем в качестве остатка резерв {reserve} > {new}', [
+                        'article' => $ProductsOzonCardResult->getArticle(),
+                        'token' => (string) $OzonTokenUid,
+                        'reserve' => $OzonStockInfoDTO->getReserve(),
+                        'new' => $ProductQuantity,
+                        self::class.':'.__LINE__,
+                    ]);
+
+                    $ProductQuantity = $OzonStockInfoDTO->getReserve();
+                }
+            }
 
             /**
              * Обновляем остатки товара
