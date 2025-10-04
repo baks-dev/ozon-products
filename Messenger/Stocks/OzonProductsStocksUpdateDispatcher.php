@@ -202,21 +202,11 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     continue;
                 }
 
-                /**
-                 * Если остаток на складе меньше резерва - передаем в качестве остатка резерв селлера для баланса чисел
-                 *  т.о. делаем доступным для заказа - 0 остатков
-                 */
-                if($OzonStockInfoDTO->getReserve() > $ProductQuantity)
+                /** В случае наличия резерва на маркетплейсе - вычитаем его из остатка */
+                if(false === empty($OzonStockInfoDTO->getReserve()))
                 {
-                    $this->logger->warning('{article}: передаем в качестве остатка резерв {reserve} > {new}', [
-                        'article' => $ProductsOzonCardResult->getArticle(),
-                        'token' => (string) $OzonTokenUid,
-                        'reserve' => $OzonStockInfoDTO->getReserve(),
-                        'new' => $ProductQuantity,
-                        self::class.':'.__LINE__,
-                    ]);
-
-                    $ProductQuantity = $OzonStockInfoDTO->getReserve();
+                    $ProductQuantity -= $OzonStockInfoDTO->getReserve();
+                    $ProductQuantity = max($ProductQuantity, 0);
                 }
             }
 
