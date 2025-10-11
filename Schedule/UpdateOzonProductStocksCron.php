@@ -27,7 +27,7 @@ namespace BaksDev\Ozon\Products\Schedule;
 
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
-use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
+use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksUpdateDispatcher;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
@@ -41,15 +41,15 @@ use Symfony\Component\Scheduler\Attribute\AsCronTask;
 /** @see YaMarketProductsPriceUpdate */
 
 /**
- * Обновляем цены
+ * Обновляем остатки
  *
- * #midnight - каждый день между 00:00 и 2:59
+ * #hourly - в какую-то минуту каждый час
  *
  * @see https://symfony.com/doc/current/scheduler.html#cron-expression-triggers
  * @see OzonProductsStocksUpdateDispatcher
  */
-#[AsCronTask('#midnight', jitter: 60)]
-final readonly class UpdateOzonProductPriceCron
+#[AsCronTask('#hourly', jitter: 60)]
+final readonly class UpdateOzonProductStocksCron
 {
     public function __construct(
         #[Target('ozonProductsLogger')] private LoggerInterface $logger,
@@ -104,7 +104,7 @@ final readonly class UpdateOzonProductPriceCron
                     $ProductsIdentifierResult->getProductModificationConst(),
                 );
 
-                $OzonProductsStocksMessage = new OzonProductsPriceMessage($OzonProductsCardMessage);
+                $OzonProductsStocksMessage = new OzonProductsStocksMessage($OzonProductsCardMessage);
 
                 /** Консольную комманду выполняем синхронно */
                 $this->messageDispatch->dispatch(
