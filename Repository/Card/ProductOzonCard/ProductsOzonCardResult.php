@@ -101,10 +101,10 @@ final  class ProductsOzonCardResult
 
         /** Изображения */
         private readonly ?string $product_images_custom, //" => null
-        private readonly ?string $product_images_modification, //" => null
-        private readonly ?string $product_images_variation, //" => null
-        private readonly ?string $product_images_offer, //" => null
-        private readonly ?string $product_images, //" => "[{"product_img": "/upload/product_photo/1d129d8e73de76c01dd3b97060e78a53", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": false}, {"product_img": "/upload/product_photo/46ee2f0f6adab11443789192821c4ec3", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": true}, {"product_img": "/upload/product_photo/78483dad1fba1f1eb5debb6efcac0d3c", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": false}, {"product_img": "/upload/product_photo/7f1ba417142283b0d1bcea461e59499e", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": false}, {"product_img": "/upload/product_photo/fceaab3fae070675e40e5d0b54593f62", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": false}]"
+        private ?string $product_images_modification, //" => null
+        private ?string $product_images_variation, //" => null
+        private ?string $product_images_offer, //" => null
+        private ?string $product_images, //" => "[{"product_img": "/upload/product_photo/1d129d8e73de76c01dd3b97060e78a53", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": false}, {"product_img": "/upload/product_photo/46ee2f0f6adab11443789192821c4ec3", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": true}, {"product_img": "/upload/product_photo/78483dad1fba1f1eb5debb6efcac0d3c", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": false}, {"product_img": "/upload/product_photo/7f1ba417142283b0d1bcea461e59499e", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": false}, {"product_img": "/upload/product_photo/fceaab3fae070675e40e5d0b54593f62", "product_img_cdn": true, "product_img_ext": "webp", "product_img_root": false}]"
 
 
     ) {}
@@ -368,6 +368,31 @@ final  class ProductsOzonCardResult
         if(false === is_null($this->images))
         {
             return $this->images;
+        }
+
+        /** Если имеется коллекция кастомных изображений - снимаем ROOT с изображений карточки */
+
+        if(false === empty($this->product_images_custom))
+        {
+            if(false === empty($this->product_images_modification))
+            {
+                $this->product_images_modification = str_replace('"product_img_root": true', '"product_img_root": false', $this->product_images_modification);
+            }
+
+            if(false === empty($this->product_images_variation))
+            {
+                $this->product_images_variation = str_replace('"product_img_root": true', '"product_img_root": false', $this->product_images_variation);
+            }
+
+            if(false === empty($this->product_images_offer))
+            {
+                $this->product_images_offer = str_replace('"product_img_root": true', '"product_img_root": false', $this->product_images_offer);
+            }
+
+            if(false === empty($this->product_images))
+            {
+                $this->product_images = str_replace('"product_img_root": true', '"product_img_root": false', $this->product_images);
+            }
         }
 
         $collection = [
