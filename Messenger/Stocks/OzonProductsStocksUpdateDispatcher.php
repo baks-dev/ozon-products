@@ -97,7 +97,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
         /** Не обновляем остатки карточки без цены */
         if(empty($ProductsOzonCardResult->getProductPrice()?->getRoundValue()))
         {
-            $this->logger->critical(
+            $this->logger->warning(
                 sprintf('ozon-products: Ошибка при обновлении остатков! Стоимость артикула %s не найдена', $ProductsOzonCardResult->getArticle()),
                 [var_export($message, true), self::class.':'.__LINE__],
             );
