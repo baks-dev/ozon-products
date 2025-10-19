@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Schedule;
 
+use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
@@ -94,7 +95,7 @@ final readonly class UpdateOzonProductPriceCron
 
         foreach($products as $ProductsIdentifierResult)
         {
-            foreach($profiles as $UserProfileUid)
+            foreach($profiles as $stamps => $UserProfileUid)
             {
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
                     $UserProfileUid,
@@ -109,6 +110,7 @@ final readonly class UpdateOzonProductPriceCron
                 /** Консольную комманду выполняем синхронно */
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsStocksMessage,
+                    stamps: [new MessageDelay(sprintf('%s minutes', $stamps))],
                     transport: $UserProfileUid.'-low',
                 );
             }
