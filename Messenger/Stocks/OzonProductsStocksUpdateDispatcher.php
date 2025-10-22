@@ -86,8 +86,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
         if(false === ($ProductsOzonCardResult instanceof ProductsOzonCardResult))
         {
-            $this->logger->critical(
-                sprintf('ozon-products: Ошибка при обновлении остатков! Карточка товара артикула %s не найдена', $ProductsOzonCardResult->getArticle()),
+            $this->logger->warning(
+                'ozon-products: Ошибка при обновлении остатков! Карточка товара артикула не найдена',
                 [var_export($message, true), self::class.':'.__LINE__],
             );
 

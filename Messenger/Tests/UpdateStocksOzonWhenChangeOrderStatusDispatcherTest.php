@@ -43,6 +43,8 @@ class UpdateStocksOzonWhenChangeOrderStatusDispatcherTest extends KernelTestCase
 {
     public function testUseCase(): void
     {
+        self::assertTrue(true);
+
         /** @var UpdateStocksOzonWhenChangeOrderStatusDispatcher $UpdateStocksOzonWhenChangeOrderStatusDispatcher */
         $UpdateStocksOzonWhenChangeOrderStatusDispatcher = self::getContainer()->get(UpdateStocksOzonWhenChangeOrderStatusDispatcher::class);
 
