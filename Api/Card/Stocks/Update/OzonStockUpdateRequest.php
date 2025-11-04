@@ -107,6 +107,11 @@ final class OzonStockUpdateRequest extends Ozon
         {
             if(str_contains($content['message'], 'limit'))
             {
+                $this->logger->warning(
+                    sprintf('ozon-products: Превышен лимит запросов'),
+                    [self::class.':'.__LINE__, $content, $stocks],
+                );
+
                 return null;
             }
 

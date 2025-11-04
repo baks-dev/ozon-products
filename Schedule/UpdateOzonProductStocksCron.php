@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Schedule;
 
+use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
@@ -109,6 +110,7 @@ final readonly class UpdateOzonProductStocksCron
                 /** Консольную комманду выполняем синхронно */
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsStocksMessage,
+                    stamps: [new MessageDelay('1 hour')],
                     transport: $UserProfileUid.'-low',
                 );
             }

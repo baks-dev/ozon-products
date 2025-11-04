@@ -155,13 +155,13 @@ final readonly class OzonProductsStocksUpdateDispatcher
 
             if($Deduplicator->isExecuted())
             {
-                $this->logger->warning(
-                    sprintf('%s: Пропустили обновление остатков => {new}', $ProductsOzonCardResult->getArticle()),
-                    [
-                        'new' => $ProductQuantity,
-                        (string) $OzonTokenUid,
-                        self::class.':'.__LINE__,
-                    ]);
+                $this->logger->info(
+                    sprintf(
+                        '%s: Остаток в недавнем времени был обновлен. Фактический остаток %s',
+                        $ProductsOzonCardResult->getArticle(), $ProductQuantity,
+                    ),
+                    [(string) $OzonTokenUid, self::class.':'.__LINE__],
+                );
 
                 $Deduplicator->save();
 
@@ -257,7 +257,7 @@ final readonly class OzonProductsStocksUpdateDispatcher
             /** TRUE возвращается если токен не предполагает обновление остатков (либо обнуляет) */
             if(true === $result || false === $result->valid())
             {
-                $this->logger->info('{article}: Остановили продажу товара => {new}', [
+                $this->logger->info('{article}: Остановили продажу товара при фактическом остатке {new}', [
                     'article' => $ProductsOzonCardResult->getArticle(),
                     'token' => (string) $OzonTokenUid,
                     'new' => $ProductQuantity,
