@@ -35,7 +35,7 @@ use BaksDev\Orders\Order\UseCase\Admin\Edit\Products\OrderProductDTO;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
-use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierInterface;
+use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierByEventInterface;
 use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierResult;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -49,7 +49,7 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
 {
     public function __construct(
         private CurrentOrderEventInterface $CurrentOrderEventRepository,
-        private CurrentProductIdentifierInterface $CurrentProductIdentifierRepository,
+        private CurrentProductIdentifierByEventInterface $CurrentProductIdentifierRepository,
         private AllProfileOzonTokenInterface $allProfileOzonToken,
         private MessageDispatchInterface $messageDispatch,
         private DeduplicatorInterface $deduplicator
