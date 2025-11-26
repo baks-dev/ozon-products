@@ -19,7 +19,6 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
- *
  */
 
 namespace BaksDev\Ozon\Products\Controller\Admin\Barcode;
@@ -67,6 +66,7 @@ final class PrintController extends AbstractController
         /**
          * Получаем информацию о продукте
          */
+
         $ProductDetail = $ProductDetailByUid
             ->event($event)
             ->offer($offer)
