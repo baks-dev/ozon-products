@@ -82,9 +82,10 @@ class OzonMapperTest extends KernelTestCase
 
     public function testUseCase(): void
     {
-        if(!isset($_SERVER['TEST_PRODUCT']))
+        self::assertTrue(true);
+
+        if(false === isset($_SERVER['TEST_PRODUCT']))
         {
-            self::assertTrue(true);
             return;
         }
 
@@ -100,8 +101,9 @@ class OzonMapperTest extends KernelTestCase
         $variationConst = new ProductVariationConst($_SERVER['TEST_VARIATION_CONST']);
         $modificationConst = new ProductModificationConst($_SERVER['TEST_MODIFICATION_CONST']);
 
-        /** @var ProductsOzonCardInterface $ProductsOzonCard */
+        /** @var ProductsOzonCardInterface $ProductsOzonCardRepository */
         $ProductsOzonCardRepository = self::getContainer()->get(ProductsOzonCardInterface::class);
+
 
         /** @var ProductsOzonCardResult $ProductsOzonCardResult */
         $ProductsOzonCardResult = $ProductsOzonCardRepository
@@ -113,7 +115,7 @@ class OzonMapperTest extends KernelTestCase
             ->find();
 
 
-        if(false === $ProductsOzonCardResult)
+        if(false === ($ProductsOzonCardResult instanceof ProductsOzonCardResult))
         {
             self::assertFalse(false);
             return;
@@ -123,7 +125,7 @@ class OzonMapperTest extends KernelTestCase
         /** @var OzonProductsMapper $OzonProductsMapper */
         $OzonProductsMapper = self::getContainer()->get(OzonProductsMapper::class);
         $Card = $OzonProductsMapper->getData($ProductsOzonCardResult);
-        self::assertTrue(true);
+
 
         // dd($Card);
     }

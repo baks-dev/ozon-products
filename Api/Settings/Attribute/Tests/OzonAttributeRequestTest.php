@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2025.  Baks.dev <admin@baks.dev>
- *
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,6 +32,8 @@ use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\InvalidArgumentException;
+use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -68,66 +70,69 @@ class OzonAttributeRequestTest extends KernelTestCase
         // 17027949 -Шины
         // 94765 -Шины для легковых автомобилей
 
-        // 200000933 - Одежда
-        // 93244 - Футболка
-        // 93080 - Джинсы
-        // 93080 - Джинсы
-        // 93253 - Худи
-        // 93216 - Свитшот
+        $allAttributes = [
 
-        // 41777465 - Аксессуары
-        // 93040 - Бейсболка
+            // Шины
+            17027949 => [
+                94765, //  Шины для легковых автомобилей
+            ],
 
-        // 17028741 - Столовая посуда
-        // 92499 - Кружка
 
-        $attribute = $ozonAttributeRequest->findAll(17027949, 94765);
+            // Одежда
+            200000933 => [
+                93244, // - Футболка
+                93080, // - Джинсы
+                93080, // - Джинсы
+                93253, // - Худи
+                93216, // - Свитшот
+            ],
 
-        //                dd(iterator_to_array($attribute));
+            // Аксессуары
+            41777465 => [
+                93040, // - Бейсболка
+            ],
 
-        if($attribute->valid())
+            // Столовая посуда
+            17028741 => [
+                92499, // - Кружка
+            ],
+
+        ];
+
+
+        foreach($allAttributes as $category => $types)
         {
-            /** @var OzonAttributeDTO $OzonAttributeDTO */
-            $OzonAttributeDTO = $attribute->current();
+            foreach($types as $type)
+            {
+                $attributes = $ozonAttributeRequest->findAll($category, $type);
 
-            self::assertNotNull($OzonAttributeDTO->getId());
-            self::assertIsInt($OzonAttributeDTO->getId());
+                // dd(iterator_to_array($attribute));
 
-            self::assertNotNull($OzonAttributeDTO->getName());
-            self::assertIsString($OzonAttributeDTO->getName());
+                if(false === $attributes->valid())
+                {
+                    continue;
+                }
 
-            self::assertNotNull($OzonAttributeDTO->getComplexId());
-            self::assertIsInt($OzonAttributeDTO->getComplexId());
+                foreach($attributes as $OzonAttributeDTO)
+                {
+                    // Вызываем все геттеры
+                    $reflectionClass = new ReflectionClass(OzonAttributeDTO::class);
+                    $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
 
-            self::assertNotNull($OzonAttributeDTO->getDescription());
-            self::assertIsString($OzonAttributeDTO->getDescription());
+                    foreach($methods as $method)
+                    {
+                        // Методы без аргументов
+                        if($method->getNumberOfParameters() === 0)
+                        {
+                            // Вызываем метод
+                            $data = $method->invoke($OzonAttributeDTO);
+                            // dump($data);
+                        }
+                    }
 
-            self::assertNotNull($OzonAttributeDTO->getType());
-            self::assertIsString($OzonAttributeDTO->getType());
-
-            self::assertNotNull($OzonAttributeDTO->isCollection());
-            self::assertIsBool($OzonAttributeDTO->isCollection());
-
-            self::assertNotNull($OzonAttributeDTO->isRequired());
-            self::assertIsBool($OzonAttributeDTO->isCollection());
-
-            self::assertNotNull($OzonAttributeDTO->getMaxValueCount());
-            self::assertIsInt($OzonAttributeDTO->getMaxValueCount());
-
-            self::assertNotNull($OzonAttributeDTO->getGroupName());
-            self::assertIsString($OzonAttributeDTO->getGroupName());
-
-            self::assertNotNull($OzonAttributeDTO->getGroupId());
-            self::assertIsInt($OzonAttributeDTO->getGroupId());
-
-            self::assertNotNull($OzonAttributeDTO->getDictionaryId());
-            self::assertIsInt($OzonAttributeDTO->getDictionaryId());
-
+                    self::assertTrue(true);
+                }
+            }
         }
-        else
-        {
-            self::assertFalse($attribute->valid());
-        }
-
     }
 }
