@@ -11,7 +11,21 @@
 
     {# Изображения #}
     <div class="card-body">
-        <div id="photo_collection" class="d-flex gap-5 flex-wrap">
+        <div class="alert alert-info mb-3 w-100" role="alert">
+            <div class="d-flex align-items-baseline gap-3">
+                <div>
+                    <div class="icon rounded-circle bg-contain p-2 bg-primary text-white"
+                         style="width: 10px; height: 10px;">
+                        <span class="small">!</span>
+                    </div>
+                </div>
+                <div class="small lh-1">
+                    <div class="info">Перетяните одно или несколько изображений в область ниже</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="photo_collection" class="d-flex gap-5 flex-wrap border p-1 border-1" style="min-height: 150px;">
 
             {% set images = form.images %}
 
@@ -87,4 +101,3 @@
     </div>
 
 </div>
-
