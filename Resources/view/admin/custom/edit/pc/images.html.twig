@@ -11,7 +11,13 @@
 
     {# Изображения #}
     <div class="card-body">
-        <div id="photo_collection" class="d-flex gap-5 flex-wrap">
+
+        <div id="photo_collection" class="d-flex gap-5 flex-wrap border p-3 border-1 border-light bg-light"
+             style="min-height: 290px;">
+
+            <div class="h5 opacity-25 text-secondary lh-1 position-absolute top-50 start-50 translate-middle">
+                <div class="info w-100 text-center">Перетяните одно или несколько изображений в эту область</div>
+            </div>
 
             {% set images = form.images %}
 
