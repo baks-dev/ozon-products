@@ -141,10 +141,14 @@ executeFunc(function init()
         let newPrototype = document.getElementById($addImageButton.dataset.prototype).dataset.prototype;
         let index = $addImageButton.dataset.index * 1;
 
-        if(index === 12)
-        {
+        /** Подсчитать кол-во в момент добавления */
+        const item_collections = document.getElementsByClassName('item-collection-photo');
+        /* Если кол-во элементов равно 12 то не даем возможность добавлять */
+        const total_count = item_collections.length;
+        if (total_count === 12) {
             return;
         }
+
 
         /* Замена '__name__' в HTML-коде прототипа число, основанное на том, сколько коллекций */
         newPrototype = newPrototype.replace(/__images__/g, index);
@@ -280,10 +284,14 @@ executeFunc(function init()
 
             let index = $addImageButton.dataset.index * 1;
 
-            if(index === 12)
-            {
+            /** Подсчитать кол-во в момент добавления */
+            const item_collections = document.getElementsByClassName('item-collection-photo');
+            /* Если кол-во элементов равно 12 то не даем возможность добавлять */
+            const total_count = item_collections.length;
+            if (total_count === 12) {
                 return;
-            }
+            } 
+
 
             /* Заменить '__name__' в HTML-коде прототипа числом, основанным на том, сколько коллекций */
             newPrototype = newPrototype.replace(/__images__/g, index);
