@@ -83,6 +83,13 @@ class OzonAttributeValueSearchRequestTest extends KernelTestCase
         // 17028741 - Столовая посуда
         // 92499 - Кружка
 
+
+        // ["attribute_id" => 23249,
+        //"description_category_id" => 17027949,
+        //"limit" => 1,
+        //"type_id" => 94765,
+        //"value" => "1 "
+
         $OzonAttributeValueSearch->attribute(23249);
         $OzonAttributeValueSearch->category(17027949);
         $OzonAttributeValueSearch->type(94765);

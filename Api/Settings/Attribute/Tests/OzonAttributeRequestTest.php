@@ -100,13 +100,21 @@ class OzonAttributeRequestTest extends KernelTestCase
         ];
 
 
+        //        $allAttributes = [
+        //
+        //            // Шины
+        //            17027949 => [
+        //                94765, //  Шины для легковых автомобилей
+        //            ]
+        //        ];
+
         foreach($allAttributes as $category => $types)
         {
             foreach($types as $type)
             {
                 $attributes = $ozonAttributeRequest->findAll($category, $type);
 
-                // dd(iterator_to_array($attribute));
+                // dd(iterator_to_array($attributes));
 
                 if(false === $attributes || false === $attributes->valid())
                 {

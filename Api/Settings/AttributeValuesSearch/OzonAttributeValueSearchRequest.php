@@ -104,7 +104,7 @@ final class OzonAttributeValueSearchRequest extends Ozon
         }
 
         $cache = $this->getCacheInit('ozon-products');
-        $key = md5($this->type.$this->attribute);
+        $key = md5($this->category.$this->type.$this->attribute.$this->value);
 
         $content = $cache->get($key, function(ItemInterface $item): array|false {
 

@@ -66,7 +66,7 @@ final class QuantityUEIOzonProductsAttribute implements OzonProductsAttributeInt
             self::ID,
             (string) $this->default(),
             $data,
-            $this->attributeValueRequest,
+            false, // не определяем значение аттрибута по API
         );
 
         return $requestData->getData();
