@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2025.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@ namespace BaksDev\Ozon\Products\Api\Settings\Type;
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Ozon\Api\Ozon;
 use DateInterval;
-use DomainException;
 use Generator;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
@@ -57,19 +56,22 @@ final class OzonTypeRequest extends Ozon
 
     /**
      * Возвращает категории и типы для товаров в виде дерева.
+     *
      * @see https://docs.ozon.ru/api/seller/#tag/CategoryAPI
      *
      * @throws InvalidArgumentException
+     * @return Generator<OzonTypeDTO>|false
      */
-    public function findAll(int $categoryId): Generator
+    public function findAll(int $categoryId): Generator|false
     {
         $cache = $this->getCacheInit('ozon-products');
 
-        $response = $cache->get('ozon-products-type', function(ItemInterface $item): ResponseInterface {
+        $content = $cache->get('ozon-products-type', function(ItemInterface $item): array|false {
 
-            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+            $item->expiresAfter(DateInterval::createFromDateString('1 second'));
 
-            return $this->TokenHttpClient()
+            $response = $this
+                ->TokenHttpClient()
                 ->request(
                     'POST',
                     '/v1/description-category/tree',
@@ -79,19 +81,33 @@ final class OzonTypeRequest extends Ozon
                         ]
                     ]
                 );
+
+            $content = $response->toArray(false);
+
+            if($response->getStatusCode() !== 200)
+            {
+                $this->logger->critical($content['code'].': '.$content['message'], [__FILE__.':'.__LINE__]);
+
+                return false;
+            }
+
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+
+            return $content;
+
         });
 
-        $content = $response->toArray(false);
 
-        if($response->getStatusCode() !== 200)
+        if(false === $content)
         {
-            $this->logger->critical($content['code'].': '.$content['message'], [__FILE__.':'.__LINE__]);
-
-            throw new DomainException(
-                message: 'Ошибка '.self::class,
-                code: $response->getStatusCode()
-            );
+            return false;
         }
+
+        if(empty($content['result']))
+        {
+            return false;
+        }
+
 
         $this->getTypes($categoryId, $content['result']);
 

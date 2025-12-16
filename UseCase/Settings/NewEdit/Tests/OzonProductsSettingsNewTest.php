@@ -45,7 +45,7 @@ class OzonProductsSettingsNewTest extends KernelTestCase
 
         // 0188a99c-ab4b-7c1a-be5d-14f2b990284d
 
-        $CategoryProductNewTest = new CategoryProductNewTest();
+        $CategoryProductNewTest = new CategoryProductNewTest('jMdNPAAMU');
         $CategoryProductNewTest::setUpBeforeClass();
         $CategoryProductNewTest->testUseCase();
 

@@ -86,12 +86,20 @@ class OzonProductsMapperTypeTest extends KernelTestCase
             /** @var OzonProductsCategoryInterface $caseCategory */
             foreach($OzonProductCategoryArray as $caseCategory)
             {
-                if(!$caseType->equalsCategory($caseCategory->getId()))
+                if(false === $caseType->equalsCategory($caseCategory->getId()))
                 {
                     continue;
                 }
 
-                $typeIds = iterator_to_array($ozonTypeRequest->findAll($caseCategory->getId()));
+                $types = $ozonTypeRequest->findAll($caseCategory->getId());
+
+                if(false === $types || false === $types->valid())
+                {
+                    echo 'Ошибка получении данных';
+                    continue;
+                }
+
+                $typeIds = iterator_to_array($types);
 
                 assertNotEmpty(array_filter($typeIds, fn($n) => $n->getId() === $caseType->getId()));
             }

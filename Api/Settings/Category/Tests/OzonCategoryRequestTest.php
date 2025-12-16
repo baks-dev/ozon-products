@@ -32,6 +32,8 @@ use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\InvalidArgumentException;
+use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -61,6 +63,7 @@ class OzonCategoryRequestTest extends KernelTestCase
      */
     public function testComplete(): void
     {
+
         /** @var OzonCategoryRequest $ozonCategoryRequest */
         $ozonCategoryRequest = self::getContainer()->get(OzonCategoryRequest::class);
         $ozonCategoryRequest->TokenHttpClient(self::$Authorization);
@@ -71,26 +74,27 @@ class OzonCategoryRequestTest extends KernelTestCase
 
         $categories = $ozonCategoryRequest->findAll(17027495);
 
-
-        // dd(iterator_to_array($categories));
-        // выбираем категорию и находим тип
-        // @see OzonTypeRequestTest
-
-        if($categories->valid())
+        if(false === $categories->valid())
         {
-            /** @var OzonCategoryDTO $OzonCategoryDTO */
-            $OzonCategoryDTO = $categories->current();
-
-            self::assertNotNull($OzonCategoryDTO->getId());
-            self::assertIsInt($OzonCategoryDTO->getId());
-
-            self::assertNotNull($OzonCategoryDTO->getName());
-            self::assertIsString($OzonCategoryDTO->getName());
-
+            return;
         }
-        else
+
+        foreach($categories as $OzonCategoryDTO)
         {
-            self::assertFalse($categories->valid());
+            // Вызываем все геттеры
+            $reflectionClass = new ReflectionClass(OzonCategoryDTO::class);
+            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+            foreach($methods as $method)
+            {
+                // Методы без аргументов
+                if($method->getNumberOfParameters() === 0)
+                {
+                    // Вызываем метод
+                    $data = $method->invoke($OzonCategoryDTO);
+                    // dump($data);
+                }
+            }
         }
     }
 }

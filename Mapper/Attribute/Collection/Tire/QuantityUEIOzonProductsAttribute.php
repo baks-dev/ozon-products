@@ -32,17 +32,20 @@ use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult
 
 final class QuantityUEIOzonProductsAttribute implements OzonProductsAttributeInterface
 {
-    //-id: 7202
-    //-complex: 0
-    //-name: "Количество, штук"
-    //-description: "Укажите количество товаров, которые получит покупатель. Пример: если в одной упаковке две детали - укажите 2; если товар один, но поставляется в двух упаковках - укажите 1. Выберите одно значение из выпадающего списка."
-    //-type: "String"
-    //-collection: false
-    //-required: false
-    //-count: 0
-    //-groupId: 1
-    //-groupName: "Общие"
-    //-dictionary: 1324
+    //    -id: 23249
+    //    -complex: 0
+    //    -name: "Количество товара в УЕИ"
+    //    -description: """
+    //      УЕИ – унифицированная единица измерения. Необходимо указывать для продажи товаров на территории Республики Беларусь согласно локальному законодательству. Указывается количество пар либо штук в единице товара. \n
+    //      Можно указать только целое число.
+    //      """
+    //    -type: "Decimal"
+    //    -collection: false
+    //    -required: false
+    //    -count: 0
+    //    -groupId: 0
+    //    -groupName: ""
+    //    -dictionary: 0
 
 
     /** 17027949 - Шины */

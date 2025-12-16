@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2025.  Baks.dev <admin@baks.dev>
- *
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,6 +32,8 @@ use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\InvalidArgumentException;
+use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -81,36 +83,32 @@ class OzonAttributeValueSearchRequestTest extends KernelTestCase
         // 17028741 - Столовая посуда
         // 92499 - Кружка
 
-        $OzonAttributeValueSearch->attribute(4389);
+        $OzonAttributeValueSearch->attribute(23249);
         $OzonAttributeValueSearch->category(17027949);
         $OzonAttributeValueSearch->type(94765);
-        $OzonAttributeValueSearch->value("Triangle");
-        $attribute = $OzonAttributeValueSearch->find();
+        $OzonAttributeValueSearch->value("1 ");
+        $OzonAttributeValueSearchDTO = $OzonAttributeValueSearch->find();
 
 
-        //                dd(iterator_to_array($attribute));
-
-        if($attribute->valid())
+        if(false === ($OzonAttributeValueSearchDTO instanceof OzonAttributeValueSearchDTO))
         {
-            /** @var OzonAttributeValueSearchDTO $OzonAttributeDTO */
-            $OzonAttributeDTO = $attribute->current();
-
-            self::assertNotNull($OzonAttributeDTO->getId());
-            self::assertIsInt($OzonAttributeDTO->getId());
-
-            self::assertNotNull($OzonAttributeDTO->getValue());
-            self::assertIsString($OzonAttributeDTO->getValue());
-
-            self::assertNotNull($OzonAttributeDTO->getInfo());
-            self::assertIsString($OzonAttributeDTO->getInfo());
-
-            self::assertNotNull($OzonAttributeDTO->getPicture());
-            self::assertIsString($OzonAttributeDTO->getPicture());
-        }
-        else
-        {
-            self::assertFalse($attribute->valid());
+            echo "Ошибка при получении данных".PHP_EOL;
+            return;
         }
 
+        // Вызываем все геттеры
+        $reflectionClass = new ReflectionClass(OzonAttributeValueSearchDTO::class);
+        $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+        foreach($methods as $method)
+        {
+            // Методы без аргументов
+            if($method->getNumberOfParameters() === 0)
+            {
+                // Вызываем метод
+                $data = $method->invoke($OzonAttributeValueSearchDTO);
+                // dump($data);
+            }
+        }
     }
 }

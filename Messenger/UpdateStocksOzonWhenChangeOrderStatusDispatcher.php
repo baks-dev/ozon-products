@@ -140,6 +140,14 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
                     stamps: [new MessageDelay('5 seconds')],
                     transport: (string) $profile,
                 );
+
+                /** Дополнительно пробуем обновить  */
+
+                $this->messageDispatch->dispatch(
+                    message: new OzonProductsStocksMessage($OzonProductsCardMessage),
+                    stamps: [new MessageDelay('15 seconds')],
+                    transport: (string) $profile,
+                );
             }
         }
     }

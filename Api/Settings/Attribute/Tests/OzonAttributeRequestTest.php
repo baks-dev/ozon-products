@@ -108,7 +108,7 @@ class OzonAttributeRequestTest extends KernelTestCase
 
                 // dd(iterator_to_array($attribute));
 
-                if(false === $attributes->valid())
+                if(false === $attributes || false === $attributes->valid())
                 {
                     continue;
                 }

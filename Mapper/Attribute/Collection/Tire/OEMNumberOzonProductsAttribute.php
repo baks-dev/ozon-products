@@ -31,17 +31,17 @@ use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult
 
 final class OEMNumberOzonProductsAttribute implements OzonProductsAttributeInterface
 {
-    //-id: 7324
-    //-complex: 0
-    //-name: "OEM-номер"
-    //-description: "Несколько OEM-номеров записываются через "; " (пробел обязателен))"
-    //-type: "multiline"
-    //-collection: false
-    //-required: false
-    //-count: 0
-    //-groupId: 0
-    //-groupName: ""
-    //-dictionary: 0
+    // -id: 7324
+    //  -complex: 0
+    //  -name: "OEM-номер"
+    //  -description: "Оригинальный номер запчасти, присвоенный производителем автомобиля или автозапчастей, аналогом которой является ваш товар. Не заполняйте это поле, если у запчасти нет OEM-номера. Если номеров несколько, перечислите их через точку с запятой и пробел."
+    //  -type: "String"
+    //  -collection: false
+    //  -required: false
+    //  -count: 0
+    //  -groupId: 0
+    //  -groupName: ""
+    //  -dictionary: 0
 
 
     /** 17027949 - Шины */

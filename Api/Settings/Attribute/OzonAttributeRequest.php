@@ -28,7 +28,6 @@ namespace BaksDev\Ozon\Products\Api\Settings\Attribute;
 use BaksDev\Core\Type\Locale\Locale;
 use BaksDev\Ozon\Api\Ozon;
 use DateInterval;
-use DomainException;
 use Generator;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -56,43 +55,55 @@ final class OzonAttributeRequest extends Ozon
      *
      * @see https://docs.ozon.ru/api/seller/#operation/DescriptionCategoryAPI_GetAttributes
      *
-     * @return Generator<OzonAttributeDTO>
+     * @return Generator<OzonAttributeDTO>|false
      */
-    public function findAll(int $categoryId, int $typeId): Generator
+    public function findAll(int $categoryId, int $typeId): Generator|false
     {
         $cache = $this->getCacheInit('ozon-products');
+        $key = sprintf('%s-%s', 'ozon-products-attribute', $typeId);
 
-        $response = $cache->get(
-            sprintf('%s-%s', 'ozon-products-attribute', $typeId),
-            function(ItemInterface $item) use ($categoryId, $typeId): ResponseInterface {
+        $content = $cache->get($key, function(ItemInterface $item) use ($categoryId, $typeId): array|false {
 
-                $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-                return $this->TokenHttpClient()
-                    ->request(
-                        'POST',
-                        '/v1/description-category/attribute',
-                        [
-                            "json" => [
-                                'description_category_id' => $categoryId,
-                                "language" => $this->local ?: 'DEFAULT',
-                                "type_id" => $typeId
-                            ]
-                        ]
-                    );
+            $response = $this->TokenHttpClient()
+                ->request(
+                    'POST',
+                    '/v1/description-category/attribute',
+                    [
+                        "json" => [
+                            'description_category_id' => $categoryId,
+                            "language" => $this->local ?: 'DEFAULT',
+                            "type_id" => $typeId,
+                        ],
+                    ],
+                );
+
+            $content = $response->toArray(false);
+
+            if($response->getStatusCode() !== 200)
+            {
+                $this->logger->critical($content['code'].': '.$content['message'], [__FILE__.':'.__LINE__]);
+
+                return false;
             }
-        );
 
-        $content = $response->toArray(false);
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
 
-        if($response->getStatusCode() !== 200)
+            return $content;
+        });
+
+
+        if(false === $content)
         {
-            $this->logger->critical($content['code'].': '.$content['message'], [__FILE__.':'.__LINE__]);
+            $cache->deleteItem($key);
+            return false;
+        }
 
-            throw new DomainException(
-                message: 'Ошибка '.self::class,
-                code: $response->getStatusCode()
-            );
+        if(empty($content['result']))
+        {
+            $cache->deleteItem($key);
+            return false;
         }
 
         foreach($content['result'] as $attributes)

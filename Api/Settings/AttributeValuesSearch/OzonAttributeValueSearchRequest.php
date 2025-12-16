@@ -27,7 +27,6 @@ namespace BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch;
 
 use BaksDev\Ozon\Api\Ozon;
 use DateInterval;
-use DomainException;
 use Generator;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -40,9 +39,11 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class OzonAttributeValueSearchRequest extends Ozon
 {
     private int $attribute;
+
     private int|string $value;
 
     private int|false $category;
+
     private int|false $type;
 
 
@@ -104,13 +105,12 @@ final class OzonAttributeValueSearchRequest extends Ozon
 
         $cache = $this->getCacheInit('ozon-products');
         $key = md5($this->type.$this->attribute);
-        // $cache->deleteItem($key);
 
-        $response = $cache->get($key, function(ItemInterface $item): ResponseInterface {
+        $content = $cache->get($key, function(ItemInterface $item): array|false {
 
-            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+            $item->expiresAfter(DateInterval::createFromDateString('1 second'));
 
-            return $this->TokenHttpClient()
+            $response = $this->TokenHttpClient()
                 ->request(
                     'POST',
                     '/v1/description-category/attribute/values/search',
@@ -129,19 +129,42 @@ final class OzonAttributeValueSearchRequest extends Ozon
                         ],
                     ],
                 );
-        },
-        );
 
-        $content = $response->toArray(false);
+            $content = $response->toArray(false);
 
-        if($response->getStatusCode() !== 200)
+            if($response->getStatusCode() !== 200)
+            {
+                $this->logger->critical(
+                    $content['code'].': '.$content['message'],
+                    [
+                        "attribute_id" => $this->attribute,
+                        'description_category_id' => $this->category,
+                        "limit" => 1,
+                        "type_id" => $this->type,
+                        "value" => $this->value.' ',
+                        __FILE__.':'.__LINE__,
+                    ],
+                );
+
+                return false;
+            }
+
+            $item->expiresAfter(DateInterval::createFromDateString('1 day'));
+
+            return $content;
+
+        });
+
+        if(false === $content)
         {
-            $this->logger->critical($content['code'].': '.$content['message'], [__FILE__.':'.__LINE__]);
+            $cache->deleteItem($key);
+            return false;
+        }
 
-            throw new DomainException(
-                message: 'Ошибка '.self::class,
-                code: $response->getStatusCode(),
-            );
+        if(empty($content['result']))
+        {
+            $cache->deleteItem($key);
+            return false;
         }
 
         foreach($content['result'] as $attributeValuesSearch)

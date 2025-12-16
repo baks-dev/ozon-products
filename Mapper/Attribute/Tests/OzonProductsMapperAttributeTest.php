@@ -118,16 +118,22 @@ class OzonProductsMapperAttributeTest extends KernelTestCase
                 //                echo 'Категория '.$caseCategory->getId().PHP_EOL;
                 //                echo '-- Тип '.$caseType->getId().PHP_EOL;
 
-
-                /** Получаем все аттрибуты категории и типа  */
-                $attributes = iterator_to_array($ozonAttributeRequest->findAll($caseCategory->getId(), $caseType->getId()));
-
-
                 if($caseCategory->getId() !== 17027949)
                 {
                     continue;
                 }
 
+                /** Получаем все аттрибуты категории и типа  */
+
+                $attributes = $ozonAttributeRequest->findAll($caseCategory->getId(), $caseType->getId());
+
+                if(false === $attributes || false === $attributes->valid())
+                {
+                    echo 'Ошибка получении данных';
+                    continue;
+                }
+
+                $attributes = iterator_to_array($attributes);
 
                 foreach($attributes as $attribute)
                 {
@@ -143,7 +149,6 @@ class OzonProductsMapperAttributeTest extends KernelTestCase
                         dump($attribute);
                     }
 
-
                     self::assertNotEmpty($isset, sprintf('Отсутствует элемент ID = %s ( %s ) для категории %s', $attribute->getId(), $attribute->getName(), $caseCategory->getId()));
 
                 }
@@ -156,7 +161,7 @@ class OzonProductsMapperAttributeTest extends KernelTestCase
 
                 foreach($OzonProductAttributeArray as $caseAttribute)
                 {
-                    if(!$caseAttribute->equalsCategory($caseCategory->getId()))
+                    if(false === $caseAttribute->equalsCategory($caseCategory->getId()))
                     {
                         continue;
                     }

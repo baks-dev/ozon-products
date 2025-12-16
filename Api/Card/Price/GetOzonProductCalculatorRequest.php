@@ -236,8 +236,7 @@ final class GetOzonProductCalculatorRequest extends Ozon
         if(is_array($debug))
         {
             $debug['Итого затраты'] = ($this->price->getValue() - $startPrice);
-
-            dd($debug);
+            // dump($debug);
         }
 
         return $this->price;

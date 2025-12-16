@@ -25,6 +25,7 @@ namespace BaksDev\Ozon\Products\Controller\Admin\Settings\Tests;
 
 use BaksDev\Ozon\Products\Mapper\Category\OzonProductsCategoryCollection;
 use BaksDev\Ozon\Products\Mapper\Type\OzonProductsTypeCollection;
+use BaksDev\Ozon\Products\UseCase\Settings\NewEdit\Tests\OzonProductsSettingsNewTest;
 use BaksDev\Products\Category\Type\Id\CategoryProductUid;
 use BaksDev\Users\User\Tests\TestUserAccount;
 use PHPUnit\Framework\Attributes\DependsOnClass;
@@ -45,6 +46,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
 
     private const string ROLE = 'ROLE_OZON_PRODUCTS_NEW';
 
+    #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public static function setUpBeforeClass(): void
     {
@@ -68,6 +70,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
 
 
     /** Доступ по роли  */
+    #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public function testRoleSuccessful(): void
     {
@@ -92,6 +95,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
 
 
     /** Доступ по роли ROLE_ADMIN */
+    #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public function testRoleAdminSuccessful(): void
     {
@@ -114,6 +118,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
     }
 
     /** Доступ по роли ROLE_USER */
+    #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public function testRoleUserFiled(): void
     {
@@ -135,6 +140,7 @@ final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
     }
 
     /** Доступ по без роли */
+    #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]
     public function testGuestFiled(): void
     {

@@ -36,7 +36,7 @@ final class IndexControllerTest extends WebTestCase
 {
     private const string URL = '/admin/ozon/custom';
 
-    private const string ROLE = 'ROLE_OZON_PRODUCTS_INDEX';
+    private const string ROLE = 'ROLE_OZON_PRODUCTS_CUSTOM';
 
     /** Доступ по роли  */
     public function testRoleSuccessful(): void

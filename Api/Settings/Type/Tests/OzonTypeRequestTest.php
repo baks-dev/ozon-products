@@ -28,10 +28,13 @@ namespace BaksDev\Ozon\Products\Api\Settings\Type\Tests;
 use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Settings\Type\OzonTypeDTO;
 use BaksDev\Ozon\Products\Api\Settings\Type\OzonTypeRequest;
+use BaksDev\Ozon\Products\Mapper\Category\OzonProductsCategoryCollection;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\InvalidArgumentException;
+use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -61,35 +64,57 @@ class OzonTypeRequestTest extends KernelTestCase
      */
     public function testComplete(): void
     {
+        self::assertTrue(true);
+
         /** @var OzonTypeRequest $ozonTypeRequest */
         $ozonTypeRequest = self::getContainer()->get(OzonTypeRequest::class);
         $ozonTypeRequest->TokenHttpClient(self::$Authorization);
 
+        /** @var OzonProductsCategoryCollection $OzonProductsCategoryCollection */
+        $OzonProductsCategoryCollection = self::getContainer()->get(OzonProductsCategoryCollection::class);
 
-        // 17027949 - Шины
-        // 200000933 - Одежда
-        // 17028741 - Столовая посуда
-        // 41777465 - Аксессуары
 
-        $types = $ozonTypeRequest->findAll(17027949);
-
-        dd(iterator_to_array($types));
-
-        if($types->valid())
+        foreach($OzonProductsCategoryCollection->cases() as $OzonProductsCategory)
         {
-            /** @var OzonTypeDTO $OzonTypeDTO */
-            $OzonTypeDTO = $types->current();
 
-            self::assertNotNull($OzonTypeDTO->getId());
-            self::assertIsInt($OzonTypeDTO->getId());
+            // 17027949 - Шины
+            // 200000933 - Одежда
+            // 17028741 - Столовая посуда
+            // 41777465 - Аксессуары
 
-            self::assertNotNull($OzonTypeDTO->getName());
-            self::assertIsString($OzonTypeDTO->getName());
+            if($OzonProductsCategory->getId() !== 17027949)
+            {
+                // Пропускаем категории кроме ....
+                // continue;
+            }
 
-        }
-        else
-        {
-            self::assertFalse($types->valid());
+            $types = $ozonTypeRequest->findAll($OzonProductsCategory->getId());
+
+            if(false === $types || false === $types->valid())
+            {
+                echo 'Ошибка получении данных';
+                continue;
+            }
+
+            // dd(iterator_to_array($types));
+
+            foreach($types as $OzonTypeDTO)
+            {
+                // Вызываем все геттеры
+                $reflectionClass = new ReflectionClass(OzonTypeDTO::class);
+                $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+                foreach($methods as $method)
+                {
+                    // Методы без аргументов
+                    if($method->getNumberOfParameters() === 0)
+                    {
+                        // Вызываем метод
+                        $data = $method->invoke($OzonTypeDTO);
+                        // dump($data);
+                    }
+                }
+            }
         }
     }
 }

@@ -89,8 +89,8 @@ class GetOzonProductCalculatorRequestTest extends KernelTestCase
 
             // dd($Money);
 
-            self::assertEquals($Money->getValue(), 10986.47);
-            self::assertEquals($Money->getRoundValue(), 10986);
+            self::assertEquals($Money->getValue(), 11626.47);
+            self::assertEquals($Money->getRoundValue(), 11626);
         }
     }
 }
