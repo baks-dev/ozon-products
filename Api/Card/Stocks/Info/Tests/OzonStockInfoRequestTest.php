@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -67,6 +67,8 @@ class OzonStockInfoRequestTest extends KernelTestCase
 
     public function testComplete(): void
     {
+        self::assertTrue(true);
+
         self::bootKernel();
 
         /** @var OzonStockInfoRequest $OzonStockInfoRequest */
@@ -81,25 +83,23 @@ class OzonStockInfoRequestTest extends KernelTestCase
             ->article('qhEeZVHak')
             ->find();
 
-        // dd($OzonStockInfo);
-
-        if($OzonStockInfo instanceof OzonStockInfoDTO)
+        if(false === $OzonStockInfo instanceof OzonStockInfoDTO)
         {
-            // Вызываем все геттеры
-            $reflectionClass = new ReflectionClass(OzonStockInfoDTO::class);
-            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-
-            foreach($methods as $method)
-            {
-                // Методы без аргументов
-                if($method->getNumberOfParameters() === 0)
-                {
-                    // Вызываем метод
-                    $method->invoke($OzonStockInfo);
-                }
-            }
+            return;
         }
 
-        self::assertTrue(true);
+        // Вызываем все геттеры
+        $reflectionClass = new ReflectionClass(OzonStockInfoDTO::class);
+        $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+        foreach($methods as $method)
+        {
+            // Методы без аргументов
+            if($method->getNumberOfParameters() === 0)
+            {
+                // Вызываем метод
+                $method->invoke($OzonStockInfo);
+            }
+        }
     }
 }

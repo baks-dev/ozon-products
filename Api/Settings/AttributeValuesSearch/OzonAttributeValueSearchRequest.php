@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -89,9 +89,9 @@ final class OzonAttributeValueSearchRequest extends Ozon
 
 
     /**
-     * @return Generator<int, OzonAttributeValueSearchDTO>|false
+     * @return Generator<OzonAttributeValueSearchDTO>|false
      */
-    public function find(): Generator|false
+    public function findAll(): Generator|false
     {
         if(empty($this->category))
         {
@@ -105,6 +105,7 @@ final class OzonAttributeValueSearchRequest extends Ozon
 
         $cache = $this->getCacheInit('ozon-products');
         $key = md5($this->category.$this->type.$this->attribute.$this->value);
+        //$cache->deleteItem($key);
 
         $content = $cache->get($key, function(ItemInterface $item): array|false {
 
@@ -173,7 +174,7 @@ final class OzonAttributeValueSearchRequest extends Ozon
             {
                 $this->logger->critical(
                     sprintf(
-                        'Искомое значение %s не совпадает с найденным %s, аттрибут ID = %s',
+                        'ozon-products: Искомое значение %s не совпадает с найденным %s, аттрибут ID = %s',
                         $this->value,
                         $attributeValuesSearch['value'],
                         $this->attribute,

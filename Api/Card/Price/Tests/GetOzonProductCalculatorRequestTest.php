@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -86,8 +86,6 @@ class GetOzonProductCalculatorRequestTest extends KernelTestCase
                 ->weight((12600)) // Вес 12.6
                 ->price(new Money(7443)) // Цена 7443
                 ->calc();
-
-            // dd($Money);
 
             self::assertEquals($Money->getValue(), 11626.47);
             self::assertEquals($Money->getRoundValue(), 11626);

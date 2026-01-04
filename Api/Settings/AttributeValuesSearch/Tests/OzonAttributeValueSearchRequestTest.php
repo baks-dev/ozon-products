@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ namespace BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\Tests;
 use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchDTO;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\BrandOzonProductsAttribute;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\Group;
@@ -63,6 +64,8 @@ class OzonAttributeValueSearchRequestTest extends KernelTestCase
      */
     public function testComplete(): void
     {
+        self::assertTrue(true);
+
         /** @var OzonAttributeValueSearchRequest $OzonAttributeValueSearch */
         $OzonAttributeValueSearch = self::getContainer()->get(OzonAttributeValueSearchRequest::class);
         $OzonAttributeValueSearch->TokenHttpClient(self::$Authorization);
@@ -90,31 +93,40 @@ class OzonAttributeValueSearchRequestTest extends KernelTestCase
         //"type_id" => 94765,
         //"value" => "1 "
 
-        $OzonAttributeValueSearch->attribute(23249);
-        $OzonAttributeValueSearch->category(17027949);
-        $OzonAttributeValueSearch->type(94765);
-        $OzonAttributeValueSearch->value("1 ");
-        $OzonAttributeValueSearchDTO = $OzonAttributeValueSearch->find();
 
+        $BrandOzonProductsAttribute = new BrandOzonProductsAttribute();
 
-        if(false === ($OzonAttributeValueSearchDTO instanceof OzonAttributeValueSearchDTO))
+        /**
+         * @see OzonAttributeRequestTest для типа
+         */
+        $result = $OzonAttributeValueSearch
+            ->attribute($BrandOzonProductsAttribute::ID)
+            ->category($BrandOzonProductsAttribute::CATEGORY)
+            ->type(94765) // Шины для легковых автомобилей
+            ->value("Triangle")
+            ->findAll();
+
+        if(false === $result || false === $result->valid())
         {
-            echo "Ошибка при получении данных".PHP_EOL;
+            echo "Ошибка при получении аттрибутов ".self::class.':'.__LINE__.PHP_EOL;
             return;
         }
 
-        // Вызываем все геттеры
-        $reflectionClass = new ReflectionClass(OzonAttributeValueSearchDTO::class);
-        $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-
-        foreach($methods as $method)
+        foreach($result as $OzonAttributeValueSearchDTO)
         {
-            // Методы без аргументов
-            if($method->getNumberOfParameters() === 0)
+            // Вызываем все геттеры
+            $reflectionClass = new ReflectionClass(OzonAttributeValueSearchDTO::class);
+            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+            foreach($methods as $method)
             {
-                // Вызываем метод
-                $data = $method->invoke($OzonAttributeValueSearchDTO);
-                // dump($data);
+                // Методы без аргументов
+                if($method->getNumberOfParameters() === 0)
+                {
+                    // Вызываем метод
+                    $data = $method->invoke($OzonAttributeValueSearchDTO);
+                    // dump($data);
+                }
             }
         }
     }

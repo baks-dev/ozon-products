@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -47,9 +47,11 @@ final class NameGroupOzonProductsAttribute implements OzonProductsAttributeInter
 
 
     /** 17027949 - Шины */
-    private const int CATEGORY = 17027949;
+    public const int CATEGORY = 17027949;
 
-    private const int ID = 22390;
+    public const int TYPE = 94765;
+
+    public const int ID = 22390;
 
     public function getId(): int
     {

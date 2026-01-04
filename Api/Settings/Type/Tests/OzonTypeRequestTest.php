@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -92,11 +92,9 @@ class OzonTypeRequestTest extends KernelTestCase
 
             if(false === $types || false === $types->valid())
             {
-                echo 'Ошибка получении данных';
+                echo 'Ошибка получении данных '.self::class.':'.__LINE__.PHP_EOL;
                 continue;
             }
-
-            // dd(iterator_to_array($types));
 
             foreach($types as $OzonTypeDTO)
             {

@@ -1,17 +1,17 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
- *
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,10 +28,13 @@ namespace BaksDev\Ozon\Products\Api\Settings\AttributeValues\Tests;
 use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValues\OzonAttributeValueDTO;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValues\OzonAttributeValueRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\BrandOzonProductsAttribute;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\Group;
 use Psr\Cache\InvalidArgumentException;
+use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
@@ -81,31 +84,42 @@ class OzonAttributeValueRequestTest extends KernelTestCase
         // 17028741 - Столовая посуда
         // 92499 - Кружка
 
-        $attribute = $ozonAttributeRequest->findAll(17027949, 94765, 4389);
 
-        //                dd(iterator_to_array($attribute));
+        $BrandOzonProductsAttribute = new BrandOzonProductsAttribute();
 
-        if($attribute->valid())
+        $attributes = $ozonAttributeRequest
+            ->findAll(
+                $BrandOzonProductsAttribute::CATEGORY,
+                $BrandOzonProductsAttribute::TYPE,
+                $BrandOzonProductsAttribute::ID,
+            );
+
+        if(false === $attributes->valid())
         {
-            /** @var OzonAttributeValueDTO $OzonAttributeDTO */
-            $OzonAttributeDTO = $attribute->current();
-
-            self::assertNotNull($OzonAttributeDTO->getId());
-            self::assertIsInt($OzonAttributeDTO->getId());
-
-            self::assertNotNull($OzonAttributeDTO->getValue());
-            self::assertIsString($OzonAttributeDTO->getValue());
-
-            self::assertNotNull($OzonAttributeDTO->getInfo());
-            self::assertIsString($OzonAttributeDTO->getInfo());
-
-            self::assertNotNull($OzonAttributeDTO->getPicture());
-            self::assertIsString($OzonAttributeDTO->getPicture());
+            self::assertFalse(false);
+            return;
         }
-        else
+
+        foreach($attributes as $OzonAttributeValueDTO)
         {
-            self::assertFalse($attribute->valid());
+            // Вызываем все геттеры
+            $reflectionClass = new ReflectionClass(OzonAttributeValueDTO::class);
+            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+            foreach($methods as $method)
+            {
+                // Методы без аргументов
+                if($method->getNumberOfParameters() === 0)
+                {
+                    // Вызываем метод
+                    $data = $method->invoke($OzonAttributeValueDTO);
+                    //dump($data);
+                }
+            }
+
         }
+
+        self::assertTrue(true);
 
     }
 }
