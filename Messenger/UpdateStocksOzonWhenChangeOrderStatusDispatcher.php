@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,7 @@ use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierByEventInterface;
 use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierResult;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**
@@ -52,7 +53,8 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
         private CurrentProductIdentifierByEventInterface $CurrentProductIdentifierRepository,
         private AllProfileOzonTokenInterface $allProfileOzonToken,
         private MessageDispatchInterface $messageDispatch,
-        private DeduplicatorInterface $deduplicator
+        private DeduplicatorInterface $deduplicator,
+        #[Autowire(env: 'PROJECT_PROFILE')] private ?string $PROJECT_PROFILE = null,
     ) {}
 
 
@@ -105,8 +107,14 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
         $EditOrderDTO = new EditOrderDTO();
         $OrderEvent->getDto($EditOrderDTO);
 
-        foreach($profiles as $profile)
+        foreach($profiles as $UserProfileUid)
         {
+            /** Если указан профиль проекта - пропускаем остальные профили */
+            if(false === empty($this->PROJECT_PROFILE) && false === $UserProfileUid->equals($this->PROJECT_PROFILE))
+            {
+                continue;
+            }
+
             /** @var OrderProductDTO $product */
             foreach($EditOrderDTO->getProduct() as $product)
             {
@@ -124,7 +132,7 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
                 }
 
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
-                    $profile,
+                    $UserProfileUid,
                     $CurrentProductIdentifier->getProduct(),
                     $CurrentProductIdentifier->getOfferConst(),
                     $CurrentProductIdentifier->getVariationConst(),
@@ -138,15 +146,15 @@ final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
                 $this->messageDispatch->dispatch(
                     message: new OzonProductsStocksMessage($OzonProductsCardMessage),
                     stamps: [new MessageDelay('5 seconds')],
-                    transport: (string) $profile,
+                    transport: (string) $UserProfileUid,
                 );
 
-                /** Дополнительно пробуем обновить  */
+                /** Дополнительно пробуем обновить (на случай если остатки еще не успели пересчитаться) */
 
                 $this->messageDispatch->dispatch(
                     message: new OzonProductsStocksMessage($OzonProductsCardMessage),
                     stamps: [new MessageDelay('15 seconds')],
-                    transport: (string) $profile,
+                    transport: (string) $UserProfileUid,
                 );
             }
         }
