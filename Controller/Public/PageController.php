@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ use BaksDev\Ozon\Products\Api\Card\Identifier\GetOzonCardSkuRequest;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Entity\Info\ProductInfo;
 use BaksDev\Products\Product\Repository\ProductDetailByValue\ProductDetailByValueInterface;
+use BaksDev\Products\Product\Repository\ProductDetailByValue\ProductDetailByValueResult;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -66,6 +67,12 @@ final class PageController extends AbstractController
             ->byModificationValue($modification)
             ->byPostfix($postfix)
             ->find();
+
+        if(false === ($productCard instanceof ProductDetailByValueResult))
+        {
+            $this->addFlash('Ozon', 'продукт не найден');
+            return $this->redirectToReferer();
+        }
 
         $profiles = $allProfileToken
             ->onlyActiveToken()
