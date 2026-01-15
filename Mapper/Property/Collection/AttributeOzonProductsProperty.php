@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -70,6 +70,11 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
         /** @var OzonProductsAttributeInterface $item */
         foreach($this->attribute as $item)
         {
+            if(false === $item->equalsCategory($data->getOzonCategory()))
+            {
+                continue;
+            }
+
             /**
              * Если у аттрибута опредлено значение справочника (DICTIONARY)
              * в классе этого аттрибута необходимо реализовать метод  'attributeValueRequest',
