@@ -28,29 +28,30 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 
-final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
+final class TypeSleeveOzonProductsAttribute implements OzonProductsAttributeInterface
 {
+
     /**
-     * -id: 31
+     * -id: 4596
      * -complex: 0
-     * -name: "Бренд в одежде и обуви"
-     * -description: "Укажите наименование бренда, под которым произведен товар. Если товар не имеет бренда,
-     * используйте значение "Нет бренда""
+     * -name: "Тип рукава"
+     * -description: "Выберите из списка. Расшифровка значений: Длинный – до запястья, короткий – до локтя и выше, без
+     * рукавов – рукав отсутствует. Можно указать только одно значение."
      * -type: "String"
      * -collection: false
-     * -required: true
+     * -required: false
      * -count: 0
      * -groupId: 0
      * -groupName: ""
-     * -dictionary: 28732849
-     * */
+     * -dictionary: 1817
+     */
 
     /** 200000933 -Одежда */
     public const int CATEGORY = 200000933;
 
-    public const int ID = 31;
+    public const int ID = 4596;
 
-    private const int DICTIONARY = 28732849;
+    private const int DICTIONARY = 1817;
 
     public function getId(): int
     {

@@ -28,29 +28,31 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 
-final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
+final class ColorProductOzonProductsAttribute implements OzonProductsAttributeInterface
 {
     /**
-     * -id: 31
+     * -id: 10096
      * -complex: 0
-     * -name: "Бренд в одежде и обуви"
-     * -description: "Укажите наименование бренда, под которым произведен товар. Если товар не имеет бренда,
-     * используйте значение "Нет бренда""
+     * -name: "Цвет товара"
+     * -description: "Основной или доминирующий цвет товара. Если точного соответствия нет, используйте ближайшие
+     * цвета. Сложные цвета нужно описывать перечислением простых цветов. Например, если в товаре преобладают черный,
+     * желтый и белый цвета, то укажите их все простым перечислением. Атрибут "Цвет товара" — это основной цвет. Все
+     * остальные цвета можно перечислить в атрибуте "Название цвета", если он доступен в категории"
      * -type: "String"
-     * -collection: false
+     * -collection: true
      * -required: true
      * -count: 0
      * -groupId: 0
      * -groupName: ""
-     * -dictionary: 28732849
+     * -dictionary: 1494
      * */
 
     /** 200000933 -Одежда */
     public const int CATEGORY = 200000933;
 
-    public const int ID = 31;
+    public const int ID = 10096;
 
-    private const int DICTIONARY = 28732849;
+    private const int DICTIONARY = 1494;
 
     public function getId(): int
     {

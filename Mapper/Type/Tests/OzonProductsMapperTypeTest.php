@@ -86,6 +86,7 @@ class OzonProductsMapperTypeTest extends KernelTestCase
             /** @var OzonProductsCategoryInterface $caseCategory */
             foreach($OzonProductCategoryArray as $caseCategory)
             {
+
                 if(false === $caseType->equalsCategory($caseCategory->getId()))
                 {
                     continue;

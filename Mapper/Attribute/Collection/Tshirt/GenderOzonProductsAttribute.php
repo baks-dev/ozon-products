@@ -28,29 +28,31 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 
-final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
+final class GenderOzonProductsAttribute implements OzonProductsAttributeInterface
 {
+
     /**
-     * -id: 31
+     *-id: 9163
      * -complex: 0
-     * -name: "Бренд в одежде и обуви"
-     * -description: "Укажите наименование бренда, под которым произведен товар. Если товар не имеет бренда,
-     * используйте значение "Нет бренда""
+     * -name: "Пол"
+     * -description: "Пол потребителя товара: Девочки, Мальчики — для детских товаров; Женский, Мужской — для взрослых
+     * товаров. Для потребителей любого пола (унисекс) укажите сочетание 2-4 значений. Например, "Женский;Мужской".
+     * Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой"
      * -type: "String"
-     * -collection: false
+     * -collection: true
      * -required: true
-     * -count: 0
+     * -count: 4
      * -groupId: 0
      * -groupName: ""
-     * -dictionary: 28732849
-     * */
+     * -dictionary: 320
+     */
 
     /** 200000933 -Одежда */
     public const int CATEGORY = 200000933;
 
-    public const int ID = 31;
+    private const int DICTIONARY = 320;
 
-    private const int DICTIONARY = 28732849;
+    public const int ID = 9163;
 
     public function getId(): int
     {

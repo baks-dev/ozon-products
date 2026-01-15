@@ -114,11 +114,15 @@ class OzonProductsMapperAttributeTest extends KernelTestCase
                 }
 
 
-                //                echo PHP_EOL;
-                //                echo 'Категория '.$caseCategory->getId().PHP_EOL;
-                //                echo '-- Тип '.$caseType->getId().PHP_EOL;
+                //                                echo PHP_EOL;
+                //                                echo 'Категория '.$caseCategory->getId().PHP_EOL;
+                //                                echo '-- Тип '.$caseType->getId().PHP_EOL;
 
-                if($caseCategory->getId() !== 17027949)
+                // 17027949 - Шины
+                // 200000933 - Одежда
+
+
+                if($caseCategory->getId() !== 200000933)
                 {
                     continue;
                 }

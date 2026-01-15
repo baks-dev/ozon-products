@@ -28,29 +28,32 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 
-final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
+final class GroupProductOzonProductsAttribute implements OzonProductsAttributeInterface
 {
     /**
-     * -id: 31
+     * -id: 8292
      * -complex: 0
-     * -name: "Бренд в одежде и обуви"
-     * -description: "Укажите наименование бренда, под которым произведен товар. Если товар не имеет бренда,
-     * используйте значение "Нет бренда""
+     * -name: "Объединить на одной карточке"
+     * -description: "Если заполнить это поле одинаково у нескольких похожих товаров, то в карточке на сайте будет
+     * «переключалка» между ними. Например, футболки разных цветов и размеров. Не используйте слишком простые значения,
+     * не указывайте Тип и Бренд. Если вам не нужно объединять товары — заполните это поле уникальным значением
+     * (например, укажите уникальный артикул или партномер). Подробнее о заполнении этой характеристики можно узнать в
+     * статье "Объединение товаров" в "Базе знаний"."
      * -type: "String"
      * -collection: false
      * -required: true
      * -count: 0
      * -groupId: 0
      * -groupName: ""
-     * -dictionary: 28732849
+     * -dictionary: 0
      * */
 
     /** 200000933 -Одежда */
     public const int CATEGORY = 200000933;
 
-    public const int ID = 31;
+    public const int ID = 8292;
 
-    private const int DICTIONARY = 28732849;
+    private const int DICTIONARY = 0;
 
     public function getId(): int
     {
@@ -69,12 +72,12 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
 
     public function isSetting(): bool
     {
-        return true;
+        return false;
     }
 
     public function required(): bool
     {
-        return false;
+        return true;
     }
 
     public function choices(): array|false
