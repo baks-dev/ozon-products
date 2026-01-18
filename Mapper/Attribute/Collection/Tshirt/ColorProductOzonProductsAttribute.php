@@ -78,6 +78,11 @@ final class ColorProductOzonProductsAttribute implements OzonProductsAttributeIn
 
         $value = empty($attribute) ? $this->default() : current($attribute)->value;
 
+        if(empty($value))
+        {
+            return false;
+        }
+
         if($translator instanceof TranslatorInterface)
         {
             $value = $translator->trans($value, domain: 'color_type');

@@ -77,6 +77,11 @@ final class TypeSleeveOzonProductsAttribute implements OzonProductsAttributeInte
 
         $value = empty($attribute) ? $this->default() : current($attribute)->value;
 
+        if(empty($value))
+        {
+            return false;
+        }
+
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
             $value,
