@@ -141,7 +141,10 @@ final class TreadPatternTypeOzonProductsAttribute implements OzonProductsAttribu
         };
     }
 
-    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    public function attributeValueRequest(
+        OzonAttributeValueSearchRequest|false $attributeValueRequest,
+        ?TranslatorInterface $translator = null
+    ): void
     {
         $this->attributeValueRequest = $attributeValueRequest;
     }
