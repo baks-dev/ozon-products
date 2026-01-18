@@ -135,10 +135,7 @@ final class ProtectorTypeOzonProductsAttribute implements OzonProductsAttributeI
         };
     }
 
-    public function attributeValueRequest(
-        OzonAttributeValueSearchRequest|false $attributeValueRequest,
-        ?TranslatorInterface $translator = null
-    ): void
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
     {
         $this->attributeValueRequest = $attributeValueRequest;
     }

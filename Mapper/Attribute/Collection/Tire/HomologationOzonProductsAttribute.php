@@ -130,10 +130,7 @@ final class HomologationOzonProductsAttribute implements OzonProductsAttributeIn
         return self::CATEGORY === $category;
     }
 
-    public function attributeValueRequest(
-        OzonAttributeValueSearchRequest|false $attributeValueRequest,
-        ?TranslatorInterface $translator = null
-    ): void
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
     {
         $this->attributeValueRequest = $attributeValueRequest;
     }

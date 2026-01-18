@@ -51,8 +51,9 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
     public const string PARAM = 'attributes';
 
     public function __construct(
+
         #[AutowireIterator('baks.ozon.product.attribute', defaultPriorityMethod: 'priority')] private ?iterable $attribute = null,
-        private readonly TranslatorInterface $translator,
+        private readonly ?TranslatorInterface $translator = null,
         private readonly ?OzonAttributeValueSearchRequest $attributeValueSearchRequest = null
     ) {}
 
@@ -88,10 +89,10 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
                 method_exists($item, 'attributeValueRequest')
             )
             {
-                $item->attributeValueRequest($this->attributeValueSearchRequest, $this->translator);
+                $item->attributeValueRequest($this->attributeValueSearchRequest);
             }
 
-            $value = $item->getData($data);
+            $value = $item->getData($data, $this->translator);
 
             if($value === false)
             {
