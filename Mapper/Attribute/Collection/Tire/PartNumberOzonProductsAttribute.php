@@ -28,6 +28,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PartNumberOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -56,7 +57,7 @@ final class PartNumberOzonProductsAttribute implements OzonProductsAttributeInte
         return self::ID;
     }
 
-    public function getData(ProductsOzonCardResult $data): array|false
+    public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
         if(empty($data->getProductAttributes()))
         {

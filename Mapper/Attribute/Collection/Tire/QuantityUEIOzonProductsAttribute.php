@@ -29,6 +29,7 @@ use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueS
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class QuantityUEIOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -62,7 +63,7 @@ final class QuantityUEIOzonProductsAttribute implements OzonProductsAttributeInt
         return self::ID;
     }
 
-    public function getData(ProductsOzonCardResult $data): array|false
+    public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,

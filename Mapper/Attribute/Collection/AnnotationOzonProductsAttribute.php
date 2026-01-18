@@ -28,6 +28,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AnnotationOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -51,7 +52,7 @@ final class AnnotationOzonProductsAttribute implements OzonProductsAttributeInte
     }
 
 
-    public function getData(ProductsOzonCardResult $data): array|false
+    public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
         if(empty($data->getProductPreview()))
         {

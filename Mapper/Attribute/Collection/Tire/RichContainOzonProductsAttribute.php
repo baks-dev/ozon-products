@@ -30,6 +30,7 @@ use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class RichContainOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -63,7 +64,7 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
         return self::ID;
     }
 
-    public function getData(ProductsOzonCardResult $data): array|false
+    public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
         if(true === is_null($data->getOzonCategory()))
         {

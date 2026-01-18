@@ -31,6 +31,7 @@ use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('baks.ozon.product.property')]
 final class AttributeOzonProductsProperty implements OzonProductsPropertyInterface
@@ -51,6 +52,7 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
 
     public function __construct(
         #[AutowireIterator('baks.ozon.product.attribute', defaultPriorityMethod: 'priority')] private ?iterable $attribute = null,
+        private readonly TranslatorInterface $translator,
         private readonly ?OzonAttributeValueSearchRequest $attributeValueSearchRequest = null
     ) {}
 
@@ -86,7 +88,7 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
                 method_exists($item, 'attributeValueRequest')
             )
             {
-                $item->attributeValueRequest($this->attributeValueSearchRequest);
+                $item->attributeValueRequest($this->attributeValueSearchRequest, $this->translator);
             }
 
             $value = $item->getData($data);

@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute;
 
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('baks.ozon.product.attribute')]
 interface OzonProductsAttributeInterface
@@ -34,7 +35,7 @@ interface OzonProductsAttributeInterface
     public function getId(): int;
 
 
-    public function getData(ProductsOzonCardResult $data): array|false;
+    public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false;
 
     /** Возвращает значение по умолчанию */
     public function default(): int|string|false;

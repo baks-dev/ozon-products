@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class SizeManufactureOzonProductsAttribute implements OzonProductsAttributeInterface
 {
@@ -57,7 +58,7 @@ final class SizeManufactureOzonProductsAttribute implements OzonProductsAttribut
         return self::ID;
     }
 
-    public function getData(ProductsOzonCardResult $data): array|false
+    public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
         return false;
     }

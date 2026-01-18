@@ -74,7 +74,7 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
         return self::ID;
     }
 
-    public function getData(ProductsOzonCardResult $data): array|false
+    public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
         if(empty($data->getOzonCategory()))
         {
