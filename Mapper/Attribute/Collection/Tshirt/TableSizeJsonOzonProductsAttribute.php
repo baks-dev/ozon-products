@@ -84,8 +84,6 @@ final class TableSizeJsonOzonProductsAttribute implements OzonProductsAttributeI
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
             $value,
-            $data,
-            $this->attributeValueRequest,
         );
 
         return $requestData->getData();

@@ -84,8 +84,6 @@ final class QuantityPackOzonProductsAttribute implements OzonProductsAttributeIn
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
             $value,
-            $data,
-            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
