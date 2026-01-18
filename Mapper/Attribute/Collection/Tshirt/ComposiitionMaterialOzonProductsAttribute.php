@@ -54,6 +54,8 @@ final class ComposiitionMaterialOzonProductsAttribute implements OzonProductsAtt
 
     public const int ID = 4604;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 0;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

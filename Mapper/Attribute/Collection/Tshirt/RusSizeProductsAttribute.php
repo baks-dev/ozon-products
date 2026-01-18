@@ -53,6 +53,8 @@ final class RusSizeProductsAttribute implements OzonProductsAttributeInterface
 
     public const int ID = 4295;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 835;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

@@ -52,6 +52,8 @@ final class CollectionOzonProductsAttribute implements OzonProductsAttributeInte
 
     public const int ID = 4503;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 927;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

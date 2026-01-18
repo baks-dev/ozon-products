@@ -53,6 +53,8 @@ final class SizeOnModelOzonProductsAttribute implements OzonProductsAttributeInt
 
     public const int ID = 4508;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 945;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

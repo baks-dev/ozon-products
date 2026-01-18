@@ -53,6 +53,8 @@ final class PictureOzonProductsAttribute implements OzonProductsAttributeInterfa
 
     public const int ID = 9437;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 5673715;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

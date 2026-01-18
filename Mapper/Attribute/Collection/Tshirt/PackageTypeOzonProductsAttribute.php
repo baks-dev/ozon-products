@@ -55,6 +55,8 @@ final class PackageTypeOzonProductsAttribute implements OzonProductsAttributeInt
 
     public const int ID = 4300;
 
+    public const int TYPE = 93244;
+
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
     public function getId(): int

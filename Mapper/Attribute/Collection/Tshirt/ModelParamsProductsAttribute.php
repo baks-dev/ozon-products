@@ -53,6 +53,8 @@ final class ModelParamsProductsAttribute implements OzonProductsAttributeInterfa
 
     public const int ID = 4509;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 0;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

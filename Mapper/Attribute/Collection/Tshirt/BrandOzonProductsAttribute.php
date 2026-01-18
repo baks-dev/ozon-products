@@ -53,6 +53,8 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
 
     public const int ID = 31;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 28732849;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

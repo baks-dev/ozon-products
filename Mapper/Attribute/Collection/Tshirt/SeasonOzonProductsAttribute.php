@@ -53,6 +53,8 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
 
     public const int ID = 4495;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 703;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

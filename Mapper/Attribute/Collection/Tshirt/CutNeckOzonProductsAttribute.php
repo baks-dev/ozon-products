@@ -52,6 +52,8 @@ final class CutNeckOzonProductsAttribute implements OzonProductsAttributeInterfa
 
     public const int ID = 11071;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 59221744;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

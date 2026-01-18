@@ -57,6 +57,8 @@ final class GenderOzonProductsAttribute implements OzonProductsAttributeInterfac
 
     public const int ID = 9163;
 
+    public const int TYPE = 93244;
+
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
     public function getId(): int

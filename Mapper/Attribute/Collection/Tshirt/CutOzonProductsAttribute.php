@@ -53,6 +53,8 @@ final class CutOzonProductsAttribute implements OzonProductsAttributeInterface
 
     public const int ID = 23077;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 124413018;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

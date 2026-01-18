@@ -54,6 +54,8 @@ final class TypeClapsOzonProductsAttribute implements OzonProductsAttributeInter
 
     public const int ID = 4613;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 1465;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

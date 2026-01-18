@@ -53,6 +53,8 @@ final class TableSizeJsonOzonProductsAttribute implements OzonProductsAttributeI
 
     public const int ID = 13164;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 0;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

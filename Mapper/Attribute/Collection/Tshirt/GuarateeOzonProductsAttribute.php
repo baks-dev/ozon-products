@@ -52,6 +52,8 @@ final class GuarateeOzonProductsAttribute implements OzonProductsAttributeInterf
 
     public const int ID = 10400;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 46700526;
 
     public function getId(): int

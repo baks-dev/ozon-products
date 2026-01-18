@@ -50,6 +50,8 @@ final class HeightOzonProductsAttribute implements OzonProductsAttributeInterfac
 
     public const int ID = 4296;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 1866;
 
     public function getId(): int

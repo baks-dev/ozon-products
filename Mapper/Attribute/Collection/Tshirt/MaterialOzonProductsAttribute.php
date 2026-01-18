@@ -53,6 +53,8 @@ final class MaterialOzonProductsAttribute implements OzonProductsAttributeInterf
 
     public const int ID = 4496;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 1503;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

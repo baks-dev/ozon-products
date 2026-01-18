@@ -53,6 +53,8 @@ final class KitContentsOzonProductsAttribute implements OzonProductsAttributeInt
 
     public const int ID = 10438;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 47148263;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

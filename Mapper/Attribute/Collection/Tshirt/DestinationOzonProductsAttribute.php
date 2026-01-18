@@ -53,6 +53,8 @@ final class DestinationOzonProductsAttribute implements OzonProductsAttributeInt
 
     public const int ID = 9168;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 1695;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

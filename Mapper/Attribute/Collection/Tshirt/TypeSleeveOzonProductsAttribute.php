@@ -54,6 +54,8 @@ final class TypeSleeveOzonProductsAttribute implements OzonProductsAttributeInte
 
     public const int ID = 4596;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 1817;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

@@ -53,6 +53,8 @@ final class SizeJeansOzonProductsAttribute implements OzonProductsAttributeInter
 
     public const int ID = 9692;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 18172091;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

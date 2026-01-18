@@ -55,6 +55,8 @@ final class ColorProductOzonProductsAttribute implements OzonProductsAttributeIn
 
     public const int ID = 10096;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 1494;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

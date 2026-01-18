@@ -52,6 +52,8 @@ final class Sign18PlusOzonProductsAttribute implements OzonProductsAttributeInte
 
     public const int ID = 9070;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 0;
 
     public function getId(): int

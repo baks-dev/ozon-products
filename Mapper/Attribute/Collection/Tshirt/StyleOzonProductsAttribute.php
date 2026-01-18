@@ -55,6 +55,8 @@ final class StyleOzonProductsAttribute implements OzonProductsAttributeInterface
 
     public const int ID = 4501;
 
+    public const int TYPE = 93244;
+
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
     public function getId(): int

@@ -52,6 +52,8 @@ final class TypeLandingOzonProductsAttribute implements OzonProductsAttributeInt
 
     public const int ID = 4619;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 1286;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

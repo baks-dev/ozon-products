@@ -53,6 +53,8 @@ final class ModelSpecificsProductsAttribute implements OzonProductsAttributeInte
 
     public const int ID = 23078;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 124413019;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

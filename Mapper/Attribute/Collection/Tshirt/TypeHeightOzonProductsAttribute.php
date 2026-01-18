@@ -53,6 +53,8 @@ final class TypeHeightOzonProductsAttribute implements OzonProductsAttributeInte
 
     public const int ID = 23074;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 124413016;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

@@ -55,6 +55,8 @@ final class TypeReleaseOzonProductsAttribute implements OzonProductsAttributeInt
 
     public const int ID = 22270;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 124412424;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

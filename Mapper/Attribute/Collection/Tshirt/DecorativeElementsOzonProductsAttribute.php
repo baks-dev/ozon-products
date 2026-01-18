@@ -54,6 +54,8 @@ final class DecorativeElementsOzonProductsAttribute implements OzonProductsAttri
 
     public const int ID = 21531;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 124411957;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;

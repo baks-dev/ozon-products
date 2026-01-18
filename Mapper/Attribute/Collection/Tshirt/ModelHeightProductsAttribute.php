@@ -52,6 +52,8 @@ final class ModelHeightProductsAttribute implements OzonProductsAttributeInterfa
 
     public const int ID = 4506;
 
+    public const int TYPE = 93244;
+
     private const int DICTIONARY = 780;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
@@ -82,7 +84,7 @@ final class ModelHeightProductsAttribute implements OzonProductsAttributeInterfa
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            $value,
+            $value.' см',
             $data,
             $this->attributeValueRequest,
         );
