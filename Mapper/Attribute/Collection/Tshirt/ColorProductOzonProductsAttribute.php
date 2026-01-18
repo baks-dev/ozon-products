@@ -25,6 +25,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -55,6 +57,8 @@ final class ColorProductOzonProductsAttribute implements OzonProductsAttributeIn
 
     private const int DICTIONARY = 1494;
 
+    private false|OzonAttributeValueSearchRequest $attributeValueRequest;
+
     public function getId(): int
     {
         return self::ID;
@@ -62,7 +66,36 @@ final class ColorProductOzonProductsAttribute implements OzonProductsAttributeIn
 
     public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
-        return false;
+        if(empty($data->getProductAttributes()))
+        {
+            return false;
+        }
+
+        $attribute = array_filter(
+            $data->getProductAttributes(),
+            static fn($n) => self::ID === (int) $n->id,
+        );
+
+        $value = empty($attribute) ? $this->default() : current($attribute)->value;
+
+        if($translator instanceof TranslatorInterface)
+        {
+            $value = $translator->trans($value, domain: 'color_type');
+        }
+
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
+            self::ID,
+            $value,
+            $data,
+            $this->attributeValueRequest,
+        );
+
+        return $requestData->getData();
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 
     public function default(): string|false
