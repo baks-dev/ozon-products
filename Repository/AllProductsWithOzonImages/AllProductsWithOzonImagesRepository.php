@@ -1,17 +1,17 @@
 <?php
 /*
- * Copyright 2025.  Baks.dev <admin@baks.dev>
- *
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
+ *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *
+ *  
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *
+ *  
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +28,8 @@ namespace BaksDev\Ozon\Products\Repository\AllProductsWithOzonImages;
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Core\Form\Search\SearchDTO;
 use BaksDev\Core\Services\Paginator\PaginatorInterface;
+use BaksDev\Ozon\Products\Entity\Custom\Images\OzonProductCustomImage;
+use BaksDev\Ozon\Products\Form\OzonFilter\OzonProductsFilterDTO;
 use BaksDev\Products\Category\Entity\CategoryProduct;
 use BaksDev\Products\Category\Entity\Info\CategoryProductInfo;
 use BaksDev\Products\Category\Entity\Offers\CategoryProductOffers;
@@ -54,8 +56,6 @@ use BaksDev\Products\Product\Entity\Property\ProductProperty;
 use BaksDev\Products\Product\Entity\Trans\ProductTrans;
 use BaksDev\Products\Product\Forms\ProductFilter\Admin\ProductFilterDTO;
 use BaksDev\Products\Product\Forms\ProductFilter\Admin\Property\ProductFilterPropertyDTO;
-use BaksDev\Ozon\Products\Form\OzonFilter\OzonProductsFilterDTO;
-use BaksDev\Ozon\Products\Entity\Custom\Images\OzonProductCustomImage;
 
 final class AllProductsWithOzonImagesRepository implements AllProductsWithOzonImagesInterface
 {
@@ -373,7 +373,7 @@ final class AllProductsWithOzonImagesRepository implements AllProductsWithOzonIm
                 ozon_product_images.invariable = product_invariable.id AND
                 ozon_product_images.root = true
         ');
-        
+
         $dbal->addSelect(
             "
             CASE
@@ -435,9 +435,7 @@ final class AllProductsWithOzonImagesRepository implements AllProductsWithOzonIm
                 'product_category',
                 CategoryProductInfo::class,
                 'category_info',
-                '
-                    category.event = category_info.event AND
-                    category_info.active IS TRUE',
+                'category.event = category_info.event',
             );
 
         $dbal
