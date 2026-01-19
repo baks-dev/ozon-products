@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -56,12 +56,12 @@ final class TypeIdOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(ProductsOzonCardResult $data): int|false
     {
-        if(empty($data->getTypeDictionary()))
+        if(empty($data->getOzonType()))
         {
             return false;
         }
 
-        return $data->getTypeDictionary();
+        return $data->getOzonType();
     }
 
     /**
