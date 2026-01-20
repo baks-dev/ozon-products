@@ -29,6 +29,7 @@ use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueS
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
+use BaksDev\Reference\Clothing\Type\SizeClothing;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class RusSizeProductsAttribute implements OzonProductsAttributeInterface
@@ -81,6 +82,17 @@ final class RusSizeProductsAttribute implements OzonProductsAttributeInterface
         if(empty($value))
         {
             return false;
+        }
+
+        $SizeClothing = new SizeClothing($value);
+        $SizeClothingValue = $SizeClothing->getSize(); //->getRus();
+
+        $value = $SizeClothingValue->getValue();
+
+        if(method_exists($SizeClothingValue, 'getRus'))
+        {
+            $value = explode('-', $SizeClothingValue->getRus());
+            $value = current($value);
         }
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(

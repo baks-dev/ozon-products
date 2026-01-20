@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -65,7 +66,25 @@ final class GroupProductOzonProductsAttribute implements OzonProductsAttributeIn
 
     public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
-        return false;
+        if(empty($data->getProductAttributes()))
+        {
+            return false;
+        }
+
+        $value = $data->getCardArticle();
+
+        if(empty($value))
+        {
+            return false;
+        }
+
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
+            self::ID,
+            $value,
+        );
+
+        return $requestData->getData();
+
     }
 
     public function default(): string|false

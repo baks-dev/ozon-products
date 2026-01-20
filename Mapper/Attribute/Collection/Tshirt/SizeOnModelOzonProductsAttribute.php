@@ -83,6 +83,13 @@ final class SizeOnModelOzonProductsAttribute implements OzonProductsAttributeInt
             return false;
         }
 
+        $pattern = '/\((\d+)/'; // Ищем открывающую скобку и цифры после нее
+
+        if(preg_match($pattern, $value, $matches))
+        {
+            $value = $matches[1];
+        }
+
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
             $value,

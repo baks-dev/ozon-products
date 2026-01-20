@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -98,7 +98,7 @@ class UpdateOzonProductsCardCommand extends Command
         $question = new ChoiceQuestion(
             'Профиль пользователя (Ctrl+C чтобы выйти)',
             $questions,
-            '0'
+            '0',
         );
 
         $key = $helper->ask($input, $output, $question);
@@ -169,6 +169,13 @@ class UpdateOzonProductsCardCommand extends Command
 
         foreach($result as $product)
         {
+            /** Пропускаем обновление, если соответствие не найдено */
+            if(!empty($article) && stripos($product->getArticle(), $article) === false)
+            {
+                $this->io->writeln(sprintf('<fg=gray>... %s</>', $product->getArticle()));
+                continue;
+            }
+
             $ProductsOzonCardResult = $this->ProductsOzonCard
                 ->forProduct($product->getProductId())
                 ->forOfferConst($product->getProductOfferConst())
@@ -187,7 +194,6 @@ class UpdateOzonProductsCardCommand extends Command
             /** Пропускаем обновление, если соответствие не найдено */
             if(!empty($article) && stripos($ProductsOzonCardResult->getArticle(), $article) === false)
             {
-                $this->io->writeln(sprintf('<fg=gray>... %s</>', $ProductsOzonCardResult->getArticle()));
                 continue;
             }
 

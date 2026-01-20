@@ -71,23 +71,9 @@ final class DestinationOzonProductsAttribute implements OzonProductsAttributeInt
             return false;
         }
 
-        $attribute = array_filter(
-            $data->getProductAttributes(),
-            static fn($n) => self::ID === (int) $n->id,
-        );
-
-        $value = empty($attribute) ? $this->default() : current($attribute)->value;
-
-        if(empty($value))
-        {
-            return false;
-        }
-
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            $value,
-            $data,
-            $this->attributeValueRequest,
+            'для дома',
         );
 
         return $requestData->getData();

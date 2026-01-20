@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2024.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ final class MugsOzonProductsType implements OzonProductsTypeInterface
     // 17028741 - Столовая посуда
     // 92499 - Кружка
 
-    private const int ID = 92499;
+    public const int ID = 92499;
 
     private const int CATEGORY = 17028741;
 

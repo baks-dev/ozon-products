@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,8 @@ namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\SeasonOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\Collection\TypeOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
+use BaksDev\Ozon\Products\Mapper\Type\Collection\TiresPassengerCarsOzonProductsType;
+use BaksDev\Ozon\Products\Mapper\Type\Collection\TShirtsOzonProductsType;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -99,22 +101,33 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
         $name = mb_strtolower($name);
         $name = mb_ucfirst($name);
 
+        $productName = $data->getProductName();
 
-        $name .= $data->getProductName();
-
-        if($data->getProductVariationValue())
+        /** Формируем название для футболок */
+        if($data->getOzonType() === TShirtsOzonProductsType::ID)
         {
-            $name .= ' '.$data->getProductVariationValue();
+            $productName = trim(str_replace(['футболки', 'футболка'], ['', ''], mb_strtolower($productName)));
         }
 
-        if($data->getProductModificationValue())
-        {
-            $name .= '/'.$data->getProductModificationValue();
-        }
+        $name .= trim($productName);
 
-        if($data->getProductOfferValue())
+        /** Формируем название для автомобильных шин */
+        if($data->getOzonType() === TiresPassengerCarsOzonProductsType::ID)
         {
-            $name .= ' R'.$data->getProductOfferValue();
+            if($data->getProductVariationValue())
+            {
+                $name .= ' '.$data->getProductVariationValue();
+            }
+
+            if($data->getProductModificationValue())
+            {
+                $name .= '/'.$data->getProductModificationValue();
+            }
+
+            if($data->getProductOfferValue())
+            {
+                $name .= ' R'.$data->getProductOfferValue();
+            }
         }
 
         if($data->getProductOfferPostfix())

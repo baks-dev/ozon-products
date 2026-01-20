@@ -66,6 +66,8 @@ final class PictureOzonProductsAttribute implements OzonProductsAttributeInterfa
 
     public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
+        return false;
+
         if(empty($data->getProductAttributes()))
         {
             return false;
