@@ -68,14 +68,48 @@ final class GroupProductOzonProductsAttribute implements OzonProductsAttributeIn
     {
         if(empty($data->getProductAttributes()))
         {
-            return false;
+            /** Группируем по артикулу карточки */
+
+            $value = $data->getCardArticle();
+
+            if(empty($value))
+            {
+                return false;
+            }
+
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                $value,
+            );
+
+            return $requestData->getData();
+
         }
 
-        $value = $data->getCardArticle();
+        $attribute = array_filter(
+            $data->getProductAttributes(),
+            static fn($n) => self::ID === (int) $n->id,
+        );
+
+        $value = empty($attribute) ? false : current($attribute)->value;
 
         if(empty($value))
         {
-            return false;
+            /** Группируем по артикулу карточки */
+
+            $value = $data->getCardArticle();
+
+            if(empty($value))
+            {
+                return false;
+            }
+
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                $value,
+            );
+
+            return $requestData->getData();
         }
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
@@ -94,7 +128,7 @@ final class GroupProductOzonProductsAttribute implements OzonProductsAttributeIn
 
     public function isSetting(): bool
     {
-        return false;
+        return true;
     }
 
     public function required(): bool
