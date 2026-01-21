@@ -31,6 +31,8 @@ use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
 use BaksDev\Ozon\Products\Mapper\Type\Collection\TiresPassengerCarsOzonProductsType;
 use BaksDev\Ozon\Products\Mapper\Type\Collection\TShirtsOzonProductsType;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
+use BaksDev\Reference\Clothing\Type\SizeClothing;
+use BaksDev\Reference\Color\Type\Color;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -101,34 +103,54 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
         $name = mb_strtolower($name);
         $name = mb_ucfirst($name);
 
-        $productName = $data->getProductName();
+        /**
+         * Название из аттрибутов
+         */
+
+        $productName = '';
 
         /** Формируем название для футболок */
         if($data->getOzonType() === TShirtsOzonProductsType::ID)
         {
-            $productName = trim(str_replace(['футболки', 'футболка'], ['', ''], mb_strtolower($productName)));
+            $productName = $data->getProductName();
+
+            $productName = str_replace(['футболки', 'футболка'], ['', ''], $productName);
+            $productName = trim($productName);
+            $productName = mb_ucfirst($productName);
+            $productName = '"'.$productName.'"';
+
+            $name = 'Футболка '.$productName;
         }
 
-        $name .= trim($productName);
 
         /** Формируем название для автомобильных шин */
         if($data->getOzonType() === TiresPassengerCarsOzonProductsType::ID)
         {
+            $productName = '';
+
             if($data->getProductVariationValue())
             {
-                $name .= ' '.$data->getProductVariationValue();
+                $productName .= ' '.$data->getProductVariationValue();
+                $productName = trim($productName);
             }
 
             if($data->getProductModificationValue())
             {
-                $name .= '/'.$data->getProductModificationValue();
+                $productName .= '/'.$data->getProductModificationValue();
+                $productName = trim($productName);
             }
 
             if($data->getProductOfferValue())
             {
-                $name .= ' R'.$data->getProductOfferValue();
+                $productName .= ' R'.$data->getProductOfferValue();
+                $productName = trim($productName);
             }
+
+            $productName .= ' '.$data->getProductName();
+            $productName = trim($productName);
         }
+
+        $name .= $productName;
 
         if($data->getProductOfferPostfix())
         {

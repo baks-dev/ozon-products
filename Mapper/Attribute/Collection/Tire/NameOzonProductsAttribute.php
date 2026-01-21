@@ -23,13 +23,11 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection;
+namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\SeasonOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\Collection\TypeOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
-use BaksDev\Ozon\Products\Mapper\Type\Collection\TiresPassengerCarsOzonProductsType;
-use BaksDev\Ozon\Products\Mapper\Type\Collection\TShirtsOzonProductsType;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -65,6 +63,8 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
     //-groupName: ""
     //-dictionary: 0
 
+    public const int CATEGORY = 17027949;
+
     public const int ID = 4180;
 
     public function __construct(
@@ -98,35 +98,23 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
         $name = mb_strtolower($name);
         $name = mb_ucfirst($name);
 
-
         $productName = $data->getProductName();
-
-        /** Формируем название для футболок */
-        if($data->getOzonType() === TShirtsOzonProductsType::ID)
-        {
-            $productName = trim(str_replace(['футболки', 'футболка'], ['', ''], mb_strtolower($productName)));
-        }
 
         $name .= trim($productName);
 
-
-        /** Формируем название для автомобильных шин */
-        if($data->getOzonType() === TiresPassengerCarsOzonProductsType::ID)
+        if($data->getProductVariationValue())
         {
-            if($data->getProductVariationValue())
-            {
-                $name .= ' '.$data->getProductVariationValue();
-            }
+            $name .= ' '.$data->getProductVariationValue();
+        }
 
-            if($data->getProductModificationValue())
-            {
-                $name .= '/'.$data->getProductModificationValue();
-            }
+        if($data->getProductModificationValue())
+        {
+            $name .= '/'.$data->getProductModificationValue();
+        }
 
-            if($data->getProductOfferValue())
-            {
-                $name .= ' R'.$data->getProductOfferValue();
-            }
+        if($data->getProductOfferValue())
+        {
+            $name .= ' R'.$data->getProductOfferValue();
         }
 
         if($data->getProductOfferPostfix())
@@ -219,6 +207,6 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
 
     public function equalsCategory(int $category): bool
     {
-        return true;
+        return self::CATEGORY === $category;
     }
 }
