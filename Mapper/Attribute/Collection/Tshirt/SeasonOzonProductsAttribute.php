@@ -68,7 +68,14 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
     {
         if(empty($data->getProductAttributes()))
         {
-            return false;
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                $this->default(),
+                $data,
+                $this->attributeValueRequest,
+            );
+
+            return $requestData->getData();
         }
 
         $attribute = array_filter(
@@ -77,11 +84,6 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
         );
 
         $value = empty($attribute) ? $this->default() : current($attribute)->value;
-
-        if(empty($value))
-        {
-            return false;
-        }
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
@@ -100,7 +102,7 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
 
     public function default(): string|false
     {
-        return false;
+        return 'На любой сезон';
     }
 
     public function isSetting(): bool

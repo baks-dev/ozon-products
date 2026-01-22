@@ -120,6 +120,26 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
             $productName = '"'.$productName.'"';
 
             $name = 'Футболка '.$productName;
+
+            $offer = $data->getProductOfferValue();
+
+            $variation = $data->getProductVariationValue();
+
+            if($this->translator instanceof TranslatorInterface)
+            {
+                $offer = $this->translator->trans($offer, domain: Color::TYPE);
+                $variation = $this->translator->trans($variation, domain: Color::TYPE);
+            }
+
+            if(false === empty($variation))
+            {
+                $name .= ' '.$variation;
+            }
+
+            if(false === empty($offer))
+            {
+                $name .= ' '.$offer;
+            }
         }
 
 
@@ -148,9 +168,10 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
 
             $productName .= ' '.$data->getProductName();
             $productName = trim($productName);
+
+            $name .= $productName;
         }
 
-        $name .= $productName;
 
         if($data->getProductOfferPostfix())
         {

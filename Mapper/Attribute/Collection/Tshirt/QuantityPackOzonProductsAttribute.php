@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 
-use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
@@ -57,8 +56,6 @@ final class QuantityPackOzonProductsAttribute implements OzonProductsAttributeIn
 
     private const int DICTIONARY = 0;
 
-    private false|OzonAttributeValueSearchRequest $attributeValueRequest;
-
     public function getId(): int
     {
         return self::ID;
@@ -68,7 +65,12 @@ final class QuantityPackOzonProductsAttribute implements OzonProductsAttributeIn
     {
         if(empty($data->getProductAttributes()))
         {
-            return false;
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                $this->default(),
+            );
+
+            return $requestData->getData();
         }
 
         $attribute = array_filter(
@@ -78,27 +80,22 @@ final class QuantityPackOzonProductsAttribute implements OzonProductsAttributeIn
 
         $value = empty($attribute) ? $this->default() : current($attribute)->value;
 
-        if(empty($value))
-        {
-            return false;
-        }
-
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            $value,
+            (string) $value,
         );
 
         return $requestData->getData();
     }
 
-    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
-    {
-        $this->attributeValueRequest = $attributeValueRequest;
-    }
+    //    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    //    {
+    //        $this->attributeValueRequest = $attributeValueRequest;
+    //    }
 
-    public function default(): string|false
+    public function default(): int|false
     {
-        return false;
+        return 1;
     }
 
     public function isSetting(): bool

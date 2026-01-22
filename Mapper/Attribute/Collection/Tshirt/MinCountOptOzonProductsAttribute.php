@@ -70,7 +70,7 @@ final class MinCountOptOzonProductsAttribute implements OzonProductsAttributeInt
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            100,
+            '100',
         );
 
         return $requestData->getData();

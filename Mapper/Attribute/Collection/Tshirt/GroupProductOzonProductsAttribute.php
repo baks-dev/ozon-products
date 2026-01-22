@@ -103,13 +103,6 @@ final class GroupProductOzonProductsAttribute implements OzonProductsAttributeIn
             {
                 return false;
             }
-
-            $requestData = new ItemDataBuilderOzonProductsAttribute(
-                self::ID,
-                $value,
-            );
-
-            return $requestData->getData();
         }
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(

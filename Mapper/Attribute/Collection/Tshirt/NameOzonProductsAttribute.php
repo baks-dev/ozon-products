@@ -25,11 +25,11 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\SeasonOzonProductsAttribute;
-use BaksDev\Ozon\Products\Mapper\Attribute\Collection\TypeOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
+use BaksDev\Reference\Clothing\Type\SizeClothing;
+use BaksDev\Reference\Color\Type\Color;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -84,93 +84,38 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
             return false;
         }
 
-        $name = '';
-
-        if($this->translator)
-        {
-            $typeName = $this->translator->trans(
-                $data->getOzonType().'.name',
-                domain: 'ozon-products.mapper',
-            );
-
-            $name .= $typeName.' ';
-        }
-
-        $name = mb_strtolower($name);
-        $name = mb_ucfirst($name);
-
         $productName = $data->getProductName();
 
-        $name .= trim($productName);
+        $productName = str_replace(['футболки', 'футболка'], ['', ''], $productName);
+        $productName = trim($productName);
+        $productName = mb_ucfirst($productName);
+        $productName = '"'.$productName.'"';
 
-        if($data->getProductVariationValue())
+        $name = 'Футболка '.$productName;
+
+        $offer = $data->getProductOfferValue();
+
+        $variation = $data->getProductVariationValue();
+
+        if($translator instanceof TranslatorInterface)
         {
-            $name .= ' '.$data->getProductVariationValue();
+            $offer = $translator->trans($offer, domain: Color::TYPE);
+            $variation = $translator->trans($variation, domain: Color::TYPE);
         }
 
-        if($data->getProductModificationValue())
+        if(false === empty($variation))
         {
-            $name .= '/'.$data->getProductModificationValue();
+            $name .= ' '.$variation;
         }
 
-        if($data->getProductOfferValue())
+        if(false === empty($offer))
         {
-            $name .= ' R'.$data->getProductOfferValue();
-        }
-
-        if($data->getProductOfferPostfix())
-        {
-            $name .= ' '.$data->getProductOfferPostfix();
-        }
-
-        if($data->getProductVariationPostfix())
-        {
-            $name .= ' '.$data->getProductVariationPostfix();
-        }
-
-        if($data->getProductModificationPostfix())
-        {
-            $name .= ' '.$data->getProductModificationPostfix();
-        }
-
-        if($data->getProductAttributes())
-        {
-            /** Добавляем к названию сезонность */
-            $Season = new SeasonOzonProductsAttribute();
-
-            foreach($data->getProductAttributes() as $productAttribute)
-            {
-                if($Season::equals($productAttribute->id))
-                {
-                    $value = $Season::getConvertName($productAttribute->value);
-
-                    if(false === empty($value))
-                    {
-                        $name .= ', '.$value;
-                    }
-                }
-            }
-
-            /** Добавляем к названию назначение */
-            $Type = new TypeOzonProductsAttribute();
-
-            foreach($data->getProductAttributes() as $productAttribute)
-            {
-                if($Type::equals($productAttribute->id))
-                {
-                    $value = $Type::getConvertName($productAttribute->value);
-
-                    if(false === empty($value))
-                    {
-                        $name .= ', '.$value;
-                    }
-                }
-            }
+            $name .= ' '.$offer;
         }
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            empty($name) ? null : trim($name),
+            trim($name),
         );
 
         return $requestData->getData();
