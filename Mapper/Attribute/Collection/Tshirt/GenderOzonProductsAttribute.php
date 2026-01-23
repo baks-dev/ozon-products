@@ -29,6 +29,9 @@ use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueS
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
+use BaksDev\Reference\Gender\Type\Gender;
+use BaksDev\Reference\Gender\Type\Genders\Collection\GenderUnisex;
+use BaksDev\Reference\Gender\Type\GenderType;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class GenderOzonProductsAttribute implements OzonProductsAttributeInterface
@@ -83,6 +86,11 @@ final class GenderOzonProductsAttribute implements OzonProductsAttributeInterfac
         if(empty($value))
         {
             return false;
+        }
+
+        if(true === GenderUnisex::equals($value))
+        {
+            $value = 'Мужской;Женский';
         }
 
         if($translator instanceof TranslatorInterface)

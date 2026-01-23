@@ -67,7 +67,11 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
             return false;
         }
 
-        $cleaned_str = preg_replace('/[^a-zA-Z]/u', '', $data->getProductModificationPostfix());
+        /** Разбиваем по пробелу постфикс и берем первое значение */
+        $postfix = explode(' ', $data->getProductModificationPostfix());
+        $postfix = current($postfix);
+
+        $cleaned_str = preg_replace('/[^a-zA-Z]/u', '', $postfix);
 
         /** Преобразуем русские символы в латиницу */
         $cleaned_str = str_replace(

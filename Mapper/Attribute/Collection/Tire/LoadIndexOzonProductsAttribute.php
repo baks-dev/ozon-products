@@ -67,15 +67,18 @@ final class LoadIndexOzonProductsAttribute implements OzonProductsAttributeInter
             return false;
         }
 
-        $index = explode('/', $data->getProductModificationPostfix());
-        $cleanedInt = filter_var(current($index), FILTER_SANITIZE_NUMBER_INT);
+        /** Разбиваем по пробелу постфикс и берем первое значение */
+        $postfix = explode(' ', $data->getProductModificationPostfix());
+        $postfix = current($postfix);
 
+        $index = explode('/', $postfix);
+        $cleanedInt = filter_var(current($index), FILTER_SANITIZE_NUMBER_INT);
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
             $cleanedInt,
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
