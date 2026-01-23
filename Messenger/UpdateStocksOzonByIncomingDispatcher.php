@@ -49,7 +49,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 final readonly class UpdateStocksOzonByIncomingDispatcher
 {
     public function __construct(
-        #[Target('yandexMarketProductsLogger')] private LoggerInterface $logger,
+        #[Target('ozonProductsLogger')] private LoggerInterface $logger,
         private ProductStocksEventInterface $ProductStocksEventRepository,
         private MessageDispatchInterface $messageDispatch,
         private AllProfileOzonTokenInterface $allProfileOzonToken,
