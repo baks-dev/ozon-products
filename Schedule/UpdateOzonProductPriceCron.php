@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -32,9 +32,6 @@ use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksUpdateDispatcher;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
-use BaksDev\Yandex\Market\Products\Messenger\Card\YaMarketProductsCardMessage;
-use BaksDev\Yandex\Market\Products\Messenger\YaMarketProductsPriceUpdate\YaMarketProductsPriceMessage;
-use BaksDev\Yandex\Market\Repository\AllProfileToken\AllProfileYaMarketTokenInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Scheduler\Attribute\AsCronTask;

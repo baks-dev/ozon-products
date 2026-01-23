@@ -31,9 +31,6 @@ use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Stocks\Messenger\Products\Recalculate\RecalculateProductMessage;
-use BaksDev\Yandex\Market\Products\Messenger\Card\YaMarketProductsCardMessage;
-use BaksDev\Yandex\Market\Products\Messenger\YaMarketProductsStocksUpdate\YaMarketProductsStocksMessage;
-use BaksDev\Yandex\Market\Repository\AllProfileToken\AllProfileYaMarketTokenInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**
@@ -43,7 +40,6 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 final readonly class UpdateStocksOzonByRecalculateDispatcher
 {
     public function __construct(
-        private AllProfileYaMarketTokenInterface $allProfileYaMarketToken,
         private AllProfileOzonTokenInterface $allProfileOzonToken,
         private MessageDispatchInterface $messageDispatch
     ) {}
@@ -53,7 +49,7 @@ final readonly class UpdateStocksOzonByRecalculateDispatcher
     {
         /**  Получаем активные токены профилей пользователя */
 
-        $profiles = $this->allProfileYaMarketToken
+        $profiles = $this->allProfileOzonToken
             ->onlyActiveToken()
             ->findAll();
 
