@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 final readonly class UpdateCardOzonWhenChangeProductDispatcher
 {
     public function __construct(
-        private AllProductsIdentifierInterface $allProductsIdentifier,
+        private AllProductsIdentifierInterface $allProductsIdentifierRepository,
         private AllProfileOzonTokenInterface $allProfileOzonToken,
         private MessageDispatchInterface $messageDispatch,
     ) {}
@@ -62,11 +62,12 @@ final readonly class UpdateCardOzonWhenChangeProductDispatcher
             return;
         }
 
-        foreach($profiles as $profile)
+        foreach($profiles as $UserProfileUid)
         {
             /** Получаем идентификаторы обновляемой продукции  */
             $products = $this
-                ->allProductsIdentifier
+                ->allProductsIdentifierRepository
+                ->forProfile($UserProfileUid)
                 ->forProduct($message->getId())
                 ->findAll();
 
@@ -78,7 +79,7 @@ final readonly class UpdateCardOzonWhenChangeProductDispatcher
             foreach($products as $product)
             {
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
-                    $profile,
+                    $UserProfileUid,
                     $product->getProductId(),
                     $product->getProductOfferConst(),
                     $product->getProductVariationConst(),
@@ -88,7 +89,7 @@ final readonly class UpdateCardOzonWhenChangeProductDispatcher
                 /** Транспорт LOW чтобы не мешать общей очереди */
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsCardMessage,
-                    transport: $profile.'-low',
+                    transport: $UserProfileUid.'-low',
                 );
             }
         }

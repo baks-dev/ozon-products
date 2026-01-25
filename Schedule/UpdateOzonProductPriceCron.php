@@ -73,26 +73,24 @@ final readonly class UpdateOzonProductPriceCron
             return;
         }
 
-        /** Получаем список */
-
-        /* Получаем все имеющиеся карточки в системе */
-        $products = $this->AllProductsIdentifierRepository->findAll();
-
-        if(false === $products || false === $products->valid())
+        foreach($profiles as $stamps => $UserProfileUid)
         {
-            $this->logger->warning(
-                'Карточек для обновления не найдено',
-                [__FILE__.':'.__LINE__],
-            );
+            /* Получаем все имеющиеся карточки в системе */
+            $products = $this->AllProductsIdentifierRepository
+                ->forProfile($UserProfileUid)
+                ->findAll();
 
-            return;
-        }
+            if(false === $products || false === $products->valid())
+            {
+                $this->logger->warning(
+                    'Карточек для обновления не найдено',
+                    [__FILE__.':'.__LINE__],
+                );
 
-        $profiles = iterator_to_array($profiles);
+                continue;
+            }
 
-        foreach($products as $ProductsIdentifierResult)
-        {
-            foreach($profiles as $stamps => $UserProfileUid)
+            foreach($products as $ProductsIdentifierResult)
             {
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
                     $UserProfileUid,

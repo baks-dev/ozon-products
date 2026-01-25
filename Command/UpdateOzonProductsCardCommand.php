@@ -165,7 +165,9 @@ class UpdateOzonProductsCardCommand extends Command
         $this->io->note(sprintf('Обновили профиль %s', $UserProfileUid->getAttr()));
 
         /** Получаем все имеющиеся карточки профиля */
-        $result = $this->AllProductsIdentifier->findAll();
+        $result = $this->AllProductsIdentifier
+            ->forProfile($UserProfileUid)
+            ->findAll();
 
         foreach($result as $product)
         {

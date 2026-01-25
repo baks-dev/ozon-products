@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *  
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -65,22 +65,23 @@ final readonly class UpdatePriceOzonWhenChangeOzonTokenDispatcher
             return;
         }
 
-        /* Получаем все имеющиеся карточки в системе */
-        $products = $this->allProductsIdentifier->findAll();
-
-        if($products === false || false === $products->valid())
+        foreach($profiles as $UserProfileUid)
         {
-            return;
-        }
+            /* Получаем все имеющиеся карточки в системе */
+            $products = $this->allProductsIdentifier
+                ->forProfile($UserProfileUid)
+                ->findAll();
 
-        $profiles = iterator_to_array($profiles);
-
-        foreach($products as $product)
-        {
-            foreach($profiles as $profile)
+            if($products === false || false === $products->valid())
             {
+                continue;
+            }
+
+            foreach($products as $product)
+            {
+
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
-                    $profile,
+                    $UserProfileUid,
                     $product->getProductId(),
                     $product->getProductOfferConst(),
                     $product->getProductVariationConst(),
@@ -93,7 +94,7 @@ final readonly class UpdatePriceOzonWhenChangeOzonTokenDispatcher
 
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsPriceMessage,
-                    transport: $profile.'-low',
+                    transport: $UserProfileUid.'-low',
                 );
 
 
@@ -103,7 +104,7 @@ final readonly class UpdatePriceOzonWhenChangeOzonTokenDispatcher
 
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsStocksMessage,
-                    transport: $profile.'-low',
+                    transport: $UserProfileUid.'-low',
                 );
 
             }
