@@ -34,6 +34,8 @@ use BaksDev\Products\Stocks\Entity\Stock\Event\ProductStockEvent;
 use BaksDev\Products\Stocks\Messenger\ProductStockMessage;
 use BaksDev\Products\Stocks\Repository\ProductStocksEvent\ProductStocksEventInterface;
 use BaksDev\Products\Stocks\Type\Status\ProductStockStatus\ProductStockStatusIncoming;
+use BaksDev\Products\Stocks\Type\Status\ProductStockStatus\ProductStockStatusMoving;
+use BaksDev\Products\Stocks\Type\Status\ProductStockStatus\ProductStockStatusWarehouse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -78,9 +80,16 @@ final readonly class UpdateStocksOzonByIncomingDispatcher
         }
 
         /**
-         * Если Статус заявки не является Incoming «Приход на склад»
+         * Если Статус заявки не является:
+         * Incoming «Приход на склад» - когда принимается поступление на склад
+         * Moving «Перемещение» - когда создается заявка на перемещение
+         * Warehouse «Отправили на склад» - когда отправили, но могли указать другое количество
          */
-        if(false === $ProductStockEvent->equalsProductStockStatus(ProductStockStatusIncoming::class))
+        if(
+            false === $ProductStockEvent->equalsProductStockStatus(ProductStockStatusIncoming::class)
+            && false === $ProductStockEvent->equalsProductStockStatus(ProductStockStatusMoving::class)
+            && false === $ProductStockEvent->equalsProductStockStatus(ProductStockStatusWarehouse::class)
+        )
         {
             return;
         }
