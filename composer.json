@@ -22,7 +22,7 @@
   ],
   "require": {
     "php": ">=8.4",
-    "baks-dev/core": "^7.3"
+    "baks-dev/core": "^7.4"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
