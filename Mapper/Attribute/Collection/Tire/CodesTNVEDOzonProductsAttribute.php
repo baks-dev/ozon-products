@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
+use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
@@ -51,6 +52,8 @@ final class CodesTNVEDOzonProductsAttribute implements OzonProductsAttributeInte
 
     public const int ID = 22232;
 
+    private false|OzonAttributeValueSearchRequest $attributeValueRequest;
+
     public function getId(): int
     {
         return self::ID;
@@ -73,17 +76,22 @@ final class CodesTNVEDOzonProductsAttribute implements OzonProductsAttributeInte
             return false;
         }
 
+        $value = current($attribute)->value ?? $this->default();
+
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            current($attribute)->value,
+            $value,
+            $data,
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
     }
 
-    public function default(): string|false
+    public function default(): int
     {
-        return false;
+        /** 4011100009 - МАРКИРОВКА РФ - Шины и покрышки пневматические резиновые новые, для легковых автомобилей */
+        return 4011100009;
     }
 
     public function isSetting(): bool
@@ -114,5 +122,10 @@ final class CodesTNVEDOzonProductsAttribute implements OzonProductsAttributeInte
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 }
