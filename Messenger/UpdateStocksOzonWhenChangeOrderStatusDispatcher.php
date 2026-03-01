@@ -37,6 +37,7 @@ use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierByEventInterface;
 use BaksDev\Products\Product\Repository\CurrentProductIdentifier\CurrentProductIdentifierResult;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -45,6 +46,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  *
  * @see https://api-seller.ozon.ru/v1/product/import/stocks
  */
+#[Autoconfigure(public: true)]
 #[AsMessageHandler(priority: 89)]
 final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
 {
