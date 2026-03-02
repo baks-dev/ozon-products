@@ -1,17 +1,17 @@
 <?php
 /*
  *  Copyright 2026.  Baks.dev <admin@baks.dev>
- *  
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *  
+ *
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *  
+ *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,6 +19,7 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
@@ -36,7 +37,6 @@ use BaksDev\Reference\Currency\Type\Currency;
 use BaksDev\Reference\Money\Type\Money;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use JsonException;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /** @see ProductsOzonCardResult */
 final  class ProductsOzonCardResult
@@ -58,7 +58,9 @@ final  class ProductsOzonCardResult
 
         private readonly string $product_article, //" => "TH202"
         private readonly string $article, //" => "TH202-16-195-45-84W"
+
         private readonly ?string $barcode, //" => "2744652835819"
+        private readonly ?string $barcodes, //" => "2744652835819"
 
 
         private readonly string $product_name, //" => "Triangle EffeXSport XL TH202"
@@ -300,7 +302,32 @@ final  class ProductsOzonCardResult
 
     public function getBarcode(): ?string
     {
-        return $this->barcode;
+        return true === empty($this->barcode) ? null : $this->barcode;
+    }
+
+    /**
+     * @return array<int, string>|null
+     */
+    public function getBarcodes(): array|null
+    {
+        if(is_null($this->barcodes))
+        {
+            return null;
+        }
+
+        if(false === json_validate($this->barcodes))
+        {
+            return null;
+        }
+
+        $barcodes = json_decode($this->barcodes, true, 512, JSON_THROW_ON_ERROR);
+
+        if(true === empty(current($barcodes)))
+        {
+            return null;
+        }
+
+        return $barcodes;
     }
 
     /**
@@ -434,21 +461,8 @@ final  class ProductsOzonCardResult
         }
 
         /* Сортируем коллекцию изображений по root */
-        uasort($this->images, function($a, $b) {
-            // Сначала сравниваем по product_img_root
-            if($a->product_img_root === $b->product_img_root)
-            {
-                return 0; // сохраняем текущий порядок
-            }
-
-            // Если у $a true, а у $b false - $a должен быть раньше
-            if($a->product_img_root && !$b->product_img_root)
-            {
-                return -1;
-            }
-
-            // Если у $a false, а у $b true - $b должен быть раньше
-            return 1;
+        usort($this->images, static function($img) {
+            return ($img->product_img_root === false) ? 1 : -1;
         });
 
         return $this->images;
