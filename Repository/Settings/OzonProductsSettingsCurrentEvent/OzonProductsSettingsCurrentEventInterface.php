@@ -27,7 +27,7 @@ use BaksDev\Ozon\Products\Entity\Settings\Event\OzonProductsSettingsEvent;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
-#[Autoconfigure(public: true)]
+// #[Autoconfigure(public: true)]
 interface OzonProductsSettingsCurrentEventInterface
 {
     public function findByProfile(UserProfileUid|string $profile): OzonProductsSettingsEvent|false;

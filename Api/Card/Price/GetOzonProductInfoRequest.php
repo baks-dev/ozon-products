@@ -40,45 +40,31 @@ final class GetOzonProductInfoRequest extends Ozon
         return $this;
     }
 
-    public function find()
+    public function find(): array|false
     {
-        $cursor = null;
+        $response = $this->TokenHttpClient()
+            ->request(
+                'POST',
+                '/v5/product/info/prices',
+                ["json" => [
 
-        while(true)
+                    'filter' => [
+                        'offer_id' => [$this->article],
+                        "visibility" => "ALL",
+                    ],
+
+                    'limit' => 1,
+                ]],
+            );
+
+        $content = $response->toArray(false);
+
+        if($response->getStatusCode() !== 200)
         {
-            $response = $this->TokenHttpClient()
-                ->request(
-                    'POST',
-                    '/v5/product/info/prices',
-                    ["json" => [
-
-                        'filter' => [
-                            //'offer_id' => [$this->article],
-                            "visibility" => "ALL",
-                        ],
-
-                        'limit' => 1000,
-                        'cursor' => $cursor,
-                    ]],
-                );
-
-            $content = $response->toArray(false);
-
-            if($response->getStatusCode() !== 200)
-            {
-                $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
-                return false;
-            }
-
-            foreach($content['items'] as $item)
-            {
-                yield $item;
-            }
-
-            if(count($content['items']) < 1000)
-            {
-                break;
-            }
+            $this->logger->critical($content['code'].': '.$content['message'], [self::class.':'.__LINE__]);
+            return false;
         }
+
+        return current($content['items']);
     }
 }

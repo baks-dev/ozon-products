@@ -46,7 +46,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  * Обновляем остатки товаров Ozon
  */
 #[AsMessageHandler(priority: 0)]
-#[Autoconfigure(public: true)]
+// #[Autoconfigure(public: true)]
 final readonly class OzonProductsStocksUpdateDispatcher
 {
     public function __construct(

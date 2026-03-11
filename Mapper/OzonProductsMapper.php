@@ -30,7 +30,7 @@ use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-#[Autoconfigure(public: true)]
+// #[Autoconfigure(public: true)]
 final readonly class OzonProductsMapper
 {
     /**

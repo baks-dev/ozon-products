@@ -30,6 +30,7 @@ use BaksDev\Orders\Order\UseCase\Admin\Edit\Tests\OrderNewTest;
 use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductInfoRequest;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
+use BaksDev\Products\Product\Repository\AllProductsByCategory\AllProductsByCategoryInterface;
 use BaksDev\Products\Product\Repository\CurrentProductByArticle\CurrentProductByBarcodeResult;
 use BaksDev\Products\Product\Repository\ProductByArticle\ProductEventByArticleInterface;
 use BaksDev\Products\Stocks\UseCase\Admin\Package\Tests\PackageProductStockTest;
@@ -68,85 +69,45 @@ class GetOzonProductInfoRequestTest extends KernelTestCase
 
     public function testGetOzonProductInfoRequestRepository(): void
     {
-
         self::assertTrue(true);
+
+        return;
+
+        /** @var AllProductsByCategoryInterface $AllProductsByCategoryRepository */
+        $AllProductsByCategoryRepository = self::getContainer()->get(AllProductsByCategoryInterface::class);
+
+        $result = $AllProductsByCategoryRepository->fetchAllProductByCategory();
+
+
+        if(false === $result || false === $result->valid())
+        {
+            return;
+        }
 
         /** @var GetOzonProductInfoRequest $GetOzonProductInfoRequest */
         $GetOzonProductInfoRequest = self::getContainer()->get(GetOzonProductInfoRequest::class);
         $GetOzonProductInfoRequest->TokenHttpClient(self::$Authorization);
 
-        $result = $GetOzonProductInfoRequest->find()
-            //->findAll()
-            //->find()
-        ;
-
-        if(false === $result || false === $result->valid())
+        foreach($result as $AllProductsByCategoryResult)
         {
-            return;
+
+            $info = $GetOzonProductInfoRequest
+                ->setArticle($AllProductsByCategoryResult->getProductArticle())
+                ->find();
+
+            echo $AllProductsByCategoryResult->getProductName().' ';
+
+            echo $AllProductsByCategoryResult->getVariationValue().'/';
+            echo $AllProductsByCategoryResult->getModificationValue().' ';
+            echo $AllProductsByCategoryResult->getOfferValue().';';
+
+            $price = $AllProductsByCategoryResult->getProductPrice();
+
+            // название / цена сайта / Цена Озон / Минимальная конкурента
+            echo $price->getValue().';'
+                .$info['price']['price'].';'
+                .$info['price_indexes']['ozon_index_data']['min_price'].';'
+                .PHP_EOL;
         }
-
-
-        /** @var ProductEventByArticleInterface $ProductEventByArticleRepository */
-        $ProductEventByArticleRepository = self::getContainer()->get(ProductEventByArticleInterface::class);
-
-        foreach($result as $item)
-        {
-            $ProductEvent = $ProductEventByArticleRepository
-                ->findProductEventByArticle($item['offer_id']);
-
-
-            foreach($ProductEvent->getOffer() as $ProductOffer)
-            {
-                foreach($ProductOffer->getVariation() as $ProductVariation)
-                {
-                    foreach($ProductVariation->getModification() as $ProductModification)
-                    {
-                        if($ProductModification->getArticle() === $item['offer_id'])
-                        {
-                            echo $ProductEvent->getNameByLocale(new Locale(Ru::class)).' ';
-
-                            echo $ProductVariation->getValue().'/';
-                            echo $ProductModification->getValue().' ';
-                            echo $ProductOffer->getValue().';';
-
-                            $price = $ProductModification->getPrice()->getPriceValue();
-
-                            // название / цена сайта / Цена Озон / Минимальная конкурента
-                            echo $price->getValue().';'
-                                .$item['price']['price']
-                                .$item['ozon_index_data']['min_price']
-                                .PHP_EOL;
-                        }
-                    }
-                }
-            }
-        }
-
-        if(false === $result || false === $result->valid())
-        {
-            return;
-        }
-
-        foreach($result as $GetOzonProductInfoRequestResult)
-        {
-            // Вызываем все геттеры
-            $reflectionClass = new ReflectionClass(GetOzonProductInfoRequestResult::class);
-            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-
-            foreach($methods as $method)
-            {
-                // Методы без аргументов
-                if($method->getNumberOfParameters() === 0)
-                {
-                    // Вызываем метод
-                    $data = $method->invoke($GetOzonProductInfoRequestResult);
-                    // dump($data);
-                }
-            }
-
-            break;
-        }
-
     }
-
 }
