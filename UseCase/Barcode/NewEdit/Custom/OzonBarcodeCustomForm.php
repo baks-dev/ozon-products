@@ -47,14 +47,14 @@ final class OzonBarcodeCustomForm extends AbstractType
                 'label_html' => true,
                 'attr' =>
                     ['class' => 'btn btn-outline-danger border-0 del-item-custom'],
-            ]
+            ],
         );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => OzonBarcodeCustomDTO::class
+            'data_class' => OzonBarcodeCustomDTO::class,
         ]);
     }
 

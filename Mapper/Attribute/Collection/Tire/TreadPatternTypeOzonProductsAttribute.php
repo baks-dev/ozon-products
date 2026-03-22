@@ -58,6 +58,16 @@ final class TreadPatternTypeOzonProductsAttribute implements OzonProductsAttribu
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -90,6 +100,22 @@ final class TreadPatternTypeOzonProductsAttribute implements OzonProductsAttribu
         return $requestData->getData();
     }
 
+    public static function getConvertValue(?string $value): ?string
+    {
+        return match ($value)
+        {
+            'asymmetric' => 'асимметричный',
+            'directed' => 'направленный',
+            'directed_asymmetric' => 'направленный ассиметричный',
+            'directed_symmetric' => 'направленный симметричный',
+            'non_directional' => 'ненаправленный',
+            'non_directional_asymmetric' => 'ненаправленный ассиметричный',
+            'non_directional_symmetric' => 'ненаправленный симметричный',
+
+            default => null,
+        };
+    }
+
     public function default(): string|false
     {
         return false;
@@ -110,35 +136,9 @@ final class TreadPatternTypeOzonProductsAttribute implements OzonProductsAttribu
         return false;
     }
 
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
-    }
-
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
-    }
-
-    public static function getConvertValue(?string $value): ?string
-    {
-        return match ($value)
-        {
-            'asymmetric' => 'асимметричный',
-            'directed' => 'направленный',
-            'directed_asymmetric' => 'направленный ассиметричный',
-            'directed_symmetric' => 'направленный симметричный',
-            'non_directional' => 'ненаправленный',
-            'non_directional_asymmetric' => 'ненаправленный ассиметричный',
-            'non_directional_symmetric' => 'ненаправленный симметричный',
-
-            default => null,
-        };
     }
 
     public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void

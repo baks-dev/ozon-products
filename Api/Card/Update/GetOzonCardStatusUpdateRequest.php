@@ -32,6 +32,7 @@ final class GetOzonCardStatusUpdateRequest extends Ozon
 {
     /**
      * Узнать статус добавления товара
+     *
      * @see https://api-seller.ozon.ru/v1/product/import/info
      */
     public function get(int|string $task): array|false
@@ -41,8 +42,8 @@ final class GetOzonCardStatusUpdateRequest extends Ozon
                 'POST',
                 '/v1/product/import/info',
                 [
-                    "json" => ['task_id' => (string) $task]
-                ]
+                    "json" => ['task_id' => (string) $task],
+                ],
             );
 
         $content = $response->toArray(false);

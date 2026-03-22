@@ -60,7 +60,7 @@ final class DeleteController extends AbstractController
             data: $OzonBarcodeDeleteDTO,
             options: [
                 'action' => $this->generateUrl('ozon-products:admin.barcode.delete',
-                    ['id' => $OzonBarcodeDeleteDTO->getEvent()]
+                    ['id' => $OzonBarcodeDeleteDTO->getEvent()],
                 ),
             ]);
 
@@ -75,7 +75,7 @@ final class DeleteController extends AbstractController
                 'admin.page.delete',
                 $handle instanceof OzonBarcode ? 'admin.success.delete' : 'admin.danger.delete',
                 'ozon-products.barcode',
-                $handle
+                $handle,
             );
 
             return $this->redirectToRoute('ozon-products:admin.barcode.index');

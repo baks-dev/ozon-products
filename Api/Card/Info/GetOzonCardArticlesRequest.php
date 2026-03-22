@@ -56,9 +56,9 @@ final class GetOzonCardArticlesRequest extends Ozon
                         "json" => [
                             'filter' => $filter,
                             'last_id' => $this->last ?: '',
-                            'limit' => $this->limit
-                        ]
-                    ]
+                            'limit' => $this->limit,
+                        ],
+                    ],
                 );
 
             $content = $response->toArray(false);

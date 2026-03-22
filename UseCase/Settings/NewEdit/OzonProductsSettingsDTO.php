@@ -88,16 +88,6 @@ final class OzonProductsSettingsDTO implements OzonProductsSettingsEventInterfac
         $this->settings = $settings;
     }
 
-    public function getType(): ?int
-    {
-        return $this->type;
-    }
-
-    public function setType(?int $type): void
-    {
-        $this->type = $type;
-    }
-
     public function getOzon(): ?int
     {
         return $this->ozon;
@@ -129,6 +119,16 @@ final class OzonProductsSettingsDTO implements OzonProductsSettingsEventInterfac
         {
             $this->properties->add($property);
         }
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(?int $type): void
+    {
+        $this->type = $type;
     }
 
     public function removeProperty(Properties\OzonProductsSettingsPropertyDTO $property): void

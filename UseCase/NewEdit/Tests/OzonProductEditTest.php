@@ -54,15 +54,15 @@ final class OzonProductEditTest extends KernelTestCase
         /** Создаем путь к тестовой директории */
         $testUploadDir = implode(
             DIRECTORY_SEPARATOR,
-            [$containerBag->get('kernel.project_dir'), 'public', 'upload', 'tests']
+            [$containerBag->get('kernel.project_dir'), 'public', 'upload', 'tests'],
         );
 
         $fileSystem->copy(
             BaksDevCoreBundle::PATH.implode(
                 DIRECTORY_SEPARATOR,
-                ['Resources', 'assets', 'img', 'empty.webp']
+                ['Resources', 'assets', 'img', 'empty.webp'],
             ),
-            $testUploadDir.DIRECTORY_SEPARATOR.'photo1.webp'
+            $testUploadDir.DIRECTORY_SEPARATOR.'photo1.webp',
         );
 
         $filePhoto = new File($testUploadDir.DIRECTORY_SEPARATOR.'photo.webp', false);

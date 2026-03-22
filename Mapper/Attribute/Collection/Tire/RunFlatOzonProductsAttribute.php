@@ -55,6 +55,16 @@ final class RunFlatOzonProductsAttribute implements OzonProductsAttributeInterfa
 
     private OzonAttributeValueSearchRequest|false $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -78,10 +88,20 @@ final class RunFlatOzonProductsAttribute implements OzonProductsAttributeInterfa
             self::ID,
             self::getConvertValue($value),
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
+    }
+
+    public static function getConvertValue(bool|string|null $value): ?string
+    {
+        return match ($value)
+        {
+            true, 'true' => 'Да',
+            false, 'false' => 'Нет',
+            default => null
+        };
     }
 
     public function default(): string|false
@@ -104,29 +124,9 @@ final class RunFlatOzonProductsAttribute implements OzonProductsAttributeInterfa
         return false;
     }
 
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
-    }
-
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
-    }
-
-    public static function getConvertValue(bool|string|null $value): ?string
-    {
-        return match ($value)
-        {
-            true, 'true' => 'Да',
-            false, 'false' => 'Нет',
-            default => null
-        };
     }
 
     public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void

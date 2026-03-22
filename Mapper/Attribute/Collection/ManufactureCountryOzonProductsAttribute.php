@@ -53,6 +53,16 @@ final class ManufactureCountryOzonProductsAttribute implements OzonProductsAttri
         private ?TranslatorInterface $translator = null,
     ) {}
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -81,7 +91,7 @@ final class ManufactureCountryOzonProductsAttribute implements OzonProductsAttri
         {
             $country = $this->translator->trans(
                 current($attribute)->value,
-                domain: 'field-country'
+                domain: 'field-country',
             );
         }
 
@@ -89,7 +99,7 @@ final class ManufactureCountryOzonProductsAttribute implements OzonProductsAttri
             self::ID,
             $country,
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
@@ -113,16 +123,6 @@ final class ManufactureCountryOzonProductsAttribute implements OzonProductsAttri
     public function choices(): array|false
     {
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

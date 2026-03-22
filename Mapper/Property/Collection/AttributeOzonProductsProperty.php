@@ -57,6 +57,18 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
         private readonly ?OzonAttributeValueSearchRequest $attributeValueSearchRequest = null
     ) {}
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    /**
+     * Проверяет, относится ли значение к данному объекту
+     */
+    public static function equals(string $param): bool
+    {
+        return self::PARAM === $param;
+    }
 
     public function getValue(): string
     {
@@ -121,23 +133,9 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
         return false;
     }
 
-
     public function required(): bool
     {
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    /**
-     * Проверяет, относится ли значение к данному объекту
-     */
-    public static function equals(string $param): bool
-    {
-        return self::PARAM === $param;
     }
 
     public function choices(): bool

@@ -43,9 +43,12 @@ final class VoterCustom implements VoterInterface, MenuAdminInterface
 
     public const string KEY = 'GxZhhdvTX';
 
-    public static function getVoter(): string
+    /**
+     * Метод возвращает позицию, в которую располагается ссылка в секции меню.
+     */
+    public static function getSortMenu(): int
     {
-        return Role::ROLE.'_'.self::VOTER;
+        return 452;
     }
 
     public function equals(RoleInterface $role): bool
@@ -57,6 +60,16 @@ final class VoterCustom implements VoterInterface, MenuAdminInterface
     /**
      * Добавляем раздел в меню администрирования.
      */
+
+    public function getRole(): string
+    {
+        return self::getVoter();
+    }
+
+    public static function getVoter(): string
+    {
+        return Role::ROLE.'_'.self::VOTER;
+    }
 
     /** Метод возвращает PATH раздела */
     public function getPath(): string
@@ -81,14 +94,6 @@ final class VoterCustom implements VoterInterface, MenuAdminInterface
     }
 
     /**
-     * Метод возвращает позицию, в которую располагается ссылка в секции меню.
-     */
-    public static function getSortMenu(): int
-    {
-        return 452;
-    }
-
-    /**
      * Метод возвращает флаг "Показать в выпадающем меню".
      */
     public function getDropdownMenu(): bool
@@ -102,10 +107,5 @@ final class VoterCustom implements VoterInterface, MenuAdminInterface
     public function getModal(): bool
     {
         return false;
-    }
-
-    public function getRole(): string
-    {
-        return self::getVoter();
     }
 }

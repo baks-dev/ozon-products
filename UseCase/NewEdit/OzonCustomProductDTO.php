@@ -26,12 +26,12 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\UseCase\NewEdit;
 
 use BaksDev\Ozon\Products\Entity\Custom\OzonProductCustom;
+use BaksDev\Ozon\Products\Entity\Custom\OzonProductCustomInterface;
+use BaksDev\Ozon\Products\UseCase\NewEdit\Images\OzonProductCustomImagesDTO;
 use BaksDev\Products\Product\Entity\ProductInvariable;
 use BaksDev\Products\Product\Type\Invariable\ProductInvariableUid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use BaksDev\Ozon\Products\UseCase\NewEdit\Images\OzonProductCustomImagesDTO;
-use BaksDev\Ozon\Products\Entity\Custom\OzonProductCustomInterface;
 
 /** @see OzonProductCustom */
 final class OzonCustomProductDTO implements OzonProductCustomInterface

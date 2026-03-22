@@ -100,6 +100,7 @@ final class OzonProductsSettingsForm extends AbstractType
 
             /**
              * Свойства карточки Ozon
+             *
              * @var OzonProductsPropertyInterface $case
              */
             foreach($this->ozonProductPropertyCollection->casesSettings() as $case)
@@ -120,6 +121,7 @@ final class OzonProductsSettingsForm extends AbstractType
 
             /**
              * Аттрибуты карточки Ozon
+             *
              * @var OzonProductsAttributeInterface $case
              */
             foreach($this->ozonProductAttributeCollection->casesSettings($data->getOzon()) as $case)

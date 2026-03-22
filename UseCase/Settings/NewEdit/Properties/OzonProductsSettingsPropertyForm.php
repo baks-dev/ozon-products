@@ -88,8 +88,8 @@ final class OzonProductsSettingsPropertyForm extends AbstractType
                         TextType::class,
                         [
                             'data' => $data->getDef() ?: $ozonProperty->default(),
-                            'required' => $ozonProperty->required()
-                        ]
+                            'required' => $ozonProperty->required(),
+                        ],
                     );
                 }
             }
@@ -102,7 +102,7 @@ final class OzonProductsSettingsPropertyForm extends AbstractType
             [
                 'data_class' => OzonProductsSettingsPropertyDTO::class,
                 'property_fields' => null,
-            ]
+            ],
         );
     }
 

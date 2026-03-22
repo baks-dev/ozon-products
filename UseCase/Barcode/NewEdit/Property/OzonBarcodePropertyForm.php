@@ -61,10 +61,10 @@ final class OzonBarcodePropertyForm extends AbstractType
 
                             'label' => false,
                             'expanded' => false,
-                            'multiple' => false
+                            'multiple' => false,
                         ]);
                 }
-            }
+            },
         );
 
 
@@ -76,7 +76,7 @@ final class OzonBarcodePropertyForm extends AbstractType
                 'label_html' => true,
                 'attr' =>
                     ['class' => 'btn btn-outline-danger border-0 del-item-property'],
-            ]
+            ],
         );
     }
 
@@ -90,7 +90,7 @@ final class OzonBarcodePropertyForm extends AbstractType
                 'attr' => ['class' => 'w-100'],
                 'category' => null,
                 'offer_fields' => null,
-            ]
+            ],
         );
     }
 }

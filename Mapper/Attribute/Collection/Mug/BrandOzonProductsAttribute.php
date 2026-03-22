@@ -50,6 +50,18 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
 
     public const int ID = 85;
 
+    /** Приоритет */
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    /** Проверяет, относится ли значение к данному объекту */
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -84,18 +96,6 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
     {
         //return ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
         return false;
-    }
-
-    /** Приоритет */
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    /** Проверяет, относится ли значение к данному объекту */
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     /** Проверяет, относится ли объект к указанной категории */

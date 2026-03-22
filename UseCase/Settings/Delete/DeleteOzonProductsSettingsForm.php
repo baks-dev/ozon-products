@@ -37,7 +37,7 @@ final class DeleteOzonProductsSettingsForm extends AbstractType
         $builder->add(
             'delete_ozon_products_settings',
             SubmitType::class,
-            ['label' => 'Delete', 'label_html' => true, 'attr' => ['class' => 'btn-danger']]
+            ['label' => 'Delete', 'label_html' => true, 'attr' => ['class' => 'btn-danger']],
         );
     }
 

@@ -78,8 +78,8 @@ final class OzonTypeRequest extends Ozon
                     [
                         "json" => [
                             "language" => $this->local ?: 'DEFAULT',
-                        ]
-                    ]
+                        ],
+                    ],
                 );
 
             $content = $response->toArray(false);
@@ -120,7 +120,7 @@ final class OzonTypeRequest extends Ozon
 
             yield new OzonTypeDTO(
                 id: $type['type_id'],
-                name: $type['type_name']
+                name: $type['type_name'],
             );
 
         }

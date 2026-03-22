@@ -45,7 +45,7 @@ final class OzonProductCustomImagesForm extends AbstractType
                 'label' => false,
                 'required' => false,
                 'attr' => ['accept' => ".png, .jpg, .jpeg, .webp, .gif"],
-            ]
+            ],
         );
 
         $builder->add('root', RadioType::class, ['required' => false]);

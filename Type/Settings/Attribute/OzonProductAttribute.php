@@ -72,21 +72,32 @@ final class OzonProductAttribute
         throw new InvalidArgumentException(sprintf('Undefined Ozon Products Attribute %s', $property));
     }
 
-    public function __toString(): string
-    {
-        return $this->property ? $this->property->getId() : '';
-    }
-
     public function getOzonProductAttribute(): ?OzonProductsAttributeInterface
     {
         return $this->property;
+    }
+
+    public static function getDeclared(): array
+    {
+        return array_filter(
+            get_declared_classes(),
+            static function($className) {
+                return in_array(OzonProductsAttributeInterface::class, class_implements($className), true);
+            },
+        );
+    }
+
+    public function equals(mixed $property): bool
+    {
+        $property = new self($property);
+
+        return $this->getOzonProductAttributeId() === $property->getOzonProductAttributeId();
     }
 
     public function getOzonProductAttributeId(): int
     {
         return $this->property->getId();
     }
-
 
     public static function cases(): array
     {
@@ -102,20 +113,8 @@ final class OzonProductAttribute
         return $case;
     }
 
-    public static function getDeclared(): array
+    public function __toString(): string
     {
-        return array_filter(
-            get_declared_classes(),
-            static function($className) {
-                return in_array(OzonProductsAttributeInterface::class, class_implements($className), true);
-            }
-        );
-    }
-
-    public function equals(mixed $property): bool
-    {
-        $property = new self($property);
-
-        return $this->getOzonProductAttributeId() === $property->getOzonProductAttributeId();
+        return $this->property ? $this->property->getId() : '';
     }
 }

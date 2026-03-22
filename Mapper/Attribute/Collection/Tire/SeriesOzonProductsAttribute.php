@@ -51,6 +51,16 @@ final class SeriesOzonProductsAttribute implements OzonProductsAttributeInterfac
 
     public const int ID = 12882;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -108,7 +118,7 @@ final class SeriesOzonProductsAttribute implements OzonProductsAttributeInterfac
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            current($attribute)->value
+            current($attribute)->value,
         );
 
         return $requestData->getData();
@@ -132,16 +142,6 @@ final class SeriesOzonProductsAttribute implements OzonProductsAttributeInterfac
     public function choices(): array|false
     {
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

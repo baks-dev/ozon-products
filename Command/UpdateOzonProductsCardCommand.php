@@ -209,7 +209,7 @@ class UpdateOzonProductsCardCommand extends Command
                 continue;
             }
 
-            if(empty($ProductsOzonCardResult->getProductQuantity()))
+            /*if(empty($ProductsOzonCardResult->getProductQuantity()))
             {
                 $this->io->writeln(sprintf(
                     '<fg=yellow>Карточка товара с артикулом %s без наличия</>',
@@ -217,7 +217,8 @@ class UpdateOzonProductsCardCommand extends Command
                 );
 
                 continue;
-            }
+            }*/
+
 
             $OzonProductsCardMessage = new OzonProductsCardMessage(
                 $UserProfileUid,

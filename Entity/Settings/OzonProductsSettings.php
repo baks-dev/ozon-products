@@ -61,14 +61,6 @@ class OzonProductsSettings
     }
 
     /**
-     * Идентификатор
-     */
-    public function getId(): CategoryProductUid
-    {
-        return $this->id;
-    }
-
-    /**
      * Идентификатор события
      */
     public function getEvent(): OzonProductsSettingsEventUid
@@ -80,5 +72,13 @@ class OzonProductsSettings
     {
         $this->event = $event->getId();
         $this->id = $event->getSettings();
+    }
+
+    /**
+     * Идентификатор
+     */
+    public function getId(): CategoryProductUid
+    {
+        return $this->id;
     }
 }

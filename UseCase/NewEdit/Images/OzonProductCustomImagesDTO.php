@@ -33,11 +33,9 @@ use Symfony\Component\HttpFoundation\File\File;
 /** @see OzonProductCustomImage */
 final class OzonProductCustomImagesDTO implements OzonProductCustomInterface
 {
-    private ?OzonProductImageUid $id = null;
-
     /** Обложка категории */
     public ?File $file = null;
-
+    private ?OzonProductImageUid $id = null;
     /** Название файла */
     private ?string $name = null;
 

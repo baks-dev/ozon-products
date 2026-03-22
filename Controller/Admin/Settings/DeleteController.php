@@ -54,7 +54,7 @@ final class DeleteController extends AbstractController
         $form = $this->createForm(DeleteOzonProductsSettingsForm::class, $DeleteOzonProductSettingsDTO, [
             'action' => $this->generateUrl(
                 'ozon-products:admin.settings.delete',
-                ['id' => $DeleteOzonProductSettingsDTO->getEvent()]
+                ['id' => $DeleteOzonProductSettingsDTO->getEvent()],
             ),
         ]);
 

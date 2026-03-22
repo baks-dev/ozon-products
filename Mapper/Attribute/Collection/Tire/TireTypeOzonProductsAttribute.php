@@ -56,6 +56,16 @@ final class TireTypeOzonProductsAttribute implements OzonProductsAttributeInterf
 
     private OzonAttributeValueSearchRequest|false $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -79,10 +89,21 @@ final class TireTypeOzonProductsAttribute implements OzonProductsAttributeInterf
             self::ID,
             self::getConvertValue($value),
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
+    }
+
+    public static function getConvertValue(string|bool|null $value): ?string
+    {
+
+        return match ($value)
+        {
+            'true', true => 'Шипованные',
+            'false', false => 'Нешипованные',
+            default => null
+        };
     }
 
     public function default(): string|false
@@ -105,30 +126,9 @@ final class TireTypeOzonProductsAttribute implements OzonProductsAttributeInterf
         return false;
     }
 
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
-    }
-
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
-    }
-
-    public static function getConvertValue(string|bool|null $value): ?string
-    {
-
-        return match ($value)
-        {
-            'true', true => 'Шипованные',
-            'false', false => 'Нешипованные',
-            default => null
-        };
     }
 
     public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void

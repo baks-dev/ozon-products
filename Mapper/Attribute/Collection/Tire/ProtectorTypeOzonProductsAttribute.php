@@ -56,6 +56,28 @@ final class ProtectorTypeOzonProductsAttribute implements OzonProductsAttributeI
 
     private OzonAttributeValueSearchRequest|false $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
+    public static function getConvertValue(string $value): ?string
+    {
+        return match ($value)
+        {
+            'Внедорожный' => 'Внедорожный',
+            'Вседорожный' => 'Вседорожный',
+            'Дорожный' => 'Дорожный',
+            'Слики' => 'Слики',
+            default => null
+        };
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -82,7 +104,7 @@ final class ProtectorTypeOzonProductsAttribute implements OzonProductsAttributeI
             self::ID,
             current($attribute)->value,
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
@@ -108,31 +130,9 @@ final class ProtectorTypeOzonProductsAttribute implements OzonProductsAttributeI
         return false;
     }
 
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
-    }
-
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
-    }
-
-    public static function getConvertValue(string $value): ?string
-    {
-        return match ($value)
-        {
-            'Внедорожный' => 'Внедорожный',
-            'Вседорожный' => 'Вседорожный',
-            'Дорожный' => 'Дорожный',
-            'Слики' => 'Слики',
-            default => null
-        };
     }
 
     public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void

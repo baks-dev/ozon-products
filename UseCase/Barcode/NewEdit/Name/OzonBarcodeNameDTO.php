@@ -33,6 +33,7 @@ final class OzonBarcodeNameDTO implements OzonBarcodeNameInterface
 {
     /**
      * Значение свойства
+     *
      * @see OzonProductSettingsName
      */
     private bool $value = false;

@@ -44,6 +44,7 @@ final class AllProductsSettingsRepository implements AllProductsSettingsInterfac
     private PaginatorInterface $paginator;
 
     private DBALQueryBuilder $DBALQueryBuilder;
+    private ?SearchDTO $search = null;
 
     public function __construct(
         DBALQueryBuilder $DBALQueryBuilder,
@@ -53,9 +54,6 @@ final class AllProductsSettingsRepository implements AllProductsSettingsInterfac
         $this->paginator = $paginator;
         $this->DBALQueryBuilder = $DBALQueryBuilder;
     }
-
-    private ?SearchDTO $search = null;
-
 
     public function search(SearchDTO $search): self
     {
@@ -120,7 +118,7 @@ final class AllProductsSettingsRepository implements AllProductsSettingsInterfac
 					CONCAT ( '/upload/".$dbal->table(CategoryProductCover::class)."' , '/', category_cover.name)
 			   ELSE NULL
 			END AS cover
-		"
+		",
         );
 
 

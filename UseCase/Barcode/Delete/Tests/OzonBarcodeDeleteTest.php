@@ -69,7 +69,7 @@ final class OzonBarcodeDeleteTest extends KernelTestCase
             ->leftJoin(OzonBarcodeEvent::class,
                 'event',
                 'WITH',
-                'event.id = barcode.event'
+                'event.id = barcode.event',
             );
 
 

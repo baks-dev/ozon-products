@@ -97,7 +97,7 @@ final class AllOzonBarcodeSettingsRepository implements AllOzonBarcodeSettingsIn
             'barcode',
             CategoryProduct::class,
             'category',
-            'category.id = barcode.id'
+            'category.id = barcode.id',
         );
 
         /** События категории */
@@ -108,7 +108,7 @@ final class AllOzonBarcodeSettingsRepository implements AllOzonBarcodeSettingsIn
             'category',
             CategoryProductEvent::class,
             'category_event',
-            'category_event.id = category.event'
+            'category_event.id = category.event',
         );
 
 

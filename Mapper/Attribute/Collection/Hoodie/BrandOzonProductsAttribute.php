@@ -50,11 +50,20 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
 
     public const int ID = 31;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
     }
-
 
     public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
@@ -80,16 +89,6 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
     {
         //return ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

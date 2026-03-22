@@ -61,6 +61,16 @@ final class TypeReleaseOzonProductsAttribute implements OzonProductsAttributeInt
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -95,14 +105,14 @@ final class TypeReleaseOzonProductsAttribute implements OzonProductsAttributeInt
         return $requestData->getData();
     }
 
-    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
-    {
-        $this->attributeValueRequest = $attributeValueRequest;
-    }
-
     public function default(): string|false
     {
         return false;
+    }
+
+    public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
+    {
+        $this->attributeValueRequest = $attributeValueRequest;
     }
 
     public function isSetting(): bool
@@ -119,16 +129,6 @@ final class TypeReleaseOzonProductsAttribute implements OzonProductsAttributeInt
     {
         //return ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

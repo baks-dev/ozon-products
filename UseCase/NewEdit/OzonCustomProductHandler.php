@@ -26,10 +26,10 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\UseCase\NewEdit;
 
 use BaksDev\Core\Entity\AbstractHandler;
-use BaksDev\Ozon\Products\UseCase\NewEdit\Images\OzonProductCustomImagesDTO;
-use BaksDev\Ozon\Products\Entity\Custom\OzonProductCustom;
 use BaksDev\Ozon\Products\Entity\Custom\Images\OzonProductCustomImage;
+use BaksDev\Ozon\Products\Entity\Custom\OzonProductCustom;
 use BaksDev\Ozon\Products\Messenger\Custom\OzonProductMessage;
+use BaksDev\Ozon\Products\UseCase\NewEdit\Images\OzonProductCustomImagesDTO;
 
 final class OzonCustomProductHandler extends AbstractHandler
 {

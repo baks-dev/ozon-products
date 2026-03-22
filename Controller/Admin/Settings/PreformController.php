@@ -58,8 +58,8 @@ final class PreformController extends AbstractController
                 [
                     'category' => $PreformDTO->getCategory(),
                     'ozon' => $PreformDTO->getOzon()?->getId(),
-                    'type' => $PreformDTO->getType()?->getId()
-                ]
+                    'type' => $PreformDTO->getType()?->getId(),
+                ],
             );
         }
 

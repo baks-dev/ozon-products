@@ -47,17 +47,20 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
     //-groupName: ""
     //-dictionary: 0
 
+    /** 17027949 - Шины */
+    public const int CATEGORY = 17027949;
+    public const int TYPE = 94765;
+    public const int ID = 11254;
+
     public function __construct(
         #[Autowire(env: 'HOST')] private readonly ?string $HOST = null,
         #[Autowire(env: 'CDN_HOST')] private readonly ?string $CDN_HOST = null,
     ) {}
 
-    /** 17027949 - Шины */
-    public const int CATEGORY = 17027949;
-
-    public const int TYPE = 94765;
-
-    public const int ID = 11254;
+    public static function priority(): int
+    {
+        return 100;
+    }
 
     public function getId(): int
     {
@@ -236,6 +239,11 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
         return $requestData->getData();
     }
 
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function default(): string|false
     {
         return false;
@@ -254,16 +262,6 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
     public function choices(): array|false
     {
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

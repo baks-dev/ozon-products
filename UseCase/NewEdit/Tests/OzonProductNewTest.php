@@ -92,7 +92,7 @@ final class OzonProductNewTest extends KernelTestCase
         /** Создаем путь к тестовой директории */
         $testUploadDir = implode(
             DIRECTORY_SEPARATOR,
-            [$containerBag->get('kernel.project_dir'), 'public', 'upload', 'tests']
+            [$containerBag->get('kernel.project_dir'), 'public', 'upload', 'tests'],
         );
 
         /** Проверяем существование директории для тестовых картинок */
@@ -109,9 +109,9 @@ final class OzonProductNewTest extends KernelTestCase
         $fileSystem->copy(
             BaksDevCoreBundle::PATH.implode(
                 DIRECTORY_SEPARATOR,
-                ['Resources', 'assets', 'img', 'empty.webp']
+                ['Resources', 'assets', 'img', 'empty.webp'],
             ),
-            $testUploadDir.DIRECTORY_SEPARATOR.'photo.webp'
+            $testUploadDir.DIRECTORY_SEPARATOR.'photo.webp',
         );
 
         $filePhoto = new File($testUploadDir.DIRECTORY_SEPARATOR.'photo.webp', false);

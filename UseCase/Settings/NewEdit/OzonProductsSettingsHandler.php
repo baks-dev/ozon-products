@@ -29,7 +29,6 @@ use BaksDev\Core\Entity\AbstractHandler;
 use BaksDev\Ozon\Products\Entity\Settings\Event\OzonProductsSettingsEvent;
 use BaksDev\Ozon\Products\Entity\Settings\OzonProductsSettings;
 use BaksDev\Ozon\Products\Messenger\Settings\OzonProductsSettingsMessage;
-use DomainException;
 
 final class OzonProductsSettingsHandler extends AbstractHandler
 {
@@ -50,7 +49,7 @@ final class OzonProductsSettingsHandler extends AbstractHandler
         /* Отправляем сообщение в шину */
         $this->messageDispatch->dispatch(
             message: new OzonProductsSettingsMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-            transport: 'ozon-products'
+            transport: 'ozon-products',
         );
 
         return $this->main;

@@ -81,7 +81,7 @@ final class OzonBarcodeForm extends AbstractType
             'by_reference' => false,
             'allow_delete' => true,
             'allow_add' => true,
-            'prototype_name' => '__property__'
+            'prototype_name' => '__property__',
         ]);
 
         $builder->add('custom', CollectionType::class, [
@@ -91,7 +91,7 @@ final class OzonBarcodeForm extends AbstractType
             'by_reference' => false,
             'allow_delete' => true,
             'allow_add' => true,
-            'prototype_name' => '__custom__'
+            'prototype_name' => '__custom__',
         ]);
 
         /* Прототип списка свойств */
@@ -146,7 +146,7 @@ final class OzonBarcodeForm extends AbstractType
                     'by_reference' => false,
                     'allow_delete' => true,
                     'allow_add' => true,
-                    'prototype_name' => '__property__'
+                    'prototype_name' => '__property__',
                 ]);
 
 
@@ -159,7 +159,7 @@ final class OzonBarcodeForm extends AbstractType
                         'label' => 'Add',
                         'label_html' => true,
                         'attr' => ['class' => 'btn-sm btn-outline-primary border-0'],
-                        'disabled' => empty($choice)
+                        'disabled' => empty($choice),
                     ]);
             }
 
@@ -189,13 +189,13 @@ final class OzonBarcodeForm extends AbstractType
                             return (is_int($category->getAttr()) ? str_repeat(' - ', $category->getAttr() - 1) : '').$category->getOptions();
                         },
                         'disabled' => true,
-                        'label' => $category ? $category->getOptions() : false
+                        'label' => $category ? $category->getOptions() : false,
                     ]);
 
                 }
 
                 $formModifier($builder, $data->getMain());
-            }
+            },
         );
 
         $builder->get('main')->addEventListener(
@@ -207,7 +207,7 @@ final class OzonBarcodeForm extends AbstractType
                 {
                     $formModifier($event->getForm()->getParent(), $category);
                 }
-            }
+            },
         );
 
         /* Сохранить ******************************************************/

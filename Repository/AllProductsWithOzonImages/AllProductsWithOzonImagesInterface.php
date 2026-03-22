@@ -27,8 +27,8 @@ namespace BaksDev\Ozon\Products\Repository\AllProductsWithOzonImages;
 
 use BaksDev\Core\Form\Search\SearchDTO;
 use BaksDev\Core\Services\Paginator\PaginatorInterface;
-use BaksDev\Products\Product\Forms\ProductFilter\Admin\ProductFilterDTO;
 use BaksDev\Ozon\Products\Form\OzonFilter\OzonProductsFilterDTO;
+use BaksDev\Products\Product\Forms\ProductFilter\Admin\ProductFilterDTO;
 
 interface AllProductsWithOzonImagesInterface
 {

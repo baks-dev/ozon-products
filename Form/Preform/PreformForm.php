@@ -69,7 +69,7 @@ final class PreformForm extends AbstractType
                     'expanded' => false,
                     'multiple' => false,
                     'required' => true,
-                ]
+                ],
             );
 
 
@@ -89,7 +89,7 @@ final class PreformForm extends AbstractType
                 'multiple' => false,
                 'required' => true,
                 'translation_domain' => 'ozon-products.mapper',
-            ]
+            ],
         );
 
 
@@ -103,7 +103,7 @@ final class PreformForm extends AbstractType
                 'multiple' => false,
                 'required' => true,
                 'disabled' => true,
-            ]
+            ],
         );
 
         $formModifier = function(FormInterface $form, ?int $ozonCategoryId = null): void {
@@ -129,8 +129,8 @@ final class PreformForm extends AbstractType
                     'multiple' => false,
                     'required' => true,
                     'placeholder' => 'Выберите тип из свойства',
-                    'translation_domain' => 'ozon-products.mapper'
-                ]
+                    'translation_domain' => 'ozon-products.mapper',
+                ],
             );
         };
 
@@ -140,7 +140,7 @@ final class PreformForm extends AbstractType
                 $data = $event->getData();
                 /** @var PreformDTO $data */
                 $formModifier($event->getForm(), $data->getType());
-            }
+            },
         );
 
 
@@ -150,7 +150,7 @@ final class PreformForm extends AbstractType
                 /** @var OzonCategoryDTO $ozonCategory */
                 $ozonCategory = $event->getForm()->getData();
                 $formModifier($event->getForm()->getParent(), $ozonCategory->getId());
-            }
+            },
         );
 
 

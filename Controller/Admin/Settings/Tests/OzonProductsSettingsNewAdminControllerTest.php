@@ -42,9 +42,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 #[When(env: 'test')]
 final class OzonProductsSettingsNewAdminControllerTest extends WebTestCase
 {
-    private static ?string $url = null;
-
     private const string ROLE = 'ROLE_OZON_PRODUCTS_NEW';
+    private static ?string $url = null;
 
     #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     #[DependsOnClass(OzonProductsSettingsIndexAdminControllerTest::class)]

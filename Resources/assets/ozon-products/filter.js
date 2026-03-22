@@ -22,19 +22,22 @@
 
 executeFunc(function ozonProductsFunction()
 {
-    if(typeof formDebounce !== 'function')
+    if(typeof formDebounce !== "function")
     {
         return false;
     }
 
     const form = document.forms.ozon_products_filter_form;
 
-    if(typeof form === 'undefined')
+    if(typeof form === "undefined")
     {
         return false;
     }
 
-    form.addEventListener('change', formDebounce(() => { form.submit(); }, 300));
+    form.addEventListener("change", formDebounce(() =>
+    {
+        form.submit();
+    }, 300));
 
     return true;
-})
+});

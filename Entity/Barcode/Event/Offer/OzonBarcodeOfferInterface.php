@@ -28,6 +28,7 @@ interface OzonBarcodeOfferInterface
 {
     /**
      * Значение свойства
+     *
      * @see OzonBarcodeOffer
      */
     public function getValue(): bool;

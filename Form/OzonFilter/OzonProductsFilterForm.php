@@ -86,7 +86,7 @@ final class OzonProductsFilterForm extends AbstractType
 
                     $data->setExists($sessionArray['exists'] ?? null);
                 }
-            }
+            },
         );
 
         $builder->addEventListener(
@@ -117,7 +117,7 @@ final class OzonProductsFilterForm extends AbstractType
                     $this->request->getSession()->remove($this->sessionKey);
 
                 }
-            }
+            },
         );
     }
 }

@@ -54,6 +54,27 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
+    public static function getConvertName(string $value): ?string
+    {
+        return match ($value)
+        {
+            'all' => 'всесезонные', // всесезонные
+            'winter', => 'зимние', // зимние
+            'summer' => 'летние', // летние
+            default => null,
+        };
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -80,10 +101,21 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
             self::ID,
             self::getConvertValue(current($attribute)->value),
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
+    }
+
+    public static function getConvertValue(string $value): ?string
+    {
+        return match ($value)
+        {
+            'all' => 'На любой сезон', // всесезонные
+            'winter', => 'Зима', // зимние
+            'summer' => 'Лето', // летние
+            default => null,
+        };
     }
 
     public function default(): string|false
@@ -106,41 +138,9 @@ final class SeasonOzonProductsAttribute implements OzonProductsAttributeInterfac
         return false;
     }
 
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
-    }
-
     public function equalsCategory(int $category): bool
     {
         return self::CATEGORY === $category;
-    }
-
-    public static function getConvertValue(string $value): ?string
-    {
-        return match ($value)
-        {
-            'all' => 'На любой сезон', // всесезонные
-            'winter', => 'Зима', // зимние
-            'summer' => 'Лето', // летние
-            default => null,
-        };
-    }
-
-    public static function getConvertName(string $value): ?string
-    {
-        return match ($value)
-        {
-            'all' => 'всесезонные', // всесезонные
-            'winter', => 'зимние', // зимние
-            'summer' => 'летние', // летние
-            default => null,
-        };
     }
 
     public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void

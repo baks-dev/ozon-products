@@ -125,14 +125,14 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
             'product_category',
             '
                 product_category.event = product.event AND 
-                product_category.root = true'
+                product_category.root = true',
         );
 
         $dbal->leftJoin(
             'product',
             ProductInfo::class,
             'product_info',
-            'product_info.product = product.id'
+            'product_info.product = product.id',
         );
 
         $dbal
@@ -147,7 +147,7 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
             ->setParameter(
                 key: 'profile',
                 value: $this->profile ?: $this->UserProfileTokenStorage->getProfile(),
-                type: UserProfileUid::TYPE
+                type: UserProfileUid::TYPE,
             );
 
         $dbal
@@ -156,7 +156,7 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
                 'barcode',
                 OzonBarcodeCounter::class,
                 'barcode_counter',
-                'barcode_counter.event = barcode.event'
+                'barcode_counter.event = barcode.event',
             );
 
         $dbal
@@ -165,7 +165,7 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
                 'barcode',
                 OzonBarcodeName::class,
                 'barcode_name',
-                'barcode_name.event = barcode.event'
+                'barcode_name.event = barcode.event',
             );
 
         $dbal
@@ -174,7 +174,7 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
                 'barcode',
                 OzonBarcodeOffer::class,
                 'barcode_offer',
-                'barcode_offer.event = barcode.event'
+                'barcode_offer.event = barcode.event',
             );
 
         $dbal
@@ -183,7 +183,7 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
                 'barcode',
                 OzonBarcodeVariation::class,
                 'barcode_variation',
-                'barcode_variation.event = barcode.event'
+                'barcode_variation.event = barcode.event',
             );
 
         $dbal
@@ -192,7 +192,7 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
                 'barcode',
                 OzonBarcodeVariation::class,
                 'barcode_modification',
-                'barcode_modification.event = barcode.event'
+                'barcode_modification.event = barcode.event',
             );
 
         /** Получаем настройки свойств */
@@ -200,7 +200,7 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
             'barcode',
             OzonBarcodeProperty::class,
             'ozon_barcode_property',
-            'ozon_barcode_property.event = barcode.event'
+            'ozon_barcode_property.event = barcode.event',
         );
 
         $dbal->leftJoin(
@@ -209,7 +209,7 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
             'product_property',
             '
                 product_property.event = product.event AND 
-                product_property.field = ozon_barcode_property.offer'
+                product_property.field = ozon_barcode_property.offer',
         );
 
         $dbal->addSelect("JSON_AGG ( DISTINCT
@@ -231,7 +231,7 @@ final class OzonBarcodeSettingsRepository implements OzonBarcodeSettingsInterfac
             'barcode',
             OzonBarcodeCustom::class,
             'custom',
-            'custom.event = barcode.event'
+            'custom.event = barcode.event',
         );
 
         $dbal->addSelect("JSON_AGG ( DISTINCT

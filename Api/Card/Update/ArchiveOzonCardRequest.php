@@ -47,8 +47,8 @@ final class ArchiveOzonCardRequest extends Ozon
                 'POST',
                 '/v1/product/archive',
                 [
-                    "json" => ['product_id' => [$article]]
-                ]
+                    "json" => ['product_id' => [$article]],
+                ],
             );
 
         $content = $response->toArray(false);

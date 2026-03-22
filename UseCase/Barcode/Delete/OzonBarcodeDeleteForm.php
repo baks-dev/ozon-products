@@ -39,7 +39,7 @@ final class OzonBarcodeDeleteForm extends AbstractType
         $builder->add(
             'ozon_barcode_delete',
             SubmitType::class,
-            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-danger']]
+            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-danger']],
         );
     }
 

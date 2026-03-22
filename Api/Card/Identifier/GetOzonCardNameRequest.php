@@ -66,8 +66,8 @@ final class GetOzonCardNameRequest extends Ozon
                     'POST',
                     '/v3/product/info/list',
                     [
-                        "json" => ['sku' => [$this->sku]]
-                    ]
+                        "json" => ['sku' => [$this->sku]],
+                    ],
                 );
 
             $content = $response->toArray(false);
@@ -90,7 +90,7 @@ final class GetOzonCardNameRequest extends Ozon
             {
                 $this->logger->critical(
                     sprintf('ozon-products: Не найдено, либо найдено более одного идентификатора карточки товара %s', $this->article),
-                    [$content['items'], self::class.':'.__LINE__]
+                    [$content['items'], self::class.':'.__LINE__],
                 );
 
                 return false;

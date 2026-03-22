@@ -307,7 +307,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 'product_offer',
                 ProductOfferBarcode::class,
                 'product_offer_barcode',
-                'product_offer_barcode.offer = product_offer.id'
+                'product_offer_barcode.offer = product_offer.id',
             );
 
         /* Цена торгового предложения */
@@ -371,7 +371,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 'product_variation',
                 ProductVariationBarcode::class,
                 'product_variation_barcode',
-                'product_variation_barcode.variation = product_variation.id'
+                'product_variation_barcode.variation = product_variation.id',
             );
 
         /* Цена множественного варианта */
@@ -391,7 +391,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 			product_variation_image.variation = product_variation.id
 			',
         );
-
 
 
         /**
@@ -436,7 +435,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 'product_modification',
                 ProductModificationBarcode::class,
                 'product_modification_barcode',
-                'product_modification_barcode.modification = product_modification.id'
+                'product_modification_barcode.modification = product_modification.id',
             );
 
         /* Цена модификации множественного варианта */
@@ -454,7 +453,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             'product_modification_image',
             'product_modification_image.modification = product_modification.id',
         );
-
 
 
         /** Параметры упаковки товара  */
@@ -840,7 +838,7 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                         ELSE NULL
                     END
                     )
-                    AS barcodes"
+                    AS barcodes",
         );
 
         $dbal->addSelect('

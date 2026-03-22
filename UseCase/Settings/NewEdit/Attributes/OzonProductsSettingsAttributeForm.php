@@ -72,7 +72,7 @@ final class OzonProductsSettingsAttributeForm extends AbstractType
             [
                 'data_class' => OzonProductsSettingsAttributeDTO::class,
                 'property_fields' => null,
-            ]
+            ],
         );
     }
 

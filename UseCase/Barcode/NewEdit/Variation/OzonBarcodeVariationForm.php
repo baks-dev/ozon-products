@@ -45,8 +45,8 @@ final class OzonBarcodeVariationForm extends AbstractType
                 },
                 function($value) {
                     return $value === true;
-                }
-            )
+                },
+            ),
         );
     }
 

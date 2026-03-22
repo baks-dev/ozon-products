@@ -60,6 +60,16 @@ final class GuarateeOzonProductsAttribute implements OzonProductsAttributeInterf
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -120,16 +130,6 @@ final class GuarateeOzonProductsAttribute implements OzonProductsAttributeInterf
     {
         //return ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

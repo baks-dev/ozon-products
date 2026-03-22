@@ -50,6 +50,16 @@ final class SellerCodeOzonProductsAttribute implements OzonProductsAttributeInte
 
     public const int ID = 9024;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -88,16 +98,6 @@ final class SellerCodeOzonProductsAttribute implements OzonProductsAttributeInte
     public function choices(): array|false
     {
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

@@ -54,6 +54,11 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
 
     public const int ID = 23171;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -136,6 +141,11 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
         return $requestData->getData();
     }
 
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function default(): string|false
     {
         return false;
@@ -154,16 +164,6 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
     public function choices(): array|false
     {
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

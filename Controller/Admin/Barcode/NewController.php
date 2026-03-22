@@ -65,7 +65,7 @@ final class NewController extends AbstractController
                 'admin.page.new',
                 $handle instanceof OzonBarcode ? 'admin.success.new' : 'admin.danger.new',
                 'ozon-products.barcode',
-                $handle
+                $handle,
             );
 
             return $this->redirectToRoute('ozon-products:admin.barcode.index');

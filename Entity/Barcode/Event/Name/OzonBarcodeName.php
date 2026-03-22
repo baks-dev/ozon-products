@@ -35,6 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * OzonBarcodeName
+ *
  * @see OzonBarcodeNameEvent
  */
 #[ORM\Entity]

@@ -86,12 +86,12 @@ final readonly class OzonProductsCardUpdateDispatcher
             return;
         }
 
-        /** Не добавляем карточку без наличия */
-        if(empty($ProductsOzonCardResult->getProductQuantity()))
-        {
-            $this->logger->warning(sprintf('Не добавляем карточку %s без наличия', $ProductsOzonCardResult->getArticle()));
-            return;
-        }
+        //        /** Не добавляем карточку без наличия */
+        //        if(empty($ProductsOzonCardResult->getProductQuantity()))
+        //        {
+        //            $this->logger->warning(sprintf('Не добавляем карточку %s без наличия', $ProductsOzonCardResult->getArticle()));
+        //            return;
+        //        }
 
 
         /** Не добавляем карточку без цены */

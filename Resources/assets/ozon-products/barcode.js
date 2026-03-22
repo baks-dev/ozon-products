@@ -26,22 +26,22 @@
 //
 // function initOffermain() {
 
-main = document.getElementById('ozon_barcode_form_main');
+main = document.getElementById("ozon_barcode_form_main");
 
 
 changeObjectOffers(main);
 
-addProperty = document.getElementById('ozon_barcode_form_addProperty');
+addProperty = document.getElementById("ozon_barcode_form_addProperty");
 if(addProperty)
 {
-    addProperty.addEventListener('click', addPropertyPrototype);
+    addProperty.addEventListener("click", addPropertyPrototype);
 }
 
 
-addCustom = document.getElementById('ozon_barcode_form_addCustom');
+addCustom = document.getElementById("ozon_barcode_form_addCustom");
 if(addCustom)
 {
-    addCustom.addEventListener('click', addCustomPrototype);
+    addCustom.addEventListener("click", addCustomPrototype);
 }
 
 
@@ -62,23 +62,23 @@ if(addCustom)
 // }
 //}
 
-$blockCollection = document.getElementById('collectionProperty');
+$blockCollection = document.getElementById("collectionProperty");
 
 /* Удаляем при клике колекцию СЕКЦИЙ */
-$blockCollection?.querySelector('.del-item-custom')?.addEventListener('click', function()
+$blockCollection?.querySelector(".del-item-custom")?.addEventListener("click", function()
 {
 
-    this.closest('.item-collection-custom').remove();
+    this.closest(".item-collection-custom").remove();
     index = addCustom.dataset.index * 1;
     addCustom.dataset.index = (index - 1).toString();
 });
 
 
 /* Удаляем при клике колекцию */
-$blockCollection?.querySelector('.del-item-property')?.addEventListener('click', function()
+$blockCollection?.querySelector(".del-item-property")?.addEventListener("click", function()
 {
 
-    this.closest('.item-collection-property').remove();
+    this.closest(".item-collection-property").remove();
     index = addProperty.dataset.index * 1;
     addProperty.dataset.index = (index - 1).toString();
 
@@ -87,7 +87,7 @@ $blockCollection?.querySelector('.del-item-property')?.addEventListener('click',
 
 function addCustomPrototype()
 {
-    let $blockCollection = document.getElementById('collectionProperty');
+    let $blockCollection = document.getElementById("collectionProperty");
 
     /* получаем прототип коллекции  */
     let $addButtonCustom = this;
@@ -101,23 +101,23 @@ function addCustomPrototype()
     //newForm = newForm.replace(/__FIELD__/g, index);
 
     /* Вставляем новую коллекцию */
-    let div = document.createElement('div');
-    div.classList.add('item-collection-custom')
-    div.classList.add('w-100')
+    let div = document.createElement("div");
+    div.classList.add("item-collection-custom");
+    div.classList.add("w-100");
     div.innerHTML = newForm;
     $blockCollection.append(div);
 
     /* Удаляем при клике колекцию СЕКЦИЙ */
-    div.querySelector('.del-item-custom').addEventListener('click', function()
+    div.querySelector(".del-item-custom").addEventListener("click", function()
     {
 
-        this.closest('.item-collection-custom').remove();
+        this.closest(".item-collection-custom").remove();
         index = $addButtonCustom.dataset.index * 1;
         $addButtonCustom.dataset.index = (index - 1).toString();
     });
 
 
-    div.querySelector('#ozon_barcode_form_custom_' + index + '_sort').value = (index + 1);
+    div.querySelector("#ozon_barcode_form_custom_" + index + "_sort").value = (index + 1);
 
     /* Увеличиваем data-index на 1 после вставки новой коллекции */
     $addButtonCustom.dataset.index = (index + 1).toString();
@@ -130,7 +130,7 @@ function addPropertyPrototype()
 {
 
 
-    let $blockCollection = document.getElementById('collectionProperty');
+    let $blockCollection = document.getElementById("collectionProperty");
 
     /* получаем прототип коллекции  */
     let $addButtonProperty = this;
@@ -144,9 +144,9 @@ function addPropertyPrototype()
     //newForm = newForm.replace(/__FIELD__/g, index);
 
     /* Вставляем новую коллекцию */
-    let div = document.createElement('div');
-    div.classList.add('item-collection-property')
-    div.classList.add('w-100')
+    let div = document.createElement("div");
+    div.classList.add("item-collection-property");
+    div.classList.add("w-100");
     div.innerHTML = newForm;
     $blockCollection.append(div);
 
@@ -156,10 +156,10 @@ function addPropertyPrototype()
 
 
     /* Удаляем при клике колекцию */
-    div.querySelector('.del-item-property').addEventListener('click', function()
+    div.querySelector(".del-item-property").addEventListener("click", function()
     {
 
-        this.closest('.item-collection-property').remove();
+        this.closest(".item-collection-property").remove();
         index = $addButtonProperty.dataset.index * 1;
         $addButtonProperty.dataset.index = (index - 1).toString();
 
@@ -176,13 +176,13 @@ function addPropertyPrototype()
     //console.log($prototypeOffer.children);
     //$prototypeOffer.style.display = 'unset';
 
-    div.querySelector('#ozon_barcode_form_property_' + index + '_sort').value = (index + 1);
+    div.querySelector("#ozon_barcode_form_property_" + index + "_sort").value = (index + 1);
 
-    let $offer = div.querySelector('#ozon_barcode_form_property_' + index + '_offer');
+    let $offer = div.querySelector("#ozon_barcode_form_property_" + index + "_offer");
     //Array.from($offer).forEach((option) => { $offer.removeChild(option); });
 
     /* Заполняем список новыми элеиентами */
-    $prototypeOffer = document.getElementById('ozon_barcode_form_offer_prototype');
+    $prototypeOffer = document.getElementById("ozon_barcode_form_offer_prototype");
     Array.from($prototypeOffer.children).forEach((option) =>
     {
         $offer.appendChild(option.cloneNode(true));
@@ -200,9 +200,9 @@ function addPropertyPrototype()
     $addButtonProperty.dataset.index = (index + 1).toString();
 
 
-    div.querySelectorAll('[data-select="select2"]').forEach(function(item)
+    div.querySelectorAll("[data-select=\"select2\"]").forEach(function(item)
     {
-        new NiceSelect(item, {searchable: true});
+        new NiceSelect(item, {searchable : true});
     });
 
     /* применяем select2 */
@@ -215,16 +215,16 @@ function addPropertyPrototype()
 function changeObjectOffers(main, index = 0)
 {
 
-    main.addEventListener('change', function()
+    main.addEventListener("change", function()
     {
 
 
-        let replaceId = 'ozon_barcode_form_offer_prototype';
+        let replaceId = "ozon_barcode_form_offer_prototype";
 
-        let replaceElement = document.getElementById(replaceId + '_select2');
+        let replaceElement = document.getElementById(replaceId + "_select2");
         if(replaceElement)
         {
-            replaceElement.classList.add('disabled');
+            replaceElement.classList.add("disabled");
         }
 
         /* Создаём объект класса XMLHttpRequest */
@@ -235,10 +235,10 @@ function changeObjectOffers(main, index = 0)
         let incomingForm = document.forms.ozon_barcode_form;
         let formData = new FormData();
 
-        let mainName = document.getElementById('ozon_barcode_form_main');
-        formData.append(mainName.getAttribute('name'), this.value);
+        let mainName = document.getElementById("ozon_barcode_form_main");
+        formData.append(mainName.getAttribute("name"), this.value);
 
-        requestModalName.open(incomingForm.getAttribute('method'), incomingForm.getAttribute('action'), true);
+        requestModalName.open(incomingForm.getAttribute("method"), incomingForm.getAttribute("action"), true);
 
         /* Получаем ответ от сервера на запрос*/
         requestModalName.addEventListener("readystatechange", function()
@@ -247,18 +247,18 @@ function changeObjectOffers(main, index = 0)
             if(requestModalName.readyState === 4 && requestModalName.status === 200)
             {
 
-                let result = requestModalName.response.getElementById('ozon_barcode_form_offer_prototype');
+                let result = requestModalName.response.getElementById("ozon_barcode_form_offer_prototype");
 
                 /* Замена прототипа коллекции */
                 document.getElementById(replaceId).replaceWith(result);
 
                 /* Активируем кнопку Добавить колелкцию */
-                let addProperty = document.getElementById('ozon_barcode_form_addProperty');
-                addProperty.dataset.index = '0';
+                let addProperty = document.getElementById("ozon_barcode_form_addProperty");
+                addProperty.dataset.index = "0";
                 addProperty.disabled = result.disabled;
 
                 /* Сбрасываем список ранее заполненных коллекция */
-                document.getElementById('collectionProperty').innerHTML = '';
+                document.getElementById("collectionProperty").innerHTML = "";
 
             }
 
@@ -267,5 +267,5 @@ function changeObjectOffers(main, index = 0)
 
         requestModalName.send(formData);
 
-    })
+    });
 }

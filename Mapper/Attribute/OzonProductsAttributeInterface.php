@@ -32,8 +32,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag('baks.ozon.product.attribute')]
 interface OzonProductsAttributeInterface
 {
-    public function getId(): int;
+    /**
+     * Сортировка (чем выше число - тем первым в итерации будет значение)
+     */
+    public static function priority(): int;
 
+    /** Проверяет, относится ли значение к данному объекту */
+    public static function equals(int|string $param): bool;
+
+    public function getId(): int;
 
     public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false;
 
@@ -48,14 +55,6 @@ interface OzonProductsAttributeInterface
 
     /** Массив допустимых значений */
     public function choices(): array|false;
-
-    /**
-     * Сортировка (чем выше число - тем первым в итерации будет значение)
-     */
-    public static function priority(): int;
-
-    /** Проверяет, относится ли значение к данному объекту */
-    public static function equals(int|string $param): bool;
 
     /** Проверяет, относится ли объект к указанной категории */
     public function equalsCategory(int $category): bool;

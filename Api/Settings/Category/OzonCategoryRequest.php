@@ -74,9 +74,9 @@ final class OzonCategoryRequest extends Ozon
                     '/v1/description-category/tree',
                     [
                         "json" => [
-                            "language" => $this->local ?: 'DEFAULT'
-                        ]
-                    ]
+                            "language" => $this->local ?: 'DEFAULT',
+                        ],
+                    ],
                 );
         });
 
@@ -89,7 +89,7 @@ final class OzonCategoryRequest extends Ozon
 
             throw new DomainException(
                 message: 'Ошибка '.self::class,
-                code: $response->getStatusCode()
+                code: $response->getStatusCode(),
             );
         }
 
@@ -102,7 +102,7 @@ final class OzonCategoryRequest extends Ozon
         {
             $data = array_filter(
                 $content['result'],
-                fn($cat) => $cat['description_category_id'] === $categoryId
+                fn($cat) => $cat['description_category_id'] === $categoryId,
             );
 
             $categories = $data[array_key_first($data)]['children'];
@@ -118,7 +118,7 @@ final class OzonCategoryRequest extends Ozon
 
             yield new OzonCategoryDTO(
                 id: $item['description_category_id'],
-                name: $item['category_name']
+                name: $item['category_name'],
             );
 
         }

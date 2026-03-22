@@ -52,7 +52,7 @@ final class DeleteOzonProductsSettingsHandler extends AbstractHandler
         /* Отправляем сообщение в шину */
         $this->messageDispatch->dispatch(
             message: new OzonProductsSettingsMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-            transport: 'ozon-products'
+            transport: 'ozon-products',
         );
 
         return $this->main;

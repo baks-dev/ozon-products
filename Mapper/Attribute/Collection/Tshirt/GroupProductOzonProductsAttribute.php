@@ -59,6 +59,16 @@ final class GroupProductOzonProductsAttribute implements OzonProductsAttributeIn
 
     private const int DICTIONARY = 0;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -133,16 +143,6 @@ final class GroupProductOzonProductsAttribute implements OzonProductsAttributeIn
     {
         //return ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

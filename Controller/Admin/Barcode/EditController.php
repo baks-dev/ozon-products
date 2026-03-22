@@ -71,7 +71,7 @@ final class EditController extends AbstractController
                 'admin.page.edit',
                 $handle instanceof OzonBarcode ? 'admin.success.edit' : 'admin.danger.edit',
                 'ozon-products.barcode',
-                $handle
+                $handle,
             );
 
             return $this->redirectToRoute('ozon-products:admin.barcode.index');

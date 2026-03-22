@@ -54,6 +54,15 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
 
     public function getId(): int
     {
@@ -77,7 +86,7 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
         $cleaned_str = str_replace(
             ['Н', 'К', 'М', 'Р', 'Т'], // русские символы
             ['H', 'K', 'M', 'P', 'T'], // латиница
-            $cleaned_str
+            $cleaned_str,
         );
 
         $speedIndex = null;
@@ -91,45 +100,10 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
             self::ID,
             $speedIndex,
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
-    }
-
-    public function default(): string|false
-    {
-        return false;
-    }
-
-    public function isSetting(): bool
-    {
-        return false;
-    }
-
-    public function required(): bool
-    {
-        return true;
-    }
-
-    public function choices(): array|false
-    {
-        return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
-    }
-
-    public function equalsCategory(int $category): bool
-    {
-        return self::CATEGORY === $category;
     }
 
     public static function getConvertValue(?string $value): ?string
@@ -158,6 +132,31 @@ final class SpeedIndexOzonProductsAttribute implements OzonProductsAttributeInte
             'Z/ZR' => 'Z/ZR',
             default => null,
         };
+    }
+
+    public function default(): string|false
+    {
+        return false;
+    }
+
+    public function isSetting(): bool
+    {
+        return false;
+    }
+
+    public function required(): bool
+    {
+        return true;
+    }
+
+    public function choices(): array|false
+    {
+        return false;
+    }
+
+    public function equalsCategory(int $category): bool
+    {
+        return self::CATEGORY === $category;
     }
 
     public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void

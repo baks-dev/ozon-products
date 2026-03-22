@@ -45,6 +45,19 @@ final class DimensionUnitOzonProductsProperty implements OzonProductsPropertyInt
 
     public const string PARAM = 'dimension_unit';
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    /**
+     * Проверяет, относится ли значение к данному объекту
+     */
+    public static function equals(string $param): bool
+    {
+        return self::PARAM === $param;
+    }
+
     public function getValue(): string
     {
         return self::PARAM;
@@ -74,23 +87,9 @@ final class DimensionUnitOzonProductsProperty implements OzonProductsPropertyInt
         return false;
     }
 
-
     public function required(): bool
     {
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    /**
-     * Проверяет, относится ли значение к данному объекту
-     */
-    public static function equals(string $param): bool
-    {
-        return self::PARAM === $param;
     }
 
     public function choices(): bool

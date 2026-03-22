@@ -83,7 +83,7 @@ final class PrintController extends AbstractController
                     'offer' => $offer,
                     'variation' => $variation,
                     'modification' => $modification,
-                    self::class.':'.__LINE__]
+                    self::class.':'.__LINE__],
             );
 
             return new Response('Продукция в упаковке не найдена', Response::HTTP_NOT_FOUND);
@@ -126,7 +126,7 @@ final class PrintController extends AbstractController
                 'total' => $request->get('total', 1),
                 'product' => $ProductDetail,
             ],
-            file: 'print.html.twig'
+            file: 'print.html.twig',
         );
     }
 }

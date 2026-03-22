@@ -55,7 +55,7 @@ final class IndexController extends AbstractController
             ->createForm(
                 type: SearchForm::class,
                 data: $search,
-                options: ['action' => $this->generateUrl('ozon-products:admin.settings.index')]
+                options: ['action' => $this->generateUrl('ozon-products:admin.settings.index')],
             )
             ->handleRequest($request);
 

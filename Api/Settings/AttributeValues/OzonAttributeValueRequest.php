@@ -87,10 +87,10 @@ final class OzonAttributeValueRequest extends Ozon
                                 "last_value_id" => $this->lastValueId,
                                 "type_id" => $typeId,
                                 "limit" => $this->limit,
-                            ]
-                        ]
+                            ],
+                        ],
                     );
-            }
+            },
         );
 
         $content = $response->toArray(false);
@@ -101,7 +101,7 @@ final class OzonAttributeValueRequest extends Ozon
 
             throw new DomainException(
                 message: 'Ошибка '.self::class,
-                code: $response->getStatusCode()
+                code: $response->getStatusCode(),
             );
         }
 

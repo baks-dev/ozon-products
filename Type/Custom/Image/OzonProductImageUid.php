@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Type\Custom\Image;
 
-use Symfony\Component\Uid\AbstractUid;
 use BaksDev\Core\Type\UidType\Uid;
+use Symfony\Component\Uid\AbstractUid;
 
 final class OzonProductImageUid extends Uid
 {

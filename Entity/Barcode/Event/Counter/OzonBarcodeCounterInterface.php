@@ -28,6 +28,7 @@ interface OzonBarcodeCounterInterface
 {
     /**
      * Значение свойства
+     *
      * @see OzonBarcodeCounter
      */
     public function getValue(): ?int;

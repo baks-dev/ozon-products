@@ -52,6 +52,11 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
         private ?TranslatorInterface $translator = null,
     ) {}
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
     public function getValue(): string
     {
         return self::PARAM;
@@ -211,6 +216,14 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
     }
 
     /**
+     * Проверяет, относится ли значение к данному объекту
+     */
+    public static function equals(string $param): bool
+    {
+        return self::PARAM === $param;
+    }
+
+    /**
      * Возвращает значение по умолчанию
      */
     public function default(): string|bool
@@ -226,23 +239,9 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
         return false;
     }
 
-
     public function required(): bool
     {
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    /**
-     * Проверяет, относится ли значение к данному объекту
-     */
-    public static function equals(string $param): bool
-    {
-        return self::PARAM === $param;
     }
 
     public function choices(): bool

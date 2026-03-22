@@ -44,6 +44,12 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 class OzonProductsSettingsDeleteTest extends KernelTestCase
 {
+    public static function tearDownAfterClass(): void
+    {
+        OzonProductsSettingsNewTest::setUpBeforeClass();
+        CategoryProductNewTest::setUpBeforeClass();
+    }
+
     #[DependsOnClass(OzonProductsSettingsNewTest::class)]
     #[DependsOnClass(OzonProductsSettingsEditTest::class)]
     public function testUseCase(): void
@@ -73,11 +79,5 @@ class OzonProductsSettingsDeleteTest extends KernelTestCase
 
         self::assertTrue(($handle instanceof OzonProductsSettings), $handle.': Ошибка OzonProducts');
 
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        OzonProductsSettingsNewTest::setUpBeforeClass();
-        CategoryProductNewTest::setUpBeforeClass();
     }
 }

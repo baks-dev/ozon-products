@@ -35,6 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Флаг отображения торгового предложения
+ *
  * @see OzonBarcodeOfferEvent
  */
 #[ORM\Entity]

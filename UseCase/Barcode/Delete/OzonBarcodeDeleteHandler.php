@@ -54,7 +54,7 @@ final class OzonBarcodeDeleteHandler extends AbstractHandler
         /* Отправляем сообщение в шину */
         $this->messageDispatch->dispatch(
             message: new OzonBarcodeMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-            transport: 'ozon-products'
+            transport: 'ozon-products',
         );
 
         return $this->main;

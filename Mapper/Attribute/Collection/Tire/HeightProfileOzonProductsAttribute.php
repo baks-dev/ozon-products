@@ -54,6 +54,16 @@ final class HeightProfileOzonProductsAttribute implements OzonProductsAttributeI
 
     private OzonAttributeValueSearchRequest|false $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -80,7 +90,7 @@ final class HeightProfileOzonProductsAttribute implements OzonProductsAttributeI
             self::ID,
             current($attribute)->value,
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         return $requestData->getData();
@@ -104,16 +114,6 @@ final class HeightProfileOzonProductsAttribute implements OzonProductsAttributeI
     public function choices(): array|false
     {
         return false;
-    }
-
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
     }
 
     public function equalsCategory(int $category): bool

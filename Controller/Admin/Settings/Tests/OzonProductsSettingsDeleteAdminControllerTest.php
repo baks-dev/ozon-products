@@ -35,10 +35,8 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 final class OzonProductsSettingsDeleteAdminControllerTest extends WebTestCase
 {
-    private static ?string $url = null;
-
     private const string ROLE = 'ROLE_OZON_PRODUCTS_DELETE';
-
+    private static ?string $url = null;
 
     public static function setUpBeforeClass(): void
     {

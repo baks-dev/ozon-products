@@ -67,11 +67,6 @@ class OzonBarcode extends EntityState
         return (string) $this->id;
     }
 
-    public function getId(): CategoryProductUid
-    {
-        return $this->id;
-    }
-
     public function getProfile(): UserProfileUid
     {
         return $this->profile;
@@ -86,5 +81,10 @@ class OzonBarcode extends EntityState
     {
         $this->event = $event->getId();
         $this->id = $event->getMain();
+    }
+
+    public function getId(): CategoryProductUid
+    {
+        return $this->id;
     }
 }

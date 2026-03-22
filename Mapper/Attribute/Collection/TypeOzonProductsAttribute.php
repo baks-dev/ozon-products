@@ -49,6 +49,39 @@ final class TypeOzonProductsAttribute implements OzonProductsAttributeInterface
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
+    public static function getValue(?string $value): ?string
+    {
+        return match ($value)
+        {
+            'jeep' => 'Внедорожники',
+            'bus' => 'Коммерческий транспорт',
+            'truck' => 'Грузовые автомобили и автобусы',
+            'passenger' => 'Легковые автомобили',
+            default => null,
+        };
+    }
+
+    public static function getConvertName(?string $value): ?string
+    {
+        return match ($value)
+        {
+            'jeep' => 'для внедорожника',
+            'bus', 'truck' => 'для грузовых автомобилей',
+            'passenger' => 'для легковых автомобилей',
+            default => null,
+        };
+    }
+
     public function getId(): int
     {
         return self::ID;
@@ -75,7 +108,7 @@ final class TypeOzonProductsAttribute implements OzonProductsAttributeInterface
             self::ID,
             self::getConvertValue(current($attribute)->value),
             $data,
-            $this->attributeValueRequest
+            $this->attributeValueRequest,
         );
 
         /**
@@ -86,6 +119,17 @@ final class TypeOzonProductsAttribute implements OzonProductsAttributeInterface
         $data->setDictionaryValue($requestData->getData());
 
         return $requestData->getData();
+    }
+
+    public static function getConvertValue(?string $value): ?string
+    {
+        return match ($value)
+        {
+            'jeep' => 'Шины для внедорожника',
+            'bus', 'truck' => 'Шины для грузовых автомобилей',
+            'passenger' => 'Шины для легковых автомобилей',
+            default => null,
+        };
     }
 
     public function default(): string|false
@@ -108,54 +152,9 @@ final class TypeOzonProductsAttribute implements OzonProductsAttributeInterface
         return false;
     }
 
-    public static function priority(): int
-    {
-        return 100;
-    }
-
-    public static function equals(int|string $param): bool
-    {
-        return self::ID === (int) $param;
-    }
-
     public function equalsCategory(int $category): bool
     {
         return true;
-    }
-
-    public static function getValue(?string $value): ?string
-    {
-        return match ($value)
-        {
-            'jeep' => 'Внедорожники',
-            'bus' => 'Коммерческий транспорт',
-            'truck' => 'Грузовые автомобили и автобусы',
-            'passenger' => 'Легковые автомобили',
-            default => null,
-        };
-    }
-
-
-    public static function getConvertValue(?string $value): ?string
-    {
-        return match ($value)
-        {
-            'jeep' => 'Шины для внедорожника',
-            'bus', 'truck' => 'Шины для грузовых автомобилей',
-            'passenger' => 'Шины для легковых автомобилей',
-            default => null,
-        };
-    }
-
-    public static function getConvertName(?string $value): ?string
-    {
-        return match ($value)
-        {
-            'jeep' => 'для внедорожника',
-            'bus', 'truck' => 'для грузовых автомобилей',
-            'passenger' => 'для легковых автомобилей',
-            default => null,
-        };
     }
 
     public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void

@@ -23,10 +23,10 @@
 executeFunc(function init()
 {
     /* кнопка Добавить ФОТО */
-    let $addImageButton = document.getElementById('photo_addCollection');
+    let $addImageButton = document.getElementById("photo_addCollection");
 
     /* Блок для новой коллекции */
-    let $blockCollectionPhoto = document.getElementById('photo_collection');
+    let $blockCollectionPhoto = document.getElementById("photo_collection");
 
     if($addImageButton === null)
     {
@@ -34,27 +34,27 @@ executeFunc(function init()
     }
 
     /* удаление блока из коллекции изображений */
-    let $delItemPhoto = $blockCollectionPhoto.querySelectorAll('.del-item-photo');
+    let $delItemPhoto = $blockCollectionPhoto.querySelectorAll(".del-item-photo");
 
     $delItemPhoto.forEach(function(item)
     {
-        item.addEventListener('click', function()
+        item.addEventListener("click", function()
         {
 
-            let $counter = $blockCollectionPhoto.getElementsByClassName('item-collection-photo').length;
+            let $counter = $blockCollectionPhoto.getElementsByClassName("item-collection-photo").length;
 
             if($counter > 0)
             {
-                item.closest('.item-collection-photo').remove();
+                item.closest(".item-collection-photo").remove();
             }
 
 
-            let photo_collection = document.getElementById('photo_collection');
+            let photo_collection = document.getElementById("photo_collection");
 
 
             let isRoot = false;
 
-            photo_collection.querySelectorAll('.change-root').forEach(function(rootCheck)
+            photo_collection.querySelectorAll(".change-root").forEach(function(rootCheck)
             {
                 if(rootCheck.checked === true)
                 {
@@ -65,7 +65,7 @@ executeFunc(function init()
 
             if(isRoot === false)
             {
-                photo_collection.querySelectorAll('.change-root').forEach(function(rootCheck, i)
+                photo_collection.querySelectorAll(".change-root").forEach(function(rootCheck, i)
                 {
                     if(i === 0)
                     {
@@ -78,7 +78,7 @@ executeFunc(function init()
     });
 
     /* изменение чекбокса*/
-    let $changeRootPhoto = $blockCollectionPhoto.querySelectorAll('.change-root');
+    let $changeRootPhoto = $blockCollectionPhoto.querySelectorAll(".change-root");
 
     $changeRootPhoto.forEach(function(item)
     {
@@ -88,12 +88,12 @@ executeFunc(function init()
             item.checked = true;
         }
 
-        item.addEventListener('change', function()
+        item.addEventListener("change", function()
         {
 
-            let photo_collection = document.getElementById('photo_collection');
+            let photo_collection = document.getElementById("photo_collection");
 
-            photo_collection.querySelectorAll('.change-root').forEach(function(rootCheck)
+            photo_collection.querySelectorAll(".change-root").forEach(function(rootCheck)
             {
                 rootCheck.checked = false;
             });
@@ -103,36 +103,37 @@ executeFunc(function init()
 
     });
 
-    let uploadedFile = $blockCollectionPhoto.querySelectorAll('input[type="file"]');
+    let uploadedFile = $blockCollectionPhoto.querySelectorAll("input[type=\"file\"]");
 
     uploadedFile.forEach(function(item)
     {
 
-        item.addEventListener('change', function(e)
+        item.addEventListener("change", function(e)
         {
 
             let newFile = item.files[0];
             let reader = new FileReader();
             // let image = item.parentNode.parentNode;
-            let image = item.closest('.image-input');
+            let image = item.closest(".image-input");
 
             reader.onloadend = function()
             {
-                image.style.setProperty("background-image", "url(" + reader.result + ")", "important")
-            }
+                image.style.setProperty("background-image", "url(" + reader.result + ")", "important");
+            };
 
             if(newFile)
             {
                 reader.readAsDataURL(newFile);
-            } else
+            }
+            else
             {
-                image.style.setProperty("background-image", "url(/img/blank.svg)", "important")
+                image.style.setProperty("background-image", "url(/img/blank.svg)", "important");
             }
         });
     });
 
     /* Добавляем новую коллекцию */
-    $addImageButton.addEventListener('click', function()
+    $addImageButton.addEventListener("click", function()
     {
 
         let $addImageButton = this;
@@ -142,10 +143,11 @@ executeFunc(function init()
         let index = $addImageButton.dataset.index * 1;
 
         /** Подсчитать кол-во в момент добавления */
-        const item_collections = document.getElementsByClassName('item-collection-photo');
+        const item_collections = document.getElementsByClassName("item-collection-photo");
         /* Если кол-во элементов равно 12 то не даем возможность добавлять */
         const total_count = item_collections.length;
-        if (total_count === 12) {
+        if(total_count === 12)
+        {
             return;
         }
 
@@ -154,38 +156,38 @@ executeFunc(function init()
         newPrototype = newPrototype.replace(/__images__/g, index);
 
         /* Вставляем новую коллекцию */
-        let div = document.createElement('div');
-        div.classList.add('item-collection-photo')
+        let div = document.createElement("div");
+        div.classList.add("item-collection-photo");
         div.innerHTML = newPrototype;
         $blockCollectionPhoto.append(div);
 
         /* Удаляем при клике коллекцию СЕКЦИЙ */
-        div.querySelector('.del-item-photo').addEventListener('click', function()
+        div.querySelector(".del-item-photo").addEventListener("click", function()
         {
-            let $counter = $blockCollectionPhoto.getElementsByClassName('item-collection-photo').length;
-            this.closest('.item-collection-photo').remove();
+            let $counter = $blockCollectionPhoto.getElementsByClassName("item-collection-photo").length;
+            this.closest(".item-collection-photo").remove();
             let index = $addImageButton.dataset.index * 1;
-            $addImageButton.dataset.index = (index - 1).toString()
+            $addImageButton.dataset.index = (index - 1).toString();
         });
 
-        let images = photo_collection.querySelectorAll('.change-root');
+        let images = photo_collection.querySelectorAll(".change-root");
 
         if(images.length === 1)
         {
-            let photo_collection = document.getElementById('photo_collection');
+            let photo_collection = document.getElementById("photo_collection");
 
-            photo_collection.querySelectorAll('.change-root').forEach(function(rootChack, i, arr)
+            photo_collection.querySelectorAll(".change-root").forEach(function(rootChack, i, arr)
             {
                 rootChack.checked = true;
             });
         }
 
-        div.querySelector('.change-root').addEventListener('change', function(selector)
+        div.querySelector(".change-root").addEventListener("change", function(selector)
         {
 
-            let photo_collection = document.getElementById('photo_collection');
+            let photo_collection = document.getElementById("photo_collection");
 
-            photo_collection.querySelectorAll('.change-root').forEach(function(rootChack, i, arr)
+            photo_collection.querySelectorAll(".change-root").forEach(function(rootChack, i, arr)
             {
                 rootChack.checked = false;
             });
@@ -197,27 +199,28 @@ executeFunc(function init()
         $addImageButton.dataset.index = (index + 1).toString();
 
         /* загрузка изображения */
-        let inputElement = div.querySelector('input[type="file"]');
+        let inputElement = div.querySelector("input[type=\"file\"]");
 
-        inputElement.addEventListener('change', function(e)
+        inputElement.addEventListener("change", function(e)
         {
 
             let file = inputElement.files[0];
             let reader = new FileReader();
-            let image = div.querySelector('.image-input');
+            let image = div.querySelector(".image-input");
 
             reader.onloadend = function()
             {
 
-                image.style.setProperty("background-image", "url(" + reader.result + ")", "important")
-            }
+                image.style.setProperty("background-image", "url(" + reader.result + ")", "important");
+            };
 
             if(file)
             {
                 reader.readAsDataURL(file);
-            } else
+            }
+            else
             {
-                image.style.setProperty("background-image", "url(/img/blank.svg)", "important")
+                image.style.setProperty("background-image", "url(/img/blank.svg)", "important");
             }
         });
     });
@@ -226,46 +229,55 @@ executeFunc(function init()
     /** DragNDrop для загрузки изображений */
 
     /** Предотвратить стандартное (по умолчанию) поведение для событий: 'dragenter', 'dragover', 'dragleave', 'drop' */
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
-        $blockCollectionPhoto.addEventListener(event, function(e) {
+    ["dragenter", "dragover", "dragleave", "drop"].forEach(event =>
+    {
+        $blockCollectionPhoto.addEventListener(event, function(e)
+            {
                 e.preventDefault();
                 e.stopPropagation();
             },
-            false
+            false,
         );
     });
 
     /** Подсветить photo_collection при перетаскивании при событиях 'dragenter', 'dragover' */
-    ['dragenter', 'dragover'].forEach(event => {
-        $blockCollectionPhoto.addEventListener(event, () => {
+    ["dragenter", "dragover"].forEach(event =>
+    {
+        $blockCollectionPhoto.addEventListener(event, () =>
+        {
             //$blockCollectionPhoto.classList.add('bg-info');
-            $blockCollectionPhoto.classList.add('shadow'); // TODO подобрать класс для фона подсветки
+            $blockCollectionPhoto.classList.add("shadow");
         }, false);
     });
 
     /** Удалить класс подсветки при событиях 'dragleave', 'drop' */
-    ['dragleave', 'drop'].forEach(event => {
-        $blockCollectionPhoto.addEventListener(event, () => {
+    ["dragleave", "drop"].forEach(event =>
+    {
+        $blockCollectionPhoto.addEventListener(event, () =>
+        {
             //$blockCollectionPhoto.classList.remove('bg-info');
-            $blockCollectionPhoto.classList.remove('shadow');
+            $blockCollectionPhoto.classList.remove("shadow");
         }, false);
     });
 
     /** Обработать событие drop */
-    $blockCollectionPhoto.addEventListener('drop', function (e) {
+    $blockCollectionPhoto.addEventListener("drop", function(e)
+        {
             const dt = e.dataTransfer;
             const files = dt.files;
 
             /* Обработать файлы полученные при "перетягивании" */
             ([...files]).forEach(previewAndAttachFile);
 
-        }
+        },
     );
 
     /** Отобразить и загрузить в соотв-щий file input */
-    function previewAndAttachFile(file) {
+    function previewAndAttachFile(file)
+    {
         /* Проверить это файл является изображением */
-        if (!file.type.startsWith('image/')) {
+        if(!file.type.startsWith("image/"))
+        {
             return;
         }
 
@@ -273,11 +285,12 @@ executeFunc(function init()
         reader.readAsDataURL(file);
 
         /* После того как файл "загрузился" в объект FileReader */
-        reader.onloadend = function() {
+        reader.onloadend = function()
+        {
 
             /* Создать элемент коллекции div.item-collection-photo  */
-            const item_collection_photo = document.createElement('div');
-            item_collection_photo.classList.add('item-collection-photo');
+            const item_collection_photo = document.createElement("div");
+            item_collection_photo.classList.add("item-collection-photo");
 
             /* Получить прототип коллекции  */
             let newPrototype = document.getElementById($addImageButton.dataset.prototype).dataset.prototype;
@@ -285,23 +298,24 @@ executeFunc(function init()
             let index = $addImageButton.dataset.index * 1;
 
             /** Подсчитать кол-во в момент добавления */
-            const item_collections = document.getElementsByClassName('item-collection-photo');
+            const item_collections = document.getElementsByClassName("item-collection-photo");
             /* Если кол-во элементов равно 12 то не даем возможность добавлять */
             const total_count = item_collections.length;
-            if (total_count === 12) {
+            if(total_count === 12)
+            {
                 return;
-            } 
+            }
 
 
             /* Заменить '__name__' в HTML-коде прототипа числом, основанным на том, сколько коллекций */
             newPrototype = newPrototype.replace(/__images__/g, index);
-            item_collection_photo.innerHTML  = newPrototype;
+            item_collection_photo.innerHTML = newPrototype;
 
             /* Отобразить полученный file в качестве background-image для label */
-            item_collection_photo.querySelector('label').style.backgroundImage = `url('${reader.result}')`;
+            item_collection_photo.querySelector("label").style.backgroundImage = `url('${reader.result}')`;
 
             /* Получить соотв-щий input type=file */
-            const fileInput = item_collection_photo.querySelector('input[type="file"]');
+            const fileInput = item_collection_photo.querySelector("input[type=\"file\"]");
 
 
             /** Загрузить файл в input type=file */
@@ -314,33 +328,33 @@ executeFunc(function init()
             fileInput.files = dataTransfer.files;
 
             /** Навестить обработчик удаления эл-та с фото */
-            item_collection_photo.querySelector('.del-item-photo').addEventListener('click', function()
+            item_collection_photo.querySelector(".del-item-photo").addEventListener("click", function()
             {
-                let $counter = $blockCollectionPhoto.getElementsByClassName('item-collection-photo').length;
-                this.closest('.item-collection-photo').remove();
+                let $counter = $blockCollectionPhoto.getElementsByClassName("item-collection-photo").length;
+                this.closest(".item-collection-photo").remove();
                 let index = $addImageButton.dataset.index * 1;
                 $addImageButton.dataset.index = (index - 1).toString();
             });
 
             /** Навесить обработчик смены root image */
-            let images = photo_collection.querySelectorAll('.change-root');
+            let images = photo_collection.querySelectorAll(".change-root");
 
             if(images.length === 1)
             {
-                let photo_collection = document.getElementById('photo_collection');
+                let photo_collection = document.getElementById("photo_collection");
 
-                photo_collection.querySelectorAll('.change-root').forEach(function(rootChack, i, arr)
+                photo_collection.querySelectorAll(".change-root").forEach(function(rootChack, i, arr)
                 {
                     rootChack.checked = true;
                 });
             }
 
-            item_collection_photo.querySelector('.change-root').addEventListener('change', function(selector)
+            item_collection_photo.querySelector(".change-root").addEventListener("change", function(selector)
             {
 
-                let photo_collection = document.getElementById('photo_collection');
+                let photo_collection = document.getElementById("photo_collection");
 
-                photo_collection.querySelectorAll('.change-root').forEach(function(rootChack, i, arr)
+                photo_collection.querySelectorAll(".change-root").forEach(function(rootChack, i, arr)
                 {
                     rootChack.checked = false;
                 });
@@ -356,6 +370,7 @@ executeFunc(function init()
             $blockCollectionPhoto.appendChild(item_collection_photo);
         };
     }
+
     /** END DragNDrop */
 
 

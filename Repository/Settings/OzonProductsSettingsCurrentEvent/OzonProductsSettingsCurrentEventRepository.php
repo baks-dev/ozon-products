@@ -50,7 +50,7 @@ final readonly class OzonProductsSettingsCurrentEventRepository implements OzonP
             ->setParameter(
                 key: 'profile',
                 value: $profile,
-                type: UserProfileUid::TYPE
+                type: UserProfileUid::TYPE,
             );
 
 
@@ -60,7 +60,7 @@ final readonly class OzonProductsSettingsCurrentEventRepository implements OzonP
                 OzonProductsSettingsEvent::class,
                 'event',
                 'WITH',
-                'event.id = main.event'
+                'event.id = main.event',
             );
 
         return $orm->getOneOrNullResult() ?: false;

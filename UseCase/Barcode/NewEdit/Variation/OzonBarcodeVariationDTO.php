@@ -33,6 +33,7 @@ final class OzonBarcodeVariationDTO implements OzonBarcodeVariationInterface
 {
     /**
      * Значение свойства
+     *
      * @see OzonBarcodeVariation
      */
     private bool $value = false;
