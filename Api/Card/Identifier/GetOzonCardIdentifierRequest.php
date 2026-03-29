@@ -30,7 +30,7 @@ use DateInterval;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 
-#[Autoconfigure(shared: false)]
+#[Autoconfigure(public: true, shared: false)]
 final class GetOzonCardIdentifierRequest extends Ozon
 {
     /**

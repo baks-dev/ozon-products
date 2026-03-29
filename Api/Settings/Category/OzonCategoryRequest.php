@@ -35,7 +35,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-#[Autoconfigure(shared: false)]
+#[Autoconfigure(public: true, shared: false)]
 final class OzonCategoryRequest extends Ozon
 {
     private Locale|false $local = false;
