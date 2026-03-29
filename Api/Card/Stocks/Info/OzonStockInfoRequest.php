@@ -30,7 +30,7 @@ use DateInterval;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 
-// #[Autoconfigure(public: true)]
+#[Autoconfigure(shared: false)]
 final class OzonStockInfoRequest extends Ozon
 {
     private string $article;

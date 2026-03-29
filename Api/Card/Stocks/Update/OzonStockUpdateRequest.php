@@ -27,7 +27,9 @@ namespace BaksDev\Ozon\Products\Api\Card\Stocks\Update;
 
 use BaksDev\Ozon\Api\Ozon;
 use Generator;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(shared: false)]
 final class OzonStockUpdateRequest extends Ozon
 {
     private const bool STOP_SALES = false;

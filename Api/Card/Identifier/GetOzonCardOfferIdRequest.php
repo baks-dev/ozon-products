@@ -27,9 +27,10 @@ namespace BaksDev\Ozon\Products\Api\Card\Identifier;
 
 use BaksDev\Ozon\Api\Ozon;
 use DateInterval;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 
-
+#[Autoconfigure(shared: false)]
 final class GetOzonCardOfferIdRequest extends Ozon
 {
     /**
@@ -53,8 +54,8 @@ final class GetOzonCardOfferIdRequest extends Ozon
     {
         $cache = $this->getCacheInit('ozon-products');
 
-        $key = md5($this->getProfile().$this->sku);
-        $cache->delete($key);
+        $key = md5($this->getProfile().$this->getToken().$this->getClient().$this->getWarehouse().$this->sku);
+        //$cache->delete($key);
 
         $data = $cache->get($key, function(ItemInterface $item): array|false {
 

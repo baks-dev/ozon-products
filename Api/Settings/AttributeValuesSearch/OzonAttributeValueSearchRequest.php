@@ -28,6 +28,7 @@ namespace BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch;
 use BaksDev\Ozon\Api\Ozon;
 use DateInterval;
 use Generator;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -36,6 +37,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  *
  * @see https://docs.ozon.ru/api/seller/#operation/DescriptionCategoryAPI_SearchAttributeValues
  */
+#[Autoconfigure(shared: false)]
 final class OzonAttributeValueSearchRequest extends Ozon
 {
     private int $attribute;

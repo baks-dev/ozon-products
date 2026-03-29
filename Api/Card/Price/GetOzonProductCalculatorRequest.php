@@ -38,7 +38,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\Cache\ItemInterface;
 
-// #[Autoconfigure(public: true)]
+#[Autoconfigure(shared: false)]
 final class GetOzonProductCalculatorRequest extends Ozon
 {
     /** Ширина, см */

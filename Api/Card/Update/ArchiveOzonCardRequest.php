@@ -26,7 +26,9 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Api\Card\Update;
 
 use BaksDev\Ozon\Api\Ozon;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(shared: false)]
 final class ArchiveOzonCardRequest extends Ozon
 {
     /**

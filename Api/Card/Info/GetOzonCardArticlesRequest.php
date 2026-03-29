@@ -29,7 +29,7 @@ use BaksDev\Ozon\Api\Ozon;
 use Generator;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
-// #[Autoconfigure(public: true)]
+#[Autoconfigure(shared: false)]
 final class GetOzonCardArticlesRequest extends Ozon
 {
     private ?string $last = null;

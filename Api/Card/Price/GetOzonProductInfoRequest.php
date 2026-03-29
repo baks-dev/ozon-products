@@ -28,7 +28,7 @@ namespace BaksDev\Ozon\Products\Api\Card\Price;
 use BaksDev\Ozon\Api\Ozon;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
-#[Autoconfigure(public: true)]
+#[Autoconfigure(shared: false)]
 final class GetOzonProductInfoRequest extends Ozon
 {
     private string $article;

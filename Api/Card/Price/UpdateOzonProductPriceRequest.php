@@ -29,7 +29,9 @@ use BaksDev\Ozon\Api\Ozon;
 use BaksDev\Ozon\Promotion\BaksDevOzonPromotionBundle;
 use BaksDev\Reference\Currency\Type\Currency;
 use BaksDev\Reference\Money\Type\Money;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(shared: false)]
 final class UpdateOzonProductPriceRequest extends Ozon
 {
     private string $article;
