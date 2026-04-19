@@ -520,5 +520,4 @@ final  class ProductsOzonCardResult
     {
         return $this->dictionary;
     }
-
 }

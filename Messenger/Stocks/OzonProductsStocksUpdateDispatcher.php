@@ -46,7 +46,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  * Обновляем остатки товаров Ozon
  */
 #[AsMessageHandler(priority: 0)]
-// #[Autoconfigure(public: true)]
+#[Autoconfigure(shared: false)]
 final readonly class OzonProductsStocksUpdateDispatcher
 {
     public function __construct(
@@ -164,13 +164,10 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     [(string) $OzonTokenUid, self::class.':'.__LINE__],
                 );
 
-                $Deduplicator->save();
-
                 continue;
             }
 
             $Deduplicator->save();
-
 
             /**
              * Не обновляем остатки если отключены

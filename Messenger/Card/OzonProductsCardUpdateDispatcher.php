@@ -36,6 +36,7 @@ use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterf
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use BaksDev\Ozon\Repository\OzonTokensByProfile\OzonTokensByProfileInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -43,6 +44,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  * Добавляем (обновляем) карточку товара на Ozon
  */
 #[AsMessageHandler(priority: 0)]
+#[Autoconfigure(shared: false)]
 final readonly class OzonProductsCardUpdateDispatcher
 {
     public function __construct(

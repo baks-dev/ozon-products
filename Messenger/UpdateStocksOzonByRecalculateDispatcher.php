@@ -31,12 +31,14 @@ use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Stocks\Messenger\Products\Recalculate\RecalculateProductMessage;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**
  * Отправляем сообщение на обновление остатков при обновлении складского учета
  */
 #[AsMessageHandler(priority: 0)]
+#[Autoconfigure(shared: false)]
 final readonly class UpdateStocksOzonByRecalculateDispatcher
 {
     public function __construct(

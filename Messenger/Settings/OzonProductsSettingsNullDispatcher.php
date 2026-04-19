@@ -26,9 +26,11 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Messenger\Settings;
 
 use BaksDev\Ozon\Products\Repository\Settings\OzonProductsSettingsCurrentEvent\OzonProductsSettingsCurrentEventInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(priority: 0)]
+#[Autoconfigure(shared: false)]
 final readonly class OzonProductsSettingsNullDispatcher
 {
     /** Объявляем сервисы для теста */

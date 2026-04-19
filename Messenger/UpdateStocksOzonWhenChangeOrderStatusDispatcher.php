@@ -46,8 +46,8 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  *
  * @see https://api-seller.ozon.ru/v1/product/import/stocks
  */
-// #[Autoconfigure(public: true)]
 #[AsMessageHandler(priority: 89)]
+#[Autoconfigure(shared: false)]
 final readonly class UpdateStocksOzonWhenChangeOrderStatusDispatcher
 {
     public function __construct(

@@ -65,6 +65,7 @@ use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
 use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
 use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use BaksDev\Products\Stocks\BaksDevProductsStocksBundle;
+use BaksDev\Products\Stocks\Entity\Total\Approve\ProductStockApprove;
 use BaksDev\Products\Stocks\Entity\Total\ProductStockTotal;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use InvalidArgumentException;
@@ -704,13 +705,13 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 
         if(class_exists(BaksDevProductsStocksBundle::class))
         {
-
             $dbal
                 ->addSelect("JSON_AGG ( 
                         DISTINCT JSONB_BUILD_OBJECT (
                             'total', stock.total, 
-                            'reserve', stock.reserve 
-                        )) FILTER (WHERE stock.total > stock.reserve)
+                            'reserve', stock.reserve,
+                            'approve', product_stock_approve.value
+                        )) FILTER (WHERE stock.total > stock.reserve AND product_stock_approve.value IS TRUE)
             
                         AS product_quantity",
                 )
@@ -745,13 +746,19 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                             THEN stock.modification = product_modification.const
                             ELSE stock.modification IS NULL
                         END
-
                 ');
+
+            $dbal
+                ->leftJoin(
+                    'stock',
+                    ProductStockApprove::class,
+                    'product_stock_approve',
+                    'product_stock_approve.main = stock.id',
+                );
 
         }
         else
         {
-
             /* Наличие и резерв торгового предложения */
             $dbal->leftJoin(
                 'product_offer',
@@ -775,7 +782,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
                 'product_modification_quantity',
                 'product_modification_quantity.modification = product_modification.id',
             );
-
 
             $dbal
                 ->addSelect("JSON_AGG (
@@ -1001,7 +1007,6 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
         //            );
         //
         //
-
 
         //        /** Характеристики упаковки товара  */
         //        $dbal

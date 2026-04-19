@@ -37,6 +37,7 @@ use BaksDev\Products\Stocks\Type\Status\ProductStockStatus\ProductStockStatusInc
 use BaksDev\Products\Stocks\Type\Status\ProductStockStatus\ProductStockStatusMoving;
 use BaksDev\Products\Stocks\Type\Status\ProductStockStatus\ProductStockStatusWarehouse;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -44,6 +45,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
  * Обновляет складские остатки Ozon при поступлении продукции на склад
  */
 #[AsMessageHandler(priority: 0)]
+#[Autoconfigure(shared: false)]
 final readonly class UpdateStocksOzonByIncomingDispatcher
 {
     public function __construct(

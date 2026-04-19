@@ -32,11 +32,13 @@ use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
 use BaksDev\Products\Product\Repository\CurrentProductByArticle\ProductConstByArticleInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /** Проверка выполнения задания */
 #[AsMessageHandler(priority: 0)]
+#[Autoconfigure(shared: false)]
 final readonly class ResultOzonProductsCardDispatcher
 {
     public function __construct(
