@@ -63,7 +63,7 @@ final class OzonStockUpdateRequest extends Ozon
             return true;
         }
 
-        sleep(1);
+
 
         /**
          * Формируем массив с ключами для отправки JSON
@@ -118,6 +118,8 @@ final class OzonStockUpdateRequest extends Ozon
                     sprintf('ozon-products: Превышен лимит запросов'),
                     [self::class.':'.__LINE__, $content, $stocks],
                 );
+
+                sleep(1);
 
                 return null;
             }
