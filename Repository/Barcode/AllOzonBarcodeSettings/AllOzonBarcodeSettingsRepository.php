@@ -133,11 +133,12 @@ final class AllOzonBarcodeSettingsRepository implements AllOzonBarcodeSettingsIn
             'category_trans.event = category_event.id AND category_trans.local = :local');
 
         /* Поиск */
-        if($this->search->getQuery())
+        if($this->search && $this->search->getQuery())
         {
-            $this->DBALQueryBuilder
+            $dbal
                 ->createSearchQueryBuilder($this->search)
-                ->addSearchLike('category_trans.name');
+                ->addSearchLike('category_trans.name')
+                ->addSearchLike('category_trans.description');
         }
 
         return $this->paginator->fetchAllAssociative($dbal);
