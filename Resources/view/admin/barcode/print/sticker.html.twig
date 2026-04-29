@@ -1,35 +1,37 @@
 {# @var settings \BaksDev\Ozon\Products\Repository\Barcode\OzonBarcodeSettings\OzonBarcodeSettingsResult #}
+{# @var card \BaksDev\Products\Product\Repository\ProductDetail\ProductDetailByEventResult #}
 
 {% if card %}
 
     <div>
 
-        {% if settings.name and card.product_name %}
+        {% if settings.name is defined and card.productName %}
             <div style="white-space: nowrap;">
-                Название: {{ string_width(card.product_name, 32) }}
+                Название: {{ string_width(card.productName, 32) }}
             </div>
+
+            <div>Категория: {{ card.categoryName }}</div>
         {% endif %}
 
-        <div>Категория: {{ card.category_name }}</div>
 
         {% if settings %}
 
-            <div>Арт: {{ card.product_article }}</div>
+            <div>Арт: {{ card.productArticle }}</div>
 
             <div>
-                {% if settings.offer and card.product_offer_name %}
+                {% if settings.offer and card.productOfferName %}
                     {# Значение торгового предложения #}
-                    {{ card.product_offer_name }}: {{ card.product_offer_value|call_twig_func(card.product_offer_reference) }} &nbsp;
+                    {{ card.productOfferName }}: {{ card.productOfferValue|call_twig_func(card.productOfferReference) }} &nbsp;
                 {% endif %}
 
-                {% if settings.variation and card.product_variation_name %}
+                {% if settings.variation and card.productVariationName %}
                     {# Значение множественного варианта ТП #}
-                    {{ card.product_variation_name }}: {{ card.product_variation_value|call_twig_func(card.product_variation_reference) }}
+                    {{ card.productVariationName }}: {{ card.productVariationValue|call_twig_func(card.productVariationReference) }}
                 {% endif %}
 
-                {% if settings.modification and card.product_modification_name %}
+                {% if settings.modification and card.productModificationName %}
                     {# Значение множественного варианта ТП #}
-                    {{ card.product_modification_name }}: {{ card.product_modification_value|call_twig_func(card.product_modification_reference) }}
+                    {{ card.productModificationName }}: {{ card.productModificationValue|call_twig_func(card.productModificationReference) }}
                 {% endif %}
             </div>
 
@@ -43,7 +45,7 @@
 
         {% endif %}
 
-        <div>Дата производства: {{ "now"|date("d.m.Y") }}</div>
+        <div>Дата: {{ "now"|date("d.m.Y") }}</div>
     </div>
 
     <div class="text-end" style="float: right;">

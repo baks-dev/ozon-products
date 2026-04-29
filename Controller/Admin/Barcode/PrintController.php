@@ -31,6 +31,7 @@ use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
 use BaksDev\Core\Type\UidType\ParamConverter;
 use BaksDev\Ozon\Products\Repository\Barcode\OzonBarcodeSettings\OzonBarcodeSettingsInterface;
 use BaksDev\Products\Product\Repository\ProductDetail\ProductDetailByEventInterface;
+use BaksDev\Products\Product\Repository\ProductDetail\ProductDetailByEventResult;
 use BaksDev\Products\Product\Type\Event\ProductEventUid;
 use BaksDev\Products\Product\Type\Offers\Id\ProductOfferUid;
 use BaksDev\Products\Product\Type\Offers\Variation\Id\ProductVariationUid;
@@ -44,7 +45,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[AsController]
-#[RoleSecurity('ROLE_OZON_BARCODE_PRINT')]
+#[RoleSecurity(['ROLE_OZON_BARCODE_PRINT', 'ROLE_ORDERS'])]
 final class PrintController extends AbstractController
 {
     /**
@@ -72,9 +73,9 @@ final class PrintController extends AbstractController
             ->offer($offer)
             ->variation($variation)
             ->modification($modification)
-            ->find();
+            ->findResult();
 
-        if(!$ProductDetail)
+        if(false === ($ProductDetail instanceof ProductDetailByEventResult))
         {
             $logger->critical(
                 'ozon-products: Продукция в упаковке не найдена',
@@ -89,11 +90,21 @@ final class PrintController extends AbstractController
             return new Response('Продукция в упаковке не найдена', Response::HTTP_NOT_FOUND);
         }
 
+        if(empty($ProductDetail->getProductBarcode()))
+        {
+            $logger->critical(
+                sprintf('%s: Не указан штрихкод продукта в карточке', $ProductDetail->getProductArticle()),
+                [self::class.':'.__LINE__],
+            );
+
+            return new Response('Не указан штрихкод продукта', Response::HTTP_NOT_FOUND);
+        }
+
         /**
          * Генерируем штрихкод продукции (один на все заказы)
          */
         $barcode = $BarcodeWrite
-            ->text($ProductDetail['product_barcode'])
+            ->text($ProductDetail->getProductBarcode())
             ->type(BarcodeType::Code128)
             ->format(BarcodeFormat::SVG)
             ->generate();
@@ -116,14 +127,13 @@ final class PrintController extends AbstractController
         /**
          * Получаем настройки бокового стикера
          */
-        $BarcodeSettings = $ProductDetail['main'] ?
-            $OzonBarcodeSettings->forProduct($ProductDetail['main'])->find() : false;
+        $BarcodeSettings = $OzonBarcodeSettings->forProduct($ProductDetail->getProductMain())->find();
 
         return $this->render(
             parameters: [
                 'barcode' => $render,
                 'settings' => $BarcodeSettings,
-                'total' => $request->get('total', 1),
+                'total' => $request->query->get('total', 1),
                 'product' => $ProductDetail,
             ],
             file: 'print.html.twig',
