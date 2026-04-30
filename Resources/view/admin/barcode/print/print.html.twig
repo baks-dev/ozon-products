@@ -5,7 +5,7 @@
 
     {% set break = false %}
 
-    {% set counter = settings.counter is defined ?: 1 %}
+    {% set counter = settings.counter is defined ? settings.counter : 1 %}
 
     {% for i in 1..total %}
 
