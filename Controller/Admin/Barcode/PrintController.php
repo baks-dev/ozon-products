@@ -127,7 +127,9 @@ final class PrintController extends AbstractController
         /**
          * Получаем настройки бокового стикера
          */
-        $BarcodeSettings = $OzonBarcodeSettings->forProduct($ProductDetail->getProductMain())->find();
+        $BarcodeSettings = $OzonBarcodeSettings
+            ->forProduct($ProductDetail->getProductId())
+            ->find();
 
         return $this->render(
             parameters: [
