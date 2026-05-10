@@ -1,12 +1,12 @@
+{# @var product \BaksDev\Products\Product\Repository\ProductDetail\ProductDetailByInvariableResult #}
+
 <div class="modal-header">
 
     <div class="d-flex gap-3">
 
         {# Обложка  #}
         <div>
-            {% set img_host = product.getProductImageCdn() %}
-            {% set img_dir = product.getProductImage() %}
-            {% set image_path = cdn_image_path(img_dir, product.getProductImageExt(), img_host, 'min') %}
+            {% set image_path = cdn_image_path(product.productName, product.productImageExt, product.productImageCdn, 'min') %}
 
             <div class="icon rounded-3 bg-contain lazy p-1" style="width: 50px; height: 50px;"
                  data-bg="{{ image_path }}">
