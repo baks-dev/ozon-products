@@ -64,7 +64,7 @@ final class HeightOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(ProductsOzonCardResult $data): int
     {
-        return $data->getHeight() ?? 0;
+        return $data->getLength() ?? 0;
     }
 
     /**

@@ -64,7 +64,7 @@ final class DepthOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(ProductsOzonCardResult $data): int
     {
-        return $data->getLength() ?? 0;
+        return $data->getHeight() ?? 0;
     }
 
     /**
