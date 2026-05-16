@@ -86,9 +86,11 @@ final class DiameterOzonProductsAttribute implements OzonProductsAttributeInterf
             return false;
         }
 
-        /** Замена латинской C на кириллицу */
+
         $value = current($attribute)->value;
-        $value = str_replace('C', 'С', $value);
+        /** Замена латинской C на кириллицу */
+        //$value = str_replace('C', 'С', $value);
+
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
