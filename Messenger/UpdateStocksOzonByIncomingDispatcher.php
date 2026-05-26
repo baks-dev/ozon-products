@@ -123,7 +123,7 @@ final readonly class UpdateStocksOzonByIncomingDispatcher
 
                 $this->messageDispatch->dispatch(
                     message: new OzonProductsStocksMessage($OzonProductsCardMessage),
-                    stamps: [new MessageDelay('5 seconds')],
+                    stamps: [new MessageDelay('1 minutes')],
                     transport: $UserProfileUid.'-low',
                 );
             }
