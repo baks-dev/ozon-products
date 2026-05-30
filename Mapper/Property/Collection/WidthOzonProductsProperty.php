@@ -64,7 +64,7 @@ final class WidthOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(ProductsOzonCardResult $data): int
     {
-        return $data->getWidth() ?: 0;
+        return $data->getLength() ?? 0;
     }
 
     /**

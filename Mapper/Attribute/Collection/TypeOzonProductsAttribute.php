@@ -63,10 +63,9 @@ final class TypeOzonProductsAttribute implements OzonProductsAttributeInterface
     {
         return match ($value)
         {
-            'jeep' => 'Внедорожники',
             'bus' => 'Коммерческий транспорт',
             'truck' => 'Грузовые автомобили и автобусы',
-            'passenger' => 'Легковые автомобили',
+            'passenger', 'jeep' => 'Легковые автомобили',
             default => null,
         };
     }

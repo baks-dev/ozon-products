@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 final class DepthOzonProductsProperty implements OzonProductsPropertyInterface
 {
     /**
-     * Глубина упаковки
+     * Длина (Глубина) упаковки
      *
      * integer
      * example: "depth": 10
@@ -64,7 +64,7 @@ final class DepthOzonProductsProperty implements OzonProductsPropertyInterface
      */
     public function getData(ProductsOzonCardResult $data): int
     {
-        return $data->getHeight() ?? 0;
+        return $data->getWidth() ?: 0;
     }
 
     /**
