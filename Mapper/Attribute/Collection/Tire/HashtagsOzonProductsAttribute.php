@@ -93,7 +93,6 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
             $hashtags[] = '#автомобильные_шины';
             $hashtags[] = '#покрышки';
             $hashtags[] = '#купить_шины';
-            $hashtags[] = '#шины_с_доставкой';
 
             if($data->getProductAttributes())
             {
