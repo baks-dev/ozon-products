@@ -146,7 +146,7 @@ final  class ProductsOzonCardResult
 
     public function getProductPreview(): ?string
     {
-        return strip_tags($this->product_preview);
+        return $this->product_preview ? strip_tags($this->product_preview) : null;
     }
 
     public function getCategoryId(): ?CategoryProductUid
