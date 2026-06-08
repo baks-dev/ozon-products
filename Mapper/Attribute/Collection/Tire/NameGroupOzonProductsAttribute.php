@@ -89,17 +89,17 @@ final class NameGroupOzonProductsAttribute implements OzonProductsAttributeInter
         {
             $value = null;
 
-            if($data->getProductOfferValue())
+            if($data->getProductOfferValue() && $data->getProductOfferValue() !== 'null')
             {
                 $value .= 'R'.$data->getProductOfferValue();
             }
 
-            if($data->getProductVariationValue())
+            if($data->getProductVariationValue() && $data->getProductVariationValue() !== 'null')
             {
                 $value .= ' '.$data->getProductVariationValue();
             }
 
-            if($data->getProductModificationValue())
+            if($data->getProductModificationValue() && $data->getProductModificationValue() !== 'null')
             {
                 $value .= '/'.$data->getProductModificationValue();
             }

@@ -153,19 +153,19 @@ final class NameOzonProductsProperty implements OzonProductsPropertyInterface
         {
             $productName = '';
 
-            if($data->getProductVariationValue())
+            if($data->getProductVariationValue() && $data->getProductVariationValue() !== 'null')
             {
                 $productName .= ' '.$data->getProductVariationValue();
                 $productName = trim($productName);
             }
 
-            if($data->getProductModificationValue())
+            if($data->getProductModificationValue() && $data->getProductModificationValue() !== 'null')
             {
                 $productName .= '/'.$data->getProductModificationValue();
                 $productName = trim($productName);
             }
 
-            if($data->getProductOfferValue())
+            if($data->getProductOfferValue() && $data->getProductOfferValue() !== 'null')
             {
                 $productName .= ' R'.$data->getProductOfferValue();
                 $productName = trim($productName);

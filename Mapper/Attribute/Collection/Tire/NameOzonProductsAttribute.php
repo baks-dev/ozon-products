@@ -107,17 +107,17 @@ final class NameOzonProductsAttribute implements OzonProductsAttributeInterface
 
         $name .= trim($productName);
 
-        if($data->getProductVariationValue())
+        if($data->getProductVariationValue() && $data->getProductVariationValue() !== 'null')
         {
             $name .= ' '.$data->getProductVariationValue();
         }
 
-        if($data->getProductModificationValue())
+        if($data->getProductModificationValue() && $data->getProductModificationValue() !== 'null')
         {
             $name .= '/'.$data->getProductModificationValue();
         }
 
-        if($data->getProductOfferValue())
+        if($data->getProductOfferValue() && $data->getProductOfferValue() !== 'null')
         {
             $name .= ' R'.$data->getProductOfferValue();
         }
