@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
+use BaksDev\Ozon\Products\Mapper\Attribute\Collection\TypeOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
@@ -73,6 +74,35 @@ final class TypeIdOzonProductsProperty implements OzonProductsPropertyInterface
         {
             return false;
         }
+
+        /** Если передана категория Шины - сверяемся с назначением */
+        if($data->getOzonCategory() === 17027949)
+        {
+            /** Если не передан размер профиля (б/р) - указываем тип коммерческого транспорта */
+            if($data->getProductModificationValue() === 'null')
+            {
+                return 94763;
+            }
+
+            /** Получаем назначение */
+
+            $attribute = array_filter(
+                $data->getProductAttributes(),
+                static fn($n) => TypeOzonProductsAttribute::ID === (int) $n->id,
+            );
+
+            $value = current($attribute)->value;
+
+            return match ($value)
+            {
+                'jeep' => 94762, // Шины для внедорожника
+                'bus' => 97884, // Шины для коммерческого транспорта
+                'truck' => 94763, // Шины для грузовых автомобилей
+                'passenger' => 94765, // Шины для легковых автомобилей
+                default => false,
+            };
+        }
+
 
         return $data->getOzonType();
     }

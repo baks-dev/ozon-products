@@ -74,7 +74,10 @@ class OzonAttributeRequestTest extends KernelTestCase
 
             // Шины
             17027949 => [
-                94765, //  Шины для легковых автомобилей
+                94765, // Шины для легковых автомобилей
+                94762, // Шины для внедорожника
+                97884, // Шины для коммерческого транспорта
+                94763, // Шины для грузовых автомобилей
             ],
 
 
@@ -100,13 +103,16 @@ class OzonAttributeRequestTest extends KernelTestCase
         ];
 
 
-        //        $allAttributes = [
-        //
-        //            // Шины
-        //            17027949 => [
-        //                94765, //  Шины для легковых автомобилей
-        //            ]
-        //        ];
+        $allAttributes = [
+
+            // Шины
+            17027949 => [
+                //94765, // Шины для легковых автомобилей
+                //94762, // Шины для внедорожника
+                97884, // Шины для коммерческого транспорта
+                //94763, // Шины для грузовых автомобилей
+            ],
+        ];
 
         foreach($allAttributes as $category => $types)
         {
@@ -133,6 +139,7 @@ class OzonAttributeRequestTest extends KernelTestCase
                             // Вызываем метод
                             $data = $method->invoke($OzonAttributeDTO);
                             // dump($data);
+
                         }
                     }
 

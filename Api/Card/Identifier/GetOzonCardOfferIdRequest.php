@@ -46,7 +46,7 @@ final class GetOzonCardOfferIdRequest extends Ozon
 
 
     /**
-     * Метод возвращает идентификатор товара offer_id по SKU
+     * Метод возвращает идентификатор товара offer_id (артикул) по SKU
      *
      * @see https://docs.ozon.ru/api/seller/#operation/ProductAPI_GetProductInfoList
      */

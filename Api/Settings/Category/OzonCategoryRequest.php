@@ -102,7 +102,7 @@ final class OzonCategoryRequest extends Ozon
         {
             $data = array_filter(
                 $content['result'],
-                fn($cat) => $cat['description_category_id'] === $categoryId,
+                static fn($cat) => $cat['description_category_id'] === $categoryId,
             );
 
             $categories = $data[array_key_first($data)]['children'];

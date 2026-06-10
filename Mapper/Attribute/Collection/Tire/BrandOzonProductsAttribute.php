@@ -48,7 +48,10 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
     /** 17027949 - Шины */
     public const int CATEGORY = 17027949;
 
-    public const int TYPE = 94765;
+    //public const int TYPE = 94765; // Шины для легковых автомобилей
+    public const int TYPE = 94762; // Шины для внедорожника
+    //public const int TYPE = 97884; // Шины для грузовых автомобилей
+    //public const int TYPE = 94763; // Шины для легковых автомобилей
 
     public const int ID = 85;
 
