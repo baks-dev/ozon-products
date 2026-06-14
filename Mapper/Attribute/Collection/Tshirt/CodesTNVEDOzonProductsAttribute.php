@@ -23,7 +23,7 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
+namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tshirt;
 
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
@@ -45,8 +45,8 @@ final class CodesTNVEDOzonProductsAttribute implements OzonProductsAttributeInte
     //-groupName: ""
     //-dictionary: 124412395
 
-    /** 17027949 - Шины */
-    public const int CATEGORY = 17027949;
+    /** 200000933 - Одежда */
+    public const int CATEGORY = 200000933;
 
     public const int TYPE = 94765;
 
@@ -81,7 +81,7 @@ final class CodesTNVEDOzonProductsAttribute implements OzonProductsAttributeInte
             static fn($n) => self::ID === (int) $n->id,
         );
 
-        /** В случае отсутствия идентификатора - применяем по умолчанию */
+        /** В случае отсутствия идентификатора - применяем по умолчанию  */
         $value = current($attribute)->value ?? $this->default();
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
@@ -96,7 +96,7 @@ final class CodesTNVEDOzonProductsAttribute implements OzonProductsAttributeInte
 
     public function default(): string
     {
-        /** 4011100009 - МАРКИРОВКА РФ - Шины и покрышки пневматические резиновые новые, для легковых автомобилей */
+        /** 6109100000 - Майки, фуфайки с рукавами и прочие нательные фуфайки трикотажные, из хлопчатобумажной пряжи, машинного или ручного вязания */
         return '6109100000';
     }
 
