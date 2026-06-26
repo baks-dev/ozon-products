@@ -96,6 +96,8 @@ class OzonCategoryRequestTest extends KernelTestCase
                     // dump($data);
                 }
             }
+
+            //dump($OzonCategoryDTO);
         }
 
         self::assertTrue(true);

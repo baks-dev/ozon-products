@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\Collection\TypeOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
@@ -79,6 +78,11 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
         if(false === empty($attribute))
         {
             $value = current($attribute)->value;
+
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                implode(' ', $value),
+            );
         }
 
         /** Строим хештеги исходя из данных в карточке */
@@ -86,7 +90,6 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
         {
 
             $hashtags = null;
-
             $hashtags[] = '#шины';
             $hashtags[] = '#шина';
             $hashtags[] = '#автошина';
@@ -94,48 +97,11 @@ final class HashtagsOzonProductsAttribute implements OzonProductsAttributeInterf
             $hashtags[] = '#покрышки';
             $hashtags[] = '#купить_шины';
 
-            if($data->getProductAttributes())
-            {
-                /** Добавляем хештеги сезонность и назначение */
-                $Season = new SeasonOzonProductsAttribute();
-                $Type = new TypeOzonProductsAttribute();
-
-                foreach($data->getProductAttributes() as $productAttribute)
-                {
-                    /** Добавляем сезонность */
-                    if($Season::equals($productAttribute->id))
-                    {
-                        $value = $Season::getConvertName($productAttribute->value);
-
-                        if(empty($value))
-                        {
-                            continue;
-                        }
-
-                        $hashtags[] = '#'.$value;
-                        $hashtags[] = '#'.$value.'_шины';
-                        $hashtags[] = '#шины_'.$value;
-                    }
-
-                    /** Добавляем назначение */
-                    if($Type::equals($productAttribute->id))
-                    {
-                        $value = $Type::getConvertName($productAttribute->value);
-
-                        if(!empty($value))
-                        {
-                            $hashtags[] = '#шины_'.str_replace(' ', '_', $value);
-                            //$hashtags[] = '#автомобильные_шины_'.str_replace(' ', '_', $value);
-                        }
-                    }
-                }
-            }
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                implode(' ', $hashtags),
+            );
         }
-
-        $requestData = new ItemDataBuilderOzonProductsAttribute(
-            self::ID,
-            implode(' ', $hashtags),
-        );
 
         return $requestData->getData();
     }

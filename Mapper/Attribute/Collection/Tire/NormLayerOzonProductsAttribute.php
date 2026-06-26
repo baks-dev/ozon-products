@@ -44,6 +44,18 @@ final class NormLayerOzonProductsAttribute implements OzonProductsAttributeInter
     //-groupName: ""
     //-dictionary: 106027683
 
+
+    #шины
+    #шина
+    #автошина
+    #автомобильные_шины
+    #покрышки
+    #купить_шины
+    #зимние
+    #зимние_шины
+    #шины_зимние
+
+
     /** 17027949 - Шины */
     public const int CATEGORY = 17027949;
 
@@ -74,6 +86,11 @@ final class NormLayerOzonProductsAttribute implements OzonProductsAttributeInter
         }
 
         if(false === preg_match('/\b(\d+)PR\b/i', $data->getProductModificationPostfix(), $matches))
+        {
+            return false;
+        }
+
+        if(empty($matches[1]))
         {
             return false;
         }

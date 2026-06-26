@@ -113,6 +113,8 @@ class OzonTypeRequestTest extends KernelTestCase
                     }
                 }
             }
+
+            //dump($OzonTypeDTO);
         }
     }
 }
