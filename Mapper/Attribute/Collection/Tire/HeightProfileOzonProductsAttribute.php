@@ -90,7 +90,7 @@ final class HeightProfileOzonProductsAttribute implements OzonProductsAttributeI
 
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            $value === 'null' ? '75' : $value,
+            $value === 'null' ? '80' : $value,
             $data,
             $this->attributeValueRequest,
         );
