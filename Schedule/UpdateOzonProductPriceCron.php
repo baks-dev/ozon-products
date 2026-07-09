@@ -29,6 +29,7 @@ use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
+use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksUpdateDispatcher;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
@@ -100,7 +101,17 @@ final readonly class UpdateOzonProductPriceCron
                     $ProductsIdentifierResult->getProductModificationConst(),
                 );
 
-                $OzonProductsStocksMessage = new OzonProductsPriceMessage($OzonProductsCardMessage);
+                $OzonProductsPriceMessage = new OzonProductsPriceMessage($OzonProductsCardMessage);
+
+                /** Консольную комманду выполняем синхронно */
+                $this->messageDispatch->dispatch(
+                    message: $OzonProductsPriceMessage,
+                    stamps: [new MessageDelay(sprintf('%s minutes', $stamps))],
+                    transport: $UserProfileUid.'-low',
+                );
+
+
+                $OzonProductsStocksMessage = new OzonProductsStocksMessage($OzonProductsCardMessage);
 
                 /** Консольную комманду выполняем синхронно */
                 $this->messageDispatch->dispatch(
@@ -108,6 +119,7 @@ final readonly class UpdateOzonProductPriceCron
                     stamps: [new MessageDelay(sprintf('%s minutes', $stamps))],
                     transport: $UserProfileUid.'-low',
                 );
+
             }
         }
     }
