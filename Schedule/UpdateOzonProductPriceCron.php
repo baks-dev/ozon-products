@@ -74,7 +74,7 @@ final readonly class UpdateOzonProductPriceCron
             return;
         }
 
-        foreach($profiles as $stamps => $UserProfileUid)
+        foreach($profiles as $UserProfileUid)
         {
             /* Получаем все имеющиеся карточки в системе */
             $products = $this->AllProductsIdentifierRepository
@@ -91,8 +91,11 @@ final readonly class UpdateOzonProductPriceCron
                 continue;
             }
 
-            foreach($products as $ProductsIdentifierResult)
+
+            foreach($products as $stamps => $ProductsIdentifierResult)
             {
+                $seconds = $stamps * 3;
+
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
                     $UserProfileUid,
                     $ProductsIdentifierResult->getProductId(),
@@ -106,7 +109,7 @@ final readonly class UpdateOzonProductPriceCron
                 /** Консольную комманду выполняем синхронно */
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsPriceMessage,
-                    stamps: [new MessageDelay(sprintf('%s minutes', $stamps))],
+                    stamps: [new MessageDelay(sprintf('%s seconds', $seconds))],
                     transport: $UserProfileUid.'-low',
                 );
 
@@ -116,7 +119,7 @@ final readonly class UpdateOzonProductPriceCron
                 /** Консольную комманду выполняем синхронно */
                 $this->messageDispatch->dispatch(
                     message: $OzonProductsStocksMessage,
-                    stamps: [new MessageDelay(sprintf('%s minutes', $stamps))],
+                    stamps: [new MessageDelay(sprintf('%s seconds', $seconds))],
                     transport: $UserProfileUid.'-low',
                 );
 

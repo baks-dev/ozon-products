@@ -205,12 +205,16 @@ final readonly class OzonProductsStocksUpdateDispatcher
                         self::class.':'.__LINE__,
                     ]);
 
+                    $Deduplicator->delete();
+
                     continue;
                 }
 
                 /** Если остаток 0 и на селлере разница резерва и остатка равны - пропускаем */
                 if(empty($ProductQuantity) === true && $OzonStockInfoDTO->getTotal() === $OzonStockInfoDTO->getReserve())
                 {
+                    $Deduplicator->delete();
+
                     continue;
                 }
 
@@ -262,6 +266,8 @@ final readonly class OzonProductsStocksUpdateDispatcher
                     'token' => (string) $OzonTokenUid,
                     self::class.':'.__LINE__,
                 ]);
+
+                $Deduplicator->delete();
 
                 continue;
             }

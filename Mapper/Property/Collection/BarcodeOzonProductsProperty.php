@@ -63,14 +63,12 @@ final class BarcodeOzonProductsProperty implements OzonProductsPropertyInterface
         return self::PARAM;
     }
 
-    /**
-     * Возвращает состояние
-     */
+
     public function getData(ProductsOzonCardResult $data): string|false
     {
-        if(!empty($data->getBarcode()))
+        if(false === empty($data->getBarcodes()))
         {
-            return $data->getBarcode();
+            return current($data->getBarcodes());
         }
 
         if($data->getProductModificationConst() instanceof ProductModificationConst)

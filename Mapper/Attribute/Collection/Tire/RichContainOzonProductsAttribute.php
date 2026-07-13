@@ -75,6 +75,7 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
         }
 
         $name = '';
+        $desc = '';
 
         if($data->getProductAttributes())
         {
@@ -92,45 +93,56 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
                         continue;
                     }
 
-                    $name .= $value.' ';
+                    $desc .= $value.' ';
                 }
             }
         }
 
-        $name = mb_strtolower($name);
-        $name = mb_ucfirst($name);
+        //$name = mb_strtolower($name);
+        //$name = mb_ucfirst($name);
+
+        $desc = mb_strtolower($desc);
+        $desc = mb_ucfirst($desc);
+
 
 
         $name .= $data->getProductName();
+        $desc .= $data->getProductName();
 
         if($data->getProductVariationValue() && $data->getProductVariationValue() !== 'null')
         {
             $name .= ' '.$data->getProductVariationValue();
+            $desc .= ' '.$data->getProductVariationValue();
         }
 
         if($data->getProductModificationValue() && $data->getProductModificationValue() !== 'null')
         {
             $name .= '/'.$data->getProductModificationValue();
+            $desc .= '/'.$data->getProductModificationValue();
         }
 
         if($data->getProductOfferValue() && $data->getProductOfferValue() !== 'null')
         {
             $name .= ' R'.$data->getProductOfferValue();
+            $desc .= ' R'.$data->getProductOfferValue();
         }
 
         if($data->getProductOfferPostfix())
         {
             $name .= ' '.$data->getProductOfferPostfix();
+            $desc .= ' '.$data->getProductOfferPostfix();
         }
 
         if($data->getProductVariationPostfix())
         {
             $name .= ' '.$data->getProductVariationPostfix();
+            $desc .= ' '.$data->getProductVariationPostfix();
         }
 
         if($data->getProductModificationPostfix())
         {
             $name .= ' '.$data->getProductModificationPostfix();
+            $desc .= ' '.$data->getProductModificationPostfix();
         }
 
         if($data->getProductAttributes())
@@ -146,7 +158,7 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
 
                     if(!empty($value))
                     {
-                        $name .= ' '.$value;
+                        $desc .= ' '.$value;
                     }
                 }
             }
@@ -176,6 +188,10 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
             $picture->product_img_cdn ? 'large' : 'image',
             $picture->product_img_ext,
         );
+
+
+        $name = trim($name);
+        $desc = trim($desc);
 
 
         $content = [
@@ -217,7 +233,7 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
                                 'items' => [
                                     [
                                         'type' => 'text',
-                                        'content' => 'Этот текст уже готов для описания',
+                                        'content' => $desc,
                                     ],
                                 ],
                             ],
