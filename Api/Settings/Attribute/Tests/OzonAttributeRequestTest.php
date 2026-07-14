@@ -139,9 +139,10 @@ class OzonAttributeRequestTest extends KernelTestCase
                             // Вызываем метод
                             $data = $method->invoke($OzonAttributeDTO);
                             // dump($data);
-
                         }
                     }
+
+                    // dump($OzonAttributeDTO);
 
                     self::assertTrue(true);
                 }

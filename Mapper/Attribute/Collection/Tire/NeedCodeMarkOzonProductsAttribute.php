@@ -28,32 +28,28 @@ namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire;
 use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
-use BaksDev\Products\Product\Type\Barcode\ProductBarcode;
-use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
-use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
-use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class AlternativeArticleNumberOzonProductsAttribute implements OzonProductsAttributeInterface
+final class NeedCodeMarkOzonProductsAttribute implements OzonProductsAttributeInterface
 {
-    //-id: 11031
-    //-complex: 0
-    //-name: "Альтернативные артикулы товара"
-    //-description: "Если у товара есть альтернативный артикул, использующийся в другом каталоге, внесите его в это поле.  "
-    //-type: "multiline"
-    //-collection: false
-    //-required: false
-    //-count: 0
-    //-groupId: 0
-    //-groupName: ""
-    //-dictionary: 0
+    // -id: 23536
+    //  -complex: 0
+    //  -name: "Нужен код маркировки"
+    //  -description: "Выберите «Да», если товар имеет код маркировки (КИЗ). Будем проверять его у каждой отгрузки или поставки. При интеграции через Seller API передавайте параметр как "true" "
+    //  -type: "Boolean"
+    //  -collection: false
+    //  -required: true
+    //  -count: 0
+    //  -groupId: 0
+    //  -groupName: ""
+    //  -dictionary: 0
 
     /** 17027949 - Шины */
     public const int CATEGORY = 17027949;
 
     public const int TYPE = 94765;
 
-    public const int ID = 11031;
+    public const int ID = 23536;
 
     public static function priority(): int
     {
@@ -72,44 +68,9 @@ final class AlternativeArticleNumberOzonProductsAttribute implements OzonProduct
 
     public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
     {
-        if(empty($data->getProductAttributes()))
-        {
-            if(false === empty($data->getBarcodes()))
-            {
-                $requestData = new ItemDataBuilderOzonProductsAttribute(
-                    self::ID,
-                    current($data->getBarcodes()),
-                );
-
-                return $requestData->getData();
-            }
-
-            return false;
-        }
-
-        $attribute = array_filter(
-            $data->getProductAttributes(),
-            static fn($n) => self::ID === (int) $n->id,
-        );
-
-        if(empty($attribute))
-        {
-            if(false === empty($data->getBarcodes()))
-            {
-                $requestData = new ItemDataBuilderOzonProductsAttribute(
-                    self::ID,
-                    current($data->getBarcodes()),
-                );
-
-                return $requestData->getData();
-            }
-
-            return false;
-        }
-
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            current($attribute)->value,
+            "true",
         );
 
         return $requestData->getData();
@@ -122,7 +83,7 @@ final class AlternativeArticleNumberOzonProductsAttribute implements OzonProduct
 
     public function isSetting(): bool
     {
-        return true;
+        return false;
     }
 
     public function required(): bool
