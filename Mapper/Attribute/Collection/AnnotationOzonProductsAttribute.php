@@ -46,6 +46,8 @@ final class AnnotationOzonProductsAttribute implements OzonProductsAttributeInte
 
     public const int ID = 4191;
 
+    private const int MAX = 500;
+
     public static function priority(): int
     {
         return 100;
@@ -68,9 +70,57 @@ final class AnnotationOzonProductsAttribute implements OzonProductsAttributeInte
             return false;
         }
 
+        $preview = strip_tags($data->getProductPreview());
+
+        // Если текст и так короткий, возвращаем его целиком
+        if(mb_strlen($preview) <= self::MAX)
+        {
+
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                $preview,
+            );
+
+            return $requestData->getData();
+        }
+
+        // Отрезаем кусок текста максимальной длины
+        $preview = mb_substr($preview, 0, self::MAX);
+
+
+        // Ищем конец последнего предложения (. ! ?)
+        if(preg_match('/^.*[\.\!\?](?:\s|$)/uU', $preview, $matches))
+        {
+
+            $preview = trim($matches[0]);
+
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                $preview,
+            );
+
+            return $requestData->getData();
+
+        }
+
+        // Если знаков препинания нет, обрезаем по последнему пробелу, чтобы не рвать слово
+        $space_pos = mb_strrpos($preview, ' ');
+
+        if($space_pos !== false)
+        {
+
+            $requestData = new ItemDataBuilderOzonProductsAttribute(
+                self::ID,
+                mb_substr($preview, 0, $space_pos).'...',
+            );
+
+            return $requestData->getData();
+        }
+
+        // Крайний случай: жесткое отсечение, если нет ни пробелов, ни точек
         $requestData = new ItemDataBuilderOzonProductsAttribute(
             self::ID,
-            $data->getProductPreview(),
+            $preview,
         );
 
         return $requestData->getData();

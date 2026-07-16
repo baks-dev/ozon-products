@@ -57,6 +57,8 @@ use BaksDev\Products\Product\Entity\Photo\ProductPhoto;
 use BaksDev\Products\Product\Entity\Price\ProductPrice;
 use BaksDev\Products\Product\Entity\Product;
 use BaksDev\Products\Product\Entity\ProductInvariable;
+use BaksDev\Products\Product\Entity\Project\Description\ProductProjectDescription;
+use BaksDev\Products\Product\Entity\Project\ProductProject;
 use BaksDev\Products\Product\Entity\Property\ProductProperty;
 use BaksDev\Products\Product\Entity\Seo\ProductSeo;
 use BaksDev\Products\Product\Entity\Trans\ProductTrans;
@@ -69,6 +71,7 @@ use BaksDev\Products\Stocks\Entity\Total\Approve\ProductStockApprove;
 use BaksDev\Products\Stocks\Entity\Total\ProductStockTotal;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class ProductsOzonCardRepository implements ProductsOzonCardInterface
 {
@@ -210,13 +213,33 @@ final class ProductsOzonCardRepository implements ProductsOzonCardInterface
             );
 
         $dbal
-            ->addSelect('product_desc.preview AS product_preview')
             ->leftJoin(
                 'product',
-                ProductDescription::class,
-                'product_desc',
-                'product_desc.event = product.event AND product_desc.device = :device ',
-            )->setParameter('device', 'pc');
+                ProductProject::class,
+                'product_project',
+                '
+                    product_project.product = product.id 
+                    '.(true === $dbal->isProjectProfile()
+                    ? 'AND product_project.profile = :'.$dbal::PROJECT_PROFILE_KEY
+                    : 'AND product_project.profile IS NULL'),
+            );
+
+
+        $dbal
+            ->addSelect('product_project_description.preview AS product_preview')
+            ->leftJoin(
+                'product_project',
+                ProductProjectDescription::class,
+                'product_project_description',
+                '
+                        product_project_description.project = product_project.id 
+                        AND product_project_description.local = :local
+                        AND product_project_description.device = :device
+                    ',
+            )->setParameter(
+                key: 'device',
+                value: 'pc',
+            );
 
 
         /* Категория */
