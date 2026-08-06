@@ -38,6 +38,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[RoleSecurity('ROLE_OZON_BARCODE')]
 final class IndexController extends AbstractController
 {
+    /**
+     * Настройки штрихкодов
+     */
     #[Route('/admin/ozon/barcodes/{page<\d+>}', name: 'admin.barcode.index', methods: ['GET', 'POST'])]
     public function index(
         Request $request,

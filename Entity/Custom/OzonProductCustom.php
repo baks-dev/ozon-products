@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Products\Entity\Custom;
 
 use BaksDev\Core\Entity\EntityState;
+use BaksDev\Ozon\Products\Entity\Custom\Certificate\OzonProductCustomCertificate;
 use BaksDev\Ozon\Products\Entity\Custom\Images\OzonProductCustomImage;
 use BaksDev\Products\Product\Type\Invariable\ProductInvariableUid;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -45,8 +46,12 @@ class OzonProductCustom extends EntityState
 
     /** Коллекция изображений продукта для Озона */
     #[ORM\OrderBy(['root' => 'DESC'])]
-    #[ORM\OneToMany(targetEntity: OzonProductCustomImage::class, mappedBy: 'invariable', cascade: ['all'], fetch: 'EAGER')]
+    #[ORM\OneToMany(targetEntity: OzonProductCustomImage::class, mappedBy: 'invariable', cascade: ['all'])]
     private Collection $images;
+
+    /** Коллекция идентификаторов сертификатов */
+    #[ORM\OneToMany(targetEntity: OzonProductCustomCertificate::class, mappedBy: 'invariable', cascade: ['all'])]
+    private Collection $certificates;
 
     public function __construct(ProductInvariableUid $invariable)
     {

@@ -29,11 +29,12 @@ use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Messenger\Card\OzonProductsCardMessage;
 use BaksDev\Ozon\Products\Messenger\Price\OzonProductsPriceMessage;
-use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksMessage;
 use BaksDev\Ozon\Products\Messenger\Stocks\OzonProductsStocksUpdateDispatcher;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
 use BaksDev\Products\Product\Repository\AllProductsIdentifier\AllProductsIdentifierInterface;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Scheduler\Attribute\AsCronTask;
 
@@ -55,46 +56,58 @@ final readonly class UpdateOzonProductPriceCron
         private MessageDispatchInterface $messageDispatch,
         private AllProfileOzonTokenInterface $AllProfileOzonTokenRepository,
         private AllProductsIdentifierInterface $AllProductsIdentifierRepository,
+        #[Autowire(env: 'PROJECT_PROFILE')] private ?string $PROJECT_PROFILE = null,
     ) {}
 
     public function __invoke(): void
     {
-        /** Получаем все активные профили, у которых активный токен  */
-        $profiles = $this->AllProfileOzonTokenRepository
-            ->onlyActiveToken()
-            ->findAll();
+        $profiles = $this->PROJECT_PROFILE ? [new UserProfileUid($this->PROJECT_PROFILE)] : null;
 
-        if(false === $profiles || false === $profiles->valid())
+        if(empty($this->PROJECT_PROFILE))
+        {
+            /** Получаем все активные профили, у которых активный токен  */
+            $profiles = $this->AllProfileOzonTokenRepository
+                ->onlyActiveToken()
+                ->findAll();
+
+            if(false === $profiles || false === $profiles->valid())
+            {
+                $this->logger->warning(
+                    'Профили с активными токенами Яндекс не найдены',
+                    [__FILE__.':'.__LINE__],
+                );
+
+                return;
+            }
+
+            $profiles = iterator_to_array($profiles);
+        }
+
+        if(empty($profiles))
+        {
+            return;
+        }
+
+
+        /* Получаем все имеющиеся карточки в системе */
+        $products = $this->AllProductsIdentifierRepository->findAll();
+
+        if(false === $products || false === $products->valid())
         {
             $this->logger->warning(
-                'Профили с активными токенами Яндекс не найдены',
+                'Карточек для обновления не найдено',
                 [__FILE__.':'.__LINE__],
             );
 
             return;
         }
 
-        foreach($profiles as $UserProfileUid)
+        foreach($products as $stamps => $ProductsIdentifierResult)
         {
-            /* Получаем все имеющиеся карточки в системе */
-            $products = $this->AllProductsIdentifierRepository
-                ->forProfile($UserProfileUid)
-                ->findAll();
+            $seconds = $stamps * random_int(1, 3);
 
-            if(false === $products || false === $products->valid())
+            foreach($profiles as $UserProfileUid)
             {
-                $this->logger->warning(
-                    'Карточек для обновления не найдено',
-                    [__FILE__.':'.__LINE__],
-                );
-
-                continue;
-            }
-
-
-            foreach($products as $stamps => $ProductsIdentifierResult)
-            {
-                $seconds = $stamps * 3;
 
                 $OzonProductsCardMessage = new OzonProductsCardMessage(
                     $UserProfileUid,
@@ -112,17 +125,6 @@ final readonly class UpdateOzonProductPriceCron
                     stamps: [new MessageDelay(sprintf('%s seconds', $seconds))],
                     transport: $UserProfileUid.'-low',
                 );
-
-
-                $OzonProductsStocksMessage = new OzonProductsStocksMessage($OzonProductsCardMessage);
-
-                /** Консольную комманду выполняем синхронно */
-                $this->messageDispatch->dispatch(
-                    message: $OzonProductsStocksMessage,
-                    stamps: [new MessageDelay(sprintf('%s seconds', $seconds))],
-                    transport: $UserProfileUid.'-low',
-                );
-
             }
         }
     }

@@ -208,6 +208,16 @@ final readonly class OzonProductsCardUpdateDispatcher
                 message: $ResultOzonProductsCardUpdateMessage,
                 transport: $message->getProfile().'-low',
             );
+
+            /** Запускаем процесс обновления сертификатов */
+
+            $ResultOzonProductsCardUpdateMessage = new ResultOzonProductsCardMessage(
+                id: $task,
+                token: $OzonTokenUid,
+                profile: $message->getProfile(),
+            );
+
+
         }
     }
 }

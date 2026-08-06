@@ -27,6 +27,8 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use BaksDev\Ozon\Products\BaksDevOzonProductsBundle;
 use BaksDev\Ozon\Products\Type\Barcode\Event\OzonBarcodeEventUid;
 use BaksDev\Ozon\Products\Type\Barcode\Event\OzonBarcodeEventUidType;
+use BaksDev\Ozon\Products\Type\Custom\Certificate\OzonProductCertificateType;
+use BaksDev\Ozon\Products\Type\Custom\Certificate\OzonProductCertificateUid;
 use BaksDev\Ozon\Products\Type\Custom\Image\OzonProductImageType;
 use BaksDev\Ozon\Products\Type\Custom\Image\OzonProductImageUid;
 use BaksDev\Ozon\Products\Type\Settings\Attribute\OzonProductAttribute;
@@ -44,6 +46,7 @@ return static function(DoctrineConfig $doctrine, ContainerConfigurator $configur
     $doctrine->dbal()->type(OzonProductProperty::TYPE)->class(OzonProductPropertyType::class);
     $doctrine->dbal()->type(OzonProductImageUid::TYPE)->class(OzonProductImageType::class);
     $doctrine->dbal()->type(OzonBarcodeEventUid::TYPE)->class(OzonBarcodeEventUidType::class);
+    $doctrine->dbal()->type(OzonProductCertificateUid::TYPE)->class(OzonProductCertificateType::class);
 
 
     $emDefault = $doctrine->orm()->entityManager('default')->autoMapping(true);

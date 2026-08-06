@@ -45,6 +45,9 @@ use Symfony\Component\Routing\Annotation\Route;
 #[RoleSecurity('ROLE_OZON_PRODUCTS_CUSTOM')]
 final class IndexController extends AbstractController
 {
+    /**
+     * Настройки карточек Озон
+     */
     #[Route('/admin/ozon/custom/{page<\d+>}', name: 'admin.custom.index', methods: ['GET', 'POST'])]
     public function index(
         Request $request,

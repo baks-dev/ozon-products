@@ -43,6 +43,9 @@ use Symfony\Component\Routing\Annotation\Route;
 #[RoleSecurity('ROLE_OZON_PRODUCTS_CUSTOM')]
 class NewEditController extends AbstractController
 {
+    /**
+     * Изменить настройку карточки Озон
+     */
     #[Route(
         '/admin/ozon/custom/edit/{invariable}',
         name: 'admin.custom.edit',

@@ -54,11 +54,34 @@ final readonly class ResultOzonProductsCardDispatcher
             ->forTokenIdentifier($message->getToken())
             ->get($message->getId());
 
+
         /** false - если задание не найдено */
-        if(false === $result || empty($result['errors']))
+        if(false === $result)
         {
             return;
         }
+
+        /**
+         * Товар в очереди на обработку - пробуем позже
+         */
+        if($result['status'] === 'pending')
+        {
+            $this->messageDispatch
+                ->dispatch(
+                    message: $message,
+                    stamps: [new MessageDelay('1 minutes')],
+                    transport: 'ozon-products',
+                );
+
+            return;
+        }
+
+        /** Если нет ошибок */
+        if(empty($result['errors']))
+        {
+            return;
+        }
+
 
         foreach($result['errors'] as $error)
         {

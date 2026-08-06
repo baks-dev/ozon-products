@@ -59,6 +59,15 @@ final readonly class OzonStockUpdateDTO
 
     public function updated(): bool
     {
+        /** Проверяем карточку на архив */
+        foreach($this->errors as $error)
+        {
+            if($error['code'] === 'PRODUCT_IS_ARCHIVED')
+            {
+                return true;
+            }
+        }
+
         return $this->updated;
     }
 
