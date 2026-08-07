@@ -46,12 +46,12 @@ use Symfony\Component\Scheduler\Attribute\AsCronTask;
 /**
  * Обновляем остатки
  *
- * #hourly - в какую-то минуту каждый час
+ * #midnight - каждый день между 00:00 и 2:59
  *
  * @see https://symfony.com/doc/current/scheduler.html#cron-expression-triggers
  * @see OzonProductsStocksUpdateDispatcher
  */
-#[AsCronTask('#hourly', jitter: 30)]
+#[AsCronTask('#midnight', jitter: 60)]
 final readonly class UpdateOzonProductStocksCron
 {
     public function __construct(
