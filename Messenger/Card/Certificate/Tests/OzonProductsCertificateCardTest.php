@@ -60,7 +60,7 @@ class OzonProductsCertificateCardTest extends KernelTestCase
          */
         $OzonProductsCertificateCardMessage = new OzonProductsCertificateCardMessage(
             id: 11111111111111,
-            token: new OzonTokenUid('38b05f18-9948-7dad-b2af-8eb92619507d'),
+            token: new OzonTokenUid(),
         );
 
         $UpdateOzonProductsCertificateCardDispatcher($OzonProductsCertificateCardMessage);

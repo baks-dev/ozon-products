@@ -217,6 +217,10 @@ final readonly class OzonProductsCardUpdateDispatcher
                 token: $OzonTokenUid,
             );
 
+            $this->messageDispatch->dispatch(
+                message: $OzonProductsCertificateCardMessage,
+                transport: $message->getProfile().'-low',
+            );
 
         }
     }
