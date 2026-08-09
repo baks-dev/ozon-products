@@ -28,6 +28,8 @@ namespace BaksDev\Ozon\Products\Messenger\Card\Certificate;
 
 use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
+use BaksDev\Ozon\Products\Api\Card\Certificate\Create\OzonProductCertificateBindRequest;
+use BaksDev\Ozon\Products\Api\Card\Certificate\Create\OzonProductCertificateCreateRequest;
 use BaksDev\Ozon\Products\Api\Card\Certificate\FindCertByArticle\FindOzonCertByArticleRequest;
 use BaksDev\Ozon\Products\Api\Card\Update\GetOzonCardStatusUpdateRequest;
 use BaksDev\Products\Product\Repository\CertificatesByProduct\CertificatesByProductInterface;
@@ -35,8 +37,10 @@ use BaksDev\Products\Product\Repository\CertificatesByProduct\CertificatesByProd
 use BaksDev\Products\Product\Repository\CurrentProductByArticle\CurrentProductByBarcodeResult;
 use BaksDev\Products\Product\Repository\CurrentProductByArticle\ProductConstByArticleInterface;
 use BaksDev\Products\Product\Repository\ProductByArticle\ProductEventByArticleInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
@@ -48,22 +52,34 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 #[AsMessageHandler(priority: 0)]
 final readonly class UpdateOzonProductsCertificateCardDispatcher
 {
+
     public function __construct(
+        #[Target('ozonProductsLogger')] private LoggerInterface $logger,
         private MessageDispatchInterface $messageDispatch,
-        private GetOzonCardStatusUpdateRequest $cardUpdateResultRequest,
+        private GetOzonCardStatusUpdateRequest $GetOzonCardStatusUpdateRequest,
         private FindOzonCertByArticleRequest $FindOzonCertByArticleRequest,
+        private OzonProductCertificateCreateRequest $OzonProductCertificateCreateRequest,
+        private OzonProductCertificateBindRequest $OzonProductCertificateBindRequest,
         private ProductConstByArticleInterface $ProductConstByArticleRepository,
         private CertificatesByProductInterface $CertificatesByProductRepository,
-        #[Autowire(env: 'CDN_HOST')] ?string $CDN_HOST = null,
+        #[Autowire('%kernel.project_dir%')] private string $upload,
+        #[Autowire(env: 'CDN_HOST')] private ?string $CDN_HOST = null,
     ) {}
 
     public function __invoke(OzonProductsCertificateCardMessage $message): void
     {
-        // Проверяем информацию о выполненном задании
 
-        $result = $this->cardUpdateResultRequest
+        // Проверяем информацию о выполненном задании
+        $result = $this->GetOzonCardStatusUpdateRequest
             ->forTokenIdentifier($message->getToken())
             ->get($message->getId());
+
+        //        $result = [
+        //            'offer_id' => 'TR-PL01-15-185-60-88R',
+        //            //'product_id' => 4627729707, // SKU
+        //            'product_id' => 4967397384,
+        //            'status' => 'imported',
+        //        ];
 
 
         /**
@@ -89,7 +105,6 @@ final readonly class UpdateOzonProductsCertificateCardDispatcher
             return;
         }
 
-
         /**
          * Задание обновилось с ошибкой
          */
@@ -98,6 +113,10 @@ final readonly class UpdateOzonProductsCertificateCardDispatcher
             return;
         }
 
+        $this->logger->info(
+            sprintf('Обновляем сертификаты продукта: %s', $result['offer_id']),
+            [$result, self::class.':'.__LINE__],
+        );
 
         /** Получаем продукт по артикулу */
 
@@ -117,12 +136,20 @@ final readonly class UpdateOzonProductsCertificateCardDispatcher
 
         /**  Получаем все сертификаты в селлере */
         $existsCertificates = $this->FindOzonCertByArticleRequest
-            ->setArticle('PyeXNmU')
+            ->forTokenIdentifier($message->getToken())
+            ->setArticle($result['offer_id'])
             ->findAll();
-
 
         foreach($certificates as $CertificatesByProductResult)
         {
+            /** Если список имеющихся в селлере сертификатов отсутствует - добавляем системный сертификат */
+            if(false === $existsCertificates || false === $existsCertificates->valid())
+            {
+                $this->addSertificate($CertificatesByProductResult, $message, $result);
+
+                continue;
+            }
+
             /**
              * Итерируемся по имеющимся сертификатам и проверяем наличие в списке
              */
@@ -134,27 +161,75 @@ final readonly class UpdateOzonProductsCertificateCardDispatcher
                     continue;
                 }
 
-                // Отправляем файл сертификата получив "Идентификатор загруженного сертификата"
+                // Пропускаем отправку если файл сертификата отправлен на CDN, но не сервер не указана в настройках .env
                 if(empty($this->CDN_HOST) && true === $CertificatesByProductResult->isCdn())
                 {
                     continue;
                 }
 
-                $path = $CertificatesByProductResult->isCdn() ? 'http://'.$this->CDN_HOST : '';
-                $path = $path.$CertificatesByProductResult->getFilePath();
-
-                // Читаем файл в строку
-                $fileContent = file_get_contents($path);
-
-                /* Указываем путь и название файла для загрузки CDN */
-                $formDataFile = DataPart::fromPath($fileContent, 'invoice.pdf', 'application/pdf');
-
-
-                // Получаем идентификатор товара в селлере
-
-                // Прикрепляем продукт к сертификату по идентификатору продукта и сертификата
+                $this->addSertificate($CertificatesByProductResult, $message, $result);
             }
         }
+
+    }
+
+    public function addSertificate(
+        CertificatesByProductResult $CertificatesByProductResult,
+        OzonProductsCertificateCardMessage $message,
+        array $result
+    )
+    {
+        $path = $CertificatesByProductResult->isCdn() ? 'http://'.$this->CDN_HOST : $this->upload.DIRECTORY_SEPARATOR.'public';
+        $path .= $CertificatesByProductResult->getFilePath();
+
+        if(false === is_file($path))
+        {
+            return;
+        }
+
+        $type = match ($CertificatesByProductResult->getType()->getDocumentTypeValue())
+        {
+            "certconf" => "certificate_of_conformity",
+            "decconf" => "declaration",
+            "certreg" => "certificate_of_registration",
+            "regcert" => "registration_certificate",
+            "rejletter" => "refused_letter",
+            "vetdoc" => "veterinary_cover_document",
+            "passafety" => "safety_data_sheet",
+        };
+
+
+        $match = match ($CertificatesByProductResult->getMatch()->getMatchTypeValue())
+        {
+            "certtechru" => "technical_regulations_rf",
+            "certtechts" => "technical_regulations_cu",
+            "certgost" => "gost",
+            default => null
+        };
+
+        /** Отправляем файл сертификата  */
+        $cert = $this->OzonProductCertificateCreateRequest
+            ->forTokenIdentifier($message->getToken())
+            ->article($result['offer_id'])
+            ->number($CertificatesByProductResult->getNumber())
+            ->issue($CertificatesByProductResult->getIssue())
+            ->expire($CertificatesByProductResult->getExpire())
+            ->type($type)
+            ->match($match)
+            ->upload($path);
+
+        if(empty($cert))
+        {
+            return;
+        }
+
+        /** Если получен идентификатор файла сертификата - прикрепляем продукт к сертификату */
+
+        $this->OzonProductCertificateBindRequest
+            ->forTokenIdentifier($message->getToken())
+            ->cert($cert)
+            ->product($result['product_id'])
+            ->update();
 
     }
 }

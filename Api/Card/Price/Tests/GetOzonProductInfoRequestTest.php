@@ -42,7 +42,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
 
-#[Group('get-ozon-product-info-request-test')]
+#[Group('ozon-products')]
 #[When(env: 'test')]
 class GetOzonProductInfoRequestTest extends KernelTestCase
 {

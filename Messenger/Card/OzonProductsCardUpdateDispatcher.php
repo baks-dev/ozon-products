@@ -31,6 +31,7 @@ use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\Ozon\Products\Api\Card\Price\GetOzonProductCalculatorRequest;
 use BaksDev\Ozon\Products\Api\Card\Update\UpdateOzonCardRequest;
 use BaksDev\Ozon\Products\Mapper\OzonProductsMapper;
+use BaksDev\Ozon\Products\Messenger\Card\Certificate\OzonProductsCertificateCardMessage;
 use BaksDev\Ozon\Products\Messenger\Card\Result\ResultOzonProductsCardMessage;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardInterface;
 use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
@@ -211,10 +212,9 @@ final readonly class OzonProductsCardUpdateDispatcher
 
             /** Запускаем процесс обновления сертификатов */
 
-            $ResultOzonProductsCardUpdateMessage = new ResultOzonProductsCardMessage(
+            $OzonProductsCertificateCardMessage = new OzonProductsCertificateCardMessage(
                 id: $task,
                 token: $OzonTokenUid,
-                profile: $message->getProfile(),
             );
 
 

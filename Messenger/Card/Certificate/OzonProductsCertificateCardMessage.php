@@ -38,7 +38,7 @@ final class OzonProductsCertificateCardMessage
 
     /**
      * @param int|string $id
-     * @param string $token
+     * @param OzonTokenUid $token
      */
     public function __construct(
         int|string $id,

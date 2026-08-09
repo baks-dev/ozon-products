@@ -27,7 +27,7 @@ namespace BaksDev\Ozon\Products\Api\Card\Certificate\Create;
 
 use BaksDev\Ozon\Api\Ozon;
 use DateTimeImmutable;
-use InvalidArgumentException;
+use DateTimeInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -42,6 +42,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 final class OzonProductCertificateCreateRequest extends Ozon
 {
     private const array ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'pdf'];
+
     private string $article;
     private string $number;
     private string $type;
@@ -91,6 +92,7 @@ final class OzonProductCertificateCreateRequest extends Ozon
         return $this;
     }
 
+
     /**
      * Метод загружает файл сертификата в систему Ozon и возвращает его идентификатор.
      *
@@ -102,74 +104,45 @@ final class OzonProductCertificateCreateRequest extends Ozon
      * @throws FileNotFoundException Если файл не найден
      * @throws TransportExceptionInterface Если произошла ошибка при отправке запроса
      */
-    public function upload(string $fileUrl): string
+    public function upload(string $path): string|false
     {
-        $fileContent = @file_get_contents($fileUrl);
+        $formFields = [
+            'files' => DataPart::fromPath($path),
+            'name' => $this->article,
+            'number' => $this->number,
+            'type_code' => $this->type,
+            'accordance_type_code' => $this->match,
+            'issue_date' => $this->issue->format(DateTimeInterface::W3C),
+            'expire_date' => $this->expire ? $this->expire->format(DateTimeInterface::W3C) : null,
+        ];
 
-        if($fileContent === false)
-        {
-            throw new FileNotFoundException(sprintf('Не удалось скачать файл: %s', $fileUrl));
-        }
+        $formData = new FormDataPart($formFields);
+        $headers = $formData->getPreparedHeaders()->toArray();
 
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'ozon_cert_');
-        file_put_contents($tempFilePath, $fileContent);
-
-        $fileExtension = strtolower(pathinfo($fileUrl, PATHINFO_EXTENSION));
-
-        if(!in_array($fileExtension, self::ALLOWED_EXTENSIONS, true))
-        {
-            unlink($tempFilePath);
-            throw new InvalidArgumentException(sprintf('Недопустимое расширение файла: %s. Допустимые расширения: %s', $fileExtension, implode(', ', self::ALLOWED_EXTENSIONS)));
-        }
-
-        try
-        {
-            $filePart = DataPart::fromPath($tempFilePath);
-
-            $formFields = [
-                'file' => $filePart,
-            ];
-
-            $formData = new FormDataPart($formFields);
-            $headers = $formData->getPreparedHeaders()->toArray();
-
-            $response = $this->TokenHttpClient()
-                ->request(
-                    'POST',
-                    '/v1/product/certificate/file',
-                    [
-                        'headers' => $headers,
-                        'files' => [$formData->bodyToString()],
-                    ],
-                );
-
-            $content = $response->toArray(false);
-
-            if($response->getStatusCode() !== 200)
-            {
-                $this->logger->critical(
-                    sprintf('Ошибкa при загрузке файла сертификата в Ozon: %s', $fileUrl),
-                    [$content, self::class.':'.__LINE__],
-                );
-
-                throw new RuntimeException(sprintf('Ошибка при загрузке файла сертификата: %s', $response->getContent(false)));
-            }
-
-            return $content['file_id'] ?? '';
-
-        }
-        catch(ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $e)
-        {
-            $this->logger->critical(
-                sprintf('Ошибка при отправке запроса к Ozon API: %s', $fileUrl),
-                [$e->getMessage(), self::class.':'.__LINE__],
+        $response = $this->TokenHttpClient()
+            ->request(
+                'POST',
+                '/v1/product/certificate/create',
+                [
+                    'headers' => $headers,
+                    'body' => $formData->bodyToString(),
+                ],
             );
 
-            throw $e;
-        }
-        finally
+        $content = $response->toArray(false);
+
+        if($response->getStatusCode() !== 200)
         {
-            unlink($tempFilePath);
+            $this->logger->critical(
+                sprintf('ozon-products: Ошибка при загрузке файла сертификата в Ozon: %s', $path),
+                [$content, self::class.':'.__LINE__],
+            );
+
+            throw new RuntimeException(sprintf('Ошибка при загрузке файла сертификата: %s', $response->getContent(false)));
         }
+
+        return $content['id'] ?? '';
+
+
     }
 }
