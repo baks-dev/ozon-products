@@ -150,11 +150,19 @@ final readonly class UpdateOzonProductsCertificateCardDispatcher
                 continue;
             }
 
+            $isUpdate = false;
+
             /**
              * Итерируемся по имеющимся сертификатам и проверяем наличие в списке
              */
             foreach($existsCertificates as $existsCertificate)
             {
+                /** В качестве названия указываем артикул, если он не соответствует - пропускаем */
+                if($existsCertificate->getCertificateName() !== $result['offer_id'])
+                {
+                    continue;
+                }
+
                 /** Пропускаем если сертификат с таким номером уже добавлен на данный артикул */
                 if($CertificatesByProductResult->getNumber() === $existsCertificate->getCertificateNumber())
                 {
@@ -167,8 +175,16 @@ final readonly class UpdateOzonProductsCertificateCardDispatcher
                     continue;
                 }
 
+                $isUpdate = true;
+
+                break;
+            }
+
+            if(true === $isUpdate)
+            {
                 $this->addSertificate($CertificatesByProductResult, $message, $result);
             }
+
         }
 
     }
