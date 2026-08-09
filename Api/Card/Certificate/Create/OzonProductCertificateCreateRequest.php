@@ -28,7 +28,6 @@ namespace BaksDev\Ozon\Products\Api\Card\Certificate\Create;
 use BaksDev\Ozon\Api\Ozon;
 use DateTimeImmutable;
 use DateTimeInterface;
-use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\Mime\Part\DataPart;
@@ -92,7 +91,6 @@ final class OzonProductCertificateCreateRequest extends Ozon
         return $this;
     }
 
-
     /**
      * Метод загружает файл сертификата в систему Ozon и возвращает его идентификатор.
      *
@@ -104,7 +102,7 @@ final class OzonProductCertificateCreateRequest extends Ozon
      * @throws FileNotFoundException Если файл не найден
      * @throws TransportExceptionInterface Если произошла ошибка при отправке запроса
      */
-    public function upload(string $path): string|false
+    public function upload(string $path): int|false
     {
         $formFields = [
             'files' => DataPart::fromPath($path),
@@ -138,10 +136,10 @@ final class OzonProductCertificateCreateRequest extends Ozon
                 [$content, self::class.':'.__LINE__],
             );
 
-            throw new RuntimeException(sprintf('Ошибка при загрузке файла сертификата: %s', $response->getContent(false)));
+            return false;
         }
 
-        return $content['id'] ?? '';
+        return $content['id'] ? (int) $content['id'] : false;
 
 
     }
