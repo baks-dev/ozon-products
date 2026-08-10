@@ -79,6 +79,7 @@ class OzonAttributeValueSearchRequestTest extends KernelTestCase
         // 93080 - Джинсы
         // 93253 - Худи
         // 93216 - Свитшот
+        // 93148 - Лонгслив
 
         // 41777465 - Аксессуары
         // 93040 - Бейсболка

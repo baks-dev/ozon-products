@@ -88,6 +88,7 @@ class OzonAttributeRequestTest extends KernelTestCase
                 93080, // - Джинсы
                 93253, // - Худи
                 93216, // - Свитшот
+                93148, // - Лонгслив
             ],
 
             // Аксессуары
@@ -106,11 +107,8 @@ class OzonAttributeRequestTest extends KernelTestCase
         $allAttributes = [
 
             // Шины
-            17027949 => [
-                //94765, // Шины для легковых автомобилей
-                //94762, // Шины для внедорожника
-                97884, // Шины для коммерческого транспорта
-                //94763, // Шины для грузовых автомобилей
+            200000933 => [
+                93148, // - Лонгслив
             ],
         ];
 
@@ -142,11 +140,13 @@ class OzonAttributeRequestTest extends KernelTestCase
                         }
                     }
 
-                    // dump($OzonAttributeDTO);
+                    dump($OzonAttributeDTO);
 
-                    self::assertTrue(true);
+
                 }
             }
         }
+
+        self::assertTrue(true);
     }
 }

@@ -82,7 +82,7 @@ class OzonTypeRequestTest extends KernelTestCase
             // 17028741 - Столовая посуда
             // 41777465 - Аксессуары
 
-            if($OzonProductsCategory->getId() !== 17027949)
+            if($OzonProductsCategory->getId() !== 200000933)
             {
                 // Пропускаем категории кроме ....
                 // continue;
