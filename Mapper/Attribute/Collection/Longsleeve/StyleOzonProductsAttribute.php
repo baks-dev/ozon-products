@@ -48,14 +48,15 @@ final class StyleOzonProductsAttribute implements OzonProductsAttributeInterface
      * -dictionary: 627
      */
 
-    /** 200000933 -Одежда */
+    /** 200000933 - Одежда */
     public const int CATEGORY = 200000933;
 
     private const int DICTIONARY = 627;
 
     public const int ID = 4501;
 
-    public const int TYPE = 93244;
+    /** 93148 - Лонгслив */
+    public const int TYPE = 93148;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
 

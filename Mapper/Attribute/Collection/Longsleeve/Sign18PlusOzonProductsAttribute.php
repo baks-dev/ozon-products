@@ -47,12 +47,13 @@ final class Sign18PlusOzonProductsAttribute implements OzonProductsAttributeInte
      * -dictionary: 0
      * */
 
-    /** 200000933 -Одежда */
+    /** 200000933 - Одежда */
     public const int CATEGORY = 200000933;
 
     public const int ID = 9070;
 
-    public const int TYPE = 93244;
+    /** 93148 - Лонгслив */
+    public const int TYPE = 93148;
 
     private const int DICTIONARY = 0;
 

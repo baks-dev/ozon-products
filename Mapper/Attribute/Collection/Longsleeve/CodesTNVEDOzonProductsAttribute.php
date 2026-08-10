@@ -48,7 +48,8 @@ final class CodesTNVEDOzonProductsAttribute implements OzonProductsAttributeInte
     /** 200000933 - Одежда */
     public const int CATEGORY = 200000933;
 
-    public const int TYPE = 94765;
+    /** 93148 - Лонгслив */
+    public const int TYPE = 93148;
 
     public const int ID = 22232;
 

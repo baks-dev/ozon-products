@@ -50,12 +50,13 @@ final class ColorProductOzonProductsAttribute implements OzonProductsAttributeIn
      * -dictionary: 1494
      * */
 
-    /** 200000933 -Одежда */
+    /** 200000933 - Одежда */
     public const int CATEGORY = 200000933;
 
     public const int ID = 10096;
 
-    public const int TYPE = 93244;
+    /** 93148 - Лонгслив */
+    public const int TYPE = 93148;
 
     private const int DICTIONARY = 1494;
 

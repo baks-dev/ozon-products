@@ -47,12 +47,13 @@ final class CollectionOzonProductsAttribute implements OzonProductsAttributeInte
      * -dictionary: 927
      * */
 
-    /** 200000933 -Одежда */
+    /** 200000933 - Одежда */
     public const int CATEGORY = 200000933;
 
-    public const int ID = 4503;
+    /** 93148 - Лонгслив */
+    public const int TYPE = 93148;
 
-    public const int TYPE = 93244;
+    public const int ID = 4503;
 
     private const int DICTIONARY = 927;
 

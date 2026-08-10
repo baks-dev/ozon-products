@@ -49,12 +49,13 @@ final class GuarateeOzonProductsAttribute implements OzonProductsAttributeInterf
      * -dictionary: 46700526
      */
 
-    /** 200000933 -Одежда */
+    /** 200000933 - Одежда */
     public const int CATEGORY = 200000933;
 
     public const int ID = 10400;
 
-    public const int TYPE = 93244;
+    /** 93148 - Лонгслив */
+    public const int TYPE = 93148;
 
     private const int DICTIONARY = 46700526;
 

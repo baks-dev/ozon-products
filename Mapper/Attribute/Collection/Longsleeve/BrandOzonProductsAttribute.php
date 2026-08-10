@@ -43,7 +43,7 @@ final class BrandOzonProductsAttribute implements OzonProductsAttributeInterface
     //-groupName: ""
     //-dictionary: 28732849
 
-    /** 200000933 -Одежда */
+    /** 200000933 - Одежда */
     public const int CATEGORY = 200000933;
 
     private const int DICTIONARY = 28732849;
