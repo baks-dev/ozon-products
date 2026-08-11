@@ -80,27 +80,6 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
         $name = '';
         $desc = '';
 
-        if($data->getProductAttributes())
-        {
-            /** Добавляем к названию сезонность */
-            $Season = new SeasonOzonProductsAttribute();
-
-            foreach($data->getProductAttributes() as $productAttribute)
-            {
-                if($Season::equals($productAttribute->id))
-                {
-                    $value = $Season::getConvertName($productAttribute->value);
-
-                    if(empty($value))
-                    {
-                        continue;
-                    }
-
-                    $desc .= $value.' ';
-                }
-            }
-        }
-
         //$name = mb_strtolower($name);
         //$name = mb_ucfirst($name);
 
@@ -119,14 +98,14 @@ final class RichContainOzonProductsAttribute implements OzonProductsAttributeInt
 
         if($data->getProductModificationValue() && $data->getProductModificationValue() !== 'null')
         {
-            $name .= '/'.$data->getProductModificationValue();
-            $desc .= '/'.$data->getProductModificationValue();
+            $name .= ' '.$data->getProductModificationValue();
+            $desc .= ' '.$data->getProductModificationValue();
         }
 
         if($data->getProductOfferValue() && $data->getProductOfferValue() !== 'null')
         {
-            $name .= ' R'.$data->getProductOfferValue();
-            $desc .= ' R'.$data->getProductOfferValue();
+            $name .= ' '.$data->getProductOfferValue();
+            $desc .= ' '.$data->getProductOfferValue();
         }
 
         if($data->getProductOfferPostfix())
