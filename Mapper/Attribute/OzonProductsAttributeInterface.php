@@ -59,4 +59,7 @@ interface OzonProductsAttributeInterface
     /** Проверяет, относится ли объект к указанной категории */
     public function equalsCategory(int $category): bool;
 
+    /** Проверяет, относится ли объект к типу категории */
+    public function equalsType(int $type);
+
 }

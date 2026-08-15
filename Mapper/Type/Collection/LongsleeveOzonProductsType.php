@@ -30,7 +30,7 @@ use BaksDev\Ozon\Products\Mapper\Type\OzonProductsTypeInterface;
 final class LongsleeveOzonProductsType implements OzonProductsTypeInterface
 {
     // 200000933 - "Одежда"
-    // 93148 - "Худи"
+    // 93148 - "Лонгслив"
 
     public const int ID = 93148;
 

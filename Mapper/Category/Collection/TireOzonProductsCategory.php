@@ -12,7 +12,7 @@ final class TireOzonProductsCategory implements OzonProductsCategoryInterface
     // id: 17027949
     // name: "Шины"
 
-    private const int ID = 17027949;
+    public const int ID = 17027949;
 
     private const int PARENT = 17027495;
 

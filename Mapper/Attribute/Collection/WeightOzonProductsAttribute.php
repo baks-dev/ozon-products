@@ -95,4 +95,9 @@ final class WeightOzonProductsAttribute implements OzonProductsAttributeInterfac
     {
         return true;
     }
+
+    public function equalsType(int $type): bool
+    {
+        return true;
+    }
 }

@@ -45,6 +45,7 @@ final class TypeOzonProductsAttribute implements OzonProductsAttributeInterface
     //-groupName: "Общие"
     //-dictionary: 1960
 
+
     public const int ID = 8229;
 
     private false|OzonAttributeValueSearchRequest $attributeValueRequest;
@@ -151,6 +152,11 @@ final class TypeOzonProductsAttribute implements OzonProductsAttributeInterface
     }
 
     public function equalsCategory(int $category): bool
+    {
+        return true;
+    }
+
+    public function equalsType(int $type): bool
     {
         return true;
     }

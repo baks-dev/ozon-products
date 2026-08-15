@@ -90,6 +90,15 @@ final class AttributeOzonProductsProperty implements OzonProductsPropertyInterfa
                 continue;
             }
 
+
+            if(false === $item->equalsType($data->getOzonType()))
+            {
+                continue;
+            }
+
+
+
+
             /**
              * Если у аттрибута опредлено значение справочника (DICTIONARY)
              * в классе этого аттрибута необходимо реализовать метод  'attributeValueRequest',

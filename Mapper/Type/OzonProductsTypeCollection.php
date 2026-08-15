@@ -33,12 +33,20 @@ final readonly class OzonProductsTypeCollection
         #[AutowireIterator('baks.ozon.product.type', defaultPriorityMethod: 'priority')] private iterable $property,
     ) {}
 
-    public function cases(): array
+    public function cases(int|false $category = false): array
     {
         $case = null;
 
         foreach($this->property as $key => $property)
         {
+            /** @var OzonProductsTypeInterface $instance */
+            $instance = new $property();
+
+            if(($category !== false) && (false === $instance->equalsCategory($category)))
+            {
+                continue;
+            }
+
             $case[$key] = new $property();
         }
 

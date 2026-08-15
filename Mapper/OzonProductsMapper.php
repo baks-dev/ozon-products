@@ -33,6 +33,17 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 // #[Autoconfigure(public: true)]
 final readonly class OzonProductsMapper
 {
+
+
+    // Идентификаторы типов
+
+
+
+
+
+
+
+
     /**
      * Основной класс данных
      *

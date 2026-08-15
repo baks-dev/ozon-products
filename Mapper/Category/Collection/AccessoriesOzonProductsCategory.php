@@ -12,7 +12,7 @@ final class AccessoriesOzonProductsCategory implements OzonProductsCategoryInter
     // id: 41777465
     // name: "Аксессуары"
 
-    private const int ID = 41777465;
+    public const int ID = 41777465;
 
     private const int PARENT = 15621031;
 

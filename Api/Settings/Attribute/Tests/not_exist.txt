@@ -1,0 +1,3565 @@
+
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 9070
+  -complex: 0
+  -name: "Признак 18+"
+  -description: "Признак для товаров, которые содержат эротику, сцены секса, изображения с нецензурными выражениями, даже если они написаны частично или со спец. символами, а также для товаров категории 18+ (только для взрослых)"
+  -type: "Boolean"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 4501
+  -complex: 0
+  -name: "Стиль"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 1
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 627
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14704
+  -id: 10096
+  -complex: 0
+  -name: "Цвет товара"
+  -description: "Основной или доминирующий цвет товара. Если точного соответствия нет, используйте ближайшие цвета. Сложные цвета нужно описывать перечислением простых цветов. Например, если в товаре преобладают черный, желтый и белый цвета, то укажите их все простым перечислением. Атрибут "Цвет товара" — это основной цвет. Все остальные цвета можно перечислить в атрибуте "Название цвета", если он доступен в категории"
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1494
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 23078
+  -complex: 0
+  -name: "Особенности модели"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 6
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413019
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 23077
+  -complex: 0
+  -name: "Покрой"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413018
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 4309
+  -complex: 0
+  -name: "Материал подкладки"
+  -description: "Выберите одно или несколько значений из списка, но не больше 3. В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 3
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1503
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14704
+  -id: 8790
+  -complex: 8788
+  -name: "Документ PDF"
+  -description: ""
+  -type: "URL"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 4596
+  -complex: 0
+  -name: "Тип рукава"
+  -description: "Выберите из списка. Короткий – не доходит до локтя; 3/4 – закрывает локоть, но не доходит до запястья; Длинный – закрывает запястье. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1817
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 23536
+  -complex: 0
+  -name: "Нужен код маркировки"
+  -description: "Выберите «Да», если товар имеет код маркировки (КИЗ). Будем проверять его у каждой отгрузки или поставки. При интеграции через Seller API передавайте параметр как "true" "
+  -type: "Boolean"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 11254
+  -complex: 0
+  -name: "Rich-контент JSON"
+  -description: "Добавьте расширенное описание товара с фото и видео по шаблону в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Rich-контент" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14396
+  -id: 21531
+  -complex: 0
+  -name: "Декоративные элементы"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124411957
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 22273
+  -complex: 100001
+  -name: "Озон.Видео: товары на видео"
+  -description: "Укажите товары, которые демонстрируются в вашем видео. Перечислите SKU через запятую (не более 5)."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 23074
+  -complex: 0
+  -name: "Тип ростовки"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413016
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 11071
+  -complex: 0
+  -name: "Вырез горловины"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 59221744
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14396
+  -id: 23518
+  -complex: 0
+  -name: "Минимальное количество оптом"
+  -description: "Заполните поле (укажите целое число), чтобы продавать товар оптом покупателям-юрлицам. Подробнее: https://seller-edu.ozon.ru/libra/work-with-goods/additional-materials/prodazha-optom"
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 22390
+  -complex: 0
+  -name: "Объединить в похожие товары"
+  -description: "Введите одинаковое значение в этом атрибуте для объединения товаров в группу "Похожие". Обратите внимание, что товары в группе собираются в рамках одной категории второго уровня в личном кабинете. Если у товаров будет указано одно Название группы, но они находятся в разных категориях — вы получите несколько объединений товаров. Подробнее об объединении в Похожие можно прочитать в статье "Похожие товары" в "Базе знаний""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 9168
+  -complex: 0
+  -name: "Назначение"
+  -description: "Выберите из списка. Можно указать только одно значение. Значение "Большие размеры" можно указать на размерный ряд от 52 размера."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 2
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1695
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14496
+  -id: 4503
+  -complex: 0
+  -name: "Коллекция"
+  -description: "Серия моделей, приуроченная к конкретному сезону продажи."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 927
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 4180
+  -complex: 0
+  -name: "Название"
+  -description: "Название пишется по принципу: Тип + Бренд + Модель (серия + пояснение) + Артикул производителя + , (запятая) + Атрибут Название не пишется большими буквами (не используем caps lock). Перед атрибутом ставится запятая. Если атрибутов несколько, они так же разделяются запятыми. Если какой-то составной части названия нет - пропускаем её. Атрибутом может быть: цвет, вес, объём, количество штук в упаковке и т.д. Цвет пишется с маленькой буквы, в мужском роде, единственном числе. Слово цвет в названии не пишем. Точка в конце не ставится. Никаких знаков препинания, кроме запятой, не используем. Кавычки используем только для названий на русском языке. Примеры корректных названий: Смартфон Apple iPhone XS MT572RU/A, space black Кеды Dr. Martens Киноклассика, бело-черные, размер 43 Стиральный порошок Ariel Магия белого с мерной ложкой, 15 кг Соус Heinz Xtreme Tabasco суперострый, 10 мл Игрушка для животных Четыре лапы "Бегающая мышка" БММ, белый"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 9437
+  -complex: 0
+  -name: "Рисунок"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 5673715
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 4300
+  -complex: 0
+  -name: "Тип упаковки одежды"
+  -description: "Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1238
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 4508
+  -complex: 0
+  -name: "Размер на модели"
+  -description: "Выберите из списка размер производителя одежды или обуви на модели, если она присутствует на фотографии товара. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 945
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 4506
+  -complex: 0
+  -name: "Рост модели на фото"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 780
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 9533
+  -complex: 0
+  -name: "Размер производителя"
+  -description: "Можно указать в любом формате. Обратите внимание: данный размер является дополнительным, основной — Российский размер"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 11650
+  -complex: 0
+  -name: "Количество заводских упаковок"
+  -description: """
+    Сколько заводских упаковок продаёте под этим SKU. Пример: 24 банки детского пюре запаяны в 1 упаковку на заводе и в таком же виде продаются в других магазинах — укажите значение 1. \n
+    Другой пример: завод выпускает лампочки в упаковках по 1 или 10 штук, а вы решили продавать по 3 лампочки и запаяли их в одну упаковку — значение атрибута будет 3
+    """
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 21837
+  -complex: 100001
+  -name: "Озон.Видео: название"
+  -description: "Укажите название для видео"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 4295
+  -complex: 0
+  -name: "Российский размер"
+  -description: "Выберите из выпадающего списка российский размер одежды. Если товар подходит для нескольких размеров (например, 42–44), укажите все подходящие размеры через выпадающий список. В XLS-файле такие размеры укажите последовательно через точку с запятой (например: 42;44 или 50;52;54). В карточке товара покажем единый диапазон (например, 42–44 или 50–54)."
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 835
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 22270
+  -complex: 0
+  -name: "Вид выпуска товара"
+  -description: "Если вы выбираете "Ручная работа", то это означает, что товар является частью интеллектуальной собственности и изготовлен без использования специализированного оборудования. Если вы выбираете "По индивидуальному дизайну", то это означает, что товар изготавливается только после сделанного покупателем заказа с предоставления личных запросов, например, фото или текста для гравировки."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124412424
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 4496
+  -complex: 0
+  -name: "Материал"
+  -description: "Выберите из списка или укажите вручную. Указывается основной материал (один или несколько), но не более 4 значений. Если есть подкладка, укажите её материал в атрибуте «Материал подкладки». В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1503
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14704
+  -id: 13164
+  -complex: 0
+  -name: "Таблица размеров JSON"
+  -description: "Добавьте таблицу размеров в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Таблица размеров" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 10400
+  -complex: 0
+  -name: "Гарантия"
+  -description: "Период, в течение которого производитель отвечает за качество товара. А покупатель может оформить заявку на возврат по гарантийному случаю. Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 46700526
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14396
+  -id: 4495
+  -complex: 0
+  -name: "Сезон"
+  -description: "Демисезон — изделия для использования весной/осенью, на любой сезон — изделия, которые можно комфортно использовать в любое время года. Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 703
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 4509
+  -complex: 0
+  -name: "Параметры модели на фото (ОГ-ОТ-ОБ)"
+  -description: "Параметры фотомодели в сантиметрах в формате: обхват груди - обхват талии - обхват бедер, рост. Например, 90-60-90, рост 170. "
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 4296
+  -complex: 0
+  -name: "Рост"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1866
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 4655
+  -complex: 0
+  -name: "Уход за вещами"
+  -description: "Инструкция по уходу за вещью с пришивного ярлыка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14496
+  -id: 8789
+  -complex: 8788
+  -name: "Название файла PDF"
+  -description: ""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14396
+  -id: 4604
+  -complex: 0
+  -name: "Состав материала"
+  -description: "Укажите состав материала в формате «% материал, % материал» от большего к меньшему. Информация о процентном содержании материала должна совпадать с пришивным ярлыком. Например: 70% хлопок, 25% полиэстер, 5% эластан."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 22232
+  -complex: 0
+  -name: "ТН ВЭД коды ЕАЭС"
+  -description: "Выберите одно значение из списка. Если вы не знаете, какой код нужно указать, то вам необходимо обратиться к таможенной службе или таможенному представителю"
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124412395
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 8292
+  -complex: 0
+  -name: "Объединить на одной карточке"
+  -description: "Если заполнить это поле одинаково у нескольких похожих товаров, то в карточке на сайте будет «переключалка» между ними. Например, футболки разных цветов и размеров. Не используйте слишком простые значения, не указывайте Тип и Бренд. Если вам не нужно объединять товары — заполните это поле уникальным значением (например, укажите уникальный артикул или партномер). Подробнее о заполнении этой характеристики можно узнать в статье "Объединение товаров" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 23171
+  -complex: 0
+  -name: "#Хештеги"
+  -description: "Хештеги работают так же, как в соцсетях: покупатели могут нажать на них в карточке или написать в поиске. Укажите тут тренд, стиль или тематику. Например, для одежды #oldmoney #kpop #бохо, для мебели #скандинавский_стиль #минимализм #лофт. Не добавляйте бренды, параметры или название товара.  Хештег должен начинаться со знака # и содержать только буквы и цифры. Если хештег состоит из 2+ слов, соедините их нижним подчеркиванием. Длина — не более 30 символов. Укажите не больше 30 хештегов, разделяйте пробелом"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 4613
+  -complex: 0
+  -name: "Вид застежки"
+  -description: "Выберите одно или несколько значений из списка, но не больше 3. В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 3
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1465
+}
+^ "--- Идентификатор типа категории: 93253"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 21841
+  -complex: 100001
+  -name: "Озон.Видео: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 сек до 5 минут, размер файла не более 2ГБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 11254
+  -complex: 0
+  -name: "Rich-контент JSON"
+  -description: "Добавьте расширенное описание товара с фото и видео по шаблону в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Rich-контент" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 9692
+  -complex: 0
+  -name: "Размер джинсов"
+  -description: "Выберите из списка.  W - объем талии в дюймах, L - длина по внутреннему шву в дюймах. Можно добавить несколько значений через точку с запятой."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 18172091
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 4309
+  -complex: 0
+  -name: "Материал подкладки"
+  -description: "Выберите одно или несколько значений из списка, но не больше 3. В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 3
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1503
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 23536
+  -complex: 0
+  -name: "Нужен код маркировки"
+  -description: "Выберите «Да», если товар имеет код маркировки (КИЗ). Будем проверять его у каждой отгрузки или поставки. При интеграции через Seller API передавайте параметр как "true" "
+  -type: "Boolean"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 22273
+  -complex: 100001
+  -name: "Озон.Видео: товары на видео"
+  -description: "Укажите товары, которые демонстрируются в вашем видео. Перечислите SKU через запятую (не более 5)."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 9070
+  -complex: 0
+  -name: "Признак 18+"
+  -description: "Признак для товаров, которые содержат эротику, сцены секса, изображения с нецензурными выражениями, даже если они написаны частично или со спец. символами, а также для товаров категории 18+ (только для взрослых)"
+  -type: "Boolean"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 9168
+  -complex: 0
+  -name: "Назначение"
+  -description: "Выберите из списка. Можно указать только одно значение. Значение "Большие размеры" можно указать на размерный ряд от 52 размера."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 2
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1695
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 4604
+  -complex: 0
+  -name: "Состав материала"
+  -description: "Укажите состав материала в формате «% материал, % материал» от большего к меньшему. Информация о процентном содержании материала должна совпадать с пришивным ярлыком. Например: 70% хлопок, 25% полиэстер, 5% эластан."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14496
+  -id: 10097
+  -complex: 0
+  -name: "Название цвета"
+  -description: "Текстовое описание цвета  - заполните, если товар имеет маркетинговое название цвета от поставщика, номер тона или оттенка, например: "№17 Нежная голубая лазурь", "Deep blue""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 4496
+  -complex: 0
+  -name: "Материал"
+  -description: "Выберите из списка или укажите вручную. Указывается основной материал (один или несколько), но не более 4 значений. Если есть подкладка, укажите её материал в атрибуте «Материал подкладки». В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1503
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14704
+  -id: 11650
+  -complex: 0
+  -name: "Количество заводских упаковок"
+  -description: """
+    Сколько заводских упаковок продаёте под этим SKU. Пример: 24 банки детского пюре запаяны в 1 упаковку на заводе и в таком же виде продаются в других магазинах — укажите значение 1. \n
+    Другой пример: завод выпускает лампочки в упаковках по 1 или 10 штук, а вы решили продавать по 3 лампочки и запаяли их в одну упаковку — значение атрибута будет 3
+    """
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 21531
+  -complex: 0
+  -name: "Декоративные элементы"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124411957
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 23079
+  -complex: 0
+  -name: "Модель"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413020
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 4655
+  -complex: 0
+  -name: "Уход за вещами"
+  -description: "Инструкция по уходу за вещью с пришивного ярлыка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 9163
+  -complex: 0
+  -name: "Пол"
+  -description: "Пол потребителя товара: Девочки, Мальчики — для детских товаров; Женский, Мужской — для взрослых товаров. Для потребителей любого пола (унисекс) укажите сочетание 2-4 значений. Например, "Женский;Мужской". Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой"
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 2
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 320
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14704
+  -id: 10400
+  -complex: 0
+  -name: "Гарантия"
+  -description: "Период, в течение которого производитель отвечает за качество товара. А покупатель может оформить заявку на возврат по гарантийному случаю. Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 46700526
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 23171
+  -complex: 0
+  -name: "#Хештеги"
+  -description: "Хештеги работают так же, как в соцсетях: покупатели могут нажать на них в карточке или написать в поиске. Укажите тут тренд, стиль или тематику. Например, для одежды #oldmoney #kpop #бохо, для мебели #скандинавский_стиль #минимализм #лофт. Не добавляйте бренды, параметры или название товара.  Хештег должен начинаться со знака # и содержать только буквы и цифры. Если хештег состоит из 2+ слов, соедините их нижним подчеркиванием. Длина — не более 30 символов. Укажите не больше 30 хештегов, разделяйте пробелом"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 4506
+  -complex: 0
+  -name: "Рост модели на фото"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 780
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 4503
+  -complex: 0
+  -name: "Коллекция"
+  -description: "Серия моделей, приуроченная к конкретному сезону продажи."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 927
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 4295
+  -complex: 0
+  -name: "Российский размер"
+  -description: "Выберите из выпадающего списка российский размер одежды. Если товар подходит для нескольких размеров (например, 42–44), укажите все подходящие размеры через выпадающий список. В XLS-файле такие размеры укажите последовательно через точку с запятой (например: 42;44 или 50;52;54). В карточке товара покажем единый диапазон (например, 42–44 или 50–54)."
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 835
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 31
+  -complex: 0
+  -name: "Бренд в одежде и обуви"
+  -description: "Наименование бренда, под которым произведен товар. Если товар не имеет бренда, используйте значение "Нет бренда"."
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 28732849
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 8789
+  -complex: 8788
+  -name: "Название файла PDF"
+  -description: ""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 4300
+  -complex: 0
+  -name: "Тип упаковки одежды"
+  -description: "Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1238
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 22232
+  -complex: 0
+  -name: "ТН ВЭД коды ЕАЭС"
+  -description: "Выберите одно значение из списка. Если вы не знаете, какой код нужно указать, то вам необходимо обратиться к таможенной службе или таможенному представителю"
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124412395
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 4619
+  -complex: 0
+  -name: "Тип посадки"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1286
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 21837
+  -complex: 100001
+  -name: "Озон.Видео: название"
+  -description: "Укажите название для видео"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 4509
+  -complex: 0
+  -name: "Параметры модели на фото (ОГ-ОТ-ОБ)"
+  -description: "Параметры фотомодели в сантиметрах в формате: обхват груди - обхват талии - обхват бедер, рост. Например, 90-60-90, рост 170. "
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 22390
+  -complex: 0
+  -name: "Объединить в похожие товары"
+  -description: "Введите одинаковое значение в этом атрибуте для объединения товаров в группу "Похожие". Обратите внимание, что товары в группе собираются в рамках одной категории второго уровня в личном кабинете. Если у товаров будет указано одно Название группы, но они находятся в разных категориях — вы получите несколько объединений товаров. Подробнее об объединении в Похожие можно прочитать в статье "Похожие товары" в "Базе знаний""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 4180
+  -complex: 0
+  -name: "Название"
+  -description: "Название пишется по принципу: Тип + Бренд + Модель (серия + пояснение) + Артикул производителя + , (запятая) + Атрибут Название не пишется большими буквами (не используем caps lock). Перед атрибутом ставится запятая. Если атрибутов несколько, они так же разделяются запятыми. Если какой-то составной части названия нет - пропускаем её. Атрибутом может быть: цвет, вес, объём, количество штук в упаковке и т.д. Цвет пишется с маленькой буквы, в мужском роде, единственном числе. Слово цвет в названии не пишем. Точка в конце не ставится. Никаких знаков препинания, кроме запятой, не используем. Кавычки используем только для названий на русском языке. Примеры корректных названий: Смартфон Apple iPhone XS MT572RU/A, space black Кеды Dr. Martens Киноклассика, бело-черные, размер 43 Стиральный порошок Ariel Магия белого с мерной ложкой, 15 кг Соус Heinz Xtreme Tabasco суперострый, 10 мл Игрушка для животных Четыре лапы "Бегающая мышка" БММ, белый"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 9533
+  -complex: 0
+  -name: "Размер производителя"
+  -description: "Можно указать в любом формате. Обратите внимание: данный размер является дополнительным, основной — Российский размер"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 23518
+  -complex: 0
+  -name: "Минимальное количество оптом"
+  -description: "Заполните поле (укажите целое число), чтобы продавать товар оптом покупателям-юрлицам. Подробнее: https://seller-edu.ozon.ru/libra/work-with-goods/additional-materials/prodazha-optom"
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 4613
+  -complex: 0
+  -name: "Вид застежки"
+  -description: "Выберите одно или несколько значений из списка, но не больше 3. В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 3
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1465
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14704
+  -id: 8790
+  -complex: 8788
+  -name: "Документ PDF"
+  -description: ""
+  -type: "URL"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 10096
+  -complex: 0
+  -name: "Цвет товара"
+  -description: "Основной или доминирующий цвет товара. Если точного соответствия нет, используйте ближайшие цвета. Сложные цвета нужно описывать перечислением простых цветов. Например, если в товаре преобладают черный, желтый и белый цвета, то укажите их все простым перечислением. Атрибут "Цвет товара" — это основной цвет. Все остальные цвета можно перечислить в атрибуте "Название цвета", если он доступен в категории"
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1494
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 23249
+  -complex: 0
+  -name: "Количество товара в УЕИ"
+  -description: "УЕИ – унифицированная единица измерения. Необходимо указывать для продажи товаров на территории Республики Беларусь согласно локальному законодательству. Указывается количество ШТУК в одной SKU. Можно указать только целое число."
+  -type: "Decimal"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 4296
+  -complex: 0
+  -name: "Рост"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1866
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 13164
+  -complex: 0
+  -name: "Таблица размеров JSON"
+  -description: "Добавьте таблицу размеров в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Таблица размеров" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 23074
+  -complex: 0
+  -name: "Тип ростовки"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413016
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 21845
+  -complex: 100002
+  -name: "Озон.Видеообложка: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 до 30 секунд, размер файла не более 20МБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 21841
+  -complex: 100001
+  -name: "Озон.Видео: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 сек до 5 минут, размер файла не более 2ГБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 4495
+  -complex: 0
+  -name: "Сезон"
+  -description: "Демисезон — изделия для использования весной/осенью, на любой сезон — изделия, которые можно комфортно использовать в любое время года. Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 703
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14496
+  -id: 8292
+  -complex: 0
+  -name: "Объединить на одной карточке"
+  -description: "Если заполнить это поле одинаково у нескольких похожих товаров, то в карточке на сайте будет «переключалка» между ними. Например, футболки разных цветов и размеров. Не используйте слишком простые значения, не указывайте Тип и Бренд. Если вам не нужно объединять товары — заполните это поле уникальным значением (например, укажите уникальный артикул или партномер). Подробнее о заполнении этой характеристики можно узнать в статье "Объединение товаров" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 4501
+  -complex: 0
+  -name: "Стиль"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 1
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 627
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 4508
+  -complex: 0
+  -name: "Размер на модели"
+  -description: "Выберите из списка размер производителя одежды или обуви на модели, если она присутствует на фотографии товара. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 945
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 23077
+  -complex: 0
+  -name: "Покрой"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413018
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 23078
+  -complex: 0
+  -name: "Особенности модели"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 6
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413019
+}
+^ "--- Идентификатор типа категории: 93080"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 9437
+  -complex: 0
+  -name: "Рисунок"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 5673715
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14317
+  -id: 9168
+  -complex: 0
+  -name: "Назначение"
+  -description: "Выберите из списка. Можно указать только одно значение. Значение "Большие размеры" можно указать на размерный ряд от 52 размера."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 2
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1695
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 10400
+  -complex: 0
+  -name: "Гарантия"
+  -description: "Период, в течение которого производитель отвечает за качество товара. А покупатель может оформить заявку на возврат по гарантийному случаю. Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 46700526
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14704
+  -id: 4509
+  -complex: 0
+  -name: "Параметры модели на фото (ОГ-ОТ-ОБ)"
+  -description: "Параметры фотомодели в сантиметрах в формате: обхват груди - обхват талии - обхват бедер, рост. Например, 90-60-90, рост 170. "
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 22232
+  -complex: 0
+  -name: "ТН ВЭД коды ЕАЭС"
+  -description: "Выберите одно значение из списка. Если вы не знаете, какой код нужно указать, то вам необходимо обратиться к таможенной службе или таможенному представителю"
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124412395
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 11650
+  -complex: 0
+  -name: "Количество заводских упаковок"
+  -description: """
+    Сколько заводских упаковок продаёте под этим SKU. Пример: 24 банки детского пюре запаяны в 1 упаковку на заводе и в таком же виде продаются в других магазинах — укажите значение 1. \n
+    Другой пример: завод выпускает лампочки в упаковках по 1 или 10 штук, а вы решили продавать по 3 лампочки и запаяли их в одну упаковку — значение атрибута будет 3
+    """
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 21841
+  -complex: 100001
+  -name: "Озон.Видео: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 сек до 5 минут, размер файла не более 2ГБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 23518
+  -complex: 0
+  -name: "Минимальное количество оптом"
+  -description: "Заполните поле (укажите целое число), чтобы продавать товар оптом покупателям-юрлицам. Подробнее: https://seller-edu.ozon.ru/libra/work-with-goods/additional-materials/prodazha-optom"
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 9437
+  -complex: 0
+  -name: "Рисунок"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 5673715
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 11071
+  -complex: 0
+  -name: "Вырез горловины"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 59221744
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 10097
+  -complex: 0
+  -name: "Название цвета"
+  -description: "Текстовое описание цвета  - заполните, если товар имеет маркетинговое название цвета от поставщика, номер тона или оттенка, например: "№17 Нежная голубая лазурь", "Deep blue""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 22273
+  -complex: 100001
+  -name: "Озон.Видео: товары на видео"
+  -description: "Укажите товары, которые демонстрируются в вашем видео. Перечислите SKU через запятую (не более 5)."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 21845
+  -complex: 100002
+  -name: "Озон.Видеообложка: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 до 30 секунд, размер файла не более 20МБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 23074
+  -complex: 0
+  -name: "Тип ростовки"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413016
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 4180
+  -complex: 0
+  -name: "Название"
+  -description: "Название пишется по принципу: Тип + Бренд + Модель (серия + пояснение) + Артикул производителя + , (запятая) + Атрибут Название не пишется большими буквами (не используем caps lock). Перед атрибутом ставится запятая. Если атрибутов несколько, они так же разделяются запятыми. Если какой-то составной части названия нет - пропускаем её. Атрибутом может быть: цвет, вес, объём, количество штук в упаковке и т.д. Цвет пишется с маленькой буквы, в мужском роде, единственном числе. Слово цвет в названии не пишем. Точка в конце не ставится. Никаких знаков препинания, кроме запятой, не используем. Кавычки используем только для названий на русском языке. Примеры корректных названий: Смартфон Apple iPhone XS MT572RU/A, space black Кеды Dr. Martens Киноклассика, бело-черные, размер 43 Стиральный порошок Ariel Магия белого с мерной ложкой, 15 кг Соус Heinz Xtreme Tabasco суперострый, 10 мл Игрушка для животных Четыре лапы "Бегающая мышка" БММ, белый"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 9533
+  -complex: 0
+  -name: "Размер производителя"
+  -description: "Можно указать в любом формате. Обратите внимание: данный размер является дополнительным, основной — Российский размер"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 10096
+  -complex: 0
+  -name: "Цвет товара"
+  -description: "Основной или доминирующий цвет товара. Если точного соответствия нет, используйте ближайшие цвета. Сложные цвета нужно описывать перечислением простых цветов. Например, если в товаре преобладают черный, желтый и белый цвета, то укажите их все простым перечислением. Атрибут "Цвет товара" — это основной цвет. Все остальные цвета можно перечислить в атрибуте "Название цвета", если он доступен в категории"
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1494
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 9163
+  -complex: 0
+  -name: "Пол"
+  -description: "Пол потребителя товара: Девочки, Мальчики — для детских товаров; Женский, Мужской — для взрослых товаров. Для потребителей любого пола (унисекс) укажите сочетание 2-4 значений. Например, "Женский;Мужской". Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой"
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 2
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 320
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14317
+  -id: 23536
+  -complex: 0
+  -name: "Нужен код маркировки"
+  -description: "Выберите «Да», если товар имеет код маркировки (КИЗ). Будем проверять его у каждой отгрузки или поставки. При интеграции через Seller API передавайте параметр как "true" "
+  -type: "Boolean"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 4655
+  -complex: 0
+  -name: "Уход за вещами"
+  -description: "Инструкция по уходу за вещью с пришивного ярлыка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14704
+  -id: 23077
+  -complex: 0
+  -name: "Покрой"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413018
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 4296
+  -complex: 0
+  -name: "Рост"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1866
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 22390
+  -complex: 0
+  -name: "Объединить в похожие товары"
+  -description: "Введите одинаковое значение в этом атрибуте для объединения товаров в группу "Похожие". Обратите внимание, что товары в группе собираются в рамках одной категории второго уровня в личном кабинете. Если у товаров будет указано одно Название группы, но они находятся в разных категориях — вы получите несколько объединений товаров. Подробнее об объединении в Похожие можно прочитать в статье "Похожие товары" в "Базе знаний""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 23079
+  -complex: 0
+  -name: "Модель"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413020
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 4295
+  -complex: 0
+  -name: "Российский размер"
+  -description: "Выберите из выпадающего списка российский размер одежды. Если товар подходит для нескольких размеров (например, 42–44), укажите все подходящие размеры через выпадающий список. В XLS-файле такие размеры укажите последовательно через точку с запятой (например: 42;44 или 50;52;54). В карточке товара покажем единый диапазон (например, 42–44 или 50–54)."
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 835
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 4503
+  -complex: 0
+  -name: "Коллекция"
+  -description: "Серия моделей, приуроченная к конкретному сезону продажи."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 927
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 4496
+  -complex: 0
+  -name: "Материал"
+  -description: "Выберите из списка или укажите вручную. Указывается основной материал (один или несколько), но не более 4 значений. Если есть подкладка, укажите её материал в атрибуте «Материал подкладки». В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1503
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 8789
+  -complex: 8788
+  -name: "Название файла PDF"
+  -description: ""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 23171
+  -complex: 0
+  -name: "#Хештеги"
+  -description: "Хештеги работают так же, как в соцсетях: покупатели могут нажать на них в карточке или написать в поиске. Укажите тут тренд, стиль или тематику. Например, для одежды #oldmoney #kpop #бохо, для мебели #скандинавский_стиль #минимализм #лофт. Не добавляйте бренды, параметры или название товара.  Хештег должен начинаться со знака # и содержать только буквы и цифры. Если хештег состоит из 2+ слов, соедините их нижним подчеркиванием. Длина — не более 30 символов. Укажите не больше 30 хештегов, разделяйте пробелом"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 8292
+  -complex: 0
+  -name: "Объединить на одной карточке"
+  -description: "Если заполнить это поле одинаково у нескольких похожих товаров, то в карточке на сайте будет «переключалка» между ними. Например, футболки разных цветов и размеров. Не используйте слишком простые значения, не указывайте Тип и Бренд. Если вам не нужно объединять товары — заполните это поле уникальным значением (например, укажите уникальный артикул или партномер). Подробнее о заполнении этой характеристики можно узнать в статье "Объединение товаров" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 23249
+  -complex: 0
+  -name: "Количество товара в УЕИ"
+  -description: "УЕИ – унифицированная единица измерения. Необходимо указывать для продажи товаров на территории Республики Беларусь согласно локальному законодательству. Указывается количество ШТУК в одной SKU. Можно указать только целое число."
+  -type: "Decimal"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 8790
+  -complex: 8788
+  -name: "Документ PDF"
+  -description: ""
+  -type: "URL"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 4495
+  -complex: 0
+  -name: "Сезон"
+  -description: "Демисезон — изделия для использования весной/осенью, на любой сезон — изделия, которые можно комфортно использовать в любое время года. Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 703
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 4300
+  -complex: 0
+  -name: "Тип упаковки одежды"
+  -description: "Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1238
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 9070
+  -complex: 0
+  -name: "Признак 18+"
+  -description: "Признак для товаров, которые содержат эротику, сцены секса, изображения с нецензурными выражениями, даже если они написаны частично или со спец. символами, а также для товаров категории 18+ (только для взрослых)"
+  -type: "Boolean"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 4604
+  -complex: 0
+  -name: "Состав материала"
+  -description: "Укажите состав материала в формате «% материал, % материал» от большего к меньшему. Информация о процентном содержании материала должна совпадать с пришивным ярлыком. Например: 70% хлопок, 25% полиэстер, 5% эластан."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 21531
+  -complex: 0
+  -name: "Декоративные элементы"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124411957
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14317
+  -id: 13164
+  -complex: 0
+  -name: "Таблица размеров JSON"
+  -description: "Добавьте таблицу размеров в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Таблица размеров" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 9661
+  -complex: 0
+  -name: "Количество в упаковке"
+  -description: "Если товар — набор из нескольких предметов, укажите количество предметов. Можно указать только целое число."
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 4596
+  -complex: 0
+  -name: "Тип рукава"
+  -description: "Выберите из списка. Короткий – не доходит до локтя; 3/4 – закрывает локоть, но не доходит до запястья; Длинный – закрывает запястье. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1817
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 4508
+  -complex: 0
+  -name: "Размер на модели"
+  -description: "Выберите из списка размер производителя одежды или обуви на модели, если она присутствует на фотографии товара. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 945
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14704
+  -id: 4501
+  -complex: 0
+  -name: "Стиль"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 1
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 627
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 4506
+  -complex: 0
+  -name: "Рост модели на фото"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 780
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 11254
+  -complex: 0
+  -name: "Rich-контент JSON"
+  -description: "Добавьте расширенное описание товара с фото и видео по шаблону в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Rich-контент" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 21837
+  -complex: 100001
+  -name: "Озон.Видео: название"
+  -description: "Укажите название для видео"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 4309
+  -complex: 0
+  -name: "Материал подкладки"
+  -description: "Выберите одно или несколько значений из списка, но не больше 3. В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 3
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1503
+}
+^ "--- Идентификатор типа категории: 93148"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 23078
+  -complex: 0
+  -name: "Особенности модели"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 6
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413019
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14373
+  -id: 4296
+  -complex: 0
+  -name: "Рост"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1866
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 4508
+  -complex: 0
+  -name: "Размер на модели"
+  -description: "Выберите из списка размер производителя одежды или обуви на модели, если она присутствует на фотографии товара. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 945
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 23249
+  -complex: 0
+  -name: "Количество товара в УЕИ"
+  -description: "УЕИ – унифицированная единица измерения. Необходимо указывать для продажи товаров на территории Республики Беларусь согласно локальному законодательству. Указывается количество ШТУК в одной SKU. Можно указать только целое число."
+  -type: "Decimal"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 4300
+  -complex: 0
+  -name: "Тип упаковки одежды"
+  -description: "Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1238
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 8292
+  -complex: 0
+  -name: "Объединить на одной карточке"
+  -description: "Если заполнить это поле одинаково у нескольких похожих товаров, то в карточке на сайте будет «переключалка» между ними. Например, футболки разных цветов и размеров. Не используйте слишком простые значения, не указывайте Тип и Бренд. Если вам не нужно объединять товары — заполните это поле уникальным значением (например, укажите уникальный артикул или партномер). Подробнее о заполнении этой характеристики можно узнать в статье "Объединение товаров" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 4295
+  -complex: 0
+  -name: "Российский размер"
+  -description: "Выберите из выпадающего списка российский размер одежды. Если товар подходит для нескольких размеров (например, 42–44), укажите все подходящие размеры через выпадающий список. В XLS-файле такие размеры укажите последовательно через точку с запятой (например: 42;44 или 50;52;54). В карточке товара покажем единый диапазон (например, 42–44 или 50–54)."
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 835
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 4613
+  -complex: 0
+  -name: "Вид застежки"
+  -description: "Выберите одно или несколько значений из списка, но не больше 3. В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 3
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1465
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14317
+  -id: 9163
+  -complex: 0
+  -name: "Пол"
+  -description: "Пол потребителя товара: Девочки, Мальчики — для детских товаров; Женский, Мужской — для взрослых товаров. Для потребителей любого пола (унисекс) укажите сочетание 2-4 значений. Например, "Женский;Мужской". Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой"
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 320
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 8790
+  -complex: 8788
+  -name: "Документ PDF"
+  -description: ""
+  -type: "URL"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 10096
+  -complex: 0
+  -name: "Цвет товара"
+  -description: "Основной или доминирующий цвет товара. Если точного соответствия нет, используйте ближайшие цвета. Сложные цвета нужно описывать перечислением простых цветов. Например, если в товаре преобладают черный, желтый и белый цвета, то укажите их все простым перечислением. Атрибут "Цвет товара" — это основной цвет. Все остальные цвета можно перечислить в атрибуте "Название цвета", если он доступен в категории"
+  -type: "String"
+  -collection: true
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1494
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 10097
+  -complex: 0
+  -name: "Название цвета"
+  -description: "Текстовое описание цвета  - заполните, если товар имеет маркетинговое название цвета от поставщика, номер тона или оттенка, например: "№17 Нежная голубая лазурь", "Deep blue""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 9437
+  -complex: 0
+  -name: "Рисунок"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 5673715
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 23518
+  -complex: 0
+  -name: "Минимальное количество оптом"
+  -description: "Заполните поле (укажите целое число), чтобы продавать товар оптом покупателям-юрлицам. Подробнее: https://seller-edu.ozon.ru/libra/work-with-goods/additional-materials/prodazha-optom"
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 8789
+  -complex: 8788
+  -name: "Название файла PDF"
+  -description: ""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 11071
+  -complex: 0
+  -name: "Вырез горловины"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 59221744
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 4506
+  -complex: 0
+  -name: "Рост модели на фото"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 780
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 4503
+  -complex: 0
+  -name: "Коллекция"
+  -description: "Серия моделей, приуроченная к конкретному сезону продажи."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 927
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 31
+  -complex: 0
+  -name: "Бренд в одежде и обуви"
+  -description: "Наименование бренда, под которым произведен товар. Если товар не имеет бренда, используйте значение "Нет бренда"."
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 28732849
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 22273
+  -complex: 100001
+  -name: "Озон.Видео: товары на видео"
+  -description: "Укажите товары, которые демонстрируются в вашем видео. Перечислите SKU через запятую (не более 5)."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 21841
+  -complex: 100001
+  -name: "Озон.Видео: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 сек до 5 минут, размер файла не более 2ГБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 4309
+  -complex: 0
+  -name: "Материал подкладки"
+  -description: "Выберите одно или несколько значений из списка, но не больше 3. В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 3
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1503
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 4604
+  -complex: 0
+  -name: "Состав материала"
+  -description: "Укажите состав материала в формате «% материал, % материал» от большего к меньшему. Информация о процентном содержании материала должна совпадать с пришивным ярлыком. Например: 70% хлопок, 25% полиэстер, 5% эластан."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14317
+  -id: 11650
+  -complex: 0
+  -name: "Количество заводских упаковок"
+  -description: """
+    Сколько заводских упаковок продаёте под этим SKU. Пример: 24 банки детского пюре запаяны в 1 упаковку на заводе и в таком же виде продаются в других магазинах — укажите значение 1. \n
+    Другой пример: завод выпускает лампочки в упаковках по 1 или 10 штук, а вы решили продавать по 3 лампочки и запаяли их в одну упаковку — значение атрибута будет 3
+    """
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 23077
+  -complex: 0
+  -name: "Покрой"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413018
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 23171
+  -complex: 0
+  -name: "#Хештеги"
+  -description: "Хештеги работают так же, как в соцсетях: покупатели могут нажать на них в карточке или написать в поиске. Укажите тут тренд, стиль или тематику. Например, для одежды #oldmoney #kpop #бохо, для мебели #скандинавский_стиль #минимализм #лофт. Не добавляйте бренды, параметры или название товара.  Хештег должен начинаться со знака # и содержать только буквы и цифры. Если хештег состоит из 2+ слов, соедините их нижним подчеркиванием. Длина — не более 30 символов. Укажите не больше 30 хештегов, разделяйте пробелом"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 23074
+  -complex: 0
+  -name: "Тип ростовки"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413016
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 22270
+  -complex: 0
+  -name: "Вид выпуска товара"
+  -description: "Если вы выбираете "Ручная работа", то это означает, что товар является частью интеллектуальной собственности и изготовлен без использования специализированного оборудования. Если вы выбираете "По индивидуальному дизайну", то это означает, что товар изготавливается только после сделанного покупателем заказа с предоставления личных запросов, например, фото или текста для гравировки."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124412424
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 21531
+  -complex: 0
+  -name: "Декоративные элементы"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124411957
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 21845
+  -complex: 100002
+  -name: "Озон.Видеообложка: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 до 30 секунд, размер файла не более 20МБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 4496
+  -complex: 0
+  -name: "Материал"
+  -description: "Выберите из списка или укажите вручную. Указывается основной материал (один или несколько), но не более 4 значений. Если есть подкладка, укажите её материал в атрибуте «Материал подкладки». В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 4
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1503
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 11254
+  -complex: 0
+  -name: "Rich-контент JSON"
+  -description: "Добавьте расширенное описание товара с фото и видео по шаблону в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Rich-контент" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 13164
+  -complex: 0
+  -name: "Таблица размеров JSON"
+  -description: "Добавьте таблицу размеров в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Таблица размеров" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14373
+  -id: 9533
+  -complex: 0
+  -name: "Размер производителя"
+  -description: "Можно указать в любом формате. Обратите внимание: данный размер является дополнительным, основной — Российский размер"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 22232
+  -complex: 0
+  -name: "ТН ВЭД коды ЕАЭС"
+  -description: "Выберите одно значение из списка. Если вы не знаете, какой код нужно указать, то вам необходимо обратиться к таможенной службе или таможенному представителю"
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124412395
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14711
+  -id: 10400
+  -complex: 0
+  -name: "Гарантия"
+  -description: "Период, в течение которого производитель отвечает за качество товара. А покупатель может оформить заявку на возврат по гарантийному случаю. Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 46700526
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 4596
+  -complex: 0
+  -name: "Тип рукава"
+  -description: "Выберите из списка. Короткий – не доходит до локтя; 3/4 – закрывает локоть, но не доходит до запястья; Длинный – закрывает запястье. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1817
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 4501
+  -complex: 0
+  -name: "Стиль"
+  -description: "Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 1
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 627
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 4180
+  -complex: 0
+  -name: "Название"
+  -description: "Название пишется по принципу: Тип + Бренд + Модель (серия + пояснение) + Артикул производителя + , (запятая) + Атрибут Название не пишется большими буквами (не используем caps lock). Перед атрибутом ставится запятая. Если атрибутов несколько, они так же разделяются запятыми. Если какой-то составной части названия нет - пропускаем её. Атрибутом может быть: цвет, вес, объём, количество штук в упаковке и т.д. Цвет пишется с маленькой буквы, в мужском роде, единственном числе. Слово цвет в названии не пишем. Точка в конце не ставится. Никаких знаков препинания, кроме запятой, не используем. Кавычки используем только для названий на русском языке. Примеры корректных названий: Смартфон Apple iPhone XS MT572RU/A, space black Кеды Dr. Martens Киноклассика, бело-черные, размер 43 Стиральный порошок Ariel Магия белого с мерной ложкой, 15 кг Соус Heinz Xtreme Tabasco суперострый, 10 мл Игрушка для животных Четыре лапы "Бегающая мышка" БММ, белый"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 23078
+  -complex: 0
+  -name: "Особенности модели"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 6
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124413019
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 23536
+  -complex: 0
+  -name: "Нужен код маркировки"
+  -description: "Выберите «Да», если товар имеет код маркировки (КИЗ). Будем проверять его у каждой отгрузки или поставки. При интеграции через Seller API передавайте параметр как "true" "
+  -type: "Boolean"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14317
+  -id: 4495
+  -complex: 0
+  -name: "Сезон"
+  -description: "Демисезон — изделия для использования весной/осенью, на любой сезон — изделия, которые можно комфортно использовать в любое время года. Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 703
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 21837
+  -complex: 100001
+  -name: "Озон.Видео: название"
+  -description: "Укажите название для видео"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14319
+  -id: 9070
+  -complex: 0
+  -name: "Признак 18+"
+  -description: "Признак для товаров, которые содержат эротику, сцены секса, изображения с нецензурными выражениями, даже если они написаны частично или со спец. символами, а также для товаров категории 18+ (только для взрослых)"
+  -type: "Boolean"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 9168
+  -complex: 0
+  -name: "Назначение"
+  -description: "Выберите из списка. Можно указать только одно значение. Значение "Большие размеры" можно указать на размерный ряд от 52 размера."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 2
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1695
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 4655
+  -complex: 0
+  -name: "Уход за вещами"
+  -description: "Инструкция по уходу за вещью с пришивного ярлыка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15114
+  -id: 22390
+  -complex: 0
+  -name: "Объединить в похожие товары"
+  -description: "Введите одинаковое значение в этом атрибуте для объединения товаров в группу "Похожие". Обратите внимание, что товары в группе собираются в рамках одной категории второго уровня в личном кабинете. Если у товаров будет указано одно Название группы, но они находятся в разных категориях — вы получите несколько объединений товаров. Подробнее об объединении в Похожие можно прочитать в статье "Похожие товары" в "Базе знаний""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93216"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 4509
+  -complex: 0
+  -name: "Параметры модели на фото (ОГ-ОТ-ОБ)"
+  -description: "Параметры фотомодели в сантиметрах в формате: обхват груди - обхват талии - обхват бедер, рост. Например, 90-60-90, рост 170. "
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 21845
+  -complex: 100002
+  -name: "Озон.Видеообложка: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 до 30 секунд, размер файла не более 20МБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 21837
+  -complex: 100001
+  -name: "Озон.Видео: название"
+  -description: "Укажите название для видео"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 8790
+  -complex: 8788
+  -name: "Документ PDF"
+  -description: ""
+  -type: "URL"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 23171
+  -complex: 0
+  -name: "#Хештеги"
+  -description: "Хештеги работают так же, как в соцсетях: покупатели могут нажать на них в карточке или написать в поиске. Укажите тут тренд, стиль или тематику. Например, для одежды #oldmoney #kpop #бохо, для мебели #скандинавский_стиль #минимализм #лофт. Не добавляйте бренды, параметры или название товара.  Хештег должен начинаться со знака # и содержать только буквы и цифры. Если хештег состоит из 2+ слов, соедините их нижним подчеркиванием. Длина — не более 30 символов. Укажите не больше 30 хештегов, разделяйте пробелом"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#15998
+  -id: 4503
+  -complex: 0
+  -name: "Коллекция"
+  -description: "Серия моделей, приуроченная к конкретному сезону продажи."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 927
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 8789
+  -complex: 8788
+  -name: "Название файла PDF"
+  -description: ""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 11650
+  -complex: 0
+  -name: "Количество заводских упаковок"
+  -description: """
+    Сколько заводских упаковок продаёте под этим SKU. Пример: 24 банки детского пюре запаяны в 1 упаковку на заводе и в таком же виде продаются в других магазинах — укажите значение 1. \n
+    Другой пример: завод выпускает лампочки в упаковках по 1 или 10 штук, а вы решили продавать по 3 лампочки и запаяли их в одну упаковку — значение атрибута будет 3
+    """
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14317
+  -id: 22232
+  -complex: 0
+  -name: "ТН ВЭД коды ЕАЭС"
+  -description: "Выберите одно значение из списка. Если вы не знаете, какой код нужно указать, то вам необходимо обратиться к таможенной службе или таможенному представителю"
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124412395
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14305
+  -id: 22273
+  -complex: 100001
+  -name: "Озон.Видео: товары на видео"
+  -description: "Укажите товары, которые демонстрируются в вашем видео. Перечислите SKU через запятую (не более 5)."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14455
+  -id: 4495
+  -complex: 0
+  -name: "Сезон"
+  -description: "Демисезон — изделия для использования весной/осенью, на любой сезон — изделия, которые можно комфортно использовать в любое время года. Выберите из списка. Можно указать только одно значение."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 703
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14305
+  -id: 22390
+  -complex: 0
+  -name: "Объединить в похожие товары"
+  -description: "Введите одинаковое значение в этом атрибуте для объединения товаров в группу "Похожие". Обратите внимание, что товары в группе собираются в рамках одной категории второго уровня в личном кабинете. Если у товаров будет указано одно Название группы, но они находятся в разных категориях — вы получите несколько объединений товаров. Подробнее об объединении в Похожие можно прочитать в статье "Похожие товары" в "Базе знаний""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 4180
+  -complex: 0
+  -name: "Название"
+  -description: "Название пишется по принципу: Тип + Бренд + Модель (серия + пояснение) + Артикул производителя + , (запятая) + Атрибут Название не пишется большими буквами (не используем caps lock). Перед атрибутом ставится запятая. Если атрибутов несколько, они так же разделяются запятыми. Если какой-то составной части названия нет - пропускаем её. Атрибутом может быть: цвет, вес, объём, количество штук в упаковке и т.д. Цвет пишется с маленькой буквы, в мужском роде, единственном числе. Слово цвет в названии не пишем. Точка в конце не ставится. Никаких знаков препинания, кроме запятой, не используем. Кавычки используем только для названий на русском языке. Примеры корректных названий: Смартфон Apple iPhone XS MT572RU/A, space black Кеды Dr. Martens Киноклассика, бело-черные, размер 43 Стиральный порошок Ariel Магия белого с мерной ложкой, 15 кг Соус Heinz Xtreme Tabasco суперострый, 10 мл Игрушка для животных Четыре лапы "Бегающая мышка" БММ, белый"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14139
+  -id: 11254
+  -complex: 0
+  -name: "Rich-контент JSON"
+  -description: "Добавьте расширенное описание товара с фото и видео по шаблону в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Rich-контент" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 23536
+  -complex: 0
+  -name: "Нужен код маркировки"
+  -description: "Выберите «Да», если товар имеет код маркировки (КИЗ). Будем проверять его у каждой отгрузки или поставки. При интеграции через Seller API передавайте параметр как "true" "
+  -type: "Boolean"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14317
+  -id: 23518
+  -complex: 0
+  -name: "Минимальное количество оптом"
+  -description: "Заполните поле (укажите целое число), чтобы продавать товар оптом покупателям-юрлицам. Подробнее: https://seller-edu.ozon.ru/libra/work-with-goods/additional-materials/prodazha-optom"
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 23249
+  -complex: 0
+  -name: "Количество товара в УЕИ"
+  -description: "УЕИ – унифицированная единица измерения. Необходимо указывать для продажи товаров на территории Республики Беларусь согласно локальному законодательству. Указывается количество ШТУК в одной SKU. Можно указать только целое число."
+  -type: "Decimal"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 93244"
+^ "Идентификатор категории 200000933 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 21841
+  -complex: 100001
+  -name: "Озон.Видео: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 сек до 5 минут, размер файла не более 2ГБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14374
+  -id: 10097
+  -complex: 0
+  -name: "Название цвета"
+  -description: "Текстовое описание цвета  - заполните, если товар имеет маркетинговое название цвета от поставщика, номер тона или оттенка, например: "№17 Нежная голубая лазурь", "Deep blue""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 1
+  -groupName: "Общие"
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14448
+  -id: 10096
+  -complex: 0
+  -name: "Цвет товара"
+  -description: "Основной или доминирующий цвет товара. Если точного соответствия нет, используйте ближайшие цвета. Сложные цвета нужно описывать перечислением простых цветов. Например, если в товаре преобладают черный, желтый и белый цвета, то укажите их все простым перечислением. Атрибут "Цвет товара" — это основной цвет. Все остальные цвета можно перечислить в атрибуте "Название цвета", если он доступен в категории"
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 0
+  -groupId: 1
+  -groupName: "Общие"
+  -dictionary: 1494
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14456
+  -id: 9390
+  -complex: 0
+  -name: "Целевая аудитория"
+  -description: "Можно указать только одно значение из списка. Детская аудитория предполагает, что товар предназначен для детского пользования, для детей от 3-х лет."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 1
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1183
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 6392
+  -complex: 0
+  -name: "Объем, мл"
+  -description: "Можно указать только целое число или десятичную дробь. Разделитель — точка."
+  -type: "Decimal"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14457
+  -id: 11650
+  -complex: 0
+  -name: "Количество заводских упаковок"
+  -description: """
+    Сколько заводских упаковок продаёте под этим SKU. Пример: 24 банки детского пюре запаяны в 1 упаковку на заводе и в таком же виде продаются в других магазинах — укажите значение 1. \n
+    Другой пример: завод выпускает лампочки в упаковках по 1 или 10 штук, а вы решили продавать по 3 лампочки и запаяли их в одну упаковку — значение атрибута будет 3
+    """
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 9048
+  -complex: 0
+  -name: "Название модели (для объединения в одну карточку)"
+  -description: "Заполните данное поле любым одинаковым значением на товарах, которые хотите объединить. И по разному, если товары нужно разъединить. Объединение произойдет при условии, что товары имеют одинаковый Тип и Бренд, и хотя бы одна вариативная характеристика заполнена по разному на всех товарах в объединении"
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14409
+  -id: 4383
+  -complex: 0
+  -name: "Вес товара, г"
+  -description: "Вес за единицу товара без упаковки. При продаже нескольких товаров/набора под одной SKU указывается вес одного товара из набора. Можно указать только целое число или десятичную дробь. Разделитель — точка."
+  -type: "Decimal"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14456
+  -id: 9070
+  -complex: 0
+  -name: "Признак 18+"
+  -description: "Признак для товаров, которые содержат эротику, сцены секса, изображения с нецензурными выражениями, даже если они написаны частично или со спец. символами, а также для товаров категории 18+ (только для взрослых)"
+  -type: "Boolean"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 8448
+  -complex: 0
+  -name: "Праздник"
+  -description: "Автоматически укажем значение  "Универсальный", если оставите это поле пустым. Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 3
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 347
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14621
+  -id: 11619
+  -complex: 0
+  -name: "Название принта"
+  -description: "Краткое название принта, если оно есть. Добавлять кавычки к тексту или указывать название типа в этой характеристике не нужно. "
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 8789
+  -complex: 8788
+  -name: "Название файла PDF"
+  -description: ""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14396
+  -id: 4382
+  -complex: 0
+  -name: "Размеры, мм"
+  -description: "Размеры сторон товара без упаковки в миллиметрах. Формат заполнения: ДхШхВ, где Д - длина, Ш - ширина, В - высота. Без единиц измерения. Пример: 70х60х15."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 6953
+  -complex: 0
+  -name: "Особенности посуды"
+  -description: "Выберите из списка или укажите вручную. Можно добавить несколько значений через точку с запятой. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";"."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1224
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14454
+  -id: 8449
+  -complex: 0
+  -name: "Для кого"
+  -description: "Выберите одно или несколько значений из списка, но не больше 5. В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 5
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 449
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 23518
+  -complex: 0
+  -name: "Минимальное количество оптом"
+  -description: "Заполните поле (укажите целое число), чтобы продавать товар оптом покупателям-юрлицам. Подробнее: https://seller-edu.ozon.ru/libra/work-with-goods/additional-materials/prodazha-optom"
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14496
+  -id: 21837
+  -complex: 100001
+  -name: "Озон.Видео: название"
+  -description: "Укажите название для видео"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14318
+  -id: 22232
+  -complex: 0
+  -name: "ТН ВЭД коды ЕАЭС"
+  -description: "Выберите одно значение из списка. Если вы не знаете, какой код нужно указать, то вам необходимо обратиться к таможенной службе или таможенному представителю"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124412395
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14374
+  -id: 11254
+  -complex: 0
+  -name: "Rich-контент JSON"
+  -description: "Добавьте расширенное описание товара с фото и видео по шаблону в формате JSON. Подробнее о заполнении этой характеристики можно узнать в статье "Rich-контент" в "Базе знаний"."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 23536
+  -complex: 0
+  -name: "Нужен код маркировки"
+  -description: "Выберите «Да», если товар имеет код маркировки (КИЗ). Будем проверять его у каждой отгрузки или поставки. При интеграции через Seller API передавайте параметр как "true" "
+  -type: "Boolean"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14457
+  -id: 22270
+  -complex: 0
+  -name: "Вид выпуска товара"
+  -description: "Автоматически укажем значение \u{A0}"Фабричное производство", если оставите это поле пустым. Выбирая "ручная работа" вы подтверждаете, что товар является частью интеллектуальной собственности и произведен человеком без использования специализированного оборудования. "По индивидуальному дизайну" - указывается, если товар изготавливается только после сделанного покупателем заказа с предоставления личных запросов, например, фото, текст для гравировки и т.п."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 124412424
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14714
+  -id: 21845
+  -complex: 100002
+  -name: "Озон.Видеообложка: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 до 30 секунд, размер файла не более 20МБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14719
+  -id: 4384
+  -complex: 0
+  -name: "Комплектация"
+  -description: "Перечислите, что входит в комплект вместе с товаром: инструкция, чехол, комплект проводов и т.п. Не дублируйте сюда значения других характеристик (аннотацию, тип или количество в упаковке). Если вы поставляете товар без дополнительной комплектации, не заполняйте эту характеристику. "
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14712
+  -id: 21841
+  -complex: 100001
+  -name: "Озон.Видео: ссылка"
+  -description: "Укажите ссылку на видео (MP4, MOV). Продолжительность от 8 сек до 5 минут, размер файла не более 2ГБ"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14442
+  -id: 6949
+  -complex: 0
+  -name: "Количество предметов"
+  -description: "Можно указать только целое число."
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14409
+  -id: 7578
+  -complex: 0
+  -name: "Срок годности в днях"
+  -description: "Срок годности, установленный производителем. Согласно оферте, общий срок годности поставляемого товара на склад FBO не должен быть менее 120 дней, в связи с чем товары могут быть не приняты при поставках по FBO. Правила по срокам годности для фулфилмент-центров Ozon и дарксторов Ozon fresh могут различаться. С регламентами по продаже со склада Ozon можно ознакомиться в "Базе знаний"."
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14364
+  -id: 23249
+  -complex: 0
+  -name: "Количество товара в УЕИ"
+  -description: "УЕИ – унифицированная единица измерения. Необходимо указывать для продажи товаров на территории Республики Беларусь согласно локальному законодательству. Указывается количество ШТУК в одной SKU. Можно указать только целое число."
+  -type: "Decimal"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14396
+  -id: 6383
+  -complex: 0
+  -name: "Материал"
+  -description: "Основной материал изделия. Выберите из списка одно или несколько значений. В XLS-шаблоне перечислите через точку с запятой без пробелов. Если точка с запятой есть в значении атрибута, поместите знак в кавычки ";""
+  -type: "String"
+  -collection: true
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 1503
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14352
+  -id: 8790
+  -complex: 8788
+  -name: "Документ PDF"
+  -description: ""
+  -type: "URL"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14621
+  -id: 10400
+  -complex: 0
+  -name: "Гарантия"
+  -description: "Период, в течение которого производитель отвечает за качество товара. А покупатель может оформить заявку на возврат по гарантийному случаю. Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 46700526
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14706
+  -id: 23171
+  -complex: 0
+  -name: "#Хештеги"
+  -description: "Хештеги работают так же, как в соцсетях: покупатели могут нажать на них в карточке или написать в поиске. Укажите тут тренд, стиль или тематику. Например, для одежды #oldmoney #kpop #бохо, для мебели #скандинавский_стиль #минимализм #лофт. Не добавляйте бренды, параметры или название товара.  Хештег должен начинаться со знака # и содержать только буквы и цифры. Если хештег состоит из 2+ слов, соедините их нижним подчеркиванием. Длина — не более 30 символов. Укажите не больше 30 хештегов, разделяйте пробелом"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14496
+  -id: 22390
+  -complex: 0
+  -name: "Объединить в похожие товары"
+  -description: "Введите одинаковое значение в этом атрибуте для объединения товаров в группу "Похожие". Обратите внимание, что товары в группе собираются в рамках одной категории второго уровня в личном кабинете. Если у товаров будет указано одно Название группы, но они находятся в разных категориях — вы получите несколько объединений товаров. Подробнее об объединении в Похожие можно прочитать в статье "Похожие товары" в "Базе знаний""
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14710
+  -id: 22273
+  -complex: 100001
+  -name: "Озон.Видео: товары на видео"
+  -description: "Укажите товары, которые демонстрируются в вашем видео. Перечислите SKU через запятую (не более 5)."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14374
+  -id: 4180
+  -complex: 0
+  -name: "Название"
+  -description: "Название пишется по принципу: Тип + Бренд + Модель (серия + пояснение) + Артикул производителя + , (запятая) + Атрибут Название не пишется большими буквами (не используем caps lock). Перед атрибутом ставится запятая. Если атрибутов несколько, они так же разделяются запятыми. Если какой-то составной части названия нет - пропускаем её. Атрибутом может быть: цвет, вес, объём, количество штук в упаковке и т.д. Цвет пишется с маленькой буквы, в мужском роде, единственном числе. Слово цвет в названии не пишем. Точка в конце не ставится. Никаких знаков препинания, кроме запятой, не используем. Кавычки используем только для названий на русском языке. Примеры корректных названий: Смартфон Apple iPhone XS MT572RU/A, space black Кеды Dr. Martens Киноклассика, бело-черные, размер 43 Стиральный порошок Ariel Магия белого с мерной ложкой, 15 кг Соус Heinz Xtreme Tabasco суперострый, 10 мл Игрушка для животных Четыре лапы "Бегающая мышка" БММ, белый"
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}
+^ "--- Идентификатор типа категории: 92499"
+^ "Идентификатор категории 17028741 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14621
+  -id: 85
+  -complex: 0
+  -name: "Бренд"
+  -description: "Наименование бренда, под которым произведен товар. Если товар не имеет бренда, используйте значение "Нет бренда"."
+  -type: "String"
+  -collection: false
+  -required: true
+  -count: 0
+  -groupId: 1
+  -groupName: "Общие"
+  -dictionary: 28732849
+}
+^ "--- Идентификатор типа категории: 94765"
+^ "Идентификатор категории 17027949 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14374
+  -id: 10400
+  -complex: 0
+  -name: "Гарантия"
+  -description: "Период, в течение которого производитель отвечает за качество товара. А покупатель может оформить заявку на возврат по гарантийному случаю. Выберите одно значение из выпадающего списка."
+  -type: "String"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 46700526
+}
+^ "--- Идентификатор типа категории: 94765"
+^ "Идентификатор категории 17027949 -----------------------------------"
+^ BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO^ {#14374
+  -id: 23518
+  -complex: 0
+  -name: "Минимальное количество оптом"
+  -description: "Заполните поле (укажите целое число), чтобы продавать товар оптом покупателям-юрлицам. Подробнее: https://seller-edu.ozon.ru/libra/work-with-goods/additional-materials/prodazha-optom"
+  -type: "Integer"
+  -collection: false
+  -required: false
+  -count: 0
+  -groupId: 0
+  -groupName: ""
+  -dictionary: 0
+}

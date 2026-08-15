@@ -1,0 +1,164 @@
+<?php
+/*
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is furnished
+ *  to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+declare(strict_types=1);
+
+namespace BaksDev\Ozon\Products\Mapper\Attribute\Collection;
+
+use BaksDev\Ozon\Products\Mapper\Attribute\ItemDataBuilderOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeInterface;
+use BaksDev\Ozon\Products\Mapper\Category\Collection\CookwareOzonProductsCategory;
+use BaksDev\Ozon\Products\Mapper\Type\Collection\MugsOzonProductsType;
+use BaksDev\Ozon\Products\Repository\Card\ProductOzonCard\ProductsOzonCardResult;
+use BaksDev\Products\Product\Type\Barcode\ProductBarcode;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+final class ForWhomOzonProductsAttribute implements OzonProductsAttributeInterface
+{
+    //-id: 8449
+    //  -complex: 0
+    //  -name: "Для кого"
+    //  -description: "Выберите одно или несколько значений из списка, но не больше 5. В xls-файле варианты заполняются через точку с запятой (;) без пробелов."
+    //  -type: "String"
+    //  -collection: true
+    //  -required: false
+    //  -count: 5
+    //  -groupId: 0
+    //  -groupName: ""
+    //  -dictionary: 449
+
+
+    public const array CATEGORY = [
+        // AccessoriesOzonProductsCategory::ID, // 41777465 - "Аксессуары"
+        // ClothesOzonProductsCategory::ID, // 200000933 - "Одежда"
+        CookwareOzonProductsCategory::ID, // 17028741 - "Столовая посуда"
+        // TireOzonProductsCategory::ID, // 17027949 - "Шины"
+    ];
+
+
+    private const array TYPES = [
+        // BaseBallsOzonProductsType::ID, // 93040 - Бейсболка
+        // HoodieOzonProductsType::ID, // 93253 - "Худи"
+        // JeansOzonProductsType::ID, // 93080 - "Джинсы"
+        // LongsleeveOzonProductsType::ID, // 93148 - "Лонгслив"
+        MugsOzonProductsType::ID, // 92499 - Кружка
+        // SweatshirtsOzonProductsType::ID, //  93216 - "Свитшот"
+        // TiresPassengerCarsOzonProductsType::ID, // 94765 - "Шины для легковых автомобилей"
+        // TShirtsOzonProductsType::ID, // 93244 - "Футболка"
+    ];
+
+    public const int ID = 8449;
+
+    public static function priority(): int
+    {
+        return 100;
+    }
+
+    public static function equals(int|string $param): bool
+    {
+        return self::ID === (int) $param;
+    }
+
+    public function getId(): int
+    {
+        return self::ID;
+    }
+
+    public function getData(ProductsOzonCardResult $data, ?TranslatorInterface $translator): array|false
+    {
+        if(empty($data->getProductAttributes()))
+        {
+            if(false === empty($data->getBarcodes()))
+            {
+                $requestData = new ItemDataBuilderOzonProductsAttribute(
+                    self::ID,
+                    current($data->getBarcodes()),
+                );
+
+                return $requestData->getData();
+            }
+
+            return false;
+        }
+
+        $attribute = array_filter(
+            $data->getProductAttributes(),
+            static fn($n) => self::ID === (int) $n->id,
+        );
+
+        if(empty($attribute))
+        {
+            if(false === empty($data->getBarcodes()))
+            {
+                $requestData = new ItemDataBuilderOzonProductsAttribute(
+                    self::ID,
+                    current($data->getBarcodes()),
+                );
+
+                return $requestData->getData();
+            }
+
+            return false;
+        }
+
+        $requestData = new ItemDataBuilderOzonProductsAttribute(
+            self::ID,
+            current($attribute)->value,
+        );
+
+        return $requestData->getData();
+    }
+
+    public function default(): string|false
+    {
+        return false;
+    }
+
+    public function isSetting(): bool
+    {
+        return true;
+    }
+
+    public function required(): bool
+    {
+        return false;
+    }
+
+    public function choices(): array|false
+    {
+        return false;
+    }
+
+    public function equalsCategory(int $category): bool
+    {
+        return in_array($category, self::CATEGORY, true);
+    }
+
+    public function equalsType(int $type): bool
+    {
+        return in_array($type, self::TYPES, true);
+    }
+}

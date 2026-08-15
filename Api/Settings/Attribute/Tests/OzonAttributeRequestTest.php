@@ -28,6 +28,9 @@ namespace BaksDev\Ozon\Products\Api\Settings\Attribute\Tests;
 use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeDTO;
 use BaksDev\Ozon\Products\Api\Settings\Attribute\OzonAttributeRequest;
+use BaksDev\Ozon\Products\Mapper\Attribute\OzonProductsAttributeCollection;
+use BaksDev\Ozon\Products\Mapper\Category\OzonProductsCategoryCollection;
+use BaksDev\Ozon\Products\Mapper\Type\OzonProductsTypeCollection;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\Group;
@@ -67,6 +70,150 @@ class OzonAttributeRequestTest extends KernelTestCase
         $ozonAttributeRequest = self::getContainer()->get(OzonAttributeRequest::class);
         $ozonAttributeRequest->TokenHttpClient(self::$Authorization);
 
+
+        /** @var OzonProductsCategoryCollection $OzonProductsCategoryCollection */
+        $OzonProductsCategoryCollection = self::getContainer()->get(OzonProductsCategoryCollection::class);
+
+        /** @var OzonProductsTypeCollection $OzonProductsTypeCollection */
+        $OzonProductsTypeCollection = self::getContainer()->get(OzonProductsTypeCollection::class);
+
+
+        /** @var OzonProductsAttributeCollection $OzonProductsAttributeCollection */
+        $OzonProductsAttributeCollection = self::getContainer()->get(OzonProductsAttributeCollection::class);
+        $existAttributes = $OzonProductsAttributeCollection->cases();
+
+
+        foreach($OzonProductsCategoryCollection->cases() as $category)
+        {
+            $types = $OzonProductsTypeCollection->cases($category->getId());
+
+            foreach($types as $type)
+            {
+                $attributes = $ozonAttributeRequest->findAll($category->getId(), $type->getId());
+
+                if(false === $attributes || false === $attributes->valid())
+                {
+                    echo 'Список атрибутов не найден'.PHP_EOL;
+                    continue;
+                }
+
+                $attributes = iterator_to_array($attributes);
+
+
+                /**
+                 * Проверяем новые атрибуты
+                 */
+
+                foreach($attributes as $OzonAttributeDTO)
+                {
+                    // Вызываем все геттеры
+                    $reflectionClass = new ReflectionClass(OzonAttributeDTO::class);
+                    $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+                    foreach($methods as $method)
+                    {
+                        // Методы без аргументов
+                        if($method->getNumberOfParameters() === 0)
+                        {
+                            // Вызываем метод
+                            $data = $method->invoke($OzonAttributeDTO);
+                            // dump($data);
+                        }
+                    }
+
+
+                    $isNotExistClassAttributes = true;
+
+                    /** Проверяем имеющийся класс */
+                    foreach($existAttributes as $attribute)
+                    {
+                        if($attribute->getId() !== $OzonAttributeDTO->getId())
+                        {
+                            continue;
+                        }
+
+                        if(false === $attribute->equalsCategory($category->getId()))
+                        {
+                            continue;
+                        }
+
+                        if(false === $attribute->equalsType($type->getId()))
+                        {
+                            continue;
+                        }
+
+                        $isNotExistClassAttributes = false;
+                        break;
+                    }
+
+                    if(true === $isNotExistClassAttributes)
+                    {
+                        dump('Новый идентификатор атрибута: '.$OzonAttributeDTO->getId().' -----------------------------------');
+
+                        dump(sprintf('Идентификатор категории %s',
+                            $category->getId(),
+                        ));
+
+                        dump(sprintf(
+                            '--- Идентификатор типа категории: %s',
+                            $type->getId(),
+                        ));
+
+                        dump($OzonAttributeDTO);
+                    }
+                }
+
+
+                /**
+                 * Проверяем лишние либо ошибочные атрибуты
+                 */
+
+                //                foreach($existAttributes as $attribute)
+                //                {
+                //                    if(false === $attribute->equalsCategory($category->getId()) && false === $attribute->equalsType($type->getId()))
+                //                    {
+                //                        continue;
+                //                    }
+                //
+                //                    $isNotExistAttributes = true;
+                //
+                //                    foreach($attributes as $OzonAttributeDTO)
+                //                    {
+                //                        if($attribute->getId() === $OzonAttributeDTO->getId())
+                //                        {
+                //                            $isNotExistAttributes = false;
+                //                            break;
+                //                        }
+                //                    }
+                //
+                //                    if(true === $isNotExistAttributes)
+                //                    {
+                //
+                //                        dump(sprintf(
+                //                            'Лишний идентификатор атрибута: %s -----------------------------------',
+                //                            $OzonAttributeDTO->getId(),
+                //                        ));
+                //
+                //                        dump(sprintf('--- Идентификатор категории %s',
+                //                            $category->getId(),
+                //                        ));
+                //
+                //                        dump(sprintf(
+                //                            '--- Идентификатор типа категории: %s',
+                //                            $type->getId(),
+                //                        ));
+                //
+                //
+                //                        dd($OzonAttributeDTO);
+                //                    }
+                //                }
+            }
+        }
+
+
+        self::assertTrue(true);
+        return;
+
         // 17027949 -Шины
         // 94765 -Шины для легковых автомобилей
 
@@ -84,7 +231,6 @@ class OzonAttributeRequestTest extends KernelTestCase
             // Одежда
             200000933 => [
                 93244, // - Футболка
-                93080, // - Джинсы
                 93080, // - Джинсы
                 93253, // - Худи
                 93216, // - Свитшот
@@ -104,49 +250,5 @@ class OzonAttributeRequestTest extends KernelTestCase
         ];
 
 
-        $allAttributes = [
-
-            // Шины
-            200000933 => [
-                93148, // - Лонгслив
-            ],
-        ];
-
-        foreach($allAttributes as $category => $types)
-        {
-            foreach($types as $type)
-            {
-                $attributes = $ozonAttributeRequest->findAll($category, $type);
-
-                if(false === $attributes || false === $attributes->valid())
-                {
-                    continue;
-                }
-
-                foreach($attributes as $OzonAttributeDTO)
-                {
-                    // Вызываем все геттеры
-                    $reflectionClass = new ReflectionClass(OzonAttributeDTO::class);
-                    $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-
-                    foreach($methods as $method)
-                    {
-                        // Методы без аргументов
-                        if($method->getNumberOfParameters() === 0)
-                        {
-                            // Вызываем метод
-                            $data = $method->invoke($OzonAttributeDTO);
-                            // dump($data);
-                        }
-                    }
-
-                    dump($OzonAttributeDTO);
-
-
-                }
-            }
-        }
-
-        self::assertTrue(true);
     }
 }

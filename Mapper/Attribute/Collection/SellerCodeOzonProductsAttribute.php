@@ -104,4 +104,9 @@ final class SellerCodeOzonProductsAttribute implements OzonProductsAttributeInte
     {
         return true;
     }
+
+    public function equalsType(int $type): bool
+    {
+        return true;
+    }
 }

@@ -130,6 +130,11 @@ final class ManufactureCountryOzonProductsAttribute implements OzonProductsAttri
         return true;
     }
 
+    public function equalsType(int $type): bool
+    {
+        return true;
+    }
+
     public function attributeValueRequest(OzonAttributeValueSearchRequest|false $attributeValueRequest): void
     {
         $this->attributeValueRequest = $attributeValueRequest;

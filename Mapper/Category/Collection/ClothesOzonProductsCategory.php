@@ -12,7 +12,7 @@ final class ClothesOzonProductsCategory implements OzonProductsCategoryInterface
     // id: 200000933
     // name: "Одежда"
 
-    private const int ID = 200000933;
+    public const int ID = 200000933;
 
     private const int PARENT = 15621031;
 

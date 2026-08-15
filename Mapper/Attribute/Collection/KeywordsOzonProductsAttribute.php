@@ -100,4 +100,9 @@ final class KeywordsOzonProductsAttribute implements OzonProductsAttributeInterf
     {
         return true;
     }
+
+    public function equalsType(int $type): bool
+    {
+        return true;
+    }
 }

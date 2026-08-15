@@ -34,13 +34,17 @@ final readonly class OzonProductsAttributeCollection
         private iterable $property,
     ) {}
 
+    /** @return array<OzonProductsAttributeInterface> */
     public function cases(): array
     {
         $case = null;
 
+        /** @var OzonProductsAttributeInterface $instance */
+
         foreach($this->property as $key => $property)
         {
-            $case[$key] = new $property();
+            $instance = new $property();
+            $case[$key] = $instance;
         }
 
         return $case;
