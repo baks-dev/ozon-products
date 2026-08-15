@@ -93,39 +93,44 @@ class OzonAttributeValueRequestTest extends KernelTestCase
 
         $BrandOzonProductsAttribute = new BrandOzonProductsAttribute();
 
-        $attributes = $ozonAttributeRequest
-            ->findAll(
-                $BrandOzonProductsAttribute::CATEGORY,
-                $BrandOzonProductsAttribute::TYPE,
-                $BrandOzonProductsAttribute::ID,
-            );
-
-        if(false === $attributes->valid())
+        foreach($BrandOzonProductsAttribute::CATEGORY as $category)
         {
-            self::assertFalse(false);
-            return;
-        }
-
-        foreach($attributes as $OzonAttributeValueDTO)
-        {
-            // Вызываем все геттеры
-            $reflectionClass = new ReflectionClass(OzonAttributeValueDTO::class);
-            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-
-            foreach($methods as $method)
+            foreach($BrandOzonProductsAttribute::TYPES as $type)
             {
-                // Методы без аргументов
-                if($method->getNumberOfParameters() === 0)
+                $attributes = $ozonAttributeRequest
+                    ->findAll(
+                        $category,
+                        $type,
+                        $BrandOzonProductsAttribute::ID,
+                    );
+
+                if(false === $attributes->valid())
                 {
-                    // Вызываем метод
-                    $data = $method->invoke($OzonAttributeValueDTO);
-                    //dump($data);
+                    self::assertFalse(false);
+                    return;
                 }
+
+                foreach($attributes as $OzonAttributeValueDTO)
+                {
+                    // Вызываем все геттеры
+                    $reflectionClass = new ReflectionClass(OzonAttributeValueDTO::class);
+                    $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+                    foreach($methods as $method)
+                    {
+                        // Методы без аргументов
+                        if($method->getNumberOfParameters() === 0)
+                        {
+                            // Вызываем метод
+                            $data = $method->invoke($OzonAttributeValueDTO);
+                            //dump($data);
+                        }
+                    }
+
+                }
+
+                self::assertTrue(true);
             }
-
         }
-
-        self::assertTrue(true);
-
     }
 }

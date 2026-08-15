@@ -54,7 +54,7 @@ final class GuaranteePeriodOzonProductsAttribute implements OzonProductsAttribut
         TireOzonProductsCategory::ID, // 17027949 - "Шины"
     ];
 
-    private const array TYPES = [
+    public const array TYPES = [
         // BaseBallsOzonProductsType::ID, // 93040 - Бейсболка
         // HoodieOzonProductsType::ID, // 93253 - "Худи"
         // JeansOzonProductsType::ID, // 93080 - "Джинсы"

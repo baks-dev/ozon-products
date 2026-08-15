@@ -63,7 +63,7 @@ final class TypeSleeveOzonProductsAttribute implements OzonProductsAttributeInte
 
     public const int ID = 4596;
 
-    private const array TYPES = [
+    public const array TYPES = [
         // BaseBallsOzonProductsType::ID, // 93040 - Бейсболка
         HoodieOzonProductsType::ID, // 93253 - "Худи"
         // JeansOzonProductsType::ID, // 93080 - "Джинсы"

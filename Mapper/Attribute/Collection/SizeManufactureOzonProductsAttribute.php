@@ -65,7 +65,7 @@ final class SizeManufactureOzonProductsAttribute implements OzonProductsAttribut
 
     public const int ID = 9533;
 
-    private const array TYPES = [
+    public const array TYPES = [
         BaseBallsOzonProductsType::ID, // 93040 - Бейсболка
         HoodieOzonProductsType::ID, // 93253 - "Худи"
         JeansOzonProductsType::ID, // 93080 - "Джинсы"

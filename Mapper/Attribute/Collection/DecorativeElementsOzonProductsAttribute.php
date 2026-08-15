@@ -66,7 +66,7 @@ final class DecorativeElementsOzonProductsAttribute implements OzonProductsAttri
 
     public const int ID = 21531;
 
-    private const array TYPES = [
+    public const array TYPES = [
         BaseBallsOzonProductsType::ID, // 93040 - Бейсболка
         HoodieOzonProductsType::ID, // 93253 - "Худи"
         JeansOzonProductsType::ID, // 93080 - "Джинсы"
