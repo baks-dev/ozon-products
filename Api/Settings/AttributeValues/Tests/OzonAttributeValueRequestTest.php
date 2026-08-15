@@ -28,7 +28,7 @@ namespace BaksDev\Ozon\Products\Api\Settings\AttributeValues\Tests;
 use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValues\OzonAttributeValueDTO;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValues\OzonAttributeValueRequest;
-use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\BrandOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\Collection\BrandOzonProductsAttribute;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\Group;
