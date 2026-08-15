@@ -28,7 +28,9 @@ namespace BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\Tests;
 use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchDTO;
 use BaksDev\Ozon\Products\Api\Settings\AttributeValuesSearch\OzonAttributeValueSearchRequest;
-use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\BrandOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\Collection\BrandOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Category\Collection\TireOzonProductsCategory;
+use BaksDev\Ozon\Products\Mapper\Type\Collection\TiresPassengerCarsOzonProductsType;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\Group;
@@ -102,8 +104,8 @@ class OzonAttributeValueSearchRequestTest extends KernelTestCase
          */
         $result = $OzonAttributeValueSearch
             ->attribute($BrandOzonProductsAttribute::ID)
-            ->category($BrandOzonProductsAttribute::CATEGORY)
-            ->type(94765) // Шины для легковых автомобилей
+            ->category(TireOzonProductsCategory::ID) // 17027949 - "Шины"
+            ->type(TiresPassengerCarsOzonProductsType::ID) // 94765 - Шины для легковых автомобилей
             ->value("Triangle")
             ->findAll();
 
