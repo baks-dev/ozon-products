@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Products\Mapper\Property\Collection;
 
-use BaksDev\Ozon\Products\Mapper\Attribute\Collection\Tire\SeasonOzonProductsAttribute;
+use BaksDev\Ozon\Products\Mapper\Attribute\Collection\SeasonOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Attribute\Collection\TypeOzonProductsAttribute;
 use BaksDev\Ozon\Products\Mapper\Property\OzonProductsPropertyInterface;
 use BaksDev\Ozon\Products\Mapper\Type\Collection\TiresPassengerCarsOzonProductsType;
