@@ -100,7 +100,7 @@ final class OzonAttributeValueRequest extends Ozon
             $this->logger->critical($content['code'].': '.$content['message'], [__FILE__.':'.__LINE__]);
 
             throw new DomainException(
-                message: 'Ошибка '.self::class,
+                message: sprintf('Ошибка %s '.self::class, $response->getStatusCode()),
                 code: $response->getStatusCode(),
             );
         }
