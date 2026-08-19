@@ -125,7 +125,12 @@ final class CodesTNVEDOzonProductsAttribute implements OzonProductsAttributeInte
             match (true)
             {
                 // 4011100009 - МАРКИРОВКА РФ - Шины и покрышки пневматические резиновые новые, для легковых автомобилей
-                $data->getOzonType() === TireOzonProductsCategory::ID => '6109100000',
+                $data->getOzonType() === TireOzonProductsCategory::ID => '4011100009',
+
+                // 6109100000 - Майки, фуфайки с рукавами и прочие нательные фуфайки трикотажные, из хлопчатобумажной пряжи, машинного или ручного вязания
+                $data->getOzonType() === TShirtsOzonProductsType::ID => '6109100000',
+
+
                 default => null
             };
 

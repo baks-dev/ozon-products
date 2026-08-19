@@ -123,6 +123,31 @@ final class BrandClothesShoesOzonProductsAttribute implements OzonProductsAttrib
             $this->attributeValueRequest,
         );
 
+
+        $data = $requestData->getData();
+
+        if(empty($data['values']))
+        {
+            return false;
+        }
+
+        $current = current($data['values']);
+
+        if(empty($current))
+        {
+            return false;
+        }
+
+        if($value !== $current['value'])
+        {
+            return false;
+        }
+
+        if($value !== current($requestData->getData())['value'])
+        {
+            return false;
+        }
+
         return $requestData->getData();
     }
 

@@ -8,10 +8,10 @@
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is furnished
  *  to do so, subject to the following conditions:
- *  
+ *
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *  
+ *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
@@ -91,6 +91,72 @@ final class OzonAttributeValueSearchRequest extends Ozon
 
 
     /**
+     * ### Русский
+     * Стоп-слова, которые игнорируются при поиске по частям.
+     *
+     * ### English
+     * Stop words that are ignored when searching by parts.
+     */
+    private const array STOP_WORDS = [
+        'в', 'на', 'с', 'по', 'как', 'для', 'и', 'а', 'но', 'о', 'у', 'под',
+        'над', 'за', 'об', 'выше, ниже', 'сзади',
+        'the', 'and', 'for', 'an', 'a', 'of', 'to', 'in', 'on', 'at', 'by', 'from',
+    ];
+
+    /**
+     * ### Русский
+     * Генерирует поисковые запросы на основе разбиения строки на слова.
+     *
+     * Если передана фраза из нескольких слов, возвращает массив вариантов:
+     * 1. Исходный запрос (без изменений)
+     * 2. Отдельные слова (кроме стоп-слов)
+     * 3. Уменьшенная копия строки (в нижнем регистре)
+     *
+     * ### English
+     * Generates search queries based on splitting the string into words.
+     *
+     * If a phrase of several words is passed, returns an array of options:
+     * 1. Original request (unchanged)
+     * 2. Individual words (except stop words)
+     * 3. Reduced copy of the line (lowercase)
+     *
+     * ### Examples
+     * ```
+     * $this->generateSearchVariants("Шина для легкового");
+     * // Возвращает: ["Шина для легкового", "Шина", "легкового"]
+     * ```
+     */
+    private function generateSearchVariants(string $value): array
+    {
+        $variants = [];
+
+        // 1. Исходный запрос (с пробелом в конце, как и раньше)
+        $variants[] = $value;
+
+        // 2. Пытаемся найти по частям (разбиваем на слова)
+        $words = preg_split('/\s+/', trim($value));
+
+        if($words && count($words) > 1)
+        {
+            foreach($words as $word)
+            {
+                $lowerWord = mb_strtolower(trim($word));
+
+                // Пропускаем стоп-слова и пустые слова
+                if(empty($word) || in_array($lowerWord, self::STOP_WORDS, true))
+                {
+                    continue;
+                }
+
+                $variants[] = mb_strlen($word) > 3 ? trim($word) : $word.' ';
+            }
+        }
+
+        return array_unique($variants);
+    }
+
+
+    /**
      * @return Generator<OzonAttributeValueSearchDTO>|false
      */
     public function findAll(): Generator|false
@@ -113,43 +179,63 @@ final class OzonAttributeValueSearchRequest extends Ozon
 
             $item->expiresAfter(DateInterval::createFromDateString('1 second'));
 
-            $response = $this->TokenHttpClient()
-                ->request(
-                    'POST',
-                    '/v1/description-category/attribute/values/search',
-                    [
-                        "json" => [
+
+            $search = $this->generateSearchVariants($this->value);
+
+
+            foreach($search as $value)
+            {
+                $response = $this->TokenHttpClient()
+                    ->request(
+                        'POST',
+                        '/v1/description-category/attribute/values/search',
+                        [
+                            "json" => [
+                                "attribute_id" => $this->attribute,
+                                'description_category_id' => $this->category,
+                                "limit" => 10,
+                                "type_id" => $this->type,
+
+                                /**
+                                 * Минимальное количество символов в значении 'value' 2
+                                 * поэтому добавляем пробел пробел после значения
+                                 */
+                                "value" => 'Свободный',
+                            ],
+                        ],
+                    );
+
+                $content = $response->toArray(false);
+
+                if($response->getStatusCode() !== 200)
+                {
+                    $this->logger->critical(
+                        $content['code'].': '.$content['message'],
+                        [
                             "attribute_id" => $this->attribute,
                             'description_category_id' => $this->category,
                             "limit" => 1,
                             "type_id" => $this->type,
-
-                            /**
-                             * Минимальное количество символов в значении 'value' 2
-                             * поэтому добавляем пробел пробел после значения
-                             */
                             "value" => $this->value.' ',
+                            __FILE__.':'.__LINE__,
                         ],
-                    ],
-                );
+                    );
 
-            $content = $response->toArray(false);
+                    return false;
+                }
 
-            if($response->getStatusCode() !== 200)
-            {
-                $this->logger->critical(
-                    $content['code'].': '.$content['message'],
-                    [
-                        "attribute_id" => $this->attribute,
-                        'description_category_id' => $this->category,
-                        "limit" => 1,
-                        "type_id" => $this->type,
-                        "value" => $this->value.' ',
-                        __FILE__.':'.__LINE__,
-                    ],
-                );
 
-                return false;
+                if(false === $content)
+                {
+                    continue;
+                }
+
+                if(empty($content['result']))
+                {
+                    continue;
+                }
+
+                break;
             }
 
             $item->expiresAfter(DateInterval::createFromDateString('1 day'));
